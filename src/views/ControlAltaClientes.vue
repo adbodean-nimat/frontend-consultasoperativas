@@ -8,7 +8,7 @@
       <span style="color: white; margin-left: 5px;">{{ title }}</span>
     </div>
     <datasource ref="remoteDataSource"
-                      :transport-read-url="'http://localhost:8090/api/control/'"
+                      :transport-read-url="'http://192.168.0.250:8090/api/control/'"
                       :transport-read-data-type="'json'"
                       :transport-read-content-type="' application/json'"
                       :transport-read-type="'GET'"
