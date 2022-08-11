@@ -7,6 +7,12 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
+    "@progress/kendo-datasource-vue-wrapper": "^2022.2.802",
+    "@progress/kendo-grid-vue-wrapper": "^2022.2.802",
+    "@progress/kendo-theme-bootstrap": "^5.6.0",
+    "@progress/kendo-theme-default": "^5.6.0",
+    "@progress/kendo-ui": "^2022.2.802",
+    "bootstrap": "^5.2.0",
     "core-js": "^3.8.3",
     "vue": "^3.2.13",
     "vue-router": "^4.0.3",
