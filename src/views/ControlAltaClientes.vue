@@ -14,7 +14,7 @@
                       :transport-read-type="'GET'"
                       :transport-read-cache="false"
                       :schema-model-fields="schemaModelFields"
-                      :page-size='15'
+                      :page-size='50'
                       >
     </datasource>
     <grid ref="grid"
@@ -24,7 +24,7 @@
           :sortable-allow-unsort="true"
           :sortable-show-indexes="true"
           :pageable='true'
-          :filterable="false"
+          :filterable="true"
           :filterable-extra="false"
           :reorderable="true"
           :resizable="true"
@@ -33,26 +33,29 @@
           :auto-bind="false"
           :row-height="38"
           :toolbar="toolbarTemplate"
+          :allow-copy="true"
+          :navigatable="true"
+          :selectable="true"
           >
-          <grid-column field="CLIE_FECHA_ALTA" title="Fecha Alta" type="date" format="{0:dd-MM-yyyy}" :width="100"></grid-column>
-          <grid-column field="AUDI_USUARIO" title="Auditoría" :filterable-search="true" :filterable-multi="true"></grid-column>
-          <grid-column field="USUA_NOMBRE" title="Nombre Usuario" :width="150"></grid-column>
-          <grid-column field="VEND_NOMBRE" title="Vendedor"></grid-column>
-          <grid-column field="CLIE_CLIENTE" title="Nro. Cliente"></grid-column>
+          <grid-column field="CLIE_FECHA_ALTA" title="Fecha Alta" type="date" format="{0:dd-MM-yyyy}" :width="150"></grid-column>
+          <grid-column field="AUDI_USUARIO" title="Auditoría" :filterable-search="true" :filterable-multi="true" :width="130"></grid-column>
+          <grid-column field="USUA_NOMBRE" title="Nombre Usuario" :width="200"></grid-column>
+          <grid-column field="VEND_NOMBRE" title="Vendedor" :width="135"></grid-column>
+          <grid-column field="CLIE_CLIENTE" title="Nro. Cliente" :width="135"></grid-column>
           <grid-column field="CLIE_NOMBRE" title="Nombre Cliente" :width="200"></grid-column>
-          <grid-column field="CLIE_EMAIL" title="E-mail"></grid-column>
-          <grid-column field="CLC5_NOMBRE" title="Clasificación 5"></grid-column>
-          <grid-column field="DCLI_DOMICILIO" title="Domicilio"></grid-column>
-          <grid-column field="DCLI_LOCALIDAD" title="Localidad"></grid-column>
-          <grid-column field="DCLI_COD_LOCALIDAD" title="Código Localidad"></grid-column>
-          <grid-column field="DCLI_COD_POSTAL" title="Código Postal"></grid-column>
-          <grid-column field="DCLI_PROVINCIA" title="Provincia"></grid-column>
-          <grid-column field="CLIE_CONDICION_IVA" title="Condicion IVA"></grid-column>
-          <grid-column field="CLIE_CUIT" title="CUIT"></grid-column>
-          <grid-column field="CLIE_COBRADOR" title="Cobrador"></grid-column>
-          <grid-column field="CLPF_FECHA_NACIM" title="Fecha nacimiento" type="date" format="{0:dd-MM-yyyy}"></grid-column>
-          <grid-column field="CLPF_NACIONALIDAD" title="Nacionalidad"></grid-column>
-          <grid-column field="CLPF_SEXO" title="Sexo"></grid-column>
+          <grid-column field="CLIE_EMAIL" title="E-mail" :width="250"></grid-column>
+          <grid-column field="CLC5_NOMBRE" title="Clasificación 5" :width="135"></grid-column>
+          <grid-column field="DCLI_DOMICILIO" title="Domicilio" :width="135"></grid-column>
+          <grid-column field="DCLI_LOCALIDAD" title="Localidad" :width="135"></grid-column>
+          <grid-column field="DCLI_COD_LOCALIDAD" title="Código Localidad" :width="135"></grid-column>
+          <grid-column field="DCLI_COD_POSTAL" title="Código Postal" :width="135"></grid-column>
+          <grid-column field="DCLI_PROVINCIA" title="Provincia" :width="135"></grid-column>
+          <grid-column field="CLIE_CONDICION_IVA" title="Condicion IVA" :width="135"></grid-column>
+          <grid-column field="CLIE_CUIT" title="CUIT" :width="135"></grid-column>
+          <grid-column field="CLIE_COBRADOR" title="Cobrador" :width="135"></grid-column>
+          <grid-column field="CLPF_FECHA_NACIM" title="Fecha nacimiento" type="date" format="{0:dd-MM-yyyy}" :width="135"></grid-column>
+          <grid-column field="CLPF_NACIONALIDAD" title="Nacionalidad" :width="135"></grid-column>
+          <grid-column field="CLPF_SEXO" title="Sexo" :width="135"></grid-column>
     </grid>
   </div>
 </template>
@@ -91,7 +94,7 @@ export default {
                 CLIE_CONDICION_IVA: {type: 'string'},
                 CLIE_CUIT: {type: 'string'},
                 CLIE_COBRADOR: {type: 'string'},
-                CLPF_FECHA_NACIM: {type: 'string'},
+                CLPF_FECHA_NACIM: {type: 'date'},
                 CLPF_NACIONALIDAD: {type: 'string'},
                 CLPF_SEXO: {type: 'string'}
             }
@@ -187,6 +190,8 @@ export default {
               fechadesde.data("kendoDatePicker").value(null);
               grid.dataSource.sort({});
               grid.dataSource.filter({});
+              grid.dataSource.autoFitColumn();
+              
               /* grid.dataSource.read({}); */
               /* grid.dataSource.refresh(); */
               /* grid.dataSource.data("kendoGrid").empty(null); */
@@ -197,9 +202,16 @@ export default {
 </script>
 
 <style>
+.k-grid {
+    font-size: 12px;
+}
 .k-grid td{
     white-space: nowrap;
     text-overflow: ellipsis;
+}
+
+.k-grid-content{
+  overflow-x: scroll;
 }
 
 .page-grid{
