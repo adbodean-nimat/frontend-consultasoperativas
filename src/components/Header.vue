@@ -50,7 +50,7 @@ header{
 
 #encabezado{
     width: 100%;
-    height: 50px;
+    height: 55px;
     background-color: #fff;
     display: flex;
     align-items: center; 
