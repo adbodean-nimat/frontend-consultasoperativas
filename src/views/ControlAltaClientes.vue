@@ -31,11 +31,11 @@
           :groupable="true"
           :column-menu="true"
           :auto-bind="false"
-          :row-height="38"
           :toolbar="toolbarTemplate"
           :allow-copy="true"
           :navigatable="true"
           :selectable="true"
+          :scrollable-virtual="false"
           >
           <grid-column field="CLIE_FECHA_ALTA" title="Fecha Alta" type="date" format="{0:dd-MM-yyyy}" :width="150"></grid-column>
           <grid-column field="AUDI_USUARIO" title="Auditoría" :filterable-search="true" :filterable-multi="true" :width="130"></grid-column>
@@ -73,10 +73,11 @@ export default {
   components: {
     "grid": Grid,
     "grid-column": GridColumn,
-    "datasource": DataSource
+    "datasource": DataSource,
 },
   data: function () {
          return {
+            dataSource: ['remoteDataSource'],
             title: 'Control Alta Clientes',
             schemaModelFields: {
                 CLIE_FECHA_ALTA: {type: 'date'},
@@ -116,7 +117,7 @@ export default {
                     '</span>' +
                 '</span>';
             return templateHtml;
-            }
+            },
           },
             mounted: function(){
             var grid = this.$refs.grid.kendoWidget();
