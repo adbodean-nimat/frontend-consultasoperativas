@@ -10,7 +10,7 @@
     <datasource ref="remoteDataSource2"
                       :transport-read-url="'http://192.168.0.250:8090/api/listadeclientes/'"
                       :transport-read-data-type="'json'"
-                      :transport-read-content-type="' application/json'"
+                      :transport-read-content-type="'application/json'"
                       :transport-read-type="'GET'"
                       :transport-read-cache="false"
                       :schema-model-fields="schemaModelFields"
@@ -23,7 +23,8 @@
           :sortable-mode="'multiple'"
           :sortable-allow-unsort="true"
           :sortable-show-indexes="true"
-          :pageable='true'
+          :pageable-always-visible="false"
+          :pageable-page-sizes="[5, 10, 20, 100]"
           :filterable="true"
           :filterable-extra="false"
           :reorderable="true"
@@ -33,17 +34,22 @@
           :auto-bind="false"
           :row-height="38"
           :toolbar="toolbarTemplate"
+          :selectable="true"
+          :allow-copy="true"
+          :navigatable="true"
           >
           <grid-column field="Fecha_alta_cliente" title="Fecha alta cliente" type="date" format="{0:dd-MM-yyyy}" :width="200"></grid-column>
           <grid-column field="Nro_cliente" title="Nro cliente" :filterable-search="true" :width="200"></grid-column>
           <grid-column field="Nombre_cliente" title="Nombre cliente" :width="200"></grid-column>
           <grid-column field="Cod_domic" title="Cod domic"></grid-column>
           <grid-column field="Fax_celular" title="Fax (celular)"></grid-column>
-          <grid-column field="Verificación" title="Verificación" :filterable-multi="true" :width="200"></grid-column>
-          <grid-column field="Teléfono" title="Teléfono"></grid-column>
+          <grid-column field="Verificacion" title="Verificación" :filterable-multi="true" :width="200"></grid-column>
+          <grid-column field="Telefono" title="Teléfono"></grid-column>
           <grid-column field="Observ_domicilio" title="Observ domicilio"></grid-column>
           <grid-column field="Cobrador" title="Cobrador"></grid-column>
           <grid-column field="Vendedor" title="Vendedor"></grid-column>
+          <grid-column field="Auditoria" title="Auditoría" :filterable-multi="true"></grid-column>
+          <grid-column field="Nombre_Usuario" title="Nombre Usuario" :filterable-multi="true"></grid-column>
     </grid>
   </div>
 </template>
@@ -72,11 +78,13 @@ export default {
                 Nombre_cliente: {type: 'string'},
                 Cod_domic: {type: 'number'},
                 Fax_celular: {type: 'string'},
-                Verificación: {type: 'string'},
-                Teléfono: {type: 'string'},
+                Verificacion: {type: 'string'},
+                Telefono: {type: 'string'},
                 Observ_domicilio: {type: 'string'},
                 Cobrador: {type: 'string'},
-                Vendedor: {type: 'string'}
+                Vendedor: {type: 'string'},
+                Auditoria: {type: 'string'},
+                Nombre_Usuario: {type: 'string'}
             }
          }
   },
@@ -180,6 +188,10 @@ export default {
 </script>
 
 <style>
+.k-grid {
+    font-size: 12px;
+}
+
 .k-grid td{
     white-space: nowrap;
     text-overflow: ellipsis;

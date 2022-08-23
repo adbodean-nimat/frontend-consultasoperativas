@@ -2,6 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import ControlAltaClientes from '../views/ControlAltaClientes.vue'
 import ListadeClientes from '../views/ListadeClientes.vue'
+import DeposANoConsiderar from '../views/DeposaNoConsiderar.vue'
+
 
 const routes = [
   {
@@ -48,6 +50,19 @@ const routes = [
       metaTags: [
         {
           name: 'Lista de Clientes'
+        }      ]
+    }
+  },
+  {
+    path: '/deposanoconsiderar',
+    name: 'Deposito a No Considerar',
+    component: DeposANoConsiderar,
+    props: true,
+    meta: {
+      title: 'Deposito a No Considerar',
+      metaTags: [
+        {
+          name: 'Deposito a No Considerar'
         }      ]
     }
   }

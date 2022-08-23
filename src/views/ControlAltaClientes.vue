@@ -10,11 +10,11 @@
     <datasource ref="remoteDataSource"
                       :transport-read-url="'http://192.168.0.250:8090/api/control/'"
                       :transport-read-data-type="'json'"
-                      :transport-read-content-type="' application/json'"
+                      :transport-read-content-type="'application/json'"
                       :transport-read-type="'GET'"
                       :transport-read-cache="false"
                       :schema-model-fields="schemaModelFields"
-                      :page-size='50'
+                      :page-size='15'
                       >
     </datasource>
     <grid ref="grid"
@@ -23,7 +23,8 @@
           :sortable-mode="'multiple'"
           :sortable-allow-unsort="true"
           :sortable-show-indexes="true"
-          :pageable='true'
+          :pageable-always-visible="false"
+          :pageable-page-sizes="[5, 10, 20, 100]"
           :filterable="true"
           :filterable-extra="false"
           :reorderable="true"
@@ -39,8 +40,8 @@
           >
           <grid-column field="CLIE_FECHA_ALTA" title="Fecha Alta" type="date" format="{0:dd-MM-yyyy}" :width="150"></grid-column>
           <grid-column field="AUDI_USUARIO" title="Auditoría" :filterable-search="true" :filterable-multi="true" :width="130"></grid-column>
-          <grid-column field="USUA_NOMBRE" title="Nombre Usuario" :width="200"></grid-column>
-          <grid-column field="VEND_NOMBRE" title="Vendedor" :width="135"></grid-column>
+          <grid-column field="USUA_NOMBRE" title="Nombre Usuario" :width="200" :filterable-multi="true"></grid-column>
+          <grid-column field="VEND_NOMBRE" title="Vendedor" :width="135" :filterable-multi="true"></grid-column>
           <grid-column field="CLIE_CLIENTE" title="Nro. Cliente" :width="135"></grid-column>
           <grid-column field="CLIE_NOMBRE" title="Nombre Cliente" :width="200"></grid-column>
           <grid-column field="CLIE_EMAIL" title="E-mail" :width="250"></grid-column>

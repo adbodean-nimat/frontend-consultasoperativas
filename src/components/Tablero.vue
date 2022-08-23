@@ -3,7 +3,7 @@
         <div class="page-content">
             <div class="container-fluid px-5 text-center">
                 <div class="row row-cols-lg-5 gx-5 gy-5">
-                    <div class="col shadow">
+                    <div class="col">
                     <router-link to="/controlaltaclientes">
                         <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                             <div class="column d-flex flex-row justify-content-between p-3 text-secondary link-success">
@@ -51,7 +51,7 @@
                             </span>
                         </div>
                         <div class="column-bottom text-center h-10 d-flex justify-content-between align-items-center px-4 rounded-bottom bg-light">
-                            <span class="fs-6">1.0.0</span>
+                            <span class="fs-6">1.1.0</span>
                             <span class="fs-6">LDC</span>
                         </div>
                     </div>
@@ -155,15 +155,16 @@ export default{
     }
     .container-page{
         width: 100%;
-        height: 100vh;
+        height: 800px;
         display: flex;
-        align-items: center;
+        align-items: flex-start;
+        justify-content: center;
         background-color: currentColor;
     }
 
     .page-content{
         width: 100%;
-        height: 800px;
+        margin: 50px 0px;
     }
 
     .column{
