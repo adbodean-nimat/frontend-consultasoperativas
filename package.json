@@ -7,14 +7,19 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
+    "@progress/kendo-buttons-vue-wrapper": "^2022.2.802",
     "@progress/kendo-datasource-vue-wrapper": "^2022.2.802",
+    "@progress/kendo-dialog-vue-wrapper": "^2022.2.802",
     "@progress/kendo-grid-vue-wrapper": "^2022.2.802",
     "@progress/kendo-theme-bootstrap": "^5.6.0",
     "@progress/kendo-theme-default": "^5.6.0",
     "@progress/kendo-ui": "^2022.2.802",
+    "@progress/kendo-vue-dialogs": "^3.5.1",
     "bootstrap": "^5.2.0",
     "core-js": "^3.8.3",
+    "jquery": "^3.6.1",
     "vue": "^3.2.13",
+    "vue-fullscreen": "^3.1.1",
     "vue-router": "^4.0.3",
     "vuex": "^4.0.0"
   },

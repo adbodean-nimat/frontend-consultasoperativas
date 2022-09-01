@@ -22,11 +22,10 @@ export default {
 <style>
 footer{
     width: 100%;
-    height: 40px;
+    height: 30px;
     background: #008645;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    bottom: 0;
+    position: flex;
 }
 
 .copyright{

@@ -2,8 +2,8 @@
     <div class="container-page">
         <div class="page-content">
             <div class="container-fluid px-5 text-center">
-                <div class="row row-cols-lg-5 gx-5 gy-5">
-                    <div class="col">
+                <div class="row row-cols-lg-5 gy-5">
+                    <div class="col col-h">
                     <router-link to="/controlaltaclientes">
                         <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                             <div class="column d-flex flex-row justify-content-between p-3 text-secondary link-success">
@@ -11,7 +11,7 @@
                                     <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="#fff" class="bi bi-person-lines-fill" viewBox="0 0 16 16"><path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-5 6s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zM11 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5zm.5 2.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1h-4zm2 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1h-2zm0 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1h-2z"/></svg>
                                 </div>
                                 <div class="title-column">
-                                    Control Alta Clientes
+                                   <p>Control Alta Clientes</p>
                                 </div>
                             </div>
                         </div>
@@ -25,15 +25,15 @@
                             </span>
                         </div>
                         <div class="column-bottom text-center h-10 d-flex justify-content-between align-items-center rounded-bottom px-4 bg-light">
-                            <span class="fs-6">1.1.0</span>
+                            <span class="fs-6">1.2.0</span>
                             <span class="fs-6">CAC</span>
                         </div>
                     </div>
-                    <div class="col">
+                    <div class="col col-h">
                     <router-link to="/listadeclientes">
                         <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                             <div class="column d-flex flex-row justify-content-between p-3 rounded text-secondary link-success">
-                                <div class="d-flex flex-column justify-content-center align-items-center icon rounded">
+                                <div class="d-flex justify-content-center align-items-center flex-shrink-0 icon rounded">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="#fff" class="bi bi-person-lines-fill" viewBox="0 0 16 16"><path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-5 6s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zM11 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5zm.5 2.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1h-4zm2 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1h-2zm0 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1h-2z"/></svg>
                                 </div>
                                 <div class="title-column">
@@ -51,15 +51,15 @@
                             </span>
                         </div>
                         <div class="column-bottom text-center h-10 d-flex justify-content-between align-items-center px-4 rounded-bottom bg-light">
-                            <span class="fs-6">1.1.0</span>
+                            <span class="fs-6">1.2.0</span>
                             <span class="fs-6">LDC</span>
                         </div>
                     </div>
-                    <div class="col">
+                    <div class="col col-h">
                      <router-link to="">
                         <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                             <div class="column d-flex flex-row justify-content-between p-3 rounded text-secondary link-success">
-                                <div class="d-flex flex-column justify-content-center align-items-center icon rounded">
+                                <div class="d-flex justify-content-center align-items-center flex-shrink-0 icon rounded">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="#fff" class="bi bi-list-columns-reverse" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M0 .5A.5.5 0 0 1 .5 0h2a.5.5 0 0 1 0 1h-2A.5.5 0 0 1 0 .5Zm4 0a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1h-10A.5.5 0 0 1 4 .5Zm-4 2A.5.5 0 0 1 .5 2h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5Zm4 0a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5Zm-4 2A.5.5 0 0 1 .5 4h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5Zm4 0a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5Zm-4 2A.5.5 0 0 1 .5 6h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5Zm4 0a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 0 1h-8a.5.5 0 0 1-.5-.5Zm-4 2A.5.5 0 0 1 .5 8h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5Zm4 0a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 0 1h-8a.5.5 0 0 1-.5-.5Zm-4 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5Zm4 0a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1h-10a.5.5 0 0 1-.5-.5Zm-4 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5Zm4 0a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5Zm-4 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5Zm4 0a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5Z"/></svg>
                                 </div>
                                 <div class="title-column" style="text-align: right;">
@@ -81,11 +81,11 @@
                             <span class="fs-6">LDPB</span>
                         </div>
                     </div>
-                    <div class="col">
+                    <div class="col col-h">
                     <router-link to="">
                         <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                             <div class="column d-flex flex-row justify-content-between p-3 rounded text-secondary link-success">
-                                <div class="d-flex flex-column justify-content-center align-items-center icon rounded">
+                                <div class="d-flex justify-content-center align-items-center flex-shrink-0 icon rounded">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="#fff" class="bi bi-list-columns-reverse" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M0 .5A.5.5 0 0 1 .5 0h2a.5.5 0 0 1 0 1h-2A.5.5 0 0 1 0 .5Zm4 0a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1h-10A.5.5 0 0 1 4 .5Zm-4 2A.5.5 0 0 1 .5 2h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5Zm4 0a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5Zm-4 2A.5.5 0 0 1 .5 4h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5Zm4 0a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5Zm-4 2A.5.5 0 0 1 .5 6h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5Zm4 0a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 0 1h-8a.5.5 0 0 1-.5-.5Zm-4 2A.5.5 0 0 1 .5 8h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5Zm4 0a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 0 1h-8a.5.5 0 0 1-.5-.5Zm-4 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5Zm4 0a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1h-10a.5.5 0 0 1-.5-.5Zm-4 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5Zm4 0a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5Zm-4 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5Zm4 0a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5Z"/></svg>
                                 </div>
                                 <div class="title-column" style="text-align: right;">
@@ -107,11 +107,11 @@
                             <span class="fs-6">LDPC</span>
                         </div>
                     </div>
-                     <div class="col">
+                     <div class="col col-h">
                     <router-link to="">
                         <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                             <div class="column d-flex flex-row justify-content-between p-3 rounded text-secondary link-success">
-                                <div class="d-flex flex-column justify-content-center align-items-center icon rounded">
+                                <div class="d-flex justify-content-center align-items-center flex-shrink-0 icon rounded">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="#fff" class="bi bi-list-columns-reverse" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M0 .5A.5.5 0 0 1 .5 0h2a.5.5 0 0 1 0 1h-2A.5.5 0 0 1 0 .5Zm4 0a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1h-10A.5.5 0 0 1 4 .5Zm-4 2A.5.5 0 0 1 .5 2h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5Zm4 0a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5Zm-4 2A.5.5 0 0 1 .5 4h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5Zm4 0a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5Zm-4 2A.5.5 0 0 1 .5 6h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5Zm4 0a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 0 1h-8a.5.5 0 0 1-.5-.5Zm-4 2A.5.5 0 0 1 .5 8h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5Zm4 0a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 0 1h-8a.5.5 0 0 1-.5-.5Zm-4 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5Zm4 0a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1h-10a.5.5 0 0 1-.5-.5Zm-4 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5Zm4 0a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5Zm-4 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5Zm4 0a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5Z"/></svg>
                                 </div>
                                 <div class="title-column" style="text-align: right;">
@@ -155,7 +155,7 @@ export default{
     }
     .container-page{
         width: 100%;
-        height: 800px;
+        height: 100vh;
         display: flex;
         align-items: flex-start;
         justify-content: center;
@@ -164,6 +164,7 @@ export default{
 
     .page-content{
         width: 100%;
+        height: auto;
         margin: 50px 0px;
     }
 
@@ -172,12 +173,12 @@ export default{
         height: 100px;
     }
 
-    .col{
+    .col-h{
         transition: all .3s cubic-bezier(0.4, 0, 0.2, 1);
         transform: translateY(0rem);
     }
 
-    .col:hover{
+    .col-h:hover{
         transition: all .3s cubic-bezier(0.4, 0, 0.2, 1);;
         transform: translateY(-0.75rem)
     }
@@ -203,5 +204,16 @@ export default{
 
     .column-bottom{
         height: 40px;
+    }
+
+    @media (max-width: 1366px){
+        .title-column{
+            font-size: 14px;
+            text-align: right;
+        }
+        #tooltip svg{
+            width: 15px;
+            height: 15px;
+        }
     }
 </style>

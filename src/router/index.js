@@ -3,6 +3,8 @@ import HomeView from '../views/HomeView.vue'
 import ControlAltaClientes from '../views/ControlAltaClientes.vue'
 import ListadeClientes from '../views/ListadeClientes.vue'
 import DeposANoConsiderar from '../views/DeposaNoConsiderar.vue'
+import NPAConsiderar from '../views/NPaConsiderar.vue'
+import DimensionesContenedores from '../views/DimensionesContenedores.vue'
 
 
 const routes = [
@@ -63,6 +65,32 @@ const routes = [
       metaTags: [
         {
           name: 'Deposito a No Considerar'
+        }      ]
+    }
+  },
+  {
+    path: '/npaconsiderar',
+    name: 'NP a Considerar',
+    component: NPAConsiderar,
+    props: true,
+    meta: {
+      title: 'NP a Considerar',
+      metaTags: [
+        {
+          name: 'NP a Considerar'
+        }      ]
+    }
+  },
+  {
+    path: '/dimensionescontenedores',
+    name: 'Dimensiones aprox. de contenedores',
+    component: DimensionesContenedores,
+    props: true,
+    meta: {
+      title: 'Dimensiones aprox. de contenedores',
+      metaTags: [
+        {
+          name: 'Dimensiones aprox. de contenedores'
         }      ]
     }
   }
