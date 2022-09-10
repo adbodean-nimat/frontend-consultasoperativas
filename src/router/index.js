@@ -5,6 +5,8 @@ import ListadeClientes from '../views/ListadeClientes.vue'
 import DeposANoConsiderar from '../views/DeposaNoConsiderar.vue'
 import NPAConsiderar from '../views/NPaConsiderar.vue'
 import DimensionesContenedores from '../views/DimensionesContenedores.vue'
+import MovimientosContenedores from '../views/MovimientosDeContenedores.vue'
+import ListaContenedores from '../views/Containers.vue'
 
 
 const routes = [
@@ -91,6 +93,32 @@ const routes = [
       metaTags: [
         {
           name: 'Dimensiones aprox. de contenedores'
+        }      ]
+    }
+  },
+  {
+    path: '/movimientosdecontenedores',
+    name: 'Movimientos de contenedores',
+    component: MovimientosContenedores,
+    props: true,
+    meta: {
+      title: 'Movimientos de contenedores',
+      metaTags: [
+        {
+          name: 'Movimientos de contenedores'
+        }      ]
+    }
+  },
+  {
+    path: '/containers',
+    name: 'Lista de precio - Containers',
+    component: ListaContenedores,
+    props: true,
+    meta: {
+      title: 'Lista de precio - Containers',
+      metaTags: [
+        {
+          name: 'Lista de precio - Containers'
         }      ]
     }
   }

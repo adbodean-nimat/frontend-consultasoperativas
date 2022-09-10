@@ -27,7 +27,7 @@
                       >
     </datasource>
     <grid ref="grid"
-          :height="'100vh'"
+          :height="'95vh'"
           :data-source-ref="'remoteDataSource2'"
           :sortable-mode="'multiple'"
           :sortable-allow-unsort="true"

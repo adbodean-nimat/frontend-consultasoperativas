@@ -17,16 +17,16 @@
   </div>
   
   <datasource ref="remoteDataSource4"
-                    :transport-read-url="'http://192.168.0.182:8090/api/dimensionescontenedores/'"
+                    :transport-read-url="'http://192.168.0.250:8090/api/dimensionescontenedores/'"
                     :transport-read-content-type="'application/json; charset=utf-8'"
                     :transport-read-data-type="'json'"
-                    :transport-update-url="'http://192.168.0.182:8090/api/dimensionescontenedores/'"
+                    :transport-update-url="'http://192.168.0.250:8090/api/dimensionescontenedores/'"
                     :transport-update-content-type="'application/json; charset=utf-8'"
                     :transport-update-data-type="'json'"
-                    :transport-destroy-url="'http://192.168.0.182:8090/api/dimensionescontenedores/'"
+                    :transport-destroy-url="'http://192.168.0.250:8090/api/dimensionescontenedores/'"
                     :transport-destroy-content-type="'application/json; charset=utf-8'"
                     :transport-destroy-data-type="'json'"
-                    :transport-create-url="'http://192.168.0.182:8090/api/dimensionescontenedores/'"
+                    :transport-create-url="'http://192.168.0.250:8090/api/dimensionescontenedores/'"
                     :transport-create-content-type="'application/json; charset=utf-8'"
                     :transport-create-data-type="'json'"
                     :transport-parameter-map="parameterMap"
@@ -164,7 +164,7 @@ export default {
                 "medidas_largo": JSON.stringify(options.models[0].medidas_largo),
                 };
                 let json = JSON.stringify(params);
-                var destroyUrl = "http://192.168.0.182:8090/api/dimensionescontenedores/"
+                var destroyUrl = "http://192.168.0.250:8090/api/dimensionescontenedores/"
                 $.ajax({
                     method: "DELETE",
                     url: destroyUrl + Id,
@@ -179,7 +179,7 @@ export default {
                 //return JSON.stringify(options.models[0],["cod_comp","nomb_comp"]);
                 let params = JSON.stringify(options.models[0],["clas4_clas5", "nombre", "medidas_ancho", "medidas_alto_puerta", "medidas_alto_interior", "medidas_largo"])
                 let json = JSON.parse(params)
-                var createUrl = "http://192.168.0.182:8090/api/dimensionescontenedores/"
+                var createUrl = "http://192.168.0.250:8090/api/dimensionescontenedores/"
                 $.ajax({
                     method: "POST",
                     url: createUrl,
@@ -195,7 +195,7 @@ export default {
                 var Id = JSON.stringify(options.models[0].id);
                 let params = JSON.stringify(options.models[0],["clas4_clas5", "nombre", "medidas_ancho", "medidas_alto_puerta", "medidas_alto_interior", "medidas_largo"]);
                 let json = JSON.parse(params);
-                var updateUrl = "http://192.168.0.182:8090/api/dimensionescontenedores/"
+                var updateUrl = "http://192.168.0.250:8090/api/dimensionescontenedores/"
                 $.ajax({
                     method: "PUT",
                     url: updateUrl + Id,

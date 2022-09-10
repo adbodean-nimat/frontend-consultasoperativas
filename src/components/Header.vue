@@ -7,7 +7,7 @@
                 </router-link>
             </div>
             <div class="titulo">
-                <!-- <span>{{titleGeneral}}</span> -->
+                <span>{{titulo}}</span>
             </div>
         </div>
         <nav class="navbar navbar-expand-lg navbar-light">
@@ -22,14 +22,11 @@
 <script>
 export default {
   name: 'HeaderVue',
- /*  props: {
-    titleGeneral: String
-}, */
-/* data(){
-    return{
-        titleGeneral: 'Tablero - Consulta'
+  data: function(){
+    return {
+        titulo: 'Consultas Operativas',
     }
-} */
+  }  
 }
 </script>
 
@@ -58,15 +55,16 @@ header{
 
 .titulo{
     width: auto;
-    height: 70px;
+    height: auto;
     display: flex;
     align-items: center;
     justify-content: center;
     letter-spacing: 0px;
+    margin-left: 15px;
 }
 
 .titulo span{
-    font-size: 24px;
+    font-size: 16px;
     font-weight: 400;
 }
 

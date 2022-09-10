@@ -27,7 +27,7 @@
                       >
     </datasource>
     <grid ref="grid"
-          :height="'100vh'"
+          :height="'95vh'"
           :data-source-ref="'remoteDataSource'"
           :sortable-mode="'multiple'"
           :sortable-allow-unsort="true"
@@ -244,15 +244,11 @@ export default {
     text-overflow: ellipsis;
 }
 
-.k-grid-content{
-  overflow-x: scroll;
-}
-
 .page-grid{
-  height: 100vh ;
+  height: auto;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   background-color: currentColor;
 }
 
@@ -264,12 +260,13 @@ export default {
 
 .encabezado-titulo{
   background-color: #008645; 
-  height: 45px; 
+  height: 5vh; 
   border-top-left-radius: 10px; 
   border-top-right-radius: 10px;
   margin-top: 10px; 
   display: flex; 
   justify-content:space-between; 
   align-items: center; 
+  padding: 0.5rem 0.5rem;
 }
 </style>
