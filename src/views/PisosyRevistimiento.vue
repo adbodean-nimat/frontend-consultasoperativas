@@ -16,20 +16,19 @@
             </div>
           </div>
         </div>
-        <datasource ref="remoteDataSourceContainers"
-                          :transport-read-url="'http://192.168.0.250:8090/api/listacontenedores'"
+        <datasource ref="remoteDataSourcePyR"
+                          :transport-read-url="'http://192.168.0.182:8090/api/listapyr'"
                           :transport-read-data-type="'json'"
                           :transport-read-content-type="'application/json'"
                           :transport-read-type="'GET'"
                           :transport-read-cache="false"
                           :schema-model-fields="schemaModelFields"
-                          :aggregate="aggregateDefinition"
                           :page-size='50'
                           >
         </datasource>
         <grid ref="grid"
               :height="'95vh'"
-              :data-source-ref="'remoteDataSourceContainers'"
+              :data-source-ref="'remoteDataSourcePyR'"
               :sortable-mode="'multiple'"
               :pageable-page-sizes="[5, 10, 15, 20, 25, 100]"
               :filterable="true"
@@ -42,32 +41,20 @@
               :allow-copy="true"
               :selectable="true"
               >
-              <grid-column field="Movimientos" title="¿Movimientos?" :width="140" :filterable-multi="true" :locked="true" :footer-template="'Total'"></grid-column>
-              <grid-column field="Longitud" title="Longitud" :width="100" :filterable-multi="true" :locked="true"></grid-column>
-              <grid-column field="Tipo" title="Tipo" :width="100" :filterable-multi="true" :locked="true"></grid-column>
-              <grid-column field="Cód_Art" title="Cód Art" :width="100" :locked="true"></grid-column>
-              <grid-column field="Nombre_art" title="Nombre art" :width="340" :locked="true"></grid-column>
-              <grid-column field="Stock_Uni" title="Stock Uni" :width="120" :aggregates="['sum']" :footer-template="'#=sum#'"></grid-column>
-              <grid-column field="Uni_Pte_Entr_NP" title="Uni_Pte_Entr_NP" :filterable-multi="true" :width="120" :aggregates="['sum']" :footer-template="'#=sum#'"></grid-column>
-              <grid-column field="Stk_Disp_pVta" title="Stk Disp p/Vta" :filterable-multi="true" :width="120" :aggregates="['sum']" :footer-template="'#=sum#'"></grid-column>
-              <grid-column field="Pre_Cdo_USD_con_IVA" title="Pre Cdo USD con IVA" :width="120" :format="'{0:c}'"></grid-column>
-              <grid-column field="Pre_Cdo_AR_cIVA_L1" title="Pre Cdo AR c/IVA L1" :width="120" :format="'{0:c}'"></grid-column>
-              <grid-column field="Cant_Mov_Nro" title="Cant Mov Nro" :width="120" :filterable-multi="true"></grid-column>
-              <grid-column field="Precio_ARxmov_01500026" title="Precio AR$ x mov 01500026" :width="120" :format="'{0:c}'"></grid-column>
-              <grid-column field="Total_mov" title="Total mov" :width="120" :format="'{0:c}'"></grid-column>
-              <grid-column field="Contenedor_c_mov_AR_cdo_efect" title="Contenedor c/ mov AR$ cdo efect" :width="120" :format="'{0:c}'"></grid-column>
-              <grid-column field="Depósito" title="Depósito" :width="120" :filterable-multi="true"></grid-column>
-              <grid-column field="Moneda_del_Precio_Lista_en_USD" title="Moneda del Precio Lista en USD" :width="250"></grid-column>
-              <grid-column field="Cotización" title="Cotización" :width="120"></grid-column>
-              <grid-column field="IVA_incluido_en_precio" title="IVA incluido en precio" :width="120"></grid-column>
-              <grid-column field="Año_de_fabricación" title="Año de fabricación" :filterable-multi="true" :width="120"></grid-column>
-              <grid-column field="Peso_aprox_Kg" title="Peso aprox Kg" :width="120"></grid-column>
-              <grid-column field="Nro_cliente" title="Nro. cliente" :filterable-multi="true" :width="120"></grid-column>
-              <grid-column field="Nombre_Cliente" title="Nombre Cliente" :filterable-multi="true" :width="300"></grid-column>
-              <grid-column field="Observación_NP" title="Observación NP" :width="600"></grid-column>
-              <grid-column field="Vendedor" title="Vendedor" :filterable-multi="true" :width="150"></grid-column>
-              <grid-column field="Medidas_interiores" title="Medidas Interiores" :width="400"></grid-column>
-
+              <grid-column field="CA03_NOMBRE" title="Nombre Cat6" :width="160" :filterable-multi="true"></grid-column>
+              <grid-column field="Tipología" title="Tipología" :width="130" :filterable-multi="true"></grid-column>
+              <grid-column field="ARTS_ARTICULO_EMP" title="Código Art." :width="100"></grid-column>
+              <grid-column field="ARTS_NOMBRE" title="Nombre Art." :width="400"></grid-column>
+              <grid-column field="Pre_Cdo_con_IVA_L1" title="Pre Cdo con IVA L1" :format="'{0:c}'"></grid-column>
+              <grid-column field="Pre_Cdo_con_IVA_M2" title="Pre Cdo con IVA M2" :format="'{0:c}'"></grid-column>
+              <grid-column field="RAC_M2" title="RAC M2"></grid-column>
+              <grid-column field="Stock_Uni" title="Stock Uni"></grid-column>
+              <grid-column field="Stock_M2" title="Stock M2"></grid-column>
+              <grid-column field="M2_Pte_Entr_NP" title="M2 Pte Entr NP"></grid-column>
+              <grid-column field="M2_Disp_Habil_Vta" title="M2 Disp Habil Vta"></grid-column>
+              <grid-column field="Bloqueado_Vtas" title="Bloqueado Vtas" :filterable-multi="true"></grid-column>
+              <grid-column field="M2_Bloqueado_Vta" title="M2 Bloqueado Vta" :filterable-multi="true"></grid-column>
+              <grid-column field="Uso" title="Uso" :filterable-multi="true"></grid-column>
         </grid>
       </div>
     </div>
@@ -84,7 +71,7 @@
     import { directive as fullscreen } from 'vue-fullscreen'
     
     export default {
-      name: 'ListaContainers',
+      name: 'ListaPYR',
       directives: {
         fullscreen,
       },
@@ -99,39 +86,23 @@
                 fullscreen: false,
                 teleport: true,
                 pageOnly: true,
-                title: 'Lista de Precios - Containers',
+                title: 'Lista de precio - Pisos y Revistimiento con Stock',
                 schemaModelFields: {
-                    Movimientos: {type: 'string'},
-                    Longitud: {type: 'string'},
-                    Tipo: {type: 'string'},
-                    Cód_Art: {type: 'string'},
-                    Nombre_art: {type: 'string'},
+                    CA03_NOMBRE: {type: 'string'},
+                    Tipología: {type: 'string'},
+                    ARTS_ARTICULO_EMP: {type: 'string'},
+                    ARTS_NOMBRE: {type: 'string'},
+                    Pre_Cdo_con_IVA_L1: {type: 'number'},
+                    Pre_Cdo_con_IVA_M2: {type: 'number'},
+                    RAC_M2: {type: 'number'},
                     Stock_Uni: {type: 'number'},
-                    Uni_Pte_Entr_NP: {type: 'number'},
-                    Stk_Disp_pVta: {type: 'number'},
-                    Pre_Cdo_USD_con_IVA: {type: 'number'},
-                    Pre_Cdo_AR_cIVA_L1: {type: 'number'},
-                    Cant_Mov_Nro: {type: 'number'},
-                    Precio_ARxmov_01500026: {type: 'number'},
-                    Total_mov: {type: 'number'},
-                    Contenedor_c_mov_AR_cdo_efect: {type: 'number'},
-                    Depósito: {type: 'string'},
-                    Moneda_del_Precio_Lista_en_USD: {type: 'string'},
-                    Cotización: {type: 'number'},
-                    IVA_incluido_en_precio: {type: 'string'},
-                    Año_de_fabricación: {type: 'string'},
-                    Peso_aprox_Kg: {type: 'number'},
-                    Nro_cliente: {type: 'number'},
-                    Nombre_Cliente: {type: 'string'},
-                    Observación_NP: {type: 'string'},
-                    Vendendor: {type: 'string'},
-                    Medidas_interiores: {type: 'string'}
-                },
-                aggregateDefinition: [
-                    {field: "Stock_Uni", aggregate: "sum"},
-                    {field: "Uni_Pte_Entr_NP", aggregate: "sum"},
-                    {field: "Stk_Disp_pVta", aggregate: "sum"}
-                ]
+                    Stock_M2: {type: 'number'},
+                    M2_Pte_Entr_NP: {type: 'number'},
+                    M2_Disp_Habil_Vta: {type: 'number'},
+                    Bloqueado_Vtas: {type: 'string'},
+                    M2_Bloqueado_Vta: {type: 'number'},
+                    Uso: {type: 'string'}
+                }
              }
       },
       computed: {

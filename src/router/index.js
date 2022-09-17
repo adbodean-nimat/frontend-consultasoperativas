@@ -7,6 +7,7 @@ import NPAConsiderar from '../views/NPaConsiderar.vue'
 import DimensionesContenedores from '../views/DimensionesContenedores.vue'
 import MovimientosContenedores from '../views/MovimientosDeContenedores.vue'
 import ListaContenedores from '../views/Containers.vue'
+import ListaPyR from '../views/PisosyRevistimiento.vue'
 
 
 const routes = [
@@ -119,6 +120,19 @@ const routes = [
       metaTags: [
         {
           name: 'Lista de precio - Containers'
+        }      ]
+    }
+  },
+  {
+    path: '/pisosyrevistimiento',
+    name: 'Lista de precio - Pisos y Revistimiento con Stock',
+    component: ListaPyR,
+    props: true,
+    meta: {
+      title: 'Lista de precio - Pisos y Revistimiento con Stock',
+      metaTags: [
+        {
+          name: 'Lista de precio - Pisos y Revistimiento con Stock'
         }      ]
     }
   }
