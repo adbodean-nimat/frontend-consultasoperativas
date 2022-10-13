@@ -17,7 +17,7 @@
           </div>
         </div>
         <datasource ref="remoteDataSourceBreveUso"
-                          :transport-read-url="'http://192.168.0.182:8090/api/listabreveuso'"
+                          :transport-read-url="'http://192.168.0.250:8090/api/listabreveuso'"
                           :transport-read-data-type="'json'"
                           :transport-read-content-type="'application/json'"
                           :transport-read-type="'GET'"
