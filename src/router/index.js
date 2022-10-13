@@ -8,6 +8,7 @@ import DimensionesContenedores from '../views/DimensionesContenedores.vue'
 import MovimientosContenedores from '../views/MovimientosDeContenedores.vue'
 import ListaContenedores from '../views/Containers.vue'
 import ListaPyR from '../views/PisosyRevistimiento.vue'
+import ListaBUI from '../views/BreveUsoInterno.vue'
 
 
 const routes = [
@@ -24,14 +25,6 @@ const routes = [
         }      ]
     }
   },
-  //{
-  //  path: '/prueba',
-  //  name: 'Prueba',
-  // route level code-splitting
-  // this generates a separate chunk (about.[hash].js) for this route
-  // which is lazy-loaded when the route is visited.
-  //component: () => import(/* webpackChunkName: "about" */ '../views/PruebaView.vue')
-  //},
   {
     path: '/controlaltaclientes',
     name: 'Control Alta Clientes',
@@ -133,6 +126,19 @@ const routes = [
       metaTags: [
         {
           name: 'Lista de precio - Pisos y Revistimiento con Stock'
+        }      ]
+    }
+  },
+  {
+    path: '/breveusointerno',
+    name: 'Lista de precio - Breve Uso Interno',
+    component: ListaBUI,
+    props: true,
+    meta: {
+      title: 'Lista de precio - Breve Uso Interno',
+      metaTags: [
+        {
+          name: 'Lista de precio - Breve Uso Interno'
         }      ]
     }
   }

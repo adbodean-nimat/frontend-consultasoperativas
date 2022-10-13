@@ -16,45 +16,45 @@
             </div>
           </div>
         </div>
-        <datasource ref="remoteDataSourcePyR"
-                          :transport-read-url="'http://192.168.0.250:8090/api/listapyr'"
+        <datasource ref="remoteDataSourceBreveUso"
+                          :transport-read-url="'http://192.168.0.182:8090/api/listabreveuso'"
                           :transport-read-data-type="'json'"
                           :transport-read-content-type="'application/json'"
                           :transport-read-type="'GET'"
                           :transport-read-cache="false"
                           :schema-model-fields="schemaModelFields"
-                          :page-size='50'
+                          :group="groupDefinition"
+                          :page-size='100'
                           >
         </datasource>
         <grid ref="grid"
               :height="'95vh'"
-              :data-source-ref="'remoteDataSourcePyR'"
+              :data-source-ref="'remoteDataSourceBreveUso'"
               :sortable-mode="'multiple'"
               :pageable-page-sizes="[5, 10, 15, 20, 25, 100]"
               :filterable="true"
               :reorderable="true"
               :resizable="true"
-              :groupable="true"
               :column-menu="true"
               :navigatable="true"
               :toolbar="toolbarTemplate"
               :allow-copy="true"
               :selectable="true"
+              :pdf-all-pages="true"
+              :pdf-avoid-links="true"
+              :pdf-paper-size="'A4'"
+              :pdf-margin="{ top: '2cm', left: '1cm', right: '1cm', bottom: '1cm' }"
+              :pdf-landscape="true"
+              :pdf-repeat-headers="true"
+              :pdf-scale="0.8"
               >
-              <grid-column field="CA03_NOMBRE" title="Nombre Cat6" :width="160" :filterable-multi="true"></grid-column>
-              <grid-column field="Tipología" title="Tipología" :width="130" :filterable-multi="true"></grid-column>
               <grid-column field="ARTS_ARTICULO_EMP" title="Código Art." :width="100"></grid-column>
-              <grid-column field="ARTS_NOMBRE" title="Nombre Art." :width="400"></grid-column>
-              <grid-column field="Pre_Cdo_con_IVA_L1" title="Pre Cdo con IVA L1" :format="'{0:c}'"></grid-column>
-              <grid-column field="Pre_Cdo_con_IVA_M2" title="Pre Cdo con IVA M2" :format="'{0:c}'"></grid-column>
-              <grid-column field="RAC_M2" title="RAC M2"></grid-column>
-              <grid-column field="Stock_Uni" title="Stock Uni"></grid-column>
-              <grid-column field="Stock_M2" title="Stock M2"></grid-column>
-              <grid-column field="M2_Pte_Entr_NP" title="M2 Pte Entr NP"></grid-column>
-              <grid-column field="M2_Disp_Habil_Vta" title="M2 Disp Habil Vta"></grid-column>
-              <grid-column field="Bloqueado_Vtas" title="Bloqueado Vtas" :filterable-multi="true"></grid-column>
-              <grid-column field="M2_Bloqueado_Vta" title="M2 Bloqueado Vta" :filterable-multi="true"></grid-column>
-              <grid-column field="Uso" title="Uso" :filterable-multi="true"></grid-column>
+              <grid-column field="ARTS_NOMBRE" title="Nombre Art." :width="500"></grid-column>
+              <grid-column field="Pre_Lista_con_IVA_L1" title="Precio Lista" :format="'{0:c}'" :width="200"></grid-column>
+              <grid-column field="Pre_Cdo_con_IVA_L1" title="Precio Cdo" :format="'{0:c}'" :width="200"></grid-column>
+              <grid-column field="Grupo_del_art" title="Grupo del Art." :filterable-multi="true" :width="300" :hidden="true"></grid-column>
+              <grid-column field="Nro_orden_art" title="Nro. Orden Art." :width="100" :hidden="true"></grid-column>
+              <grid-column field="Comentario1" title="Comentario"></grid-column>
         </grid>
       </div>
     </div>
@@ -71,7 +71,7 @@
     import { directive as fullscreen } from 'vue-fullscreen'
     
     export default {
-      name: 'ListaPYR',
+      name: 'ListaBreveUsoInterno',
       directives: {
         fullscreen,
       },
@@ -86,22 +86,18 @@
                 fullscreen: false,
                 teleport: true,
                 pageOnly: true,
-                title: 'Lista de precio - Pisos y Revistimiento con Stock',
+                title: 'Lista de precio - Breve Uso Interno',
                 schemaModelFields: {
-                    CA03_NOMBRE: {type: 'string'},
-                    Tipología: {type: 'string'},
                     ARTS_ARTICULO_EMP: {type: 'string'},
                     ARTS_NOMBRE: {type: 'string'},
+                    Pre_Lista_con_IVA_L1: {type: 'number'},
                     Pre_Cdo_con_IVA_L1: {type: 'number'},
-                    Pre_Cdo_con_IVA_M2: {type: 'number'},
-                    RAC_M2: {type: 'number'},
-                    Stock_Uni: {type: 'number'},
-                    Stock_M2: {type: 'number'},
-                    M2_Pte_Entr_NP: {type: 'number'},
-                    M2_Disp_Habil_Vta: {type: 'number'},
-                    Bloqueado_Vtas: {type: 'string'},
-                    M2_Bloqueado_Vta: {type: 'number'},
-                    Uso: {type: 'string'}
+                    Grupo_del_art: {type: 'string'},
+                    Nro_orden_art: {type: 'number'},
+                    Comentario1: {type: 'string'}
+                },
+                groupDefinition: {
+                    field: 'Grupo_del_art',
                 }
              }
       },
