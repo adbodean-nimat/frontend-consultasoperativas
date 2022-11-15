@@ -17,7 +17,7 @@
       </div>
     </div>
     <datasource ref="remoteDataSource"
-                      :transport-read-url="'http://192.168.0.250:8090/api/control/'"
+                      :transport-read-url="UrlApiBase"
                       :transport-read-data-type="'json'"
                       :transport-read-content-type="'application/json'"
                       :transport-read-type="'GET'"
@@ -48,9 +48,9 @@
           :scrollable-virtual="false"
           :scrollable-endless="false"
           >
-          <grid-column field="CLIE_FECHA_ALTA" title="Fecha Alta" type="date" format="{0:dd-MM-yyyy}" :width="150"></grid-column>
-          <grid-column field="AUDI_USUARIO" title="Auditoría" :filterable-search="true" :filterable-multi="true" :width="130"></grid-column>
-          <grid-column field="USUA_NOMBRE" title="Nombre Usuario" :width="200" :filterable-multi="true"></grid-column>
+          <grid-column field="CLIE_FECHA_ALTA" title="Fecha Alta" type="date" format="{0:dd-MM-yyyy}" :width="150" :locked="true"></grid-column>
+          <grid-column field="AUDI_USUARIO" title="Auditoría" :filterable-search="true" :filterable-multi="true" :width="130" :locked="true"></grid-column>
+          <grid-column field="USUA_NOMBRE" title="Nombre Usuario" :width="200" :filterable-multi="true" :locked="true"></grid-column>
           <grid-column field="VEND_NOMBRE" title="Vendedor" :width="135" :filterable-multi="true"></grid-column>
           <grid-column field="CLIE_CLIENTE" title="Nro. Cliente" :width="135"></grid-column>
           <grid-column field="CLIE_NOMBRE" title="Nombre Cliente" :width="200"></grid-column>
@@ -123,6 +123,9 @@ export default {
          }
   },
   computed: {
+    UrlApiBase(){
+      return `${process.env.VUE_APP_API_BASE}/control`
+    },
     options () {
       return {
         callback: (isFullscreen) => {

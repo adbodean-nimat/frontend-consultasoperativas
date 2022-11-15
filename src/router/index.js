@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import Tablero from '../views/Tablero.vue'
 import ControlAltaClientes from '../views/ControlAltaClientes.vue'
 import ListadeClientes from '../views/ListadeClientes.vue'
 import DeposANoConsiderar from '../views/DeposaNoConsiderar.vue'
@@ -9,16 +9,32 @@ import MovimientosContenedores from '../views/MovimientosDeContenedores.vue'
 import ListaContenedores from '../views/Containers.vue'
 import ListaPyR from '../views/PisosyRevistimiento.vue'
 import ListaBUI from '../views/BreveUsoInterno.vue'
+import ListadePrecioBUI from '../views/ListadePrecioBUI.vue'
+import Tablas from '../views/Tablas.vue'
+import Login from "../views/Login.vue";
 
 
 const routes = [
   {
-    path: '/',
-    name: 'home',
-    component: HomeView,
+    path: '/login',
+    name: 'Login',
+    component: Login,
     props: true,
     meta: {
-      title: 'Inicio - Tablero',
+      title: 'Login',
+      metaTags: [
+        {
+          name: 'Login'
+        }      ]
+    }
+  },
+  {
+    path: '/',
+    name: 'tablero',
+    component: Tablero,
+    props: true,
+    meta: {
+      title: 'Tablero',
       metaTags: [
         {
           name: 'Tablero'
@@ -52,8 +68,21 @@ const routes = [
     }
   },
   {
-    path: '/deposanoconsiderar',
-    name: 'Deposito a No Considerar',
+    path: '/tablas',
+    name: 'Tablas',
+    component: Tablas,
+    props: true,
+    meta: {
+      title: 'Tablas',
+      metaTags: [
+        {
+          name: 'Tablas'
+        }      ]
+    }
+  },
+  {
+    path: '/tabla/deposanoconsiderar',
+    name: 'Tabla: Deposito a No Considerar',
     component: DeposANoConsiderar,
     props: true,
     meta: {
@@ -65,8 +94,8 @@ const routes = [
     }
   },
   {
-    path: '/npaconsiderar',
-    name: 'NP a Considerar',
+    path: '/tabla/npaconsiderar',
+    name: 'Tabla: NP a Considerar',
     component: NPAConsiderar,
     props: true,
     meta: {
@@ -78,8 +107,8 @@ const routes = [
     }
   },
   {
-    path: '/dimensionescontenedores',
-    name: 'Dimensiones aprox. de contenedores',
+    path: '/tabla/dimensionescontenedores',
+    name: 'Tabla: Dimensiones aprox. de contenedores',
     component: DimensionesContenedores,
     props: true,
     meta: {
@@ -91,8 +120,8 @@ const routes = [
     }
   },
   {
-    path: '/movimientosdecontenedores',
-    name: 'Movimientos de contenedores',
+    path: '/tabla/movimientosdecontenedores',
+    name: 'Tabla: Movimientos de contenedores',
     component: MovimientosContenedores,
     props: true,
     meta: {
@@ -100,6 +129,19 @@ const routes = [
       metaTags: [
         {
           name: 'Movimientos de contenedores'
+        }      ]
+    }
+  },
+  {
+    path: '/tabla/listadepreciobreveusointerno',
+    name: 'Tabla: Lista de precio Breve Uso Interno',
+    component: ListadePrecioBUI,
+    props: true,
+    meta: {
+      title: 'Tabla: Lista de precio Breve Uso Interno',
+      metaTags: [
+        {
+          name: 'Tabla: Lista de precio Breve Uso Interno'
         }      ]
     }
   },

@@ -17,7 +17,7 @@
           </div>
         </div>
         <datasource ref="remoteDataSourceContainers"
-                          :transport-read-url="'http://192.168.0.250:8090/api/listacontenedores'"
+                          :transport-read-url="UrlApiBase"
                           :transport-read-data-type="'json'"
                           :transport-read-content-type="'application/json'"
                           :transport-read-type="'GET'"
@@ -58,7 +58,7 @@
               <grid-column field="Contenedor_c_mov_AR_cdo_efect" title="Contenedor c/ mov AR$ cdo efect" :width="120" :format="'{0:c}'"></grid-column>
               <grid-column field="Depósito" title="Depósito" :width="120" :filterable-multi="true"></grid-column>
               <grid-column field="Moneda_del_Precio_Lista_en_USD" title="Moneda del Precio Lista en USD" :width="250"></grid-column>
-              <grid-column field="Cotización" title="Cotización" :width="120"></grid-column>
+              <grid-column field="Cotización" title="Cotización" :width="120" :format="'{0:c}'"></grid-column>
               <grid-column field="IVA_incluido_en_precio" title="IVA incluido en precio" :width="120"></grid-column>
               <grid-column field="Año_de_fabricación" title="Año de fabricación" :filterable-multi="true" :width="120"></grid-column>
               <grid-column field="Peso_aprox_Kg" title="Peso aprox Kg" :width="120"></grid-column>
@@ -135,6 +135,9 @@
              }
       },
       computed: {
+        UrlApiBase(){
+          return `${process.env.VUE_APP_API_BASE}/listacontenedores`
+        },
         options () {
           return {
             callback: (isFullscreen) => {

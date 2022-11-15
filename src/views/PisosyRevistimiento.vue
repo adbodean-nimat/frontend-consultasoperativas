@@ -17,7 +17,7 @@
           </div>
         </div>
         <datasource ref="remoteDataSourcePyR"
-                          :transport-read-url="'http://192.168.0.250:8090/api/listapyr'"
+                          :transport-read-url="UrlApiBase"
                           :transport-read-data-type="'json'"
                           :transport-read-content-type="'application/json'"
                           :transport-read-type="'GET'"
@@ -106,6 +106,9 @@
              }
       },
       computed: {
+        UrlApiBase(){
+          return `${process.env.VUE_APP_API_BASE}/listapyr`
+        },
         options () {
           return {
             callback: (isFullscreen) => {

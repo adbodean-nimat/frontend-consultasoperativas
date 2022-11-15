@@ -6,7 +6,7 @@
 // @ is an alias to /src
 import TableroVue from '../components/Tablero.vue'
 export default {
-  name: 'HomeView',
+  name: 'Tablero',
   components: {
     TableroVue
   }

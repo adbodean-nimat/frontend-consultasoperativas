@@ -17,16 +17,16 @@
   </div>
   
   <datasource ref="remoteDataSource4"
-                    :transport-read-url="'http://192.168.0.250:8090/api/npaconsiderar/'"
+                    :transport-read-url="UrlApiBase"
                     :transport-read-content-type="'application/json; charset=utf-8'"
                     :transport-read-data-type="'json'"
-                    :transport-update-url="'http://192.168.0.250:8090/api/npaconsiderar/'"
+                    :transport-update-url="UrlApiBase"
                     :transport-update-content-type="'application/json; charset=utf-8'"
                     :transport-update-data-type="'json'"
-                    :transport-destroy-url="'http://192.168.0.250:8090/api/npaconsiderar/'"
+                    :transport-destroy-url="UrlApiBase"
                     :transport-destroy-content-type="'application/json; charset=utf-8'"
                     :transport-destroy-data-type="'json'"
-                    :transport-create-url="'http://192.168.0.250:8090/api/npaconsiderar/'"
+                    :transport-create-url="UrlApiBase"
                     :transport-create-content-type="'application/json; charset=utf-8'"
                     :transport-create-data-type="'json'"
                     :transport-parameter-map="parameterMap"
@@ -90,6 +90,9 @@ export default {
          }
     },
   computed: {
+    UrlApiBase(){
+          return `${process.env.VUE_APP_API_BASE}/npaconsiderar/`
+    },
     options () {
       return {
         callback: (isFullscreen) => {
@@ -149,7 +152,7 @@ export default {
                 "nomb_comp": JSON.stringify(options.models[0].nomb_comp),
                 };
                 let json = JSON.stringify(params);
-                var destroyUrl = "http://192.168.0.250:8090/api/npaconsiderar/"
+                var destroyUrl = `${process.env.VUE_APP_API_BASE}/npaconsiderar/`
                 $.ajax({
                     method: "DELETE",
                     url: destroyUrl + Id,
@@ -164,7 +167,7 @@ export default {
                 //return JSON.stringify(options.models[0],["cod_comp","nomb_comp"]);
                 let params = JSON.stringify(options.models[0],["cod_comp", "nomb_comp"])
                 let json = JSON.parse(params)
-                var createUrl = "http://192.168.0.250:8090/api/npaconsiderar/"
+                var createUrl = `${process.env.VUE_APP_API_BASE}/npaconsiderar/`
                 $.ajax({
                     method: "POST",
                     url: createUrl,
@@ -180,7 +183,7 @@ export default {
                 var Id = JSON.stringify(options.models[0].id);
                 let params = JSON.stringify(options.models[0],["cod_comp", "nomb_comp"]);
                 let json = JSON.parse(params);
-                var updateUrl = "http://192.168.0.250:8090/api/npaconsiderar/"
+                var updateUrl = `${process.env.VUE_APP_API_BASE}/npaconsiderar/`
                 $.ajax({
                     method: "PUT",
                     url: updateUrl + Id,

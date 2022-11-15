@@ -17,16 +17,16 @@
   </div>
   
   <datasource ref="remoteDataSource5"
-                    :transport-read-url="'http://192.168.0.250:8090/api/movimientosdecontenedores/'"
+                    :transport-read-url="UrlApiBase"
                     :transport-read-content-type="'application/json; charset=utf-8'"
                     :transport-read-data-type="'json'"
-                    :transport-update-url="'http://192.168.0.250:8090/api/movimientosdecontenedores/'"
+                    :transport-update-url="UrlApiBase"
                     :transport-update-content-type="'application/json; charset=utf-8'"
                     :transport-update-data-type="'json'"
-                    :transport-destroy-url="'http://192.168.0.250:8090/api/movimientosdecontenedores/'"
+                    :transport-destroy-url="UrlApiBase"
                     :transport-destroy-content-type="'application/json; charset=utf-8'"
                     :transport-destroy-data-type="'json'"
-                    :transport-create-url="'http://192.168.0.250:8090/api/movimientosdecontenedores/'"
+                    :transport-create-url="UrlApiBase"
                     :transport-create-content-type="'application/json; charset=utf-8'"
                     :transport-create-data-type="'json'"
                     :transport-parameter-map="parameterMap"
@@ -91,6 +91,9 @@ export default {
          }
     },
   computed: {
+    UrlApiBase(){
+          return `${process.env.VUE_APP_API_BASE}/movimientosdecontenedores/`
+    },
     options () {
       return {
         callback: (isFullscreen) => {
@@ -148,7 +151,7 @@ export default {
                 "cant_mov_nro": JSON.stringify(options.models[0].cant_mov_nro),
                 };
                 let json = JSON.stringify(params);
-                var destroyUrl = "http://192.168.0.250:8090/api/movimientosdecontenedores/"
+                var destroyUrl = `${process.env.VUE_APP_API_BASE}/movimientosdecontenedores/`
                 $.ajax({
                     method: "DELETE",
                     url: destroyUrl + Id,
@@ -159,7 +162,7 @@ export default {
             if (operation == 'create') {
                 let params = JSON.stringify(options.models[0],["cod_cant_mov","nombre_movimiento","cant_mov_nro"])
                 let json = JSON.parse(params)
-                var createUrl = "http://192.168.0.250:8090/api/movimientosdecontenedores/"
+                var createUrl = `${process.env.VUE_APP_API_BASE}/movimientosdecontenedores/`
                 $.ajax({
                     method: "POST",
                     url: createUrl,
@@ -171,7 +174,7 @@ export default {
                 var Id = JSON.stringify(options.models[0].id);
                 let params = JSON.stringify(options.models[0],["cod_cant_mov","nombre_movimiento","cant_mov_nro"]);
                 let json = JSON.parse(params);
-                var updateUrl = "http://192.168.0.250:8090/api/movimientosdecontenedores/"
+                var updateUrl = `${process.env.VUE_APP_API_BASE}/movimientosdecontenedores/`
                 $.ajax({
                     method: "PUT",
                     url: updateUrl + Id,

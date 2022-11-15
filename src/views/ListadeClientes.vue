@@ -17,7 +17,7 @@
       </div>
     </div>
     <datasource ref="remoteDataSource2"
-                      :transport-read-url="'http://192.168.0.250:8090/api/listadeclientes/'"
+                      :transport-read-url="UrlApiBase"
                       :transport-read-data-type="'json'"
                       :transport-read-content-type="'application/json'"
                       :transport-read-type="'GET'"
@@ -109,6 +109,9 @@ export default {
          }
   },
   computed: {
+    UrlApiBase(){
+      return `${process.env.VUE_APP_API_BASE}/listadeclientes`
+    },
     options () {
       return {
         callback: (isFullscreen) => {

@@ -16,11 +16,10 @@
             </div>
           </div>
         </div>
-        <datasource ref="remoteDataSourceBreveUso"
-                          :transport-read-url="'http://192.168.0.250:8090/api/listabreveuso'"
+        <datasource ref="remoteDataSourceBreveUsoInterno"
+                          :transport-read-url="UrlApiBase"
                           :transport-read-data-type="'json'"
                           :transport-read-content-type="'application/json'"
-                          :transport-read-type="'GET'"
                           :transport-read-cache="false"
                           :schema-model-fields="schemaModelFields"
                           :group="groupDefinition"
@@ -29,7 +28,7 @@
         </datasource>
         <grid ref="grid"
               :height="'95vh'"
-              :data-source-ref="'remoteDataSourceBreveUso'"
+              :data-source-ref="'remoteDataSourceBreveUsoInterno'"
               :sortable-mode="'multiple'"
               :pageable-page-sizes="[5, 10, 15, 20, 25, 100]"
               :filterable="true"
@@ -40,27 +39,23 @@
               :toolbar="toolbarTemplate"
               :allow-copy="true"
               :selectable="true"
-              :pdf-all-pages="true"
-              :pdf-avoid-links="true"
-              :pdf-paper-size="'A4'"
-              :pdf-margin="{ top: '2cm', left: '1cm', right: '1cm', bottom: '1cm' }"
-              :pdf-landscape="true"
-              :pdf-repeat-headers="true"
-              :pdf-scale="0.8"
               >
-              <grid-column field="ARTS_ARTICULO_EMP" title="Código Art." :width="100"></grid-column>
-              <grid-column field="ARTS_NOMBRE" title="Nombre Art." :width="500"></grid-column>
+              <grid-column :field="'id'" :title="'Id'" :hidden="true"></grid-column>
+              <grid-column field="arts_articulo_emp" title="Código Art." :width="100"></grid-column>
+              <grid-column field="arts_nombre" title="Nombre Art." :width="500"></grid-column>
               <grid-column field="Pre_Lista_con_IVA_L1" title="Precio Lista" :format="'{0:c}'" :width="200"></grid-column>
               <grid-column field="Pre_Cdo_con_IVA_L1" title="Precio Cdo" :format="'{0:c}'" :width="200"></grid-column>
-              <grid-column field="Grupo_del_art" title="Grupo del Art." :filterable-multi="true" :width="300" :hidden="true"></grid-column>
-              <grid-column field="Nro_orden_art" title="Nro. Orden Art." :width="100" :hidden="true"></grid-column>
-              <grid-column field="Comentario1" title="Comentario"></grid-column>
+              <grid-column field="grupo_del_art" title="Grupo del Art." :filterable-multi="true" :width="300" :hidden="true"></grid-column>
+              <grid-column field="nro_orden_art" title="Nro. Orden Art." :width="100" :hidden="true"></grid-column>
+              <grid-column field="ARVE_BLOQUEO_VENTA" title="Bloqueo por venta" :hidden="true"></grid-column>
+              <grid-column field="comentario" title="Comentario" template= " #= Comentario1 ? Comentario1 : '' #  #= comentario ? comentario : '' #"></grid-column>
+              <grid-column field="Comentario1" title="Comentario 1" :hidden="true"></grid-column>
         </grid>
       </div>
     </div>
 </template>
     
-    <script>
+<script>
     import '@progress/kendo-ui'
     import '@progress/kendo-ui/js/messages/kendo.messages.es-AR'
     import '@progress/kendo-ui/js/cultures/kendo.culture.es-AR'
@@ -88,20 +83,25 @@
                 pageOnly: true,
                 title: 'Lista de precio - Breve Uso Interno',
                 schemaModelFields: {
-                    ARTS_ARTICULO_EMP: {type: 'string'},
-                    ARTS_NOMBRE: {type: 'string'},
+                    id: { editable: false, nullable: true},
+                    arts_articulo_emp: { type: 'varchar'},
+                    arts_nombre: { type: 'varchar'},
                     Pre_Lista_con_IVA_L1: {type: 'number'},
                     Pre_Cdo_con_IVA_L1: {type: 'number'},
-                    Grupo_del_art: {type: 'string'},
-                    Nro_orden_art: {type: 'number'},
-                    Comentario1: {type: 'string'}
+                    grupo_del_art: { type: 'varchar'},
+                    comentario: { type: 'text'},
+                    Comentario1: {type: 'text'},
+                    nro_orden_art: { type: 'numeric'}
                 },
                 groupDefinition: {
-                    field: 'Grupo_del_art',
+                    field: 'grupo_del_art',
                 }
              }
       },
       computed: {
+        UrlApiBase(){
+          return `${process.env.VUE_APP_API_BASE}/listabreveusointerno`
+        },
         options () {
           return {
             callback: (isFullscreen) => {
@@ -122,7 +122,7 @@
                     '</span>' +
                 '</span>';
             return templateHtml;
-            },
+            }
           },
           mounted: function(){
             var grid = this.$refs.grid.kendoWidget();
@@ -131,7 +131,7 @@
             toolbarElement.on("click", ".refresh", function (e) {
               e.preventDefault(); 
               grid.dataSource.read();
-            });
+            });   
           }
     }
     </script>
