@@ -42,8 +42,6 @@ export default {
 <style>
 header{
     width: 100%;
-    height: 80px;
-    /* margin-bottom: 25px; */
 }
 
 #encabezado{
@@ -91,7 +89,6 @@ header{
 
 nav{
     width: 100%;
-    height: 30px;
     background: #008645;
 }
 
