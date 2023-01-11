@@ -3,8 +3,9 @@
       <div class="container-fluid page-grid">
       <div class="encabezado-titulo">
         <div style="margin-left: 5px; color: white;" class="icon-title">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#fff" class="bi bi-table" viewBox="0 0 16 16"><path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm15 2h-4v3h4V4zm0 4h-4v3h4V8zm0 4h-4v3h3a1 1 0 0 0 1-1v-2zm-5 3v-3H6v3h4zm-5 0v-3H1v2a1 1 0 0 0 1 1h3zm-4-4h4V8H1v3zm0-4h4V4H1v3zm5-3v3h4V4H6zm4 4H6v3h4V8z"/></svg>
+          <!-- <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#fff" class="bi bi-table" viewBox="0 0 16 16"><path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm15 2h-4v3h4V4zm0 4h-4v3h4V8zm0 4h-4v3h3a1 1 0 0 0 1-1v-2zm-5 3v-3H6v3h4zm-5 0v-3H1v2a1 1 0 0 0 1 1h3zm-4-4h4V8H1v3zm0-4h4V4H1v3zm5-3v3h4V4H6zm4 4H6v3h4V8z"/></svg> -->
           <!-- <span style="margin-left: 5px; color: white;" class="k-icon k-i-grid-layout"></span> -->
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16"><path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/></svg>
           <span style="color: white; margin-left: 5px;">{{ title }}</span>
         </div>
         <div class="button-fullscreen">
@@ -48,7 +49,7 @@
                   :editable="'inline'"
                   :toolbar="['create']">
             <grid-column :field="'id'" :title="'Id'" :hidden="true"></grid-column>
-            <grid-column :field="'arts_articulo_emp'" :title="'Código Art'" :width="100"></grid-column>
+            <grid-column :field="'arts_articulo_emp'" :title="'Código Art'" :width="130" :format="'{0:n}'"></grid-column>
             <grid-column :field="'arts_nombre'" :title="'Nombre Art'"></grid-column>
             <grid-column :field="'grupo_del_art'" :title="'Grupo del Art'" :filterable-multi="true" ></grid-column>
             <grid-column :field="'comentario'" :title="'Comentario'"></grid-column>
@@ -86,14 +87,32 @@
                 fullscreen: false,
                 teleport: true,
                 pageOnly: true,
-                title: 'Tabla: Lista de Precio Breve Uso Interno',
+                title: 'Lista de precio breve - Uso interno',
                 fields: {
                     id: { editable: false, nullable: true},
-                    arts_articulo_emp: { type: 'varchar'},
+                    arts_articulo_emp: { type: 'numeric', validation:{
+                      required: true,
+                      minLength: function(input) { 
+                        if (input.is("[name='arts_articulo_emp']") && input.val() != "") {
+                            input.attr("data-minlength-msg", "Debe tener hasta 8 caracteres");
+                            return /^[0-9]{8}$/.test(input.val());
+                            }                                   
+                        return true;
+                      }
+                    }},
                     arts_nombre: { type: 'varchar'},
                     grupo_del_art: { type: 'varchar'},
                     comentario: { type: 'text'},
-                    nro_orden_art: { type: 'numeric'},
+                    nro_orden_art: { type: 'numeric', validation:{
+                      required: true,
+                      numberonly: function(input) {
+                        if(input.is("[name='nro_orden_art']") && input.val() != ""){
+                          input.attr("data-numberonly-msg", "Debe tener números");
+                          return /^[0-9]$/.test(input.val());
+                        }
+                        return true;
+                      }
+                    }},
                   }
                 }
         },
@@ -198,6 +217,9 @@
     .k-grid td{
         white-space: nowrap;
         text-overflow: ellipsis;
+    }
+    .k-callout-n{
+      left: 15% !important;
     }
     </style>
     

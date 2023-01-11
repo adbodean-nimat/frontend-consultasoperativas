@@ -81,7 +81,7 @@
                 fullscreen: false,
                 teleport: true,
                 pageOnly: true,
-                title: 'Lista de precio - Breve Uso Interno',
+                title: 'Lista de precio breve - Uso Interno',
                 schemaModelFields: {
                     id: { editable: false, nullable: true},
                     arts_articulo_emp: { type: 'varchar'},
@@ -116,9 +116,12 @@
       methods: {
             toolbarTemplate: function() {
             var templateHtml =
-                '<span id="form" style="position:absolute; left:5px">' +
+                '<span id="form">' +
                     '<span>'+
-                    '<a class="k-pager-refresh k-link k-button refresh" title="Actualizar"><span class="k-icon k-i-reload"></span></a>' +
+                      '<a class="k-pager-refresh k-link k-button refresh" title="Actualizar"><span class="k-icon k-i-reload"></span></a>' +
+                    '</span>' +
+                    '<span style="margin-left:5px">'+
+                      '<a class="k-pager-refresh k-link k-button edit" title="Editar" href="'+ `tabla/listadepreciobreveusointerno` +'"><span class="k-icon k-i-edit"></span></a>' +
                     '</span>' +
                 '</span>';
             return templateHtml;

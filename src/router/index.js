@@ -10,8 +10,10 @@ import ListaContenedores from '../views/Containers.vue'
 import ListaPyR from '../views/PisosyRevistimiento.vue'
 import ListaBUI from '../views/BreveUsoInterno.vue'
 import ListadePrecioBUI from '../views/ListadePrecioBUI.vue'
+import ListaConstSeco from "../views/ConstSeco.vue"
 import Tablas from '../views/Tablas.vue'
-import Login from "../views/Login.vue";
+import Login from "../views/Login.vue"
+import ListaRubrosVtas from "../views/RubrosVentas.vue"
 
 
 const routes = [
@@ -181,6 +183,32 @@ const routes = [
       metaTags: [
         {
           name: 'Lista de precio - Breve Uso Interno'
+        }      ]
+    }
+  },
+  {
+    path: '/listaconstseco',
+    name: 'Lista de precio - Const. Seco',
+    component: ListaConstSeco,
+    props: true,
+    meta: {
+      title: 'Lista de precio - Const. Seco',
+      metaTags: [
+        {
+          name: 'Lista de precio - Const. Seco'
+        }      ]
+    }
+  },
+  {
+    path: '/listarubrosvtas',
+    name: 'Lista de precio - Rubros Ventas',
+    component: ListaRubrosVtas,
+    props: true,
+    meta: {
+      title: 'Lista de precio - Rubros Ventas',
+      metaTags: [
+        {
+          name: 'Lista de precio - Rubros Ventas'
         }      ]
     }
   }
