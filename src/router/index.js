@@ -9,12 +9,17 @@ import MovimientosContenedores from '../views/MovimientosDeContenedores.vue'
 import ListaContenedores from '../views/Containers.vue'
 import ListaPyR from '../views/PisosyRevistimiento.vue'
 import ListaBUI from '../views/BreveUsoInterno.vue'
-import ListadePrecioBUI from '../views/ListadePrecioBUI.vue'
+import ListadePrecioBUI from '../views/TListadePrecioBUI.vue'
 import ListaConstSeco from "../views/ConstSeco.vue"
 import Tablas from '../views/Tablas.vue'
 import Login from "../views/Login.vue"
 import ListaRubrosVtas from "../views/RubrosVentas.vue"
-
+import SetsDeVentas from "../views/TSetsVentas.vue"
+import FamiliaDeArticulos from "../views/TFamiliaArticulos.vue"
+import VincularArticuloAFamilia from "../views/TVincularArticuloAFamilia.vue"
+import ConstSecoArmadoConfig1 from "../views/TCSArmadoConfig1.vue"
+import ConstSecoArmadoConfig2 from "../views/TCSArmadoConfig2.vue"
+import ConstSecoNombresConfiguraciones from "../views/TCSNombresConfig.vue"
 
 const routes = [
   {
@@ -144,6 +149,84 @@ const routes = [
       metaTags: [
         {
           name: 'Tabla: Lista de precio Breve Uso Interno'
+        }      ]
+    }
+  },
+  {
+    path: '/tabla/setsdeventas',
+    name: 'Tabla: #01 - Sets de Ventas',
+    component: SetsDeVentas,
+    props: true,
+    meta: {
+      title: 'Tabla: #01 - Sets de Ventas',
+      metaTags: [
+        {
+          name: 'Tabla: #01 - Sets de Ventas'
+        }      ]
+    }
+  },
+  {
+    path: '/tabla/familiadearticulos',
+    name: 'Tabla: #02 - Familia de Articulos',
+    component: FamiliaDeArticulos,
+    props: true,
+    meta: {
+      title: 'Tabla: #02 - Familia de Articulos',
+      metaTags: [
+        {
+          name: 'Tabla: #02 - Familia de Articulos'
+        }      ]
+    }
+  },
+  {
+    path: '/tabla/vinculararticuloafamilia',
+    name: 'Tabla: #03 - Vincular Articulo a Familia',
+    component: VincularArticuloAFamilia,
+    props: true,
+    meta: {
+      title: 'Tabla: #03 - Vincular Articulo a Familia',
+      metaTags: [
+        {
+          name: 'Tabla: #03 - Vincular Articulo a Familia'
+        }      ]
+    }
+  },
+  {
+    path: '/tabla/armadoconfig1',
+    name: 'Tabla: Armado Config. 1',
+    component: ConstSecoArmadoConfig1,
+    props: true,
+    meta: {
+      title: 'Tabla: Armado Config. 1',
+      metaTags: [
+        {
+          name: 'Tabla: Armado Config. 1'
+        }      ]
+    }
+  },
+  {
+    path: '/tabla/armadoconfig2',
+    name: 'Tabla: Armado Config. 2',
+    component: ConstSecoArmadoConfig2,
+    props: true,
+    meta: {
+      title: 'Tabla: Armado Config. 2',
+      metaTags: [
+        {
+          name: 'Tabla: Armado Config. 2'
+        }      ]
+    }
+  },
+  {
+    path: '/tabla/nombresconfiguraciones',
+    name: 'Tabla: Nombres Configuraciones',
+    component: ConstSecoNombresConfiguraciones,
+    props: true,
+    meta: {
+      title: 'Tabla: Nombres Configuraciones',
+      metaTags: [
+        {
+          name: 'Tabla: Nombres Configuraciones'
         }      ]
     }
   },

@@ -121,7 +121,7 @@
                       '<a class="k-pager-refresh k-link k-button refresh" title="Actualizar"><span class="k-icon k-i-reload"></span></a>' +
                     '</span>' +
                     '<span style="margin-left:5px">'+
-                      '<a class="k-pager-refresh k-link k-button edit" title="Editar" href="'+ `tabla/listadepreciobreveusointerno` +'"><span class="k-icon k-i-edit"></span></a>' +
+                      '<a class="k-pager-refresh k-link k-button edit" title="Editar tablas" href="'+ `tabla/listadepreciobreveusointerno` +'"><span class="k-icon k-i-edit"></span></a>' +
                     '</span>' +
                 '</span>';
             return templateHtml;

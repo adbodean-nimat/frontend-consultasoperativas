@@ -18,10 +18,10 @@
         </div>
         <component id="pdfTemplate" :is="'script'" type="text/x-kendo-template">
           # var theDate = new Date(); #
-          <div class="container-fluid position-absolute top-0" style="margin-top: 18px;">
+          <div class="pdfFont container-fluid position-absolute top-0" style="margin-top: 18px;">
             <div class="row">
               <div class="col-sm d-flex align-items-center"><h2>CONST. SECO - Config. precios y consumos</h2></div>
-              <div class="col-sm">Las cantidades aquí expresadas no constituyen un computo que permita planificar el presupuesto de obra. Solo aspira a lograr un valor de referencia. El computo de obra debe ser realizado por el profesional de obra.</div>
+              <div class="col-sm">Las cantidades aquí expresadas no constituyen un cómputo que permita planificar el presupuesto de obra. Sólo aspira a lograr un valor de referencia. El cómputo de obra debe ser realizado por el profesional de obra.</div>
               <div class="col-sm-1"><small> #=kendo.toString(theDate, "dd.MM.yyyy", "es-AR")#</small> <br> <small><span id="cod_cte"></span> <span id="dvc1listaprecvta"></span></small></div>
             </div>
             <div class="row" style="margin-top:15px; margin-bottom: 5px;">
@@ -40,11 +40,11 @@
               <div class="col"></div>
               <div class="col"></div>
               <div class="col float-start">
-                (1) Se adiciona un 10% a 30% para refuerzos segun proyecto.<br>
-                (2) Se adiciona % segun proyecto.<br>
+                (1) Se adiciona un 10% a 30% para refuerzos según proyecto.<br>
+                (2) Se adiciona % según proyecto.<br>
                 (3) Valor aproximado, se recomienda computar sobre plano.<br>
-                (4) Se podria considerar el mismo producto en otras presentaciones.<br>
-                (5) Variable segun los largos de las placas.<br>
+                (4) Se podría considerar el mismo producto en otras presentaciones.<br>
+                (5) Variable según los largos de las placas.<br>
                 (6) No se han considerado desperdicios.<br>
               </div>
             </div>
@@ -117,7 +117,7 @@
 
               <grid-column field="ARTS_CLASIF_1" title="Art. Clasif." :hidden="true"></grid-column>
               <grid-column field="configcs" title="Config. CS" :hidden="true"></grid-column>
-              <grid-column field="nombre_conf_cs" title="&nbsp;"  :hidden="true"></grid-column>
+              <grid-column field="nombre_conf_cs" title="Config."  :hidden="true"></grid-column>
               <grid-column :template="templateNombreConfCs" :hidden="true"></grid-column>
               <grid-column field="uni_lp_x_cada_uni_ptf" title="Uni LP x cada uni PTF" :hidden="true"></grid-column>
               <grid-column field="fracciona_uni_ptf" title="Fracciona Uni PTF" :filterable-multi="true" :hidden="true"></grid-column>
@@ -174,7 +174,7 @@
                 teleport: true,
                 pageOnly: true,
                 m2: '1',
-                title: 'Lista de precio Const. Seco - Config. precios y consumos',
+                title: 'Lista de precio - Const. Seco Config. precios y consumos',
                 dataSource: ['remoteDataSourceConstSeco'],
                 schemaModelFields: {
                   ARTS_CLASIF_1: {type: 'string'},
@@ -489,25 +489,27 @@
                     '<span style="margin-left:5px">' +
                       '<label class="form-label" style="margin-right:5px">Perfil Comercial</label>' +
                       '<input type="search" id="codcte" style="width: 150px" />' +
+                      '<div class="invalid-feedback">Falta completa este campo.</div>'+
                     '</span>' +
                     '<span style="margin-left:15px">' +
                       '<label style="margin-right:5px">Cód. Config.</label>' +
                       '<input type="search" id="codconfig" style="width: 150px" />' +
+                      '<div class="invalid-feedback">Falta completa este campo.</div>'+
                     '</span>' +
                     '<span style="margin-left:15px">' +
                       '<label style="margin-right:5px">Dto. Finan.</label>' +
                       '<input type="number" id="dtofinan" style="width: 150px" v-model.number="dtofinan" required/>' +
-                      '<div class="invalid-feedback">Falta completa esta campo.</div>'+
+                      '<div class="invalid-feedback">Falta completa este campo.</div>'+
                     '</span>' +
                     '<span style="margin-left:15px">' +
                       '<label style="margin-right:5px">Dto. x monto</label>' +
                       '<input class="is-valid" type="number" id="dtoxmonto" style="width: 150px" v-model.number="dtoxmonto" required/>' +
-                      '<div class="invalid-feedback">Falta completa esta campo.</div>'+
+                      '<div class="invalid-feedback">Falta completa este campo.</div>'+
                     '</span>' +
                     '<span style="margin-left:15px">' +
                       '<label style="margin-right:5px">M<sup>2</sup></label>' +
                       '<input class="is-valid" type="number" id="numberM2" style="width: 150px" required/>' +
-                      '<div class="invalid-feedback">Falta completa esta campo.</div>'+
+                      '<div class="invalid-feedback">Falta completa este campo.</div>'+
                     '</span>' +
                     '<span style="margin-left: 15px">'+
                     '<a class="k-pager-refresh k-link k-button play" type="submit" title="Ralizar consulta" style="margin-right:5px"><span class="k-icon k-i-play"></span></a>' +
@@ -574,7 +576,7 @@
               dataTextField: "cod_conf_cs",
               dataValueField: "cod_conf_cs",
               autoBind: true,
-              optionLabel: "Todos",
+              optionLabel: "",
               dataSource: {
                 transport:{
                   read: `${process.env.VUE_APP_API_BASE}/constseconombresconfig`
@@ -586,7 +588,7 @@
               dataTextField: "CLC1_CLASIF_1",
               dataValueField: "CLC1_CLASIF_1",
               autoBind: true,
-              optionLabel: "Todos",
+              optionLabel: "",
               dataSource: {
                 transport:{
                   read: `${process.env.VUE_APP_API_BASE}/clasificadorclientes`
@@ -613,21 +615,22 @@
                     
                     { field: "configcs", operator: "contains", value: CodigoConfig },
                     { field: "COD_CTE", operator: "contains", value: PerfilComercial }
-                  
-            );
+              );
 
-            if (DtoFinan == "" || DtoFinan == null){
-              classDtoFinan.classList.add('is-invalid');
-            } else if (DtoxMonto == "" || DtoxMonto == null){
-              classDtoFinan.classList.remove('is-invalid');
-              classDtoxMonto.classList.add('is-invalid');
-            } else if (Cuadrado2 == "" || Cuadrado2 == null){
-              classDtoxMonto.classList.remove('is-invalid');
-              classCuadrado2.classList.add('is-invalid');
-            } else {
-              classCuadrado2.classList.remove('is-invalid');
-              grid.dataSource.filter(filter);
-            }
+              if (DtoFinan == "" || DtoFinan == null){
+                classDtoFinan.classList.add('is-invalid');
+              } else if (DtoxMonto == "" || DtoxMonto == null){
+                classDtoFinan.classList.remove('is-invalid');
+                classDtoxMonto.classList.add('is-invalid');
+              } else if (Cuadrado2 == "" || Cuadrado2 == null){
+                classDtoxMonto.classList.remove('is-invalid');
+                classCuadrado2.classList.add('is-invalid');
+              } else {
+                classDtoFinan.classList.remove('is-invalid');
+                classDtoxMonto.classList.remove('is-invalid');
+                classCuadrado2.classList.remove('is-invalid');
+                grid.dataSource.filter(filter);
+              }
               
               
                            
@@ -649,13 +652,44 @@
     }
     </script>
     
-    <style>
+    <style scoped>
     .k-column-title {
       text-overflow: initial;
     }
 
     #cuadro2, #descuentofinanciero, #descuentopormonto, #codcte, #dvc1listaprecvta, #configcs, #nombre_config_cs{
       margin: 0px 5px;
+    }
+    .pdfFont{
+      font-family: "DejaVu Sans", "Arial", sans-serif;
+    }
+
+    @font-face {
+      font-family: "DejaVu Sans";
+      src: url("https://kendo.cdn.telerik.com/2017.2.621/styles/fonts/DejaVu/DejaVuSans.ttf")
+        format("truetype");
+    }
+    
+    @font-face {
+      font-family: "DejaVu Sans";
+      font-weight: bold;
+      src: url("https://kendo.cdn.telerik.com/2017.2.621/styles/fonts/DejaVu/DejaVuSans-Bold.ttf")
+        format("truetype");
+    }
+    
+    @font-face {
+      font-family: "DejaVu Sans";
+      font-style: italic;
+      src: url("https://kendo.cdn.telerik.com/2017.2.621/styles/fonts/DejaVu/DejaVuSans-Oblique.ttf")
+        format("truetype");
+    }
+    
+    @font-face {
+      font-family: "DejaVu Sans";
+      font-weight: bold;
+      font-style: italic;
+      src: url("https://kendo.cdn.telerik.com/2017.2.621/styles/fonts/DejaVu/DejaVuSans-Oblique.ttf")
+        format("truetype");
     }
     </style>
     

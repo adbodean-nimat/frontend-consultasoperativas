@@ -3,7 +3,8 @@
       <div class="container-fluid page-grid">
       <div class="encabezado-titulo">
         <div style="margin-left: 5px; color: white;" class="icon-title">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#fff" class="bi bi-table" viewBox="0 0 16 16"><path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm15 2h-4v3h4V4zm0 4h-4v3h4V8zm0 4h-4v3h3a1 1 0 0 0 1-1v-2zm-5 3v-3H6v3h4zm-5 0v-3H1v2a1 1 0 0 0 1 1h3zm-4-4h4V8H1v3zm0-4h4V4H1v3zm5-3v3h4V4H6zm4 4H6v3h4V8z"/></svg>
+            <!-- <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#fff" class="bi bi-table" viewBox="0 0 16 16"><path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm15 2h-4v3h4V4zm0 4h-4v3h4V8zm0 4h-4v3h3a1 1 0 0 0 1-1v-2zm-5 3v-3H6v3h4zm-5 0v-3H1v2a1 1 0 0 0 1 1h3zm-4-4h4V8H1v3zm0-4h4V4H1v3zm5-3v3h4V4H6zm4 4H6v3h4V8z"/></svg> -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16"><path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/></svg>
           <span style="color: white; margin-left: 5px;">{{ title }}</span>
         </div>
         <div class="button-fullscreen">
@@ -16,7 +17,7 @@
        </div>
       </div>
       
-      <datasource ref="remoteDataSourceTablas"
+      <datasource ref="remoteDataSourceSetsVentas"
                         :transport-read-url="UrlApiBase"
                         :transport-read-content-type="'application/json; charset=utf-8'"
                         :transport-read-data-type="'json'"
@@ -38,18 +39,15 @@
                         >
       </datasource>
       <grid ref="grid"
-                  :height="'95vh'"
-                  :data-source-ref="'remoteDataSourceTablas'"
+                  :height="'100vh'"
+                  :data-source-ref="'remoteDataSourceSetsVentas'"
                   :navigatable="true"
                   :pageable='false'
                   :editable="'inline'"
-                  :toolbar="['create']"
-                  >
-            <grid-column :field="'id'" :title="'&nbsp;'" :width="30"></grid-column>
-            <grid-column :field="'nombre_tablas'" :title="'Nombre tabla'"></grid-column>
-            <grid-column :field="'url_tablas'" :title="'URL'" :hidden="false"></grid-column>
-            <grid-column :field="'consultas_tablas'" :title="'Consultas'"></grid-column>
-            <grid-column :template="templateBotonEditar"></grid-column>
+                  :toolbar="['create']">
+            <grid-column :field="'id'" :title="'Id'" :hidden="true"></grid-column>
+            <grid-column :field="'cod_set_art'" :title="'Código Set Art.'"></grid-column>
+            <grid-column :field="'nombre_set_art'" :title="'Nombre Set Art.'"></grid-column>
             <grid-column :command="['edit','destroy']" :title="'&nbsp;'"></grid-column>
       </grid>
     </div>
@@ -68,7 +66,7 @@
     import { directive as fullscreen } from 'vue-fullscreen'
     
     export default {
-      name: 'movimientosContenedores',
+      name: 'SetsDeVentas',
       directives: {
         fullscreen,
       },
@@ -83,18 +81,17 @@
                 fullscreen: false,
                 teleport: true,
                 pageOnly: true,
-                title: 'Tablas',
+                title: 'Tabla: Sets de Ventas',
                 fields: {
                     id: { editable: false, nullable: true},
-                    nombre_tablas: { type: 'string'},
-                    url_tablas: { type: 'string'},
-                    consultas_tablas: {type: 'string'}
-                }
+                    cod_set_art: { type: 'string'},
+                    nombre_set_art: { type: 'string'},
+                },
              }
         },
       computed: {
         UrlApiBase(){
-          return `${process.env.VUE_APP_API_BASE}/tablas/`
+              return `${process.env.VUE_APP_API_BASE}/setsdeventas/`
         },
         options () {
           return {
@@ -108,42 +105,54 @@
         }
       },
        methods: {
-        templateBotonEditar: function(item){
-            var templateHTML ='<span style="margin-left:5px">'+
-                                '<a class="k-pager-refresh k-link k-button edit" title="Editar tabla" href="'+ item.url_tablas +'"><span class="k-icon k-i-edit"></span></a>' +
-                              '</span>'; 
-            return templateHTML
-        },
             onError: function(e){
               console.log(e.status); // displays "error"
               console.log(e.error);
             },
+            /* onChange: function(e) {
+              console.log("request change");
+            },
+            requestStart: function(e) {
+              /* The result can be observed in the DevTools(F12) console of the browser. */
+              //console.log("request started"); 
+            //},
             requestEnd: function(e) {
                 var response = e.response;
                 var type = e.type;
-                console.log(type);
+                /* The result can be observed in the DevTools(F12) console of the browser. */
+                console.log(type + " => type");
+                /* The result can be observed in the DevTools(F12) console of the browser. */
                 console.log(response.length);
-
                 if (type == "create") {
                     e.sender.read();
-                }
+                    } else
                 if (type == "update") {
                     e.sender.read();
-                }
+                    }
             },
+            /* parameterMap: function(options, operation) {
+                if (operation !== 'read' && options.models) {
+                    return JSON.stringify(options.models)
+                }
+            }, */
             parameterMap: function(options, operation) {            
-                if (operation == 'read') {
+                 if (operation == 'read') {
+                    //console.log(operation + " operation");
+                    //console.log(options);
+                    //console.log(JSON.stringify(options));
                     return options
                 } 
-                if (operation == 'destroy') {              
+                if (operation == 'destroy') {
+                    //console.log(operation + " operation");
+                    //console.log(JSON.stringify(options.models[0].id));
+                    
                     var Id = JSON.stringify(options.models[0].id);
                     let params = {
-                    "nombre_tablas": JSON.stringify(options.models[0].nombre_tablas),
-                    "url_tablas": JSON.stringify(options.models[0].url_tablas),
-                    "consultas_tablas": JSON.stringify(options.models[0].consultas_tablas),
+                    "cod_set_art": JSON.stringify(options.models[0].cod_set_art),
+                    "nombre_set_art": JSON.stringify(options.models[0].nombre_set_art),
                     };
                     let json = JSON.stringify(params);
-                    var destroyUrl = `${process.env.VUE_APP_API_BASE}/tablas/`
+                    var destroyUrl = `${process.env.VUE_APP_API_BASE}/setsdeventas/`
                     $.ajax({
                         method: "DELETE",
                         url: destroyUrl + Id,
@@ -152,9 +161,13 @@
                     });   
                 } 
                 if (operation == 'create') {
-                    let params = JSON.stringify(options.models[0],["nombre_tablas","url_tablas", "consultas_tablas"])
+                    //console.log(operation);
+                    //console.log(JSON.stringify(options.models[0],["cod_comp", "nomb_comp"]))
+                    //console.log(JSON.stringify(options.models[0],["cod_depos","nombre_deposito"]));
+                    //return JSON.stringify(options.models[0],["cod_comp","nomb_comp"]);
+                    let params = JSON.stringify(options.models[0],["cod_set_art", "nombre_set_art"])
                     let json = JSON.parse(params)
-                    var createUrl = `${process.env.VUE_APP_API_BASE}/tablas/`
+                    var createUrl = `${process.env.VUE_APP_API_BASE}/setsdeventas/`
                     $.ajax({
                         method: "POST",
                         url: createUrl,
@@ -163,10 +176,14 @@
                     });
                 } 
                 if (operation == 'update') {
+                    //console.log(operation);
+                    //console.log(JSON.stringify(options.models[0],["cod_comp", "nomb_comp"]))
+                    //console.log(JSON.stringify(options.models[0],["id","cod_depos","nombre_deposito"]));
+                    //return JSON.stringify(options.models[0],["cod_comp","nomb_comp"]);
                     var Id = JSON.stringify(options.models[0].id);
-                    let params = JSON.stringify(options.models[0],["nombre_tablas","url_tablas", "consultas_tablas"]);
+                    let params = JSON.stringify(options.models[0],["cod_set_art", "nombre_set_art"]);
                     let json = JSON.parse(params);
-                    var updateUrl = `${process.env.VUE_APP_API_BASE}/tablas/`
+                    var updateUrl = `${process.env.VUE_APP_API_BASE}/setsdeventas/`
                     $.ajax({
                         method: "PUT",
                         url: updateUrl + Id,
@@ -176,7 +193,7 @@
                 }
                
             },
-      },
+      }
     }
     </script>
     
