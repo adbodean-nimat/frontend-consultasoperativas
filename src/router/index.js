@@ -20,6 +20,7 @@ import VincularArticuloAFamilia from "../views/TVincularArticuloAFamilia.vue"
 import ConstSecoArmadoConfig1 from "../views/TCSArmadoConfig1.vue"
 import ConstSecoArmadoConfig2 from "../views/TCSArmadoConfig2.vue"
 import ConstSecoNombresConfiguraciones from "../views/TCSNombresConfig.vue"
+import RowaPlanCanje from "../views/RowaPlanCanje.vue"
 
 const routes = [
   {
@@ -292,6 +293,19 @@ const routes = [
       metaTags: [
         {
           name: 'Lista de precio - Rubros Ventas'
+        }      ]
+    }
+  },
+  {
+    path: '/rowaplancanjexsiempre',
+    name: 'Rowa - Plan canje por siempre',
+    component: RowaPlanCanje,
+    props: true,
+    meta: {
+      title: 'Rowa - Plan canje por siempre',
+      metaTags: [
+        {
+          name: 'Rowa - Plan canje por siempre'
         }      ]
     }
   }
