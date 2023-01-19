@@ -42,15 +42,13 @@
                   :data-source-ref="'remoteDataSourceTablas'"
                   :navigatable="true"
                   :pageable='false'
-                  :editable="'inline'"
-                  :toolbar="['create']"
                   >
             <grid-column :field="'id'" :title="'&nbsp;'" :width="30"></grid-column>
             <grid-column :field="'nombre_tablas'" :title="'Nombre tabla'"></grid-column>
-            <grid-column :field="'url_tablas'" :title="'URL'" :hidden="false"></grid-column>
+            <grid-column :field="'url_tablas'" :title="'URL'" :hidden="true"></grid-column>
             <grid-column :field="'consultas_tablas'" :title="'Consultas'"></grid-column>
             <grid-column :template="templateBotonEditar"></grid-column>
-            <grid-column :command="['edit','destroy']" :title="'&nbsp;'"></grid-column>
+            <!-- <grid-column :command="['edit','destroy']" :title="'&nbsp;'"></grid-column> -->
       </grid>
     </div>
     </div>
