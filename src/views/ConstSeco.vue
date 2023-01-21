@@ -32,10 +32,10 @@
             <div class="row">
               <div class="col-sm bg-secondary text-white d-flex align-items-center"><small><span id="configcs"></span></small><strong><span id="nombre_config_cs"></span></strong></div>
               <div class="col-sm-3"></div>
-              <div class="col-sm bg-secondary text-white d-flex align-items-center"><strong>Presupuesto aproximado para <span id="cuadro2"></span>m<sup>2</sup></strong></div>
+              <div class="col-sm bg-secondary text-white d-flex align-items-center">Presupuesto aproximado para <strong><span id="cuadro2"></span>m<sup>2</sup></strong></div>
               <div class="col-sm-4"><small>Los precios incluyen dto. financiero del <span id="descuentofinanciero"></span>%<br>Los precios incluyen dto. por volumen del <span id="descuentopormonto"></span>%</small></div>
             </div>
-            <div class="float-end" style="margin-top:-100px;margin-right: 18px;"><img src="../assets/logo.jpg" height="100"/></div>
+            <div class="float-end" style="margin-top:-80px;margin-right: 18px;"><img src="../assets/logo.jpg" height="80"/></div>
             <div class="row" style="margin-top:500px;">
               <div class="col"></div>
               <div class="col"></div>
@@ -95,14 +95,14 @@
               >
               <grid-column field="nombre_art_lp" title="Articulo" :width="150"></grid-column>
               <grid-column field="uni" title="Uni." :width="80"></grid-column>
-              <grid-column title="Cant. Item" :template="templateCantItem"></grid-column>
+              <grid-column title="Cant. Item" :template="templateCantItem" :width="100"></grid-column>
               <grid-column field="cant" title="Cant." :width="80" :hidden="true"></grid-column>
-              <grid-column title="Precio Contado c/IVA" :template="templatePrecioConver"></grid-column>
+              <grid-column title="Precio Contado c/IVA" :template="templatePrecioConver" :width="100"></grid-column>
               <grid-column field="DCA1_POR_DESCUENTO" title="Dto. Cliente" :width="120"></grid-column>
-              <grid-column title="Precio Contado c/IVA c/Dto Cliente" :template="templateItemPrecioCliente2" :footer-template="footerPrecio"></grid-column>
+              <grid-column title="Precio Contado c/IVA c/Dto Cliente" :template="templateItemPrecioCliente2" :footer-template="footerPrecio" :width="100"></grid-column>
 
               <!-- <grid-column :template="'&nbsp;'"></grid-column> -->
-              <grid-column :template="'#:observacion#'" :width="100"></grid-column>
+              <grid-column :template="'#:observacion#'" :width="50"></grid-column>
               <!-- <grid-column :template="'&nbsp;'"></grid-column> -->
 
               <grid-column field="codptf" title="Código" :width="90"></grid-column>
@@ -111,8 +111,8 @@
               <grid-column title="Cantidad" :template="templateCantItemPTF" :width="80"></grid-column>
               <grid-column title="Precio Contado" :template="templatePrecio2" :width="100"></grid-column>
               <grid-column field="DCA1_POR_DESCUENTO" title="Dto. Cliente" :width="80"></grid-column>
-              <grid-column :template="dvc1listaprecvta" :hidden="true"></grid-column>
-              <grid-column title="Item c/IVA y Dto Finan c/Dto Cliente PTF" :template="templateItemPrecio2" :footer-template="footerPrecio2"></grid-column>
+              <grid-column :template="dvc1listaprecvta" :hidden="true" :width="100"></grid-column>
+              <grid-column title="Item c/IVA y Dto Finan c/Dto Cliente PTF" :template="templateItemPrecio2" :footer-template="footerPrecio2" :width="120"></grid-column>
 
 
               <grid-column field="ARTS_CLASIF_1" title="Art. Clasif." :hidden="true"></grid-column>
@@ -226,6 +226,19 @@
           return templateItem(e)
         },
         dataBound: function(){
+          kendo.ui.Grid.prototype._positionColumnResizeHandle= function() {
+          var that = this,
+              indicatorWidth = that.options.columnResizeHandleWidth,
+              lockedHead = that.lockedHeader ? that.lockedHeader.find("thead:first") : $();
+
+          that.thead.add(lockedHead).on("mousemove" + ".kendoGrid", "th", function (e) {
+            var th = $(this);
+            if (th.hasClass("k-group-cell") || th.hasClass("k-hierarchy-cell")) {
+              return;
+            }
+            that._createResizeHandle(th.closest("div"), th);
+          });
+        };
           const ultima_columna = document.querySelectorAll("span#idItemPrecioCliente2");
           var idem = [...ultima_columna].map(e=> parseFloat(e.innerHTML.replace(/[,$]/g, "")));
 
@@ -250,7 +263,7 @@
           var idCodCte = document.getElementById("cod_cte")
           var valCodCte = idCodCte.innerText = kendo.toString(idemCodCte)
 
-          const idemConfigCs = document.querySelector("#form > span:nth-child(2) .k-input-value-text").innerText
+          const idemConfigCs = document.querySelector("#form > div:nth-child(2) .k-input-value-text").innerText
           var idConfigCs = document.getElementById("configcs")
           var valConfigCs = idConfigCs.innerText = kendo.toString(idemConfigCs)
 
@@ -485,40 +498,42 @@
         },
         toolbarTemplate: function() {
             var templateHtml =
-                '<form id="form" class="requires-validation" novalidate>' +
-                    '<span style="margin-left:5px">' +
-                      '<label class="form-label" style="margin-right:5px">Perfil Comercial</label>' +
+            '<div class="container-fluid">' +
+                '<form id="form" class="requires-validation row align-items-end row-cols" novalidate>' +
+                    '<div class="col d-flex flex-column">' +
+                      '<label class="col-form-label" style="margin-right:5px">Perfil Comercial</label>' +
                       '<input type="search" id="codcte" style="width: 150px" />' +
                       '<div class="invalid-feedback">Falta completa este campo.</div>'+
-                    '</span>' +
-                    '<span style="margin-left:15px">' +
-                      '<label style="margin-right:5px">Cód. Config.</label>' +
+                    '</div>' +
+                    '<div class="col d-flex flex-column">' +
+                      '<label class="col-form-label" style="margin-right:5px">Código Config.</label>' +
                       '<input type="search" id="codconfig" style="width: 150px" />' +
                       '<div class="invalid-feedback">Falta completa este campo.</div>'+
-                    '</span>' +
-                    '<span style="margin-left:15px">' +
-                      '<label style="margin-right:5px">Dto. Finan.</label>' +
+                    '</div>' +
+                    '<div class="col d-flex flex-column">' +
+                      '<label class="col-form-label" style="margin-right:5px">Dto. Financiero</label>' +
                       '<input type="number" id="dtofinan" style="width: 150px" v-model.number="dtofinan" required/>' +
                       '<div class="invalid-feedback">Falta completa este campo.</div>'+
-                    '</span>' +
-                    '<span style="margin-left:15px">' +
-                      '<label style="margin-right:5px">Dto. x monto</label>' +
+                    '</div>' +
+                    '<div class="col d-flex flex-column">' +
+                      '<label class="col-form-label" style="margin-right:5px">Dto. por monto</label>' +
                       '<input class="is-valid" type="number" id="dtoxmonto" style="width: 150px" v-model.number="dtoxmonto" required/>' +
                       '<div class="invalid-feedback">Falta completa este campo.</div>'+
-                    '</span>' +
-                    '<span style="margin-left:15px">' +
-                      '<label style="margin-right:5px">M<sup>2</sup></label>' +
+                    '</div>' +
+                    '<div class="col d-flex flex-column">' +
+                      '<label class="col-form-label" style="margin-right:5px">M<sup>2</sup></label>' +
                       '<input class="is-valid" type="number" id="numberM2" style="width: 150px" required/>' +
                       '<div class="invalid-feedback">Falta completa este campo.</div>'+
-                    '</span>' +
-                    '<span style="margin-left: 15px">'+
-                    '<a class="k-pager-refresh k-link k-button play" type="submit" title="Ralizar consulta" style="margin-right:5px"><span class="k-icon k-i-play"></span></a>' +
-                    '<a class="k-pager-refresh k-link k-button filter-clear" title="Limpiar filtro" style="margin-right:5px"><span class="k-icon k-i-filter-clear"></span></a>'+
-                    '<a class="k-pager-refresh k-link k-button" title="Nueva consulta" onClick="window.location.reload();"><span class="k-icon k-i-file"></span></a>' +
+                    '</div>' +
+                    '<div class="col d-flex">'+
+                    '<a class="k-pager-refresh k-link k-button play" type="submit" title="Ralizar conulta" style="margin-left:5px"><span class="k-icon k-i-play"></span></a>' +
+                    '<a class="k-pager-refresh k-link k-button filter-clear" title="Limpiar filtro" style="margin-left:5px"><span class="k-icon k-i-filter-clear"></span></a>'+
+                    '<a class="k-pager-refresh k-link k-button" title="Nueva consulta" onClick="window.location.reload();" style="margin-left:5px"><span class="k-icon k-i-file"></span></a>' +
                     '<a class="k-pager-refresh k-link k-button k-button-icontext k-grid-pdf" style="margin-left:5px"><span class="k-icon k-i-pdf"></span></a>' +
-                    '<a class="k-pager-refresh k-link k-button refresh" title="Actualizar" style="margin-left:5px"><span class="k-icon k-i-reload"></span></a>' +
-                    '</span>' +
-                '</form>';
+                    '<a class="k-pager-refresh k-link k-button refresh" title="Actualizar"style="margin-left:5px"><span class="k-icon k-i-reload"></span></a>' +
+                    '</div>' +
+                '</form>' +
+                '</div>';
             return kendo.template(templateHtml);
             },
             footerPrecio: function(){
@@ -587,8 +602,8 @@
             dropDownElement.kendoDropDownList({
               dataTextField: "CLC1_CLASIF_1",
               dataValueField: "CLC1_CLASIF_1",
+              index: 17,
               autoBind: true,
-              optionLabel: "",
               dataSource: {
                 transport:{
                   read: `${process.env.VUE_APP_API_BASE}/clasificadorclientes`
@@ -605,11 +620,11 @@
               var PerfilComercial = dropDownElement.data("kendoDropDownList").value();
               var CodigoConfig = dropDownElement2.data("kendoDropDownList").value();
               var DtoFinan = numericDtoFinan.data("kendoNumericTextBox").value();
-              var classDtoFinan = document.querySelector("#form > span:nth-child(3) > .k-numerictextbox")
+              var classDtoFinan = document.querySelector("#form > div:nth-child(3) > .k-numerictextbox")
               var DtoxMonto = numericDtoxMonto.data("kendoNumericTextBox").value();
-              var classDtoxMonto = document.querySelector("#form > span:nth-child(4) > .k-numerictextbox")
+              var classDtoxMonto = document.querySelector("#form > div:nth-child(4) > .k-numerictextbox")
               var Cuadrado2 = numericM2.data("kendoNumericTextBox").value();
-              var classCuadrado2 = document.querySelector("#form > span:nth-child(5) > .k-numerictextbox")
+              var classCuadrado2 = document.querySelector("#form > div:nth-child(5) > .k-numerictextbox")
               var filter = { logic: "and", filters: [] };
               filter.filters.push(
                     
@@ -617,12 +632,12 @@
                     { field: "COD_CTE", operator: "contains", value: PerfilComercial }
               );
 
-              if (DtoFinan == "" || DtoFinan == null){
+              if (DtoFinan == null){
                 classDtoFinan.classList.add('is-invalid');
-              } else if (DtoxMonto == "" || DtoxMonto == null){
+              } else if (DtoxMonto == null){
                 classDtoFinan.classList.remove('is-invalid');
                 classDtoxMonto.classList.add('is-invalid');
-              } else if (Cuadrado2 == "" || Cuadrado2 == null){
+              } else if (Cuadrado2 == null){
                 classDtoxMonto.classList.remove('is-invalid');
                 classCuadrado2.classList.add('is-invalid');
               } else {

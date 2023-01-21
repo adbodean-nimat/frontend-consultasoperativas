@@ -263,7 +263,6 @@ export default {
 
 .encabezado-titulo{
   background-color: #008645; 
-  height: 5vh; 
   border-top-left-radius: 10px; 
   border-top-right-radius: 10px;
   margin-top: 10px; 

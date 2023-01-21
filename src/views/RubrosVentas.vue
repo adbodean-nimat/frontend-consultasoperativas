@@ -366,36 +366,37 @@
         },
         toolbarTemplate: function() {
             var templateHtml =
-                '<form id="form" class="requires-validation" novalidate>' +
-                    '<span style="margin-left:5px">' +
-                      '<label style="margin-right:5px">Perfil Comercial</label>' +
+            '<div class="container-fluid">' +
+                '<form id="form" class="requires-validation row align-items-end row-cols-5" novalidate>' +
+                    '<div class="col d-flex flex-column">' +
+                      '<label class="col-form-label">Perfil Comercial</label>' +
                       '<input type="search" id="codcte" style="width: 150px"/>' +
                       '<div class="invalid-feedback">Falta completa este campo.</div>'+
-                    '</span>' +
-                    '<span style="margin-left:15px">' +
-                      '<label style="margin-right:5px">Rubro Vta.</label>' +
+                    '</div>' +
+                    '<div class="col d-flex flex-column">' +
+                      '<label class="col-form-label">Rubro Vta.</label>' +
                       '<input type="search" id="codconfig" style="width: 150px"/>' +
                       '<div class="invalid-feedback">Falta completa este campo.</div>'+
-                    '</span>' +
-                    '<span style="margin-left:15px">' +
-                      '<label style="margin-right:5px">Dto. Finan.</label>' +
+                    '</div>' +
+                    '<div class="col d-flex flex-column">' +
+                      '<label class="col-form-label">Dto. Finan.</label>' +
                       '<input type="number" id="dtofinan" style="width: 150px" v-model.number="dtofinan"/>' +
                       '<div class="invalid-feedback">Falta completa este campo.</div>'+
-                    '</span>' +
-                    '<span style="margin-left:15px">' +
-                      '<label style="margin-right:5px">Cambios precio desde</label>' +
+                    '</div>' +
+                    '<div class="col d-flex flex-column">' +
+                      '<label class="col-form-label">Cambios precio desde</label>' +
                       '<input type="date" id="fechaCambiosPrecio" style="width: 150px"/>' +
                       '<div class="invalid-feedback">Falta completa este campo.</div>'+
-                    '</span>' +
-                    
-                    '<span style="margin-left: 15px">'+
-                    '<a class="k-pager-refresh k-link k-button play" title="Ralizar consulta" style="margin-right:5px"><span class="k-icon k-i-play"></span></a>' +
-                    '<a class="k-pager-refresh k-link k-button filter-clear" title="Limpiar filtro" style="margin-right:5px"><span class="k-icon k-i-filter-clear"></span></a>'+
+                    '</div>' +
+                    '<div class="col d-flex">'+
+                    '<a class="k-pager-refresh k-link k-button play" title="Ralizar consulta"  style="margin-left:5px"><span class="k-icon k-i-play"></span></a>' +
+                    '<a class="k-pager-refresh k-link k-button filter-clear" title="Limpiar filtro"  style="margin-left:5px"><span class="k-icon k-i-filter-clear"></span></a>'+
                     '<a class="k-pager-refresh k-link k-button" title="Nueva consulta" onClick="window.location.reload();"><span class="k-icon k-i-file"></span></a>' +
                     '<a class="k-pager-refresh k-link k-button k-button-icontext k-grid-pdf" style="margin-left:5px"><span class="k-icon k-i-pdf"></span></a>' +
                     '<a class="k-pager-refresh k-link k-button refresh" title="Actualizar" style="margin-left:5px"><span class="k-icon k-i-reload"></span></a>' +
-                    '</span>' +
-                '</form>';
+                    '</div>' +
+                  '</form>' +
+                '</div>';
             return kendo.template(templateHtml);
             },
             ArtsArticuloEmp: function(item){
@@ -447,6 +448,7 @@
             dropDownElement.kendoDropDownList({
               dataTextField: "CLC1_CLASIF_1",
               dataValueField: "CLC1_CLASIF_1",
+              index: 17,
               autoBind: true,
               dataSource: {
                 transport:{
@@ -465,8 +467,8 @@
               var RubroVta = dropDownElement2.data("kendoDropDownList").value();
               var DtoFinan = numericDtoFinan.data("kendoNumericTextBox").value();
               var FechaCambiosDesde = fechaInformarCambiosPrecio.data("kendoDatePicker").value();
-              var classDtoFinan = document.querySelector("#form > span:nth-child(3) > .k-numerictextbox");
-              var classFechaDesde = document.querySelector("#form > span:nth-child(4) > .k-datepicker");
+              var classDtoFinan = document.querySelector("#form > div:nth-child(3) > .k-numerictextbox");
+              var classFechaDesde = document.querySelector("#form > div:nth-child(4) > .k-datepicker");
               
 
               var filter = { logic: "and", filters: [] };
