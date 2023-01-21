@@ -307,7 +307,7 @@
           var fechaUltModif = item.Fecha_Ult_Modif
           var fechaHasta = item.Fecha_cambio_precios_hasta
           var fechaHoy = new Date()
-          var modificado = kendo.toString(fechaUltModif, "dd-MM-yyyy") <= kendo.toString(fechaHoy, "dd-MM-yyyy") ? (kendo.toString(fechaUltModif, "dd-MM-yyyy") >= kendo.toString(fechaDesde, "dd-MM-yyyy") ? 'Modif' : '') : ''
+          var modificado = kendo.toString(fechaUltModif) <= kendo.toString(fechaHoy) ? (kendo.toString(fechaUltModif) >= kendo.toString(fechaDesde) ? 'Modif' : '') : ''
           return modificado
         },
         VeriModif: function(item){
@@ -318,7 +318,7 @@
           var fechaUltModif = item.Fecha_Ult_Modif
           var fechaHasta = item.Fecha_cambio_precios_hasta
           var fechaHoy = new Date()
-          var modificado = kendo.toString(fechaUltModif, "dd-MM-yyyy") <= kendo.toString(fechaHoy, "dd-MM-yyyy") ? (kendo.toString(fechaUltModif, "dd-MM-yyyy") >= kendo.toString(fechaDesde, "dd-MM-yyyy") ? 'Modif' : '') : ''
+          var modificado = kendo.toString(fechaUltModif) <= kendo.toString(fechaHoy) ? (kendo.toString(fechaUltModif) >= kendo.toString(fechaDesde) ? 'Modif' : '') : ''
           var VerifMod = modificado == 'Modif' ? 1 : 0
           return '<span id="idVerifMod">' + kendo.toString(VerifMod) + '</span>'
         },
