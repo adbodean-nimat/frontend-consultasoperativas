@@ -23,7 +23,7 @@
               <img style="width: 100%;" src="../assets/membretada.png" alt="Membretada - Nimat de Prades S.A.">
             </div>
             <div class="row">
-              <div class="col-sm">Fecha de impresión #=kendo.toString(theDate, "dd MMMM, yyyy", "es-AR")#</div>
+              <div class="col-sm">Fecha de impresión #=kendo.toString(theDate, "dd-MM-yyyy", "es-AR")#</div>
               <div class="col-sm"><small><span id="cod_cte"></span> <span id="dvc1listaprecvta"></span></small></div>
               <div class="col-sm text-end" style="margin-right: 50px;"><strong>VN RV</strong></div>
             </div>
@@ -45,11 +45,7 @@
           </div>
         </component>
         <datasource ref="remoteDataSourceRubrosVtas"
-                          :transport-read-url="UrlApiBase"
-                          :transport-read-data-type="'json'"
-                          :transport-read-content-type="'application/json'"
-                          :transport-read-type="'GET'"
-                          :transport-read-cache="false"
+                          :transport-read="readData"
                           :schema-model-fields="schemaModelFields"
                           :group="groupDefinition"
                           @error="onError"
@@ -80,7 +76,7 @@
               :pdf-margin-left="10"
               :pdf-margin-right="10"
               :pdf-landscape="false"
-              :pdf-repeat-headers="false"
+              :pdf-repeat-headers="true"
               :pdf-scale="0.6"
               :pdf-template="pdfTemplate"
               @pdfexport="pdfExport"
@@ -134,6 +130,8 @@
 </template>
     
 <script>
+    import $ from 'jquery'
+    import store from "../store";
     import '@progress/kendo-ui'
     import '@progress/kendo-ui/js/messages/kendo.messages.es-AR'
     import '@progress/kendo-ui/js/cultures/kendo.culture.es-AR'
@@ -189,15 +187,34 @@
         }
       },
       methods: {
+        readData: function (e) {
+              // console.log(store.state.token)
+              var token = store.state.token
+              var urlApi = `${process.env.VUE_APP_API_BASE}/lpvnrubrosvtas`
+              $.ajax({
+                url: urlApi,
+                beforeSend: function (xhr) {
+                  xhr.setRequestHeader('Authorization', 'Bearer ' + token)
+                },
+                dataType: 'json',
+                success: function (data) {
+                  e.success(data)
+                },
+                type: 'GET'
+              })
+          },
         pdfExport: function() {
           const idemDtoFinan = document.getElementById("dtofinan").ariaValueNow
           var comentarioContadoEfectivo = document.getElementById("comentariocontadoefectivo");
           var comentarioFinanciero = document.getElementById("comentariofinanciero");
-
-          if (idemDtoFinan == '20' || idemDtoFinan >= '20'){
+          if (idemDtoFinan === null){
+            alert("Falta completa campo Dto. Finan.")
+            window.location.reload()
+          } else
+          if (idemDtoFinan === 20 || idemDtoFinan > 20){
             comentarioContadoEfectivo.innerText = "contado efectivo"
-          } else 
-          if (idemDtoFinan <= '20'){
+          } else
+          if (idemDtoFinan < 20){
             comentarioFinanciero.innerText = prompt("El dto financiero NO es 20%, ingresar comentario COMPRENSIBLE para el cliente sobre este dto Ej. -VISA 6 Cuotas-")
           }
           
@@ -391,7 +408,7 @@
                     '<div class="col d-flex">'+
                     '<a class="k-pager-refresh k-link k-button play" title="Ralizar consulta"  style="margin-left:5px"><span class="k-icon k-i-play"></span></a>' +
                     '<a class="k-pager-refresh k-link k-button filter-clear" title="Limpiar filtro"  style="margin-left:5px"><span class="k-icon k-i-filter-clear"></span></a>'+
-                    '<a class="k-pager-refresh k-link k-button" title="Nueva consulta" onClick="window.location.reload();"><span class="k-icon k-i-file"></span></a>' +
+                    '<a class="k-pager-refresh k-link k-button" title="Nueva consulta" onClick="window.location.reload();" style="margin-left:5px"><span class="k-icon k-i-file"></span></a>' +
                     '<a class="k-pager-refresh k-link k-button k-button-icontext k-grid-pdf" style="margin-left:5px"><span class="k-icon k-i-pdf"></span></a>' +
                     '<a class="k-pager-refresh k-link k-button refresh" title="Actualizar" style="margin-left:5px"><span class="k-icon k-i-reload"></span></a>' +
                     '</div>' +
@@ -435,12 +452,20 @@
             })
 
             dropDownElement2.kendoDropDownList({
-              dataTextField: "RUBV_RUBRO_VENTA",
+              dataTextField: "RUBV_NOMBRE",
               dataValueField: "RUBV_RUBRO_VENTA",
               autoBind: true,
               dataSource: {
                 transport:{
-                  read: `${process.env.VUE_APP_API_BASE}/rubrovta`
+                  read: {
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    type: 'GET',
+                    url: `${process.env.VUE_APP_API_BASE}/rubrovta`,
+                    headers: {
+                      'Authorization': 'Bearer ' + store.state.token
+                    }
+                  }
                 }
               }
             })
@@ -452,7 +477,15 @@
               autoBind: true,
               dataSource: {
                 transport:{
-                  read: `${process.env.VUE_APP_API_BASE}/clasificadorclientes`
+                  read: {
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    type: 'GET',
+                    url: `${process.env.VUE_APP_API_BASE}/clasificadorclientes`,
+                    headers: {
+                      'Authorization': 'Bearer ' + store.state.token
+                    }
+                  }
                 }
               }
             });
@@ -489,13 +522,9 @@
                 grid.dataSource.filter(filter);
               }
             });
-            toolbarElement.on("click", ".filter-clear", function(e){
-              e.preventDefault();
-              dropDownElement.data("kendoDropDownList").value(null);
-              dropDownElement2.data("kendoDropDownList").value(null);
-              grid.dataSource.sort({});
-              grid.dataSource.filter({});
-              grid.dataSource.autoFitColumn();
+            toolbarElement.on("click", ".filter-clear", function(){
+              numericDtoFinan.data("kendoNumericTextBox").value(null);
+              fechaInformarCambiosPrecio.data("kendoDatePicker").value(null);
             })
           }
     }

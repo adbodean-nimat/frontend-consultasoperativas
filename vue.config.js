@@ -3,6 +3,12 @@ module.exports = defineConfig({
   transpileDependencies: true,
   runtimeCompiler: true,
   devServer: {
-    proxy: 'https://localhost:8090',
-}
+    proxy: {
+      '^/sso':{
+        target: 'https://localhost:8090/',
+        ws: true,
+        changeOrigin: true
+      }
+    }
+  }
 })

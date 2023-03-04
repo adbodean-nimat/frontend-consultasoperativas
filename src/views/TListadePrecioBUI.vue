@@ -19,22 +19,14 @@
       </div>
       
       <datasource ref="remoteDataSourceLPBUI"
-                        :transport-read-url="UrlApiBase"
-                        :transport-read-content-type="'application/json; charset=utf-8'"
-                        :transport-read-data-type="'json'"
-                        :transport-update-url="UrlApiBase"
-                        :transport-update-content-type="'application/json; charset=utf-8'"
-                        :transport-update-data-type="'json'"
-                        :transport-destroy-url="UrlApiBase"
-                        :transport-destroy-content-type="'application/json; charset=utf-8'"
-                        :transport-destroy-data-type="'json'"
-                        :transport-create-url="UrlApiBase"
-                        :transport-create-content-type="'application/json; charset=utf-8'"
-                        :transport-create-data-type="'json'"
+                        :transport-read="readData"
+                        :transport-update="updateData"
+                        :transport-destroy="destroyData"
+                        :transport-create="createData"
                         :transport-parameter-map="parameterMap"
                         :schema-model-id="'id'"
                         :schema-model-fields="fields"
-                        :batch="true"
+                        :batch='true'
                         @error="onError"
                         @requestend="requestEnd"
                         :page-size='100'
@@ -48,7 +40,7 @@
                   :pageable='true'
                   :editable="'inline'"
                   :toolbar="['create']">
-            <grid-column :field="'id'" :title="'Id'" :hidden="true"></grid-column>
+            <grid-column :field="'id'" :title="'Id'" :hidden="true" :width="50"></grid-column>
             <grid-column :field="'arts_articulo_emp'" :title="'Código Art'" :width="130" :format="'{0:n}'"></grid-column>
             <grid-column :field="'arts_nombre'" :title="'Nombre Art'"></grid-column>
             <grid-column :field="'grupo_del_art'" :title="'Grupo del Art'" :filterable-multi="true" ></grid-column>
@@ -62,6 +54,7 @@
     
     <script>
     import $ from 'jquery'
+    import store from "../store";
     import '@progress/kendo-ui'
     import '@progress/kendo-ui/js/messages/kendo.messages.es-AR'
     import '@progress/kendo-ui/js/cultures/kendo.culture.es-AR'
@@ -100,8 +93,8 @@
                         return true;
                       }
                     }},
-                    arts_nombre: { type: 'varchar'},
-                    grupo_del_art: { type: 'varchar'},
+                    arts_nombre: { type: 'string'},
+                    grupo_del_art: { type: 'string'},
                     comentario: { type: 'text'},
                     nro_orden_art: { type: 'numeric', validation:{
                       required: true,
@@ -120,6 +113,9 @@
         UrlApiBase(){
           return `${process.env.VUE_APP_API_BASE}/listadepreciobreveusointerno/`
         },
+        token(){
+          return store.state.token
+        },
         options () {
           return {
             callback: (isFullscreen) => {
@@ -132,83 +128,117 @@
         }
       },
        methods: {
-            onError: function(e){
-              console.log(e.status); // displays "error"
-              console.log(e.error);
+        readData: function (e) {
+          var tkn = this.token
+          var urlApi = this.UrlApiBase
+          $.ajax({
+            type: 'GET',
+            url: urlApi,
+            beforeSend: function (xhr) {
+              xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
             },
-            requestEnd: function(e) {
-                var response = e.response;
-                var type = e.type;
-                /* The result can be observed in the DevTools(F12) console of the browser. */
-                console.log(type + " => type");
-                /* The result can be observed in the DevTools(F12) console of the browser. */
-                console.log(response.length);
-                if (type == "create") {
-                    e.sender.read();
-                    } else
-                if (type == "update") {
-                    e.sender.read();
-                    }
+            success: function(data){
+              e.success(data)
             },
-            parameterMap: function(options, operation) {            
-                if (operation == 'read') {
-                    //console.log(operation + " operation");
-                    //console.log(options.models);
-                    //console.log(JSON.stringify(options));
-                    return options
-                } 
-                if (operation == 'destroy') {
-                    //console.log(operation);
-                    //console.log(options.models);
-                    //console.log(JSON.stringify(options.models[0],["id"]));
-                    var Id = JSON.stringify(options.models[0].id);
-                    let params = {
-                    "ARTS_ARTICULO_EMP": JSON.stringify(options.models[0].arts_articulo_emp),
-                    "ARTS_NOMBRE": JSON.stringify(options.models[0].arts_nombre),
-                    "grupo_del_art": JSON.stringify(options.models[0].grupo_del_art),
-                    "comentario": JSON.stringify(options.models[0].comentario),
-                    "nro_orden_art": JSON.stringify(options.models[0].nro_orden_art),
-                    };
-                    let json = JSON.stringify(params);
-                    var destroyUrl = `${process.env.VUE_APP_API_BASE}/listadepreciobreveusointerno/`
-                    $.ajax({
-                        method: "DELETE",
-                        url: destroyUrl + Id,
-                        dataType: "json",
-                        data: json
-                    });  
-                } 
-                if (operation == 'create') {
-                    //console.log(operation);
-                    //console.log(options.models);
-                    //console.log(JSON.stringify(options.models[0],["cod_depos","nombre_deposito"]));
-                    let params = JSON.stringify(options.models[0],["arts_articulo_emp", "arts_nombre", "grupo_del_art", "comentario", "nro_orden_art"])
-                    let json = JSON.parse(params)
-                    var createUrl = `${process.env.VUE_APP_API_BASE}/listadepreciobreveusointerno/`
-                    $.ajax({
-                        method: "POST",
-                        url: createUrl,
-                        dataType: "json",
-                        data: json
-                    });
-                } 
-                if (operation == 'update') {
-                    //console.log(operation);
-                    //console.log(options.models);
-                    //console.log(JSON.stringify(options.models[0],["id","cod_depos","nombre_deposito"]));
-                    var Id = JSON.stringify(options.models[0].id);
-                    let params = JSON.stringify(options.models[0],["arts_articulo_emp", "arts_nombre", "grupo_del_art", "comentario", "nro_orden_art"]);
-                    let json = JSON.parse(params);
-                    var updateUrl = `${process.env.VUE_APP_API_BASE}/listadepreciobreveusointerno/`
-                    $.ajax({
-                        method: "PUT",
-                        url: updateUrl + Id,
-                        dataType: "json",
-                        data: json
-                    });
-                }
-               
+            error: function(data){
+              e.error(data)
             },
+            dataType: 'json',
+            contentType: 'application/json'
+          })
+        },
+        updateData: function(e) {
+          var tkn = this.token
+          var urlApi = this.UrlApiBase
+          console.log(JSON.stringify(e.data.models[0].id))
+          console.log(JSON.parse(JSON.stringify(e.data.models[0],["arts_articulo_emp", "arts_nombre", "grupo_del_art", "comentario", "nro_orden_art"])),)
+          $.ajax({
+            method: 'PUT',
+            url: urlApi + JSON.stringify(e.data.models[0].id),
+            beforeSend: function(xhr) {
+              xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
+            },
+            success: function(data){
+              e.success(data)
+            },
+            error: function(data){
+              e.error(data)
+            },
+            data: JSON.stringify(e.data.models[0],["arts_articulo_emp", "arts_nombre", "grupo_del_art", "comentario", "nro_orden_art"]),
+            dataType: 'json',
+            contentType: 'application/json',
+          })
+        },
+        destroyData: function(e){
+          var tkn = this.token
+          var urlApi = this.UrlApiBase
+          $.ajax({
+            method: 'DELETE',
+            type: 'DELETE',
+            url: urlApi + JSON.stringify(e.data.models[0].id),
+            beforeSend: function(xhr) {
+              xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
+            },
+            success: function(data){
+              e.success(data)
+            },
+            error: function(data){
+              e.error(data)
+            },
+            dataType: 'json',
+            contentType: 'application/json',
+          })
+        },
+        createData: function(e){
+          var tkn = this.token
+          var urlApi = this.UrlApiBase
+          $.ajax({
+            method: 'POST',
+            type: 'POST',
+            url: urlApi,
+            beforeSend: function(xhr) {
+              xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
+            },
+            success: function(data){
+              e.success(data)
+            },
+            error: function(data){
+              e.error(data)
+            },
+            dataType: 'json',
+            contentType: 'application/json',
+            data: JSON.stringify(e.data.models[0],["arts_articulo_emp", "arts_nombre", "grupo_del_art", "comentario", "nro_orden_art"]),
+          })
+        },
+        onError: function(e){
+            console.log(e.status); 
+            // displays "error"
+            console.log(e.error);
+        },
+        requestEnd: function(e) {
+            var response = e.response;
+            var type = e.type;
+            /* The result can be observed in the DevTools(F12) console of the browser. */
+            console.log("type => " + type);
+            // console.log(response)
+            /* The result can be observed in the DevTools(F12) console of the browser. */
+            // console.log(response.length);
+            if (type == "create") {
+                  e.sender.read();
+            }
+            if (type == "update") {
+                  e.sender.read();
+            }
+            if (type == undefined) {
+                  e.sender.read();
+            }
+            
+        },
+        parameterMap: function (options, operation) {
+            if (operation == 'read') {
+              return options
+            } 
+        }
       }
     }
     </script>

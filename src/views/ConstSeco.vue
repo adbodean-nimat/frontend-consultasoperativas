@@ -51,11 +51,7 @@
           </div>
         </component>
         <datasource ref="remoteDataSourceConstSeco"
-                          :transport-read-url="UrlApiBase"
-                          :transport-read-data-type="'json'"
-                          :transport-read-content-type="'application/json'"
-                          :transport-read-type="'GET'"
-                          :transport-read-cache="false"
+                          :transport-read="readData"
                           :schema-model-fields="schemaModelFields"
                           :group="groupDefinition"
                           :page-size='100'
@@ -148,6 +144,8 @@
 </template>
     
 <script>
+    import $ from 'jquery'
+    import store from "../store";
     import '@progress/kendo-ui'
     import '@progress/kendo-ui/js/messages/kendo.messages.es-AR'
     import '@progress/kendo-ui/js/cultures/kendo.culture.es-AR'
@@ -218,6 +216,22 @@
         }
       },
       methods: {
+        readData: function (e) {
+              // console.log(store.state.token)
+              var token = store.state.token
+              var urlApi = `${process.env.VUE_APP_API_BASE}/listaconstseco`
+              $.ajax({
+                url: urlApi,
+                beforeSend: function (xhr) {
+                  xhr.setRequestHeader('Authorization', 'Bearer ' + token)
+                },
+                dataType: 'json',
+                success: function (data) {
+                  e.success(data)
+                },
+                type: 'GET'
+              })
+          },
         pdfExport: function() {
           
         },
@@ -594,7 +608,15 @@
               optionLabel: "",
               dataSource: {
                 transport:{
-                  read: `${process.env.VUE_APP_API_BASE}/constseconombresconfig`
+                  read: {
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    type: 'GET',
+                    url: `${process.env.VUE_APP_API_BASE}/constseconombresconfig`,
+                    headers: {
+                      'Authorization': 'Bearer ' + store.state.token
+                    }
+                  }
                 }
               }
             })
@@ -606,7 +628,15 @@
               autoBind: true,
               dataSource: {
                 transport:{
-                  read: `${process.env.VUE_APP_API_BASE}/clasificadorclientes`
+                  read: {
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    type: 'GET',
+                    url: `${process.env.VUE_APP_API_BASE}/clasificadorclientes`,
+                    headers: {
+                      'Authorization': 'Bearer ' + store.state.token
+                    }
+                  }  
                 }
               }
             });

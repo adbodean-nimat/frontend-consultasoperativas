@@ -22,7 +22,7 @@ export default {
 <style>
 footer{
     width: 100%;
-    height: 25px;
+    /* height: 25px; */
     background: #008645;
     bottom: 0;
 }

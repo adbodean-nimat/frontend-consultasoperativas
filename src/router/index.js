@@ -24,12 +24,12 @@ import RowaPlanCanje from "../views/RowaPlanCanje.vue"
 
 const routes = [
   {
-    path: '/login',
+    path: '/',
     name: 'Login',
     component: Login,
     props: true,
     meta: {
-      title: 'Login',
+      title: 'Consultas Operativas - Login',
       metaTags: [
         {
           name: 'Login'
@@ -37,7 +37,7 @@ const routes = [
     }
   },
   {
-    path: '/',
+    path: '/tablero',
     name: 'tablero',
     component: Tablero,
     props: true,
@@ -312,7 +312,8 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+  mode: "history",
+  history: createWebHistory(),
   routes
 })
 

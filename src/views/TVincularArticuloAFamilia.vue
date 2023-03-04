@@ -18,18 +18,10 @@
       </div>
       
       <datasource ref="remoteDataSourceVinculararticulosafamilia"
-                        :transport-read-url="UrlApiBase"
-                        :transport-read-content-type="'application/json; charset=utf-8'"
-                        :transport-read-data-type="'json'"
-                        :transport-update-url="UrlApiBase"
-                        :transport-update-content-type="'application/json; charset=utf-8'"
-                        :transport-update-data-type="'json'"
-                        :transport-destroy-url="UrlApiBase"
-                        :transport-destroy-content-type="'application/json; charset=utf-8'"
-                        :transport-destroy-data-type="'json'"
-                        :transport-create-url="UrlApiBase"
-                        :transport-create-content-type="'application/json; charset=utf-8'"
-                        :transport-create-data-type="'json'"
+                        :transport-read="readData"
+                        :transport-update="updateData"
+                        :transport-destroy="destroyData"
+                        :transport-create="createData"
                         :transport-parameter-map="parameterMap"
                         :schema-model-id="'cod'"
                         :schema-model-fields="fields"
@@ -57,6 +49,7 @@
     
     <script>
     import $ from 'jquery'
+    import store from "../store";
     import '@progress/kendo-ui'
     import '@progress/kendo-ui/js/messages/kendo.messages.es-AR'
     import '@progress/kendo-ui/js/cultures/kendo.culture.es-AR'
@@ -95,6 +88,9 @@
         UrlApiBase(){
               return `${process.env.VUE_APP_API_BASE}/vinculararticulosafamilia/`
         },
+        token(){
+          return store.state.token
+        },
         options () {
           return {
             callback: (isFullscreen) => {
@@ -107,6 +103,84 @@
         }
       },
        methods: {
+        readData: function (e) {
+              // console.log(store.state.token)
+              var tkn = this.token
+              var urlApi = this.UrlApiBase
+              $.ajax({
+                url: urlApi,
+                beforeSend: function (xhr) {
+                  xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
+                },
+                dataType: 'json',
+                success: function (data) {
+                  e.success(data)
+                },
+                type: 'GET'
+              })
+      },
+      updateData: function(e) {
+            var tkn = this.token
+            var urlApi = this.UrlApiBase
+            $.ajax({
+              method: 'PUT',
+              type: 'PUT',
+              url: urlApi + JSON.stringify(e.data.models[0].id),
+              beforeSend: function(xhr) {
+                xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
+              },
+              success: function(data){
+                e.success(data)
+              },
+              error: function(data){
+                e.error(data)
+              },
+              data: JSON.stringify(e.data.models[0],["cod_art", "cod_familia", "orden_art_familia"]),
+              dataType: 'json',
+              contentType: 'application/json',
+            })
+        },
+        destroyData: function(e){
+            var tkn = this.token
+            var urlApi = this.UrlApiBase
+            $.ajax({
+              method: 'DELETE',
+              type: 'DELETE',
+              url: urlApi + JSON.stringify(e.data.models[0].id),
+              beforeSend: function(xhr) {
+                xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
+              },
+              success: function(data){
+                e.success(data)
+              },
+              error: function(data){
+                e.error(data)
+              },
+              dataType: 'json',
+              contentType: 'application/json',
+            })
+        },
+        createData: function(e){
+          var tkn = this.token
+          var urlApi = this.UrlApiBase
+          $.ajax({
+            method: 'POST',
+            type: 'POST',
+            url: urlApi,
+            beforeSend: function(xhr) {
+              xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
+            },
+            success: function(data){
+              e.success(data)
+            },
+            error: function(data){
+              e.error(data)
+            },
+            dataType: 'json',
+            contentType: 'application/json',
+            data: JSON.stringify(e.data.models[0],["cod_art", "cod_familia", "orden_art_familia"]),
+          })
+        },  
             onError: function(e){
               console.log(e.status); // displays "error"
               console.log(e.error);
@@ -124,69 +198,21 @@
                 /* The result can be observed in the DevTools(F12) console of the browser. */
                 console.log(type + " => type");
                 /* The result can be observed in the DevTools(F12) console of the browser. */
-                console.log(response.length);
+                // console.log(response.length);
                 if (type == "create") {
                     e.sender.read();
-                    } else
+                }
                 if (type == "update") {
                     e.sender.read();
-                    }
+                }
+                if (type == undefined) {
+                    e.sender.read();
+                }
             },
-            /* parameterMap: function(options, operation) {
+            parameterMap: function(options, operation) {
                 if (operation !== 'read' && options.models) {
                     return JSON.stringify(options.models)
                 }
-            }, */
-            parameterMap: function(options, operation) {            
-                 if (operation == 'read') {
-                    //console.log(operation + " operation");
-                    //console.log(options);
-                    //console.log(JSON.stringify(options));
-                    return options
-                } 
-                if (operation == 'destroy') {
-                    //console.log(operation + " operation");
-                    //console.log(JSON.stringify(options.models[0].id));
-                    
-                    var Id = JSON.stringify(options.models[0].cod);
-                    let params = {
-                    "cod_art": JSON.stringify(options.models[0].cod_art),
-                    "cod_familia": JSON.stringify(options.models[0].cod_familia),
-                    "orden_art_familia": JSON.stringify(options.models[0].orden_art_familia)
-                    };
-                    let json = JSON.stringify(params);
-                    var destroyUrl = `${process.env.VUE_APP_API_BASE}/vinculararticulosafamilia/`
-                    $.ajax({
-                        method: "DELETE",
-                        url: destroyUrl + Id,
-                        dataType: "json",
-                        data: json
-                    });   
-                } 
-                if (operation == 'create') {
-                    let params = JSON.stringify(options.models[0],["cod_art", "cod_familia", "orden_art_familia"])
-                    let json = JSON.parse(params)
-                    var createUrl = `${process.env.VUE_APP_API_BASE}/vinculararticulosafamilia/`
-                    $.ajax({
-                        method: "POST",
-                        url: createUrl,
-                        dataType: "json",
-                        data: json
-                    });
-                } 
-                if (operation == 'update') {
-                    var Id = JSON.stringify(options.models[0].cod);
-                    let params = JSON.stringify(options.models[0],["cod_art", "cod_familia", "orden_art_familia"]);
-                    let json = JSON.parse(params);
-                    var updateUrl = `${process.env.VUE_APP_API_BASE}/vinculararticulosafamilia/`
-                    $.ajax({
-                        method: "PUT",
-                        url: updateUrl + Id,
-                        dataType: "json",
-                        data: json
-                    });
-                }
-               
             },
       }
     }

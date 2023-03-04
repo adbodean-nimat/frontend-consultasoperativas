@@ -18,18 +18,10 @@
       </div>
       
       <datasource ref="remoteDataConstSecoArmadoConfig2"
-                        :transport-read-url="UrlApiBase"
-                        :transport-read-content-type="'application/json; charset=utf-8'"
-                        :transport-read-data-type="'json'"
-                        :transport-update-url="UrlApiBase"
-                        :transport-update-content-type="'application/json; charset=utf-8'"
-                        :transport-update-data-type="'json'"
-                        :transport-destroy-url="UrlApiBase"
-                        :transport-destroy-content-type="'application/json; charset=utf-8'"
-                        :transport-destroy-data-type="'json'"
-                        :transport-create-url="UrlApiBase"
-                        :transport-create-content-type="'application/json; charset=utf-8'"
-                        :transport-create-data-type="'json'"
+                        :transport-read="readData"
+                        :transport-update="updateData"
+                        :transport-destroy="destroyData"
+                        :transport-create="createData"
                         :transport-parameter-map="parameterMap"
                         :schema-model-id="'id'"
                         :schema-model-fields="fields"
@@ -61,6 +53,7 @@
     
     <script>
     import $ from 'jquery'
+    import store from "../store";
     import '@progress/kendo-ui'
     import '@progress/kendo-ui/js/messages/kendo.messages.es-AR'
     import '@progress/kendo-ui/js/cultures/kendo.culture.es-AR'
@@ -130,6 +123,9 @@
         UrlApiBase(){
               return `${process.env.VUE_APP_API_BASE}/constsecoarmadoconfig2/`
         },
+        token(){
+          return store.state.token
+        },
         options () {
           return {
             callback: (isFullscreen) => {
@@ -142,7 +138,84 @@
         }
       },
        methods: {
-            onError: function(e){
+        readData: function (e) {
+              var token = store.state.token
+              var urlApi = `${process.env.VUE_APP_API_BASE}/constsecoarmadoconfig2/`
+              $.ajax({
+                url: urlApi,
+                beforeSend: function (xhr) {
+                  xhr.setRequestHeader('Authorization', 'Bearer ' + token)
+                },
+                dataType: 'json',
+                success: function (data) {
+                  e.success(data)
+                },
+                type: 'GET'
+              })
+        },
+        updateData: function(e) {
+            var tkn = this.token
+            var urlApi = this.UrlApiBase
+            $.ajax({
+              method: 'PUT',
+              type: 'PUT',
+              url: urlApi + JSON.stringify(e.data.models[0].id),
+              beforeSend: function(xhr) {
+                xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
+              },
+              success: function(data){
+                e.success(data)
+              },
+              error: function(data){
+                e.error(data)
+              },
+              data: JSON.stringify(e.data.models[0],["cod_art", "nombre_art_ptf", "nombre_art_lp", "uni_lp_x_cada_uni_ptf", "uni", "fracciona_uni_ptf", "observacion"]),
+              dataType: 'json',
+              contentType: 'application/json',
+            })
+        },
+        destroyData: function(e){
+            var tkn = this.token
+            var urlApi = this.UrlApiBase
+            $.ajax({
+              method: 'DELETE',
+              type: 'DELETE',
+              url: urlApi + JSON.stringify(e.data.models[0].id),
+              beforeSend: function(xhr) {
+                xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
+              },
+              success: function(data){
+                e.success(data)
+              },
+              error: function(data){
+                e.error(data)
+              },
+              dataType: 'json',
+              contentType: 'application/json',
+            })
+        },
+        createData: function(e){
+          var tkn = this.token
+          var urlApi = this.UrlApiBase
+          $.ajax({
+            method: 'POST',
+            type: 'POST',
+            url: urlApi,
+            beforeSend: function(xhr) {
+              xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
+            },
+            success: function(data){
+              e.success(data)
+            },
+            error: function(data){
+              e.error(data)
+            },
+            dataType: 'json',
+            contentType: 'application/json',
+            data: JSON.stringify(e.data.models[0],["cod_art", "nombre_art_ptf", "nombre_art_lp", "uni_lp_x_cada_uni_ptf", "uni", "fracciona_uni_ptf", "observacion"]),
+          })
+        },
+        onError: function(e){
               console.log(e.status); // displays "error"
               console.log(e.error);
             },
@@ -161,60 +234,19 @@
                 /* The result can be observed in the DevTools(F12) console of the browser. */
                 /* console.log(response.length); */
                 if (type == "create") {
-                    e.sender.read();
-                    } else
-                if (type == "update") {
-                    e.sender.read();
-                    }
-            },
-            parameterMap: function(options, operation) {            
-                 if (operation == 'read') {
-                    return options
-                } 
-                if (operation == 'destroy') {
-                    var Id = JSON.stringify(options.models[0].id);
-                    let params = {
-                    "cod_art": JSON.stringify(options.models[0].cod_art),
-                    "nombre_art_ptf": JSON.stringify(options.models[0].nombre_art_ptf),
-                    "nombre_art_lp": JSON.stringify(options.models[0].nombre_art_lp),
-                    "uni_lp_x_cada_uni_ptf": JSON.stringify(options.models[0].uni_lp_x_cada_uni_ptf),
-                    "uni": JSON.stringify(options.models[0].uni),
-                    "fracciona_uni_ptf": JSON.stringify(options.models[0].fracciona_uni_ptf),
-                    "observacion": JSON.stringify(options.models[0].observacion),
-                    };
-                    let json = JSON.stringify(params);
-                    var destroyUrl = `${process.env.VUE_APP_API_BASE}/constsecoarmadoconfig2/`
-                    $.ajax({
-                        method: "DELETE",
-                        url: destroyUrl + Id,
-                        dataType: "json",
-                        data: json
-                    });   
-                } 
-                if (operation == 'create') {
-                    let params = JSON.stringify(options.models[0],["cod_art", "nombre_art_ptf", "nombre_art_lp", "uni_lp_x_cada_uni_ptf", "uni", "fracciona_uni_ptf", "observacion"])
-                    let json = JSON.parse(params)
-                    var createUrl = `${process.env.VUE_APP_API_BASE}/constsecoarmadoconfig2/`
-                    $.ajax({
-                        method: "POST",
-                        url: createUrl,
-                        dataType: "json",
-                        data: json
-                    });
-                } 
-                if (operation == 'update') {
-                    var Id = JSON.stringify(options.models[0].id);
-                    let params = JSON.stringify(options.models[0],["cod_art", "nombre_art_ptf", "nombre_art_lp", "uni_lp_x_cada_uni_ptf", "uni", "fracciona_uni_ptf", "observacion"]);
-                    let json = JSON.parse(params);
-                    var updateUrl = `${process.env.VUE_APP_API_BASE}/constsecoarmadoconfig2/`
-                    $.ajax({
-                        method: "PUT",
-                        url: updateUrl + Id,
-                        dataType: "json",
-                        data: json
-                    });
+                  e.sender.read();
                 }
-               
+                if (type == "update") {
+                  e.sender.read();
+                }
+                if (type == undefined) {
+                  e.sender.read();
+                }
+            },
+            parameterMap: function(options, operation) {
+                if (operation !== 'read' && options.models) {
+                    return JSON.stringify(options.models)
+                }
             },
       }
     }

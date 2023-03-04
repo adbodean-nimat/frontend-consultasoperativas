@@ -17,9 +17,7 @@
   </div>
   
   <datasource ref="remoteDataSource4"
-                    :transport-read-url="UrlApiBase"
-                    :transport-read-content-type="'application/json; charset=utf-8'"
-                    :transport-read-data-type="'json'"
+                    :transport-read="readData"
                     :transport-update-url="UrlApiBase"
                     :transport-update-content-type="'application/json; charset=utf-8'"
                     :transport-update-data-type="'json'"
@@ -57,6 +55,7 @@
 
 <script>
 import $ from 'jquery'
+import store from "../store"
 import '@progress/kendo-ui'
 import '@progress/kendo-ui/js/messages/kendo.messages.es-AR'
 import '@progress/kendo-ui/js/cultures/kendo.culture.es-AR'
@@ -116,6 +115,22 @@ export default {
     }
   },
    methods: {
+    readData: function (e) {
+              // console.log(store.state.token)
+              var token = store.state.token
+              var urlApi = `${process.env.VUE_APP_API_BASE}/dimensionescontenedores/`
+              $.ajax({
+                url: urlApi,
+                beforeSend: function (xhr) {
+                  xhr.setRequestHeader('Authorization', 'Bearer ' + token)
+                },
+                dataType: 'json',
+                success: function (data) {
+                  e.success(data)
+                },
+                type: 'GET'
+              })
+          },
         onError: function(e){
           console.log(e.status); // displays "error"
           console.log(e.error);
@@ -172,7 +187,10 @@ export default {
                     method: "DELETE",
                     url: destroyUrl + Id,
                     dataType: "json",
-                    data: json
+                    data: json,
+                    headers: {
+                          'Authorization': 'Bearer ' + store.state.token
+                        }
                 });   
             } 
             if (operation == 'create') {
@@ -187,7 +205,10 @@ export default {
                     method: "POST",
                     url: createUrl,
                     dataType: "json",
-                    data: json
+                    data: json,
+                    headers: {
+                          'Authorization': 'Bearer ' + store.state.token
+                        }
                 });
             } 
             if (operation == 'update') {
@@ -203,7 +224,10 @@ export default {
                     method: "PUT",
                     url: updateUrl + Id,
                     dataType: "json",
-                    data: json
+                    data: json,
+                    headers: {
+                          'Authorization': 'Bearer ' + store.state.token
+                        }
                 });
             }
            

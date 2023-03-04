@@ -17,11 +17,7 @@
           </div>
         </div>
         <datasource ref="remoteDataSourceContainers"
-                          :transport-read-url="UrlApiBase"
-                          :transport-read-data-type="'json'"
-                          :transport-read-content-type="'application/json'"
-                          :transport-read-type="'GET'"
-                          :transport-read-cache="false"
+                          :transport-read="readData"
                           :schema-model-fields="schemaModelFields"
                           :aggregate="aggregateDefinition"
                           :page-size='50'
@@ -73,7 +69,9 @@
     </div>
 </template>
     
-    <script>
+<script>
+    import $ from 'jquery'
+    import store from "../store";
     import '@progress/kendo-ui'
     import '@progress/kendo-ui/js/messages/kendo.messages.es-AR'
     import '@progress/kendo-ui/js/cultures/kendo.culture.es-AR'
@@ -150,6 +148,22 @@
         }
       },
       methods: {
+        readData: function (e) {
+              // console.log(store.state.token)
+              var token = store.state.token
+              var urlApi = `${process.env.VUE_APP_API_BASE}/listacontenedores`
+              $.ajax({
+                url: urlApi,
+                beforeSend: function (xhr) {
+                  xhr.setRequestHeader('Authorization', 'Bearer ' + token)
+                },
+                dataType: 'json',
+                success: function (data) {
+                  e.success(data)
+                },
+                type: 'GET'
+              })
+          },
             toolbarTemplate: function() {
             var templateHtml =
                 '<span id="form" style="position:absolute; left:5px">' +

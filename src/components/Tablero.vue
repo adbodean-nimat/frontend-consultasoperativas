@@ -2,6 +2,8 @@
     <div class="container-page">
         <div class="page-content">
             <div class="container-fluid px-5 text-center">
+                <h3 style="color:#fff;">Hola, {{ giveName }}</h3>
+
                 <div class="row row-cols-lg-5 gy-5">
                     <div class="col col-h">
                     <router-link to="/controlaltaclientes">
@@ -181,7 +183,7 @@
                             </span>
                         </div>
                         <div class="column-bottom text-center h-10 d-flex justify-content-between align-items-center px-4 rounded-bottom bg-light">
-                            <span class="fs-6">1.0.0</span>
+                            <span class="fs-6">1.1.0</span>
                             <span class="fs-6">LDPRV</span>
                         </div>
                     </div>
@@ -218,11 +220,21 @@
 </template>
 
 <script>
+import store from "../store";
 export default{
     name: 'TableroVue',
-    mounted: function() {
-    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-  }
+    data: () => {
+        return {
+            giveName: '',
+        }
+    },
+    async created() {
+        if (!store.getters.isLoggedIn) {
+            this.$router.push('/');
+        }
+        this.giveName = store.getters.getUser.givenName;
+        //this.secretMessage = await AuthService.getSecretContent();
+    }
 }
 
 </script>
