@@ -84,7 +84,7 @@
                 fullscreen: false,
                 teleport: true,
                 pageOnly: true,
-                title: 'Lista de precio - Pisos y Revistimiento con Stock',
+                title: 'Lista de precios - Pisos y Revistimiento con Stock',
                 schemaModelFields: {
                     CA03_NOMBRE: {type: 'string'},
                     Tipología: {type: 'string'},

@@ -80,7 +80,7 @@
                     cod: { editable: false, nullable: true},
                     cod_art: { type: 'string'},
                     cod_familia: { type: 'string'},
-                    orden_art_familia: {type: 'string'},
+                    orden_art_familia: {type: 'number'}
                 },
              }
         },
@@ -125,7 +125,7 @@
             $.ajax({
               method: 'PUT',
               type: 'PUT',
-              url: urlApi + JSON.stringify(e.data.models[0].id),
+              url: urlApi + JSON.stringify(e.data.models[0].cod),
               beforeSend: function(xhr) {
                 xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
               },
@@ -146,7 +146,7 @@
             $.ajax({
               method: 'DELETE',
               type: 'DELETE',
-              url: urlApi + JSON.stringify(e.data.models[0].id),
+              url: urlApi + JSON.stringify(e.data.models[0].cod),
               beforeSend: function(xhr) {
                 xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
               },

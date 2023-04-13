@@ -47,7 +47,7 @@
         <datasource ref="remoteDataSourceRubrosVtas"
                           :transport-read="readData"
                           :schema-model-fields="schemaModelFields"
-                          :group="groupDefinition"
+                          :group="groupDefinicion"
                           @error="onError"
                           @requestend="requestEnd"
                           >
@@ -57,19 +57,23 @@
               :data="'remoteDataSourceRubrosVtas'"
               :data-source-ref="'remoteDataSourceRubrosVtas'"
               :sortable-mode="'multiple'"
+              :groupable-enabled="false"
               :filterable="true"
               :filterable-extra="false"
               :reorderable="true"
               :resizable="true"
               :column-menu="true"
-              :navigatable="true"
+              :navigatable="false"
               :toolbar="toolbarTemplate"
               :allow-copy="true"
               :selectable="true"
               :auto-bind="false"
+              :excel-file-name="'LP VN - Rubros Vtas.xlsx'"
+              :excel-all-pages="true"
+              :excel-filterable="false"
               :pdf-file-name="'LP VN - Rubros Vtas.pdf'"
               :pdf-all-pages="true"
-              :pdf-avoid-links="true"
+              :pdf-avoid-links="false"
               :pdf-paper-size="'A4'"
               :pdf-margin-top="200"
               :pdf-margin-bottom="10"
@@ -79,21 +83,23 @@
               :pdf-repeat-headers="true"
               :pdf-scale="0.6"
               :pdf-template="pdfTemplate"
+              @excelexport="exportGridWithTemplatesContent"
               @pdfexport="pdfExport"
               @databound="dataBound"
               >
               
-              <grid-column title="Código" :template="ArtsArticuloEmp" :column-menu="false" :width="90"></grid-column>
-              <grid-column field="ARTS_NOMBRE" title="Articulo" :column-menu="false" :width="300"></grid-column>
+              <grid-column title="Código" :template="ArtsArticuloEmp" :column-menu="false" :hidden="true"></grid-column>
+              <grid-column field="ARTS_ARTICULO_EMP" title="Código" :column-menu="false"  :width="60"></grid-column>
+              <grid-column field="ARTS_NOMBRE" title="Articulo" :column-menu="false" :width="400"></grid-column>
               <grid-column field="ARTS_UNIMED_STOCK" title="&nbsp;" :column-menu="false" :width="40"></grid-column>
-              <grid-column field="PRECIO_LISTA_CON_IVA" title="Precio lista c/IVA" :format="'{0:c}'" :width="100"></grid-column>
-              <grid-column title="Dto. Financ." :template="dtoFinan" :width="90"></grid-column>
-              <grid-column title="Precio contado c/IVA c/Dtos" :template="precioContado" :width="100"></grid-column>
-              <grid-column title="Modif" :template="Modif" :hidden="false" :width="40"></grid-column>
+              <grid-column field="PRECIO_LISTA_CON_IVA" title="Precio lista c/IVA" :format="'{0:c}'" :hidden="false" :width="100"></grid-column>
+              <grid-column title="Dto. Financ." :template="this.dtoFinan" :width="80" :hidden="false"></grid-column>
+              <grid-column title="Precio contado c/IVA c/Dtos" :template="this.precioContado" :hidden="false" :width="100"></grid-column>
+              <grid-column title="Modif" :template="this.Modif" :hidden="false" :width="50"></grid-column>
 
-              <grid-column title="Verfi Modif" :template="VeriModif" :hidden="true" :width="40"></grid-column>
-              <grid-column title="Sin Modif" :template="SinModif" :hidden="true" :width="40"></grid-column>
-              <grid-column title="Verfi sin Modif" :template="VeriSinModif" :hidden="true" :width="40"></grid-column>
+              <grid-column title="Verfi Modif" :template="VeriModif" :hidden="true" ></grid-column>
+              <grid-column title="Sin Modif" :template="SinModif" :hidden="true" ></grid-column>
+              <grid-column title="Verfi sin Modif" :template="VeriSinModif" :hidden="true" ></grid-column>
 
               <grid-column field="ARVE_RUBRO_VENTA" :hidden="true"></grid-column>
               <grid-column field="RUBV_NOMBRE" :hidden="true"></grid-column>
@@ -101,8 +107,8 @@
               <grid-column field="cod_set_art" :hidden="true"></grid-column>
               <grid-column field="nombre_set_art" :hidden="true"></grid-column>
               <grid-column field="cod_fami_art" :hidden="true"></grid-column>
-              <grid-column field="nombre_fami_art"  title="Familia Art." :hidden="true"></grid-column>
-              <grid-column field="nro_orden_de_la_fami" :hidden="true"></grid-column>
+              <grid-column field="nombre_fami_art" title="Familia Art." :group-header-template="groupHeaderTemplateFamiliaArt" :hidden="true"></grid-column>
+              <grid-column field="nro_orden_de_la_fami" title="Nro. Orden" :hidden="true" :group-header-template="groupHeaderTemplateNroOrden"></grid-column>
               <grid-column field="orden_art_familia" title="Orden Art." :hidden="true"></grid-column>
               <grid-column field="ARTS_ARTICULO" :hidden="true"></grid-column>
               <grid-column field="ARVE_BLOQUEO_VENTA" :hidden="true"></grid-column>
@@ -132,6 +138,7 @@
 <script>
     import $ from 'jquery'
     import store from "../store";
+    import JSZip from 'jszip'
     import '@progress/kendo-ui'
     import '@progress/kendo-ui/js/messages/kendo.messages.es-AR'
     import '@progress/kendo-ui/js/cultures/kendo.culture.es-AR'
@@ -157,19 +164,29 @@
                 fullscreen: false,
                 teleport: true,
                 pageOnly: true,
-                title: 'Lista de precio - Rubros Ventas',
+                title: 'Lista de precios - Rubros Ventas',
                 dataSource: ['remoteDataSourceRubrosVtas'],
                 schemaModelFields: {
-                    orden_art_familia: {type: 'numeric'},
+                    orden_art_familia: {type: 'number'},
                     cod_set_art: {type: 'string'},
                     Fecha_cambio_precios_hasta: {type: 'date'},
-                    Fecha_Ult_Modif: {type: 'date'}
-                    
+                    Fecha_Ult_Modif: {type: 'date'},
+                    nro_orden_de_la_fami: {type: 'number'},
+                    ARPV_PRECIO_VTA: {type: 'string'}
                 },
-                groupDefinition:{
-                  field: 'nombre_fami_art'
-                }
+                groupDefinicion:[
+                  {
+                    field: 'nro_orden_de_la_fami',
+                    dir: 'asc'
+                  },
+                  {
+                    field: 'nombre_fami_art'
+                  }
+                ]
              }
+      },
+      created: function(){
+        window.JSZip = JSZip;
       },
       computed: {
         UrlApiBase(){
@@ -187,6 +204,14 @@
         }
       },
       methods: {
+        groupHeaderTemplateNroOrden: function(e){
+          var groupTemplate = kendo.template('');
+          return groupTemplate(e)
+        },
+        groupHeaderTemplateFamiliaArt: function(e){
+          var groupTemplate = kendo.template('#=value#');
+          return groupTemplate(e)
+        },  
         readData: function (e) {
               // console.log(store.state.token)
               var token = store.state.token
@@ -203,7 +228,41 @@
                 type: 'GET'
               })
           },
-        pdfExport: function() {
+          exportGridWithTemplatesContent: function(e){
+            var data = e.data;
+            var gridColumns = e.sender.columns;
+            var sheet = e.workbook.sheets[0];
+            var visibleGridColumns = [];
+            var columnTemplates = [];
+            var dataItem;
+            var elem = document.createElement('div');
+
+            for (var i = 0; i < gridColumns.length; i++) {
+              if (!gridColumns[i].hidden) {
+                visibleGridColumns.push(gridColumns[i]);
+              }
+            }
+
+            for (var i = 0; i < visibleGridColumns.length; i++) {
+              console.log(visibleGridColumns[i].template)
+              if (visibleGridColumns[i].template) {
+                  columnTemplates.push({ cellIndex: i, template: kendo.template(visibleGridColumns[i].template) })
+              }
+            } 
+            
+            for (var i = 1; i < sheet.rows.length; i++) {
+              var row = sheet.rows[i];
+              var dataItem = data[i - 1];
+              for (var j = 0; j < columnTemplates.length; j++) {
+                var columnTemplate = columnTemplates[j];
+            
+                elem.innerHTML = columnTemplate.template(dataItem);
+                if (row.cells[columnTemplate.cellIndex] != undefined)
+                  row.cells[columnTemplate.cellIndex].value = elem.textContent || elem.innerText || "";
+              }
+            }
+          },
+          pdfExport: function() {
           const idemDtoFinan = document.getElementById("dtofinan").ariaValueNow
           var comentarioContadoEfectivo = document.getElementById("comentariocontadoefectivo");
           var comentarioFinanciero = document.getElementById("comentariofinanciero");
@@ -211,7 +270,7 @@
             alert("Falta completa campo Dto. Finan.")
             window.location.reload()
           } else
-          if (idemDtoFinan === 20 || idemDtoFinan > 20){
+          if (idemDtoFinan == 20){
             comentarioContadoEfectivo.innerText = "contado efectivo"
           } else
           if (idemDtoFinan < 20){
@@ -272,6 +331,7 @@
             /* console.log(response.length); */
         },
         dataBound: function(){
+
           var idemRubVNombre = document.querySelector("span#rubvnombre").innerText
           var idRubVNombre = document.getElementById("rubrovnombre")
           var ValRubVNombre = idRubVNombre.innerText = kendo.toString(idemRubVNombre)
@@ -410,6 +470,7 @@
                     '<a class="k-pager-refresh k-link k-button filter-clear" title="Limpiar filtro"  style="margin-left:5px"><span class="k-icon k-i-filter-clear"></span></a>'+
                     '<a class="k-pager-refresh k-link k-button" title="Nueva consulta" onClick="window.location.reload();" style="margin-left:5px"><span class="k-icon k-i-file"></span></a>' +
                     '<a class="k-pager-refresh k-link k-button k-button-icontext k-grid-pdf" style="margin-left:5px"><span class="k-icon k-i-pdf"></span></a>' +
+                    '<a class="k-pager-refresh k-link k-button k-button-icontext k-grid-excel" style="margin-left:5px"><span class="k-icon k-i-excel"></span></a>' +
                     '<a class="k-pager-refresh k-link k-button refresh" title="Actualizar" style="margin-left:5px"><span class="k-icon k-i-reload"></span></a>' +
                     '</div>' +
                   '</form>' +
@@ -437,7 +498,7 @@
             var numericDtoFinan = gridElement.find('#dtofinan');
             var fechaInformarCambiosPrecio = gridElement.find('#fechaCambiosPrecio');
             var dropDownElement2 = gridElement.find('#codconfig');
-            
+
             fechaInformarCambiosPrecio.kendoDatePicker({
                 culture: "es-AR", 
                 format: "dd-MM-yyyy"
@@ -505,12 +566,11 @@
               
 
               var filter = { logic: "and", filters: [] };
+              grid.dataSource.sort({field: "orden_art_familia", dir: "asc"});
               filter.filters.push(
-                    
                     { field: "ARVE_RUBRO_VENTA", operator: "contains", value: RubroVta },
                     { field: "COD_CTE", operator: "contains", value: PerfilComercial }
-                  
-            );
+                    );
               if (DtoFinan == "" || DtoFinan == null){
                 classDtoFinan.classList.add('is-invalid');
               } else if (FechaCambiosDesde == "" || FechaCambiosDesde == null) {

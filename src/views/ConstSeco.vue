@@ -172,7 +172,7 @@
                 teleport: true,
                 pageOnly: true,
                 m2: '1',
-                title: 'Lista de precio - Const. Seco Config. precios y consumos',
+                title: 'Lista de precios - Const. Seco Config. precios y consumos',
                 dataSource: ['remoteDataSourceConstSeco'],
                 schemaModelFields: {
                   ARTS_CLASIF_1: {type: 'string'},
@@ -657,7 +657,6 @@
               var classCuadrado2 = document.querySelector("#form > div:nth-child(5) > .k-numerictextbox")
               var filter = { logic: "and", filters: [] };
               filter.filters.push(
-                    
                     { field: "configcs", operator: "contains", value: CodigoConfig },
                     { field: "COD_CTE", operator: "contains", value: PerfilComercial }
               );

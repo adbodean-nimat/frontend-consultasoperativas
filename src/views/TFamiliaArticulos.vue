@@ -81,7 +81,7 @@
                     id: { editable: false, nullable: true},
                     cod_fami_art: { type: 'string'},
                     nombre_fami_art: { type: 'string'},
-                    nro_orden_de_la_fami: {type: 'string'},
+                    nro_orden_de_la_fami: {type: 'numeric'},
                     set_de_la_familia: {type: 'string'}
                 },
              }

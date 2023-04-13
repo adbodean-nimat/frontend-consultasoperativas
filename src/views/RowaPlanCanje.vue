@@ -76,7 +76,7 @@
                 fullscreen: false,
                 teleport: true,
                 pageOnly: true,
-                title: 'Lista de Precios - Plan Canje por siempre ROWA',
+                title: 'Lista de precios - Plan Canje por siempre ROWA',
                 schemaModelFields: {
                   Cliente_devuelve_mediante_NC: {type: 'string'},
                   Valor_de_la_NC: {type: 'number'},

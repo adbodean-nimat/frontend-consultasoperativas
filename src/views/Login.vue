@@ -23,7 +23,7 @@
 								<span class="focus-input100"></span>
 								</div>
 								<div class="wrap-input100 validate-input m-b-16">
-									<input v-model="password" class="input100" type="password" name="pass" placeholder="Contraseña">
+									<input v-model="password" class="input100" type="password" name="pass" placeholder="Contraseña" @keyup.enter="login">
 								<span class="focus-input100"></span>
 								</div>
 								

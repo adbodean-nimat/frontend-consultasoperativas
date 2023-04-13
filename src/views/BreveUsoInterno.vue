@@ -80,7 +80,7 @@
                 fullscreen: false,
                 teleport: true,
                 pageOnly: true,
-                title: 'Lista de precio breve - Uso Interno',
+                title: 'Lista de precios breve - Uso Interno',
                 schemaModelFields: {
                     id: { editable: false, nullable: true},
                     arts_articulo_emp: { type: 'varchar'},

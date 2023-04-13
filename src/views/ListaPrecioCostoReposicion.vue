@@ -16,54 +16,43 @@
             </div>
           </div>
         </div>
-        <datasource ref="remoteDataSourceContainers"
+        <datasource ref="remoteDataSourceListaPreciosCostoReposicion"
                           :transport-read="readData"
                           :schema-model-fields="schemaModelFields"
-                          :aggregate="aggregateDefinition"
-                          :page-size='50'
                           >
         </datasource>
         <grid ref="grid"
               :height="'95vh'"
-              :data-source-ref="'remoteDataSourceContainers'"
+              :data-source-ref="'remoteDataSourceListaPreciosCostoReposicion'"
               :sortable-mode="'multiple'"
-              :pageable-page-sizes="[5, 10, 15, 20, 25, 100]"
               :filterable="true"
               :reorderable="true"
               :resizable="true"
-              :groupable="true"
+              :groupable="false"
               :column-menu="true"
               :navigatable="true"
               :toolbar="toolbarTemplate"
               :allow-copy="true"
-              :selectable="true"
+              :selectable="false"
               >
-              <grid-column field="Movimientos" title="¿Movimientos?" :width="140" :filterable-multi="true" :locked="true" :footer-template="'Total'"></grid-column>
-              <grid-column field="Longitud" title="Longitud" :width="100" :filterable-multi="true" :locked="true"></grid-column>
-              <grid-column field="Tipo" title="Tipo" :width="100" :filterable-multi="true" :locked="true"></grid-column>
-              <grid-column field="Cód_Art" title="Cód Art" :width="100" :locked="true"></grid-column>
-              <grid-column field="Nombre_art" title="Nombre art" :width="340" :locked="true"></grid-column>
-              <grid-column field="Stock_Uni" title="Stock Uni" :width="120" :aggregates="['sum']" :footer-template="'#=sum#'"></grid-column>
-              <grid-column field="Uni_Pte_Entr_NP" title="Uni_Pte_Entr_NP" :filterable-multi="true" :width="120" :aggregates="['sum']" :footer-template="'#=sum#'"></grid-column>
-              <grid-column field="Stk_Disp_pVta" title="Stk Disp p/Vta" :filterable-multi="true" :width="120" :aggregates="['sum']" :footer-template="'#=sum#'"></grid-column>
-              <grid-column field="Pre_Cdo_USD_con_IVA" title="Pre Cdo USD con IVA" :width="120" :format="'{0:c}'"></grid-column>
-              <grid-column field="Pre_Cdo_AR_cIVA_L1" title="Pre Cdo AR c/IVA L1" :width="120" :format="'{0:c}'"></grid-column>
-              <grid-column field="Cant_Mov_Nro" title="Cant Mov Nro" :width="120" :filterable-multi="true"></grid-column>
-              <grid-column field="Precio_ARxmov_01500026" title="Precio AR$ x mov 01500026" :width="120" :format="'{0:c}'"></grid-column>
-              <grid-column field="Total_mov" title="Total mov" :width="120" :format="'{0:c}'"></grid-column>
-              <grid-column field="Contenedor_c_mov_AR_cdo_efect" title="Contenedor c/ mov AR$ cdo efect" :width="120" :format="'{0:c}'"></grid-column>
-              <grid-column field="Depósito" title="Depósito" :width="120" :filterable-multi="true"></grid-column>
-              <grid-column field="Moneda_del_Precio_Lista_en_USD" title="Moneda del Precio Lista en USD" :width="250"></grid-column>
-              <grid-column field="Cotización" title="Cotización" :width="120" :format="'{0:c}'"></grid-column>
-              <grid-column field="IVA_incluido_en_precio" title="IVA incluido en precio" :width="120"></grid-column>
-              <grid-column field="Año_de_fabricación" title="Año de fabricación" :filterable-multi="true" :width="120"></grid-column>
-              <grid-column field="Peso_aprox_Kg" title="Peso aprox Kg" :width="120"></grid-column>
-              <grid-column field="Nro_cliente" title="Nro. cliente" :filterable-multi="true" :width="120"></grid-column>
-              <grid-column field="Nombre_Cliente" title="Nombre Cliente" :filterable-multi="true" :width="300"></grid-column>
-              <grid-column field="Observación_NP" title="Observación NP" :width="600"></grid-column>
-              <grid-column field="Vendedor" title="Vendedor" :filterable-multi="true" :width="150"></grid-column>
-              <grid-column field="Medidas_interiores" title="Medidas Interiores" :width="400"></grid-column>
-
+            <grid-column field="ARTS_ARTICULO_EMP" title="Código Arts." :width="100" :locked="true"></grid-column>
+            <grid-column field="ARTS_NOMBRE" title="Nombre Arts." :width="400" :locked="true"></grid-column>
+            <grid-column field="ARPV_ARTICULO" title="Articulo" :width="100"></grid-column>
+            <grid-column field="ARPV_LISTA_PRECVTA" title="Numero de lista de precio" :width="100"></grid-column>
+            <grid-column field="ARPV_PRECIO_VTA" title="Precio de venta" :width="100"></grid-column>
+            <grid-column field="ARPV_MONEDA" title="Moneda del precio de venta" :width="100"></grid-column>
+            <grid-column field="COTI_COTIZACION" title="Importe de cotizacion" :width="100"></grid-column>
+            <grid-column field="CIMP_TASA" title="IVA" :width="100"></grid-column>
+            <grid-column field="ARTS_CLASIF_2" title="Cod. Clasif. 2 " :width="100"></grid-column>
+            <grid-column field="CA02_NOMBRE" title="Nombre Clasif. 2" :width="250" ></grid-column>
+            <grid-column field="ARTS_UNIMED_HOMSTO" title="Uni." :width="100"></grid-column>
+            <grid-column field="ARTS_FACTOR_HOMSTO" title="Uni/M2" :width="100"></grid-column>
+            <grid-column field="Precio_L100_pesos_SI" title="Precio L100 pesos sin IVA" :format="'{0:c}'" :width="100"></grid-column>
+            <grid-column field="Pre_L100_pesos_con_IVA" title="Precio L100 pesos con IVA" :format="'{0:c}'" :width="100"></grid-column>
+            <grid-column field="M2xCaja" title="M2 x Caja" :width="100"></grid-column>
+            <grid-column field="Pre_M2_UN_L100_SI" title="Precio M2/UN L100 sin IVA" :format="'{0:c}'" :width="100"></grid-column>
+            <grid-column field="Fecha_impresion" title="Fecha impresión" type="date" format="{0:dd/MM/yyyy}" :width="100"></grid-column>
+            <grid-column field="Hora_impresion" title="Hora impresión" :width="100"></grid-column>
         </grid>
       </div>
     </div>
@@ -80,9 +69,9 @@
     import { Grid, GridColumn } from '@progress/kendo-grid-vue-wrapper'
     import { Button } from '@progress/kendo-buttons-vue-wrapper'
     import { directive as fullscreen } from 'vue-fullscreen'
-    
+    kendo.culture("es-AR")
     export default {
-      name: 'ListaContainers',
+      name: 'ListaPreciosCostoReposicion',
       directives: {
         fullscreen,
       },
@@ -97,44 +86,32 @@
                 fullscreen: false,
                 teleport: true,
                 pageOnly: true,
-                title: 'Lista de precios - Containers',
+                title: 'Lista de precios 100 - Costo de reposición',
                 schemaModelFields: {
-                    Movimientos: {type: 'string'},
-                    Longitud: {type: 'string'},
-                    Tipo: {type: 'string'},
-                    Cód_Art: {type: 'string'},
-                    Nombre_art: {type: 'string'},
-                    Stock_Uni: {type: 'number'},
-                    Uni_Pte_Entr_NP: {type: 'number'},
-                    Stk_Disp_pVta: {type: 'number'},
-                    Pre_Cdo_USD_con_IVA: {type: 'number'},
-                    Pre_Cdo_AR_cIVA_L1: {type: 'number'},
-                    Cant_Mov_Nro: {type: 'number'},
-                    Precio_ARxmov_01500026: {type: 'number'},
-                    Total_mov: {type: 'number'},
-                    Contenedor_c_mov_AR_cdo_efect: {type: 'number'},
-                    Depósito: {type: 'string'},
-                    Moneda_del_Precio_Lista_en_USD: {type: 'string'},
-                    Cotización: {type: 'number'},
-                    IVA_incluido_en_precio: {type: 'string'},
-                    Año_de_fabricación: {type: 'string'},
-                    Peso_aprox_Kg: {type: 'number'},
-                    Nro_cliente: {type: 'number'},
-                    Nombre_Cliente: {type: 'string'},
-                    Observación_NP: {type: 'string'},
-                    Vendendor: {type: 'string'},
-                    Medidas_interiores: {type: 'string'}
-                },
-                aggregateDefinition: [
-                    {field: "Stock_Uni", aggregate: "sum"},
-                    {field: "Uni_Pte_Entr_NP", aggregate: "sum"},
-                    {field: "Stk_Disp_pVta", aggregate: "sum"}
-                ]
+                    ARTS_ARTICULO_EMP: {type: 'string'},
+                    ARTS_NOMBRE: {type: 'string'},
+                    ARPV_ARTICULO: {type: 'string'},
+                    ARPV_LISTA_PRECVTA: {type: 'string'},
+                    ARPV_PRECIO_VTA: {type: 'string'},
+                    ARPV_MONEDA: {type: 'string'},
+                    COTI_COTIZACION: {type: 'string'},
+                    CIMP_TASA: {type: 'string'},
+                    ARTS_CLASIF_2: {type: 'string'},
+                    CA02_NOMBRE: {type: 'string'},
+                    ARTS_UNIMED_HOMSTO: {type: 'string'},
+                    ARTS_FACTOR_HOMSTO: {type: 'string'},
+                    Precio_L100_pesos_SI: {type: 'number'},
+                    Pre_L100_pesos_con_IVA: {type: 'number'},
+                    M2xCaja: {type: 'string'},
+                    Pre_M2_UN_L100_SI: {type: 'number'},
+                    Fecha_impresion: {type: 'date'},
+                    Hora_impresion: {type: 'string'}
+                }
              }
       },
       computed: {
         UrlApiBase(){
-          return `${process.env.VUE_APP_API_BASE}/listacontenedores`
+          return `${process.env.VUE_APP_API_BASE}/listaprecioscostoreposicion`
         },
         options () {
           return {
@@ -151,7 +128,7 @@
         readData: function (e) {
               // console.log(store.state.token)
               var token = store.state.token
-              var urlApi = `${process.env.VUE_APP_API_BASE}/listacontenedores`
+              var urlApi = this.UrlApiBase
               $.ajax({
                 url: urlApi,
                 beforeSend: function (xhr) {

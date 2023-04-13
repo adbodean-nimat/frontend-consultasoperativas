@@ -21,6 +21,10 @@ import ConstSecoArmadoConfig1 from "../views/TCSArmadoConfig1.vue"
 import ConstSecoArmadoConfig2 from "../views/TCSArmadoConfig2.vue"
 import ConstSecoNombresConfiguraciones from "../views/TCSNombresConfig.vue"
 import RowaPlanCanje from "../views/RowaPlanCanje.vue"
+import VblesEntrNP from "../views/VblesEntrNP.vue"
+import VblesEntrNPPR from "../views/VblesEntrNPPR.vue"
+import ListaPrecioCostoDeReposicion from "../views/ListaPrecioCostoReposicion.vue"
+import ListaPrecioVentaAlPublico from "../views/ListaPrecioVentaAlPublico.vue"
 
 const routes = [
   {
@@ -306,6 +310,58 @@ const routes = [
       metaTags: [
         {
           name: 'Rowa - Plan canje por siempre'
+        }      ]
+    }
+  },
+  {
+    path: '/vblesentrnp',
+    name: 'Variables Entregas NP - General',
+    component: VblesEntrNP,
+    props: true,
+    meta: {
+      title: 'Variables Entregas NP - General',
+      metaTags: [
+        {
+          name: 'Variables Entregas NP - General'
+        }      ]
+    }
+  },
+  {
+    path: '/vblesentrnppr',
+    name: 'Variables Entregas NP - Pisos y revistimiento',
+    component: VblesEntrNPPR,
+    props: true,
+    meta: {
+      title: 'Variables Entregas NP - Pisos y revistimiento',
+      metaTags: [
+        {
+          name: 'Variables Entregas NP - Pisos y revistimiento'
+        }      ]
+    }
+  },
+  {
+    path: '/listaprecioscostoreposicion',
+    name: 'Lista de precios - Costo de reposición',
+    component: ListaPrecioCostoDeReposicion,
+    props: true,
+    meta: {
+      title: 'Lista de precios - Costo de reposición',
+      metaTags: [
+        {
+          name: 'Lista de precios - Costo de reposición'
+        }      ]
+    }
+  },
+  {
+    path: '/listapreciosventaalpublico',
+    name: 'Lista de precios - Venta al público',
+    component: ListaPrecioVentaAlPublico,
+    props: true,
+    meta: {
+      title: 'Lista de precios - Venta al público',
+      metaTags: [
+        {
+          name: 'Lista de precios - Venta al público'
         }      ]
     }
   }
