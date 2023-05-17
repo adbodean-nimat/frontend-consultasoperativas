@@ -86,7 +86,6 @@
               @databound="dataBound"
               >
               
-              
               <grid-column field="ARTS_ARTICULO_EMP" title="Código" :column-menu="false"  :width="60" :hidden="false"></grid-column>
               <grid-column field="ARTS_NOMBRE" title="Articulo" :column-menu="false" :width="400" :hidden="false"></grid-column>
               <grid-column field="ARTS_UNIMED_STOCK" title="&nbsp;" :column-menu="false" :width="40" :hidden="false"></grid-column>
@@ -251,125 +250,82 @@
           return groupTemplate(e)
         },
         excelExport: function(e){
-          var gridColumns = e.sender.columns;
-          var visibleGridColumns = [];
-          var columnTemplates = [];
-          var workbook = e.workbook;
-          var sheet = workbook.sheets[0];
-          var index = 0;
-          var dataItems = [];
-          var data = e.sender.dataSource.view();
-          for(var i=0; i< data.length; i++){
-            dataItems.push(data[i]);
-            if(data[i].items.length){
-              for(var j=0; j< data[i].items.length; j++){
-                dataItems.push(data[i].items[j]);
-              }
-            } 
-          }
-          for (var i = 0; i < gridColumns.length; i++) {
-              if (!gridColumns[i].hidden) {
-                visibleGridColumns.push(gridColumns[i]);
-              }
-          }
-          for (var i = 0; i < visibleGridColumns.length; i++) {
-              if (visibleGridColumns[i].template) {
-                  columnTemplates.push({ cellIndex: i, template: kendo.template(visibleGridColumns[i].template) })
-              }
-          }
-
-          for (var i = 0; i < sheet.rows.length; i++) {
-            var dataItem = dataItems[index];
-
-            if (sheet.rows[i].type == "group-header") {
-
-              for (var ci = 0; ci < sheet.rows[i].cells.length; ci++) {
-                var colSpan = sheet.rows[i].cells[ci].colSpan;
-                if(colSpan){
-                  delete sheet.rows[i].cells[ci].colSpan;
-                  var value = sheet.rows[i].cells[ci].value;
-                  sheet.rows[i].cells[ci].value = undefined;
-
-                  for (var k = 1; k < colSpan; k++) {
-                    sheet.rows[i].cells.push({
-                      background: "#000",
-                      color: "#333"
-                    });
-                  }
-
-                  sheet.rows[i].cells[ci].value = value;
-                }
-              }
-
-              var groupOffset = e.sender.dataSource.group().length;
-              for (var ci = groupOffset; ci< sheet.rows[i].cells.length; ci++) {
-
-                if (e.sender.columns[ci-groupOffset].groupHeaderColumnTemplate) {
-                  sheet.rows[i].cells[ci].value = kendo.template(e.sender.columns[ci-groupOffset].groupHeaderColumnTemplate)(dataItem);
-                }
-              }
-              index++;
-            }
-
-            if (sheet.rows[i].type == "data") {
-              for (var ci = 0; ci < sheet.rows[i].cells.length; ci++) {
-                var cell = sheet.rows[i].cells[ci]
-                console.log(cell)
-                var values = sheet.rows[i].cells[ci].value
-                if(values == !undefined)
-                values = columnTemplates[ci].template(dataItem)
-              }
-            }
-          }
-          /* var data = e.data;
+          var data = e.data;
           var gridColumns = e.sender.columns;
           var rows = e.workbook.sheets[0].rows;
-          var sheet = e.workbook.sheets[0];
           var visibleGridColumns = [];
           var columnTemplates = [];
           var dataItems = [];
+          var newRows = [];
           var dataItem;
+
+          // Crear elemento para generar plantillas
           var elem = document.createElement('div');
-
-
+          
+          // Obtener una lista de columnas visibles
           for (var i = 0; i < gridColumns.length; i++) {
-              if (!gridColumns[i].hidden) {
-                visibleGridColumns.push(gridColumns[i]);
-              }
-          }
-
-          for (var i = 0; i < visibleGridColumns.length; i++) {
-              if (visibleGridColumns[i].template) {
-                  columnTemplates.push({ cellIndex: i, template: kendo.template(visibleGridColumns[i].template) })
-              }
-          }
-          
-          for (var iData = 0; iData < e.data.length; iData++){
-              var eData = e.data[iData]
-              for (var iDataItem = 0; iDataItem < eData.items[0].items.length; iDataItem++){
-                if (eData.items[0].items){
-                  var itemData = eData.items[0].items[iDataItem]
-                  dataItems.push(itemData)
-                }
-              }
-          }
-
-          //console.log(dataItems)
-
-          
-          for (var i = 1; i < rows.length; i++) {   
-            if (rows[i].type == "group-header"){
-              rows.splice(i, 1);
+            if (!gridColumns[i].hidden) {
+              visibleGridColumns.push(gridColumns[i]);
             }
-            if (rows[i].type == "data"){
+          }
 
+          // Cree una colección de plantillas de columna, junto con el índice de columna actual
+          for (var i = 0; i < visibleGridColumns.length; i++) {
+            if (visibleGridColumns[i].template) {
+              columnTemplates.push({ cellIndex: i, template: kendo.template(visibleGridColumns[i].template) });
+            }
+          }
+
+          for(var i=0; i< data.length; i++){
+              //dataItems.push(data[i]);
+              if(data[i].items.length){
+                for(var j=0; j< data[i].items.length; j++){
+                  //dataItems.push(data[i].items[j]);
+                  if(data[i].items[j].items.length){
+                    for(var d=0; d< data[i].items[j].items.length; d++){
+                      dataItems.push(data[i].items[j].items[d])
+                    }
+                  }
+                }
+              } 
+          }
+
+          for (var ri = 0; ri < rows.length; ri++) {
+                var row = rows[ri];
+                if (row.type !== "group-header") {
+                  newRows.push(row)
+                }
+          }
+          
+          // e.workbook.sheets[0].rows = newRows
+          
+          console.log(dataItems)
+          console.log(newRows)
+          //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+          // Recorra todas las filas exportadas.
+          for (var i = 1; i < newRows.length; i++) {
+              var row = newRows[i];
+              // Recorra las plantillas de columna y aplíquelas para cada fila en la posición de columna almacenada
+              if(row.type !== "group-header"){
+                var iRow = row
+                console.log(iRow)  
+              }
+              // Obtenga el elemento de datos correspondiente a la fila actual.
+              var dataItem = dataItems[i - 1];
+              
               for (var j = 0; j < columnTemplates.length; j++) {
                 var columnTemplate = columnTemplates[j];
-                //console.log(columnTemplate)
+
+                // Genere el contenido de la plantilla para la celda actual.
+                elem.innerHTML = columnTemplate.template(dataItem);
+                
+                var groupOffset = e.sender.dataSource.group().length;
+                if (row.cells[columnTemplate.cellIndex + groupOffset] != undefined)                
+                // Envíe el contenido de texto de la celda con plantilla a la celda exportada.
+                row.cells[columnTemplate.cellIndex + groupOffset].value = elem.textContent || elem.innerText || "";
               }
-            }
- 
-          } */                  
+          }
         },
         pdfExport: function() {
             const idemDtoFinan = document.getElementById("dtofinan").ariaValueNow

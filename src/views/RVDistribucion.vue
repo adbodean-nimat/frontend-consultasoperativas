@@ -89,14 +89,14 @@
               >
               
               <grid-column title="Código" :template="ArtsArticuloEmp" :column-menu="false" :hidden="true"></grid-column>
-              <grid-column field="ARTS_ARTICULO_EMP" title="Código" :column-menu="false"  :width="60"></grid-column>
-              <grid-column field="ARTS_NOMBRE" title="Articulo" :column-menu="false" :width="400"></grid-column>
-              <grid-column field="ARTS_UNIMED_STOCK" title="&nbsp;" :column-menu="false" :width="40"></grid-column>
-              <grid-column field="PRECIO_LISTA_CON_IVA" title="Precio lista c/IVA" :format="'{0:c}'" :hidden="false" :width="100"></grid-column>
+              <grid-column field="ARTS_ARTICULO_EMP" title="Código" :column-menu="false"  :width="60" :hidden="false"></grid-column>
+              <grid-column field="ARTS_NOMBRE" title="Articulo" :column-menu="false" :width="400" :hidden="false"></grid-column>
+              <grid-column field="ARTS_UNIMED_STOCK" title="&nbsp;" :column-menu="false" :width="40" :hidden="false"></grid-column>
+              <grid-column field="PRECIO_LISTA_CON_IVA" title="Precio lista c/IVA" template="#: kendo.toString(PRECIO_LISTA_CON_IVA, 'c2')#" :hidden="false" :width="100"></grid-column>
               <grid-column field="DCA1_POR_DESCUENTO" title="Dto. Cliente" template="#=kendo.format('{0:p0}', DCA1_POR_DESCUENTO / 100)#" :width="80" :hidden="false"></grid-column>
-              <grid-column title="Dto. Financ." :template="this.dtoFinan" :width="80" :hidden="false"></grid-column>
-              <grid-column title="Precio contado c/IVA c/Dtos" :template="this.precioContado" :hidden="false" :width="100"></grid-column>
-              <grid-column title="Modif" :template="this.Modif" :hidden="false" :width="50"></grid-column>
+              <grid-column field="dtoFinan" title="Dto. Financ." :template="this.dtoFinan" :width="80" :hidden="false"></grid-column>
+              <grid-column field="precioContado" title="Precio contado c/IVA c/Dtos" :template="this.precioContado" :hidden="false" :width="100"></grid-column>
+              <grid-column field="Modif" title="Modif" :template="this.Modif" :hidden="false" :width="50"></grid-column>
 
               <grid-column title="Verfi Modif" :template="VeriModif" :hidden="true" ></grid-column>
               <grid-column title="Sin Modif" :template="SinModif" :hidden="true" ></grid-column>
@@ -241,35 +241,85 @@
           exportGridWithTemplatesContent: function(e){
             var data = e.data;
             var gridColumns = e.sender.columns;
-            var sheet = e.workbook.sheets[0];
+            var rows = e.workbook.sheets[0].rows;
             var visibleGridColumns = [];
             var columnTemplates = [];
+            var dataItems = [];
+            var newRows = [];
             var dataItem;
-            var elem = document.createElement('div');
 
+            // Crear elemento para generar plantillas
+            var elem = document.createElement('div');
+            
+            // Obtener una lista de columnas visibles
             for (var i = 0; i < gridColumns.length; i++) {
               if (!gridColumns[i].hidden) {
                 visibleGridColumns.push(gridColumns[i]);
               }
             }
 
+            // Cree una colección de plantillas de columna, junto con el índice de columna actual
             for (var i = 0; i < visibleGridColumns.length; i++) {
-              console.log(visibleGridColumns[i].template)
               if (visibleGridColumns[i].template) {
-                  columnTemplates.push({ cellIndex: i, template: kendo.template(visibleGridColumns[i].template) })
+                columnTemplates.push({ cellIndex: i, template: kendo.template(visibleGridColumns[i].template) });
               }
-            } 
+            }
+
+            for(var i=0; i< data.length; i++){
+                //dataItems.push(data[i]);
+                if(data[i].items.length){
+                  for(var j=0; j< data[i].items.length; j++){
+                    //dataItems.push(data[i].items[j]);
+                    if(data[i].items[j].items.length){
+                      for(var d=0; d< data[i].items[j].items.length; d++){
+                        //dataItems.push(data[i].items[j].items[d])
+                        if(data[i].items[j].items[d].items.length){
+                          for(var e=0;e< data[i].items[j].items[d].items.length; e++){
+                            dataItems.push(data[i].items[j].items[d].items[e])
+                          }
+                        }
+                      }
+                    }
+                  }
+                } 
+            }
+
+            for (var ri = 0; ri < rows.length; ri++) {
+                  var row = rows[ri];
+                  if (row.type !== "group-header") {
+                    newRows.push(row)
+                  }
+            }
             
-            for (var i = 1; i < sheet.rows.length; i++) {
-              var row = sheet.rows[i];
-              var dataItem = data[i - 1];
-              for (var j = 0; j < columnTemplates.length; j++) {
-                var columnTemplate = columnTemplates[j];
+            // e.workbook.sheets[0].rows = newRows
             
-                elem.innerHTML = columnTemplate.template(dataItem);
-                if (row.cells[columnTemplate.cellIndex] != undefined)
-                  row.cells[columnTemplate.cellIndex].value = elem.textContent || elem.innerText || "";
-              }
+            console.log(dataItems)
+            console.log(newRows)
+            //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+            // Recorra todas las filas exportadas.
+            for (var i = 1; i < newRows.length; i++) {
+                var row = newRows[i];
+                // Recorra las plantillas de columna y aplíquelas para cada fila en la posición de columna almacenada
+                if(row.type !== "group-header"){
+                  var iRow = row
+                  console.log(iRow)  
+                }
+                // Obtenga el elemento de datos correspondiente a la fila actual.
+                var dataItem = dataItems[i - 1];
+                
+                for (var j = 0; j < columnTemplates.length; j++) {
+                  var columnTemplate = columnTemplates[j];
+
+                  // Genere el contenido de la plantilla para la celda actual.
+                  elem.innerHTML = columnTemplate.template(dataItem);
+                  
+                  //var groupOffset = e.sender.dataSource.group().length;
+                  
+                  if (row.cells[columnTemplate.cellIndex + 3] != undefined)                
+                  // Envíe el contenido de texto de la celda con plantilla a la celda exportada.
+                  row.cells[columnTemplate.cellIndex + 3].value = elem.textContent || elem.innerText || "";
+                }
             }
           },
           pdfExport: function() {
