@@ -34,6 +34,7 @@
                   :height="'100vh'"
                   :data-source-ref="'remoteDataSourceSetsVentas'"
                   :navigatable="true"
+                  :filterable="true"
                   :pageable='false'
                   :editable="'inline'"
                   :toolbar="['create']">

@@ -26,6 +26,7 @@
                         :schema-model-id="'id'"
                         :schema-model-fields="fields"
                         :batch="true"
+                        :page-size='100'
                         @error="onError"
                         @requestend="requestEnd"
                         >
@@ -34,7 +35,8 @@
                   :height="'100vh'"
                   :data-source-ref="'remoteDataSourceFamiliaArticulos'"
                   :navigatable="true"
-                  :pageable='false'
+                  :filterable="true"
+                  :pageable='true'
                   :editable="'inline'"
                   :toolbar="['create']">
             <grid-column :field="'id'" :title="'Id'" :hidden="true"></grid-column>

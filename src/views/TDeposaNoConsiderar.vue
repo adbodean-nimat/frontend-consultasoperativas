@@ -4,6 +4,7 @@
   <div class="encabezado-titulo">
     <div style="margin-left: 5px; color: white;" class="icon-title">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#fff" class="bi bi-table" viewBox="0 0 16 16"><path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm15 2h-4v3h4V4zm0 4h-4v3h4V8zm0 4h-4v3h3a1 1 0 0 0 1-1v-2zm-5 3v-3H6v3h4zm-5 0v-3H1v2a1 1 0 0 0 1 1h3zm-4-4h4V8H1v3zm0-4h4V4H1v3zm5-3v3h4V4H6zm4 4H6v3h4V8z"/></svg>
+      <!-- <span style="margin-left: 5px; color: white;" class="k-icon k-i-grid-layout"></span> -->
       <span style="color: white; margin-left: 5px;">{{ title }}</span>
     </div>
     <div class="button-fullscreen">
@@ -16,7 +17,7 @@
    </div>
   </div>
   
-  <datasource ref="remoteDataSource4"
+  <datasource ref="remoteDataSource3"
                     :transport-read="readData"
                     :transport-update-url="UrlApiBase"
                     :transport-update-content-type="'application/json; charset=utf-8'"
@@ -38,15 +39,15 @@
   </datasource>
   <grid ref="grid"
               :height="'100vh'"
-              :data-source-ref="'remoteDataSource4'"
+              :data-source-ref="'remoteDataSource3'"
               :navigatable="true"
+              :filterable="true"
               :pageable='false'
               :editable="'inline'"
               :toolbar="['create']">
         <grid-column :field="'id'" :title="'Id'" :hidden="true"></grid-column>
-        <grid-column :field="'clas4_clas5'" :title="'Código'"></grid-column>
-        <grid-column :field="'nombre'" :title="'Nombre'"></grid-column>
-        <grid-column :field="'medidas_dimensiones'" :title="'Medidas interiores aproximadas (mts)'" :columns="detallesMedidas"></grid-column>
+        <grid-column :field="'cod_depos'" :title="'Código Deposito'"></grid-column>
+        <grid-column :field="'nombre_deposito'" :title="'Nombre Deposito'"></grid-column>
         <grid-column :command="['edit','destroy']" :title="'&nbsp;'"></grid-column>
   </grid>
 </div>
@@ -66,7 +67,7 @@ import { Button } from '@progress/kendo-buttons-vue-wrapper'
 import { directive as fullscreen } from 'vue-fullscreen'
 
 export default {
-  name: 'dimensionesContenedores',
+  name: 'DeposaNoConsiderar',
   directives: {
     fullscreen,
   },
@@ -81,27 +82,17 @@ export default {
             fullscreen: false,
             teleport: true,
             pageOnly: true,
-            title: 'Dimensiones aprox. de contenedores',
+            title: 'Deposito a No Considerar',
             fields: {
                 id: { editable: false, nullable: true},
-                clas4_clas5: { type: 'varchar'},
-                nombre: { type: 'varchar'},
-                /* medidas_ancho: { type: 'varchar'},
-                medidas_alto_puerta: { type: 'varchar'},
-                medidas_alto_interior: { type: 'varchar'},
-                medidas_largo: { type: 'varchar'}, */
-            },
-            detallesMedidas: [
-              {field: "medidas_ancho", title: "Ancho"},
-              {field: "medidas_alto_puerta", title: "Alto puerta"},
-              {field: "medidas_alto_interior", title: "Alto interior"},
-              {field: "medidas_largo", title: "Largo"}
-              ]
-         }
+                cod_depos: { type: 'number'},
+                nombre_deposito: { type: 'string'},
+              }
+            }
     },
   computed: {
     UrlApiBase(){
-          return `${process.env.VUE_APP_API_BASE}/dimensionescontenedores/`
+          return `${process.env.VUE_APP_API_BASE}/deposanoconsiderar`
     },
     options () {
       return {
@@ -116,9 +107,8 @@ export default {
   },
    methods: {
     readData: function (e) {
-              // console.log(store.state.token)
               var token = store.state.token
-              var urlApi = `${process.env.VUE_APP_API_BASE}/dimensionescontenedores/`
+              var urlApi = this.UrlApiBase
               $.ajax({
                 url: urlApi,
                 beforeSend: function (xhr) {
@@ -135,13 +125,6 @@ export default {
           console.log(e.status); // displays "error"
           console.log(e.error);
         },
-        /* onChange: function(e) {
-          console.log("request change");
-        },
-        requestStart: function(e) {
-          /* The result can be observed in the DevTools(F12) console of the browser. */
-          //console.log("request started"); 
-        //},
         requestEnd: function(e) {
             var response = e.response;
             var type = e.type;
@@ -156,78 +139,58 @@ export default {
                 e.sender.read();
                 }
         },
-        /* parameterMap: function(options, operation) {
-            if (operation !== 'read' && options.models) {
-                return JSON.stringify(options.models)
-            }
-        }, */
         parameterMap: function(options, operation) {            
-             if (operation == 'read') {
+            if (operation == 'read') {
                 //console.log(operation + " operation");
-                //console.log(options);
+                //console.log(options.models);
                 //console.log(JSON.stringify(options));
                 return options
             } 
             if (operation == 'destroy') {
-                //console.log(operation + " operation");
-                //console.log(JSON.stringify(options.models[0].id));
-                
+                //console.log(operation);
+                //console.log(options.models);
+                //console.log(JSON.stringify(options.models[0],["id"]));
                 var Id = JSON.stringify(options.models[0].id);
                 let params = {
-                "clas4_clas5": JSON.stringify(options.models[0].clas4_clas5),
-                "nombre": JSON.stringify(options.models[0].nombre),
-                "medidas_ancho": JSON.stringify(options.models[0].medidas_ancho),
-                "medidas_alto_puerta": JSON.stringify(options.models[0].medidas_alto_puerta),
-                "medidas_alto_interior": JSON.stringify(options.models[0].medidas_alto_interior),
-                "medidas_largo": JSON.stringify(options.models[0].medidas_largo),
+                "cod_depos": JSON.stringify(options.models[0].cod_depos),
+                "nombre_deposito": JSON.stringify(options.models[0].nombre_deposito),
                 };
                 let json = JSON.stringify(params);
-                var destroyUrl = `${process.env.VUE_APP_API_BASE}/dimensionescontenedores/`
+                var destroyUrl = `${process.env.VUE_APP_API_BASE}/deposanoconsiderar/`
                 $.ajax({
                     method: "DELETE",
                     url: destroyUrl + Id,
                     dataType: "json",
-                    data: json,
-                    headers: {
-                          'Authorization': 'Bearer ' + store.state.token
-                        }
-                });   
+                    data: json
+                });  
             } 
             if (operation == 'create') {
                 //console.log(operation);
-                //console.log(JSON.stringify(options.models[0],["cod_comp", "nomb_comp"]))
+                //console.log(options.models);
                 //console.log(JSON.stringify(options.models[0],["cod_depos","nombre_deposito"]));
-                //return JSON.stringify(options.models[0],["cod_comp","nomb_comp"]);
-                let params = JSON.stringify(options.models[0],["clas4_clas5", "nombre", "medidas_ancho", "medidas_alto_puerta", "medidas_alto_interior", "medidas_largo"])
+                let params = JSON.stringify(options.models[0],["cod_depos", "nombre_deposito"])
                 let json = JSON.parse(params)
-                var createUrl = `${process.env.VUE_APP_API_BASE}/dimensionescontenedores/`
+                var createUrl = `${process.env.VUE_APP_API_BASE}/deposanoconsiderar/`
                 $.ajax({
                     method: "POST",
                     url: createUrl,
                     dataType: "json",
-                    data: json,
-                    headers: {
-                          'Authorization': 'Bearer ' + store.state.token
-                        }
+                    data: json
                 });
             } 
             if (operation == 'update') {
                 //console.log(operation);
-                //console.log(JSON.stringify(options.models[0],["cod_comp", "nomb_comp"]))
+                //console.log(options.models);
                 //console.log(JSON.stringify(options.models[0],["id","cod_depos","nombre_deposito"]));
-                //return JSON.stringify(options.models[0],["cod_comp","nomb_comp"]);
                 var Id = JSON.stringify(options.models[0].id);
-                let params = JSON.stringify(options.models[0],["clas4_clas5", "nombre", "medidas_ancho", "medidas_alto_puerta", "medidas_alto_interior", "medidas_largo"]);
+                let params = JSON.stringify(options.models[0],["cod_depos", "nombre_deposito"]);
                 let json = JSON.parse(params);
-                var updateUrl = `${process.env.VUE_APP_API_BASE}/dimensionescontenedores/`
+                var updateUrl = `${process.env.VUE_APP_API_BASE}/deposanoconsiderar/`
                 $.ajax({
                     method: "PUT",
                     url: updateUrl + Id,
                     dataType: "json",
-                    data: json,
-                    headers: {
-                          'Authorization': 'Bearer ' + store.state.token
-                        }
+                    data: json
                 });
             }
            

@@ -69,9 +69,9 @@ export default {
 					"username": this.username,
 					"password": this.password
 				};
-				const response = await axios.post("https://192.168.0.182:8090/login", credentials);
-				console.log(response.data.token);
-				console.log(response.data.user);
+				const response = await axios.post(`${process.env.VUE_APP_API_LOGIN}`, credentials);
+				// console.log(response.data.token);
+				// console.log(response.data.user);
 				const token = response.data.token;
 				const user = response.data.user;
 				store.dispatch('login', {token, user});

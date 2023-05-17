@@ -40,6 +40,7 @@
               :height="'100vh'"
               :data-source-ref="'remoteDataSource4'"
               :navigatable="true"
+              :filterable="true"
               :pageable='false'
               :editable="'inline'"
               :toolbar="['create']">

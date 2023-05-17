@@ -26,7 +26,7 @@
         <grid ref="grid"
               :height="'95vh'"
               :data-source-ref="'remoteDataSourceContainers'"
-              :sortable-mode="'multiple'"
+              :sortable="true"
               :pageable-page-sizes="[5, 10, 15, 20, 25, 100]"
               :filterable="true"
               :reorderable="true"

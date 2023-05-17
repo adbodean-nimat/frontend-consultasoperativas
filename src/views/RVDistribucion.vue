@@ -16,7 +16,7 @@
             </div>
           </div>
         </div>
-        <component id="IdpdfTemplate" :is="'script'" type="text/x-kendo-template">
+        <component id="pdfTemplate" :is="'script'" type="text/x-kendo-template">
           # var theDate = new Date(); #
           <div class="pdfFont container position-absolute top-0" style="margin-top: 18px;">
             <div class="container d-flex align-items-start" >
@@ -25,10 +25,10 @@
             <div class="row">
               <div class="col-sm">Fecha de impresión #=kendo.toString(theDate, "dd-MM-yyyy", "es-AR")#</div>
               <div class="col-sm"><small><span id="cod_cte"></span> <span id="dvc1listaprecvta"></span></small></div>
-              <div class="col-sm text-end" style="margin-right: 50px;"><strong>VN RV</strong></div>
+              <div class="col-sm text-end" style="margin-right: 50px;"><strong>VN RV Listado Distribución</strong></div>
             </div>
             <div class="row">
-              <div class="col-sm d-flex justify-content-end" style="margin-right:50px;"><u><strong><h2><span id="rubrovnombre"></span></h2></strong></u></div>
+              <div class="col-sm d-flex justify-content-end" style="margin-right:50px;"><u><strong><h2><!-- <span id="rubrovnombre"></span> --></h2></strong></u></div>
             </div>
             <div class="row">
               <div class="col">
@@ -44,16 +44,18 @@
             </div>
           </div>
         </component>
-        <datasource ref="remoteDataSourceRubrosVtas"
+        <datasource ref="remoteDataSourceDistribucion"
                           :transport-read="readData"
                           :schema-model-fields="schemaModelFields"
                           :group="groupDefinicion"
+                          @error="onError"
+                          @requestend="requestEnd"
                           >
         </datasource>
         <grid ref="grid"
               :height="'95vh'"
-              :data="'remoteDataSourceRubrosVtas'"
-              :data-source-ref="'remoteDataSourceRubrosVtas'"
+              :data="'remoteDataSourceDistribucion'"
+              :data-source-ref="'remoteDataSourceDistribucion'"
               :sortable-mode="'multiple'"
               :groupable-enabled="false"
               :filterable="true"
@@ -66,10 +68,10 @@
               :allow-copy="true"
               :selectable="true"
               :auto-bind="false"
-              :excel-file-name="'LP VN - Rubros Vtas.xlsx'"
+              :excel-file-name="'LP VN - Distribución.xlsx'"
               :excel-all-pages="true"
               :excel-filterable="false"
-              :pdf-file-name="'LP VN - Rubros Vtas.pdf'"
+              :pdf-file-name="'LP VN - Distribución.pdf'"
               :pdf-all-pages="true"
               :pdf-avoid-links="false"
               :pdf-paper-size="'A4'"
@@ -81,32 +83,34 @@
               :pdf-repeat-headers="true"
               :pdf-scale="0.6"
               :pdf-template="pdfTemplate"
-              @excelexport="excelExport"
+              @excelexport="exportGridWithTemplatesContent"
               @pdfexport="pdfExport"
               @databound="dataBound"
               >
               
-              
-              <grid-column field="ARTS_ARTICULO_EMP" title="Código" :column-menu="false"  :width="60" :hidden="false"></grid-column>
-              <grid-column field="ARTS_NOMBRE" title="Articulo" :column-menu="false" :width="400" :hidden="false"></grid-column>
-              <grid-column field="ARTS_UNIMED_STOCK" title="&nbsp;" :column-menu="false" :width="40" :hidden="false"></grid-column>
-              <grid-column field="PRECIO_LISTA_CON_IVA" title="Precio lista c/IVA" template="#: kendo.toString(PRECIO_LISTA_CON_IVA, 'c2')#" :hidden="false" :width="100"></grid-column>
-              <grid-column field="dtoFinan" title="Dto. Financ." :template="dtoFinan" :width="80" :hidden="false"></grid-column>
-              <grid-column field="precioContado" title="Precio contado c/IVA c/Dtos" :template="precioContado" :hidden="false" :width="100"></grid-column>
-              <grid-column field="Modif" title="Modif" :template="Modif" :hidden="false" :width="50"></grid-column>
+              <grid-column title="Código" :template="ArtsArticuloEmp" :column-menu="false" :hidden="true"></grid-column>
+              <grid-column field="ARTS_ARTICULO_EMP" title="Código" :column-menu="false"  :width="60"></grid-column>
+              <grid-column field="ARTS_NOMBRE" title="Articulo" :column-menu="false" :width="400"></grid-column>
+              <grid-column field="ARTS_UNIMED_STOCK" title="&nbsp;" :column-menu="false" :width="40"></grid-column>
+              <grid-column field="PRECIO_LISTA_CON_IVA" title="Precio lista c/IVA" :format="'{0:c}'" :hidden="false" :width="100"></grid-column>
+              <grid-column field="DCA1_POR_DESCUENTO" title="Dto. Cliente" template="#=kendo.format('{0:p0}', DCA1_POR_DESCUENTO / 100)#" :width="80" :hidden="false"></grid-column>
+              <grid-column title="Dto. Financ." :template="this.dtoFinan" :width="80" :hidden="false"></grid-column>
+              <grid-column title="Precio contado c/IVA c/Dtos" :template="this.precioContado" :hidden="false" :width="100"></grid-column>
+              <grid-column title="Modif" :template="this.Modif" :hidden="false" :width="50"></grid-column>
 
-              <grid-column field="VeriModif" title="Verfi Modif" :template="VeriModif" :hidden="true" ></grid-column>
-              <grid-column field="SinModif" title="Sin Modif" :template="SinModif" :hidden="true" ></grid-column>
-              <grid-column field="VeriSinModif" title="Verfi sin Modif" :template="VeriSinModif" :hidden="true" ></grid-column>
-              <grid-column field="ArtsArticuloEmp" title="Código" :template="ArtsArticuloEmp" :column-menu="false" :hidden="true"></grid-column>
+              <grid-column title="Verfi Modif" :template="VeriModif" :hidden="true" ></grid-column>
+              <grid-column title="Sin Modif" :template="SinModif" :hidden="true" ></grid-column>
+              <grid-column title="Verfi sin Modif" :template="VeriSinModif" :hidden="true" ></grid-column>
+
               <grid-column field="ARVE_RUBRO_VENTA" :hidden="true"></grid-column>
-              <grid-column field="RUBV_NOMBRE" :hidden="true"></grid-column>
-              <grid-column field="templateRUBV_NOMBRE" :template="templateRUBV_NOMBRE" :hidden="true"></grid-column>
+              <grid-column field="RUBV_NOMBRE" :hidden="true" :group-header-template="groupHeaderRUBV_NOMBRE"></grid-column>
+              <grid-column :template="templateRUBV_NOMBRE" :hidden="true"></grid-column>
               <grid-column field="cod_set_art" :hidden="true"></grid-column>
               <grid-column field="nombre_set_art" :hidden="true"></grid-column>
               <grid-column field="cod_fami_art" :hidden="true"></grid-column>
-              <grid-column field="nombre_fami_art" title="Familia Art." :group-header-template="groupHeaderTemplateFamiliaArt" :hidden="true"></grid-column>
+              <grid-column field="nombre_fami_art" title="Familia Art." :hidden="true" :group-header-template="groupHeaderTemplateNombreArt"></grid-column>
               <grid-column field="nro_orden_de_la_fami" title="Nro. Orden" :hidden="true" :group-header-template="groupHeaderTemplateNroOrden"></grid-column>
+              <grid-column title="Orden más nombre de la familia" :template="OrdenMasNombre" :width="100" :hidden="true"></grid-column>
               <grid-column field="orden_art_familia" title="Orden Art." :hidden="true"></grid-column>
               <grid-column field="ARTS_ARTICULO" :hidden="true"></grid-column>
               <grid-column field="ARVE_BLOQUEO_VENTA" :hidden="true"></grid-column>
@@ -117,16 +121,15 @@
               <grid-column field="CIMP_TASA" :hidden="true"></grid-column>
               <grid-column field="ARTS_PESO_EMB_UMS" :hidden="true"></grid-column>
               <grid-column field="DVC1_LISTA_PRECVTA" :hidden="true"></grid-column>
-              <grid-column field="dvc1listaprecvta" :template="dvc1listaprecvta" :hidden="true"></grid-column>
-              <grid-column field="DCA1_POR_DESCUENTO" :hidden="true"></grid-column>
+              <grid-column :template="dvc1listaprecvta" :hidden="true"></grid-column>
               <grid-column field="ARPV_PRECIO_VTA" :hidden="true"></grid-column>
               <grid-column field="ARPV_MONEDA" :hidden="true"></grid-column>
               <grid-column field="ARPV_FECHA_ULT_ACT" :hidden="true"></grid-column>
               <grid-column field="COTI_COTIZACION" :hidden="true"></grid-column>
               <grid-column field="COTI_FECHA" :hidden="true"></grid-column>
-              <grid-column field="Fecha_cambio_precios_hasta" template="#: kendo.toString(kendo.parseDate(Fecha_cambio_precios_hasta, 'yyyy-MM-dd'), 'dd/MM/yyyy') #" :hidden="true" :width="50"></grid-column>
+              <grid-column field="Fecha_cambio_precios_hasta"  template="#: kendo.toString(kendo.parseDate(Fecha_cambio_precios_hasta, 'yyyy-MM-dd'), 'dd/MM/yyyy') #" :hidden="true" :width="50"></grid-column>
               <grid-column field="Fecha_Ult_Modif" title="Fecha Ult Modif" template="#: kendo.toString(kendo.parseDate(Fecha_Ult_Modif, 'yyyy-MM-dd'), 'dd/MM/yyyy') #" :hidden="true" :width="50"></grid-column>
-              <grid-column field="CambiosPrecioDesde" :template="CambiosPrecioDesde" :hidden="true"></grid-column>
+              <grid-column :template="CambiosPrecioDesde" :hidden="true"></grid-column>
               <grid-column field="Delay_cambio_precio" :hidden="true"></grid-column>
         </grid>
       </div>
@@ -145,9 +148,9 @@
     import { Grid, GridColumn } from '@progress/kendo-grid-vue-wrapper'
     import { Button } from '@progress/kendo-buttons-vue-wrapper'
     import { directive as fullscreen } from 'vue-fullscreen'
-    
+    kendo.culture("es-AR");
     export default {
-      name: 'ListaRubrosVtas',
+      name: 'ListaDistribucion',
       directives: {
         fullscreen,
       },
@@ -162,49 +165,30 @@
                 fullscreen: false,
                 teleport: true,
                 pageOnly: true,
-                title: 'Lista de precios - Rubros Ventas',
-                dataSource: ['remoteDataSourceRubrosVtas'],
+                title: 'Lista de precios - Distribución',
+                dataSource: ['remoteDataSourceDistribucion'],
                 schemaModelFields: {
-                    ARTS_ARTICULO_EMP: {type: 'string'},
-                    ARTS_NOMBRE: {type: 'string'},
-                    ARTS_UNIMED_STOCK: {type: 'string'},
-                    PRECIO_LISTA_CON_IVA: {type: 'number'},
-                    ARVE_RUBRO_VENTA: {type: 'string'},
-                    RUBV_NOMBRE: {type: 'string'},
-                    cod_set_art: {type: 'number'},
-                    nombre_set_art: {type: 'string'},
-                    cod_fami_art: {type: 'number'},
-                    nombre_fami_art: {type: 'string'},
-                    nro_orden_de_la_fami: {type: 'number'},
                     orden_art_familia: {type: 'number'},
-                    ARTS_ARTICULO: {type: 'number'},
-                    ARVE_BLOQUEO_VENTA: {type: 'string'},
-                    ARTS_FACTOR_HOMSTO: {type: 'string'},
-                    COD_CTE: {type: 'string'},
-                    ARTS_CLASIF_1: {type: 'string'},
-                    ARTS_CLASIF_8: {type: 'string'},
-                    CIMP_TASA: {type: 'string'},
-                    ARTS_PESO_EMB_UMS: {type: 'string'},
-                    DVC1_LISTA_PRECVTA: {type: 'string'},
-                    DCA1_POR_DESCUENTO: {type: 'string'},
-                    ARPV_PRECIO_VTA: {type: 'string'},
-                    ARPV_MONEDA: {type: 'string'},
-                    ARPV_FECHA_ULT_ACT: {type: 'datetime'},
-                    COTI_COTIZACION: {type: 'string'},
-                    COTI_FECHA: {type: 'datetime'},
+                    cod_set_art: {type: 'string'},
                     Fecha_cambio_precios_hasta: {type: 'datetime'},
                     Fecha_Ult_Modif: {type: 'datetime'},
-                    Delay_cambio_precio: {type: 'string'}
+                    nro_orden_de_la_fami: {type: 'number'},
+                    ARPV_PRECIO_VTA: {type: 'string'},
+                    DCA1_POR_DESCUENTO: {type: 'number'}
                 },
                 groupDefinicion:[
-                  {
-                    field: 'nro_orden_de_la_fami',
-                    dir: 'asc'
-                  },
-                  {
-                    field: 'nombre_fami_art'
-                  }
-                ]
+                    {
+                        field: 'RUBV_NOMBRE'
+                    },
+                    {
+                        field: 'nro_orden_de_la_fami',
+                        dir: 'asc'
+                    },
+                    {
+                        field: 'nombre_fami_art'
+                    }
+                ],
+                
              }
       },
       created: function(){
@@ -212,7 +196,7 @@
       },
       computed: {
         UrlApiBase(){
-          return `${process.env.VUE_APP_API_BASE}/lpvnrubrosvtas`
+          return `${process.env.VUE_APP_API_BASE}/lpvndistribucion`
         },
         options() {
           return {
@@ -226,6 +210,18 @@
         }
       },
       methods: {
+        groupHeaderRUBV_NOMBRE: function(e){
+            var groupTemplate = kendo.template('#=value#');
+            return groupTemplate(e)
+        },
+        groupHeaderTemplateNroOrden: function(e){
+            var groupTemplate = kendo.template('');
+            return groupTemplate(e)
+        },
+        groupHeaderTemplateNombreArt: function(e){
+            var groupTemplate = kendo.template('#=value#');
+            return groupTemplate(e)
+        },
         readData: function (e) {
               // console.log(store.state.token)
               var token = store.state.token
@@ -241,189 +237,148 @@
                 },
                 type: 'GET'
               })
-        },
-        groupHeaderTemplateNroOrden: function(e){
-          var groupTemplate = kendo.template('');
-          return groupTemplate(e)
-        },
-        groupHeaderTemplateFamiliaArt: function(e){
-          var groupTemplate = kendo.template('#=value#');
-          return groupTemplate(e)
-        },
-        excelExport: function(e){
-          var gridColumns = e.sender.columns;
-          var visibleGridColumns = [];
-          var columnTemplates = [];
-          var workbook = e.workbook;
-          var sheet = workbook.sheets[0];
-          var index = 0;
-          var dataItems = [];
-          var data = e.sender.dataSource.view();
-          for(var i=0; i< data.length; i++){
-            dataItems.push(data[i]);
-            if(data[i].items.length){
-              for(var j=0; j< data[i].items.length; j++){
-                dataItems.push(data[i].items[j]);
+          },
+          exportGridWithTemplatesContent: function(e){
+            var data = e.data;
+            var gridColumns = e.sender.columns;
+            var sheet = e.workbook.sheets[0];
+            var visibleGridColumns = [];
+            var columnTemplates = [];
+            var dataItem;
+            var elem = document.createElement('div');
+
+            for (var i = 0; i < gridColumns.length; i++) {
+              if (!gridColumns[i].hidden) {
+                visibleGridColumns.push(gridColumns[i]);
+              }
+            }
+
+            for (var i = 0; i < visibleGridColumns.length; i++) {
+              console.log(visibleGridColumns[i].template)
+              if (visibleGridColumns[i].template) {
+                  columnTemplates.push({ cellIndex: i, template: kendo.template(visibleGridColumns[i].template) })
               }
             } 
-          }
-          for (var i = 0; i < gridColumns.length; i++) {
-              if (!gridColumns[i].hidden) {
-                visibleGridColumns.push(gridColumns[i]);
-              }
-          }
-          for (var i = 0; i < visibleGridColumns.length; i++) {
-              if (visibleGridColumns[i].template) {
-                  columnTemplates.push({ cellIndex: i, template: kendo.template(visibleGridColumns[i].template) })
-              }
-          }
-
-          for (var i = 0; i < sheet.rows.length; i++) {
-            var dataItem = dataItems[index];
-
-            if (sheet.rows[i].type == "group-header") {
-
-              for (var ci = 0; ci < sheet.rows[i].cells.length; ci++) {
-                var colSpan = sheet.rows[i].cells[ci].colSpan;
-                if(colSpan){
-                  delete sheet.rows[i].cells[ci].colSpan;
-                  var value = sheet.rows[i].cells[ci].value;
-                  sheet.rows[i].cells[ci].value = undefined;
-
-                  for (var k = 1; k < colSpan; k++) {
-                    sheet.rows[i].cells.push({
-                      background: "#000",
-                      color: "#333"
-                    });
-                  }
-
-                  sheet.rows[i].cells[ci].value = value;
-                }
-              }
-
-              var groupOffset = e.sender.dataSource.group().length;
-              for (var ci = groupOffset; ci< sheet.rows[i].cells.length; ci++) {
-
-                if (e.sender.columns[ci-groupOffset].groupHeaderColumnTemplate) {
-                  sheet.rows[i].cells[ci].value = kendo.template(e.sender.columns[ci-groupOffset].groupHeaderColumnTemplate)(dataItem);
-                }
-              }
-              index++;
-            }
-
-            if (sheet.rows[i].type == "data") {
-              for (var ci = 0; ci < sheet.rows[i].cells.length; ci++) {
-                var cell = sheet.rows[i].cells[ci]
-                console.log(cell)
-                var values = sheet.rows[i].cells[ci].value
-                if(values == !undefined)
-                values = columnTemplates[ci].template(dataItem)
-              }
-            }
-          }
-          /* var data = e.data;
-          var gridColumns = e.sender.columns;
-          var rows = e.workbook.sheets[0].rows;
-          var sheet = e.workbook.sheets[0];
-          var visibleGridColumns = [];
-          var columnTemplates = [];
-          var dataItems = [];
-          var dataItem;
-          var elem = document.createElement('div');
-
-
-          for (var i = 0; i < gridColumns.length; i++) {
-              if (!gridColumns[i].hidden) {
-                visibleGridColumns.push(gridColumns[i]);
-              }
-          }
-
-          for (var i = 0; i < visibleGridColumns.length; i++) {
-              if (visibleGridColumns[i].template) {
-                  columnTemplates.push({ cellIndex: i, template: kendo.template(visibleGridColumns[i].template) })
-              }
-          }
-          
-          for (var iData = 0; iData < e.data.length; iData++){
-              var eData = e.data[iData]
-              for (var iDataItem = 0; iDataItem < eData.items[0].items.length; iDataItem++){
-                if (eData.items[0].items){
-                  var itemData = eData.items[0].items[iDataItem]
-                  dataItems.push(itemData)
-                }
-              }
-          }
-
-          //console.log(dataItems)
-
-          
-          for (var i = 1; i < rows.length; i++) {   
-            if (rows[i].type == "group-header"){
-              rows.splice(i, 1);
-            }
-            if (rows[i].type == "data"){
-
+            
+            for (var i = 1; i < sheet.rows.length; i++) {
+              var row = sheet.rows[i];
+              var dataItem = data[i - 1];
               for (var j = 0; j < columnTemplates.length; j++) {
                 var columnTemplate = columnTemplates[j];
-                //console.log(columnTemplate)
+            
+                elem.innerHTML = columnTemplate.template(dataItem);
+                if (row.cells[columnTemplate.cellIndex] != undefined)
+                  row.cells[columnTemplate.cellIndex].value = elem.textContent || elem.innerText || "";
               }
             }
- 
-          } */                  
-        },
-        pdfExport: function() {
-            const idemDtoFinan = document.getElementById("dtofinan").ariaValueNow
-            var comentarioContadoEfectivo = document.getElementById("comentariocontadoefectivo");
-            var comentarioFinanciero = document.getElementById("comentariofinanciero");
-            if (idemDtoFinan === null){
-              alert("Falta completa campo Dto. Finan.")
-              window.location.reload()
-            } else
-            if (idemDtoFinan == 20){
-              comentarioContadoEfectivo.innerText = "contado efectivo"
-            } else
-            if (idemDtoFinan < 20){
-              comentarioFinanciero.innerText = prompt("El dto financiero NO es 20%, ingresar comentario COMPRENSIBLE para el cliente sobre este dto Ej. -VISA 6 Cuotas-")
-            }
-            
-            var idemArtsArticuloEmp = document.querySelectorAll("span#idArtsArticuloEmp")
+          },
+          pdfExport: function() {
+          const idemDtoFinan = document.getElementById("dtofinan").ariaValueNow
+          var comentarioContadoEfectivo = document.getElementById("comentariocontadoefectivo");
+          var comentarioFinanciero = document.getElementById("comentariofinanciero");
+          if (idemDtoFinan === null){
+            alert("Falta completa campo Dto. Finan.")
+            window.location.reload()
+          } else
+          if (idemDtoFinan == 20){
+            comentarioContadoEfectivo.innerText = "contado efectivo"
+          } else
+          if (idemDtoFinan < 20){
+            comentarioFinanciero.innerText = prompt("El dto financiero NO es 20%, ingresar comentario COMPRENSIBLE para el cliente sobre este dto Ej. -VISA 6 Cuotas-")
+          }
+          
+          var idemArtsArticuloEmp = document.querySelectorAll("span#idArtsArticuloEmp")
 
-            var initialValue = 0;
-            var VeriSinMod = document.querySelectorAll("span#idVeriSinMod");
-            var idem = [...VeriSinMod].map(e=> parseInt(e.innerText))
-            
-            var sumVeriSinMod = idem.reduce(
-              (accumulator, currentValue) => accumulator + currentValue,
-              initialValue
-            );
-            
-            var VeriMod = document.querySelectorAll("span#idVerifMod");
-            var idem2 = [...VeriMod].map(e=> parseInt(e.innerText))
+          var initialValue = 0;
+          var VeriSinMod = document.querySelectorAll("span#idVeriSinMod");
+          var idem = [...VeriSinMod].map(e=> parseInt(e.innerText))
+          
+          var sumVeriSinMod = idem.reduce(
+            (accumulator, currentValue) => accumulator + currentValue,
+            initialValue
+          );
+          
+          var VeriMod = document.querySelectorAll("span#idVerifMod");
+          var idem2 = [...VeriMod].map(e=> parseInt(e.innerText))
 
-            var sumVeriMod = idem2.reduce(
-              (accumulator, currentValue) => accumulator + currentValue,
-              initialValue
-            );
+          var sumVeriMod = idem2.reduce(
+            (accumulator, currentValue) => accumulator + currentValue,
+            initialValue
+          );
 
-            var grid = this.$refs.grid.kendoWidget();
-            var gridElement = grid.element;
-            var fechaCambiosPrecios = gridElement.find('#fechaCambiosPrecio');
-            var valueFechaCambiosPrecios = fechaCambiosPrecios.data('kendoDatePicker').value();
-            var fechaHasta = new Date();
-            var modificados = document.getElementById("modificados");
-            console.log(idemArtsArticuloEmp.length)
-            console.log(sumVeriSinMod)
-            console.log(sumVeriMod)
-            if (idemArtsArticuloEmp.length == sumVeriSinMod){
-              modificados.innerText = 'No se existen modificaciones en los precios de los artículos de esta lista, entre ' + kendo.toString(valueFechaCambiosPrecios, "dd-MM-yyyy") + ' y el ' + kendo.toString(fechaHasta, "dd-MM-yyyy")
-            } else
-            if(sumVeriMod > 0){
-              modificados.innerText = 'Sobre ' + idemArtsArticuloEmp.length + ' artículos de esta lista de precios, se identifican ' + sumVeriMod + ' modificados entre el ' + kendo.toString(valueFechaCambiosPrecios, "dd-MM-yyyy") + ' y el ' + kendo.toString(fechaHasta, "dd-MM-yyyy")
-            }
+          var grid = this.$refs.grid.kendoWidget();
+          var gridElement = grid.element;
+          var fechaCambiosPrecios = gridElement.find('#fechaCambiosPrecio');
+          var valueFechaCambiosPrecios = fechaCambiosPrecios.data('kendoDatePicker').value();
+          var fechaHasta = new Date();
+          var modificados = document.getElementById("modificados");
+          console.log(idemArtsArticuloEmp.length)
+          console.log(sumVeriSinMod)
+          console.log(sumVeriMod)
+          if (idemArtsArticuloEmp.length == sumVeriSinMod){
+            modificados.innerText = 'No se existen modificaciones en los precios de los artículos de esta lista, entre ' + kendo.toString(valueFechaCambiosPrecios, "dd-MM-yyyy") + ' y el ' + kendo.toString(fechaHasta, "dd-MM-yyyy")
+          } else
+          if(sumVeriMod > 0){
+            modificados.innerText = 'Sobre ' + idemArtsArticuloEmp.length + ' artículos de esta lista de precios, se identifican ' + sumVeriMod + ' modificados entre el ' + kendo.toString(valueFechaCambiosPrecios, "dd-MM-yyyy") + ' y el ' + kendo.toString(fechaHasta, "dd-MM-yyyy")
+          }
+
+          
         },
         pdfTemplate: function(e){
-          var templateItem = kendo.template(kendo.jQuery('#IdpdfTemplate').html())
+          var templateItem = kendo.template(kendo.jQuery('#pdfTemplate').html())
           return templateItem(e)
+        },
+        onError: function(e){
+          console.log(e.status);
+          console.log(e.error);
+        },
+        requestEnd: function(e) {
+            var response = e.response;
+            var type = e.type;
+        },
+        dataBound: function(){
+
+          /* var idemRubVNombre = document.querySelector("span#rubvnombre").innerText
+          var idRubVNombre = document.getElementById("rubrovnombre")
+          var ValRubVNombre = idRubVNombre.innerText = kendo.toString(idemRubVNombre) */
+
+          var idemCodCte = document.querySelector(".k-input-value-text:nth-child(1)").innerText
+          var idCodCte = document.getElementById("cod_cte")
+          var valCodCte = idCodCte.innerText = kendo.toString(idemCodCte)
+
+          var idemDvc1 = document.querySelector("#dvc1listaprevcta").innerText
+          var dvc1listaprecvta = document.getElementById("dvc1listaprecvta")
+          var idemdvc1listaprecvta = dvc1listaprecvta.innerText = kendo.toString(idemDvc1)
+
+          var idemDtoFinan = document.getElementById("dtofinan").ariaValueNow
+          var descuentofinanciero = document.getElementById("descuentofinanciero")
+          var idemDescuentoFinanciero = descuentofinanciero.innerText = kendo.toString(idemDtoFinan, "p")
+
+          var idemArtsArticuloEmp = document.querySelectorAll("span#idArtsArticuloEmp")
+
+          var initialValue = 0;
+          var VeriSinMod = document.querySelectorAll("span#idVeriSinMod");
+          var idem = [...VeriSinMod].map(e=> parseInt(e.innerText))
+          
+          var sumVeriSinMod = idem.reduce(
+            (accumulator, currentValue) => accumulator + currentValue,
+            initialValue
+          );
+
+          var VeriMod = document.querySelectorAll("span#idVerifMod");
+          var idem2 = [...VeriMod].map(e=> parseInt(e.innerText))
+
+          var sumVeriMod = idem2.reduce(
+            (accumulator, currentValue) => accumulator + currentValue,
+            initialValue
+          );
+
+        },
+        OrdenMasNombre: function(item){
+            var NroOrden = item.nro_orden_de_la_fami
+            var NombreFamilia = item.nombre_fami_art
+            var OrdenMasNombre = NroOrden + ' - ' + NombreFamilia
+            return '<span id="ordennombre">' + kendo.toString(OrdenMasNombre) + '</span>'
         },
         CambiosPrecioDesde: function(){
           kendo.culture("es-AR");
@@ -439,6 +394,7 @@
           var fechaCambiosPreciosDesde = gridElement.find('#fechaCambiosPrecio')
           var fechaDesde = fechaCambiosPreciosDesde.data("kendoDatePicker").value();
           var fechaUltModif = item.Fecha_Ult_Modif
+          var fechaHasta = item.Fecha_cambio_precios_hasta
           var fechaHoy = new Date()
           var modificado = kendo.toString(fechaUltModif, 'yyyy-MM-dd') <= kendo.toString(fechaHoy, 'yyyy-MM-dd') ? (kendo.toString(fechaUltModif, 'yyyy-MM-dd') >= kendo.toString(fechaDesde, 'yyyy-MM-dd') ? 'Modif' : '') : ''
           return modificado
@@ -449,6 +405,7 @@
           var fechaCambiosPreciosDesde = gridElement.find('#fechaCambiosPrecio')
           var fechaDesde = fechaCambiosPreciosDesde.data("kendoDatePicker").value();
           var fechaUltModif = item.Fecha_Ult_Modif
+          var fechaHasta = item.Fecha_cambio_precios_hasta
           var fechaHoy = new Date()
           var modificado = kendo.toString(fechaUltModif, 'yyyy-MM-dd') <= kendo.toString(fechaHoy, 'yyyy-MM-dd') ? (kendo.toString(fechaUltModif, 'yyyy-MM-dd') >= kendo.toString(fechaDesde, 'yyyy-MM-dd') ? 'Modif' : '') : ''
           var VerifMod = modificado == 'Modif' ? 1 : 0
@@ -478,7 +435,7 @@
             var gridElement = grid.element;
             var numericDtoFinan = gridElement.find('#dtofinan');
             var DtoFinan = numericDtoFinan.data("kendoNumericTextBox").value();
-            return kendo.toString(DtoFinan+'%')
+            return DtoFinan+'%'
         },
         precioContado: function(item){
             var grid = this.$refs.grid.kendoWidget();
@@ -490,7 +447,7 @@
             var iCOTI_COTIZACION = item.COTI_COTIZACION
             var iDCA1_POR_DESCUENTO = item.DCA1_POR_DESCUENTO
             var agregaruna = 1
-            var cal = (iARPV_PRECIO_VTA) * (1-DtoFinan/100)
+            var cal = iARPV_PRECIO_VTA * (1-DtoFinan/100)
             var cal2 = (1-iDCA1_POR_DESCUENTO/100)
             var cal3 = (1+iCIMP_TASA/100)
             var precioTotal = cal * (iDCA1_POR_DESCUENTO ? cal2 : agregaruna) * cal3 * (iCOTI_COTIZACION ? iCOTI_COTIZACION : agregaruna);
@@ -499,17 +456,17 @@
         toolbarTemplate: function() {
             var templateHtml =
             '<div class="container-fluid">' +
-                '<form id="form" class="requires-validation row align-items-end row-cols-5" novalidate>' +
+                '<form id="form" class="requires-validation row align-items-end row-cols-4" novalidate>' +
                     '<div class="col d-flex flex-column">' +
                       '<label class="col-form-label">Perfil Comercial</label>' +
                       '<input type="search" id="codcte" style="width: 150px"/>' +
                       '<div class="invalid-feedback">Falta completa este campo.</div>'+
                     '</div>' +
-                    '<div class="col d-flex flex-column">' +
+                    /* '<div class="col d-flex flex-column">' +
                       '<label class="col-form-label">Rubro Vta.</label>' +
                       '<input type="search" id="codconfig" style="width: 150px"/>' +
                       '<div class="invalid-feedback">Falta completa este campo.</div>'+
-                    '</div>' +
+                    '</div>' + */
                     '<div class="col d-flex flex-column">' +
                       '<label class="col-form-label">Dto. Finan.</label>' +
                       '<input type="number" id="dtofinan" style="width: 150px" v-model.number="dtofinan"/>' +
@@ -543,42 +500,6 @@
             templateRUBV_NOMBRE: function(item){
               var templateRUBVNOMBRE = '<span id="rubvnombre">'+ item.RUBV_NOMBRE + '</span>'
               return templateRUBVNOMBRE
-            },
-            dataBound: function(){
-              var idemRubVNombre = document.querySelector("span#rubvnombre").innerText
-              var idRubVNombre = document.getElementById("rubrovnombre")
-              var ValRubVNombre = idRubVNombre.innerText = kendo.toString(idemRubVNombre)
-
-              var idemCodCte = document.querySelector(".k-input-value-text:nth-child(1)").innerText
-              var idCodCte = document.getElementById("cod_cte")
-              var valCodCte = idCodCte.innerText = kendo.toString(idemCodCte)
-
-              var idemDvc1 = document.querySelector("#dvc1listaprevcta").innerText
-              var dvc1listaprecvta = document.getElementById("dvc1listaprecvta")
-              var idemdvc1listaprecvta = dvc1listaprecvta.innerText = kendo.toString(idemDvc1)
-
-              var idemDtoFinan = document.getElementById("dtofinan").ariaValueNow
-              var descuentofinanciero = document.getElementById("descuentofinanciero")
-              var idemDescuentoFinanciero = descuentofinanciero.innerText = kendo.toString(idemDtoFinan, "p")
-
-              var idemArtsArticuloEmp = document.querySelectorAll("span#idArtsArticuloEmp")
-
-              var initialValue = 0;
-              var VeriSinMod = document.querySelectorAll("span#idVeriSinMod");
-              var idem = [...VeriSinMod].map(e=> parseInt(e.innerText))
-
-              var sumVeriSinMod = idem.reduce(
-                (accumulator, currentValue) => accumulator + currentValue,
-                initialValue
-              );
-
-              var VeriMod = document.querySelectorAll("span#idVerifMod");
-              var idem2 = [...VeriMod].map(e=> parseInt(e.innerText))
-
-              var sumVeriMod = idem2.reduce(
-                (accumulator, currentValue) => accumulator + currentValue,
-                initialValue
-              );
             }
           },
           mounted: function(){
@@ -588,7 +509,7 @@
             var toolbarElement = gridElement.find('.k-grid-toolbar');
             var numericDtoFinan = gridElement.find('#dtofinan');
             var fechaInformarCambiosPrecio = gridElement.find('#fechaCambiosPrecio');
-            var dropDownElement2 = gridElement.find('#codconfig');
+            /* var dropDownElement2 = gridElement.find('#codconfig'); */
 
             fechaInformarCambiosPrecio.kendoDatePicker({
                 culture: "es-AR", 
@@ -603,7 +524,7 @@
               max: 20
             })
 
-            dropDownElement2.kendoDropDownList({
+            /* dropDownElement2.kendoDropDownList({
               dataTextField: "RUBV_NOMBRE",
               dataValueField: "RUBV_RUBRO_VENTA",
               autoBind: true,
@@ -620,7 +541,7 @@
                   }
                 }
               }
-            })
+            }) */
 
             dropDownElement.kendoDropDownList({
               dataTextField: "CLC1_CLASIF_1",
@@ -649,14 +570,17 @@
 
             toolbarElement.on("click", ".play", ()=>{
               var PerfilComercial = dropDownElement.data("kendoDropDownList").value();
-              var RubroVta = dropDownElement2.data("kendoDropDownList").value();
+              /* var RubroVta = dropDownElement2.data("kendoDropDownList").value(); */
               var DtoFinan = numericDtoFinan.data("kendoNumericTextBox").value();
               var FechaCambiosDesde = fechaInformarCambiosPrecio.data("kendoDatePicker").value();
-              var classDtoFinan = document.querySelector("#form > div:nth-child(3) > .k-numerictextbox");
-              var classFechaDesde = document.querySelector("#form > div:nth-child(4) > .k-datepicker");
+              var classDtoFinan = document.querySelector("#form > div:nth-child(2) > .k-numerictextbox");
+              var classFechaDesde = document.querySelector("#form > div:nth-child(3) > .k-datepicker");
+              
+
               var filter = { logic: "and", filters: [] };
+              
               filter.filters.push(
-                    { field: "ARVE_RUBRO_VENTA", operator: "contains", value: RubroVta },
+                    /* { field: "ARVE_RUBRO_VENTA", operator: "contains", value: RubroVta }, */
                     { field: "COD_CTE", operator: "contains", value: PerfilComercial }
                     );
               if (DtoFinan == null){

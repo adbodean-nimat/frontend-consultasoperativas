@@ -46,7 +46,7 @@
               >
               <grid-column field="Cod_Vend" :title="'Cod. Vend.'" :filterable-multi="true" :locked="true" :width="60"></grid-column>
               <grid-column field="Nomb_Vend" :title="'Nomb. Vend.'" :filterable-multi="true"  :locked="true" :width="200"></grid-column>
-              <grid-column field="Fecha_Emi" :title="'Fecha Emisión'"  type="date" format="{0:dd/MM/yyyy}" :locked="true" :width="120"></grid-column>
+              <grid-column field="Fecha_Emi" :title="'Fecha Emisión'" template="#: kendo.toString(kendo.parseDate(Fecha_Emi, 'yyyy-MM-dd'), 'dd/MM/yyyy') #" :locked="true" :width="120"></grid-column>
               <grid-column field="Cod_Client" :title="'Cod. Clientes'" :locked="true" :width="80"></grid-column>
               <grid-column field="Nomb_Client" :title="'Nomb. Clientes'" :locked="true" :width="200"></grid-column>
               <grid-column field="Tipo_NP" :title="'Tipo NP'" :locked="true" :width="80"></grid-column>
@@ -55,9 +55,6 @@
               <grid-column field="Cod_Art" title="Cod. Art." :width="80"></grid-column>
               <grid-column field="Nombre_Art" title="Nombre Art." :width="400"></grid-column>
               <grid-column field="Uni" :width="80"></grid-column>
-              <grid-column field="Fecha_Entr_Cabec" :title="'Fecha Entr. Cabec.'" type="date" format="{0:dd/MM/yyyy}" :width="120"></grid-column>
-              <grid-column field="Fecha_Entr_Item" :title="'Fecha Entr. Item'" type="date" format="{0:dd/MM/yyyy}" :width="120"></grid-column>
-              <grid-column field="Verif_fecha_entr" title="Verif. Fecha Entr." :width="200"></grid-column>
               <grid-column field="Cant_Ped" title="Cant. Ped." :width="80"></grid-column>
               <grid-column field="Cant_Fact" title="Cant. Fact." :width="80"></grid-column>
               <grid-column field="Cant_Entr" title="Cant. Entr." :width="80"></grid-column>
@@ -73,6 +70,9 @@
               <grid-column field="Verif_Tte" title="Verif. Tte." :width="150"></grid-column>
               <grid-column field="Domicilio" :width="200"></grid-column>
               <grid-column field="Localidad" :width="200"></grid-column>
+              <grid-column field="Fecha_Entr_Cabec" :title="'Fecha Entr. Cabec.'" template="#: kendo.toString(kendo.parseDate(Fecha_Entr_Cabec, 'yyyy-MM-dd'), 'dd/MM/yyyy') #" :width="120" :hidden="true"></grid-column>
+              <grid-column field="Fecha_Entr_Item" :title="'Fecha Entr. Item'" template="#: kendo.toString(kendo.parseDate(Fecha_Entr_Item, 'yyyy-MM-dd'), 'dd/MM/yyyy') #" :width="120" :hidden="true"></grid-column>
+              <grid-column field="Verif_fecha_entr" title="Verif. Fecha Entr." :width="200"></grid-column>
               <grid-column field="Observacion_NP" title="Observación NP" :width="400"></grid-column>
               <grid-column field="Nomb_Est_Aprob" title="Nomb. Est. Aprob." :width="80"></grid-column>
               <grid-column field="Observ_Aproba" title="Observ. Aproba" :width="80"></grid-column>
@@ -85,7 +85,7 @@
               <grid-column field="Cant_Vinc_OC" title="Cant. Vinc. OC" :width="80"></grid-column>
               <grid-column field="Cant_OC" title="Cant. OC" :width="80"></grid-column>
               <grid-column field="Cant_Recib_Prov" title="Cant. Recib. Prov." :width="80"></grid-column>
-              <grid-column field="Fech_Prob_entr_Prov" title="Fecha Prob. Entr. Prov." type="date" format="{0:dd/MM/yyyy}" :width="120"></grid-column>
+              <grid-column field="Fech_Prob_entr_Prov" title="Fecha Prob. Entr. Prov." template="#: kendo.toString(kendo.parseDate(Fech_Prob_entr_Prov, 'yyyy-MM-dd'), 'dd/MM/yyyy') ? kendo.toString(kendo.parseDate(Fech_Prob_entr_Prov, 'yyyy-MM-dd'), 'dd/MM/yyyy') : '' #" :width="120"></grid-column>
               <grid-column field="Nro_OC" title="Nro. OC" :width="120"></grid-column>
               <grid-column field="Proveedor" :width="80"></grid-column>
               <grid-column field="Nomb_Comp" title="Nomb. Comp." :width="80"></grid-column>
@@ -130,14 +130,14 @@
                 schemaModelFields: {
                     Cod_Vend: {type: 'string'},
                     Nomb_Vend: {type: 'string'},
-                    Fecha_Emi: {type: 'date'},
+                    Fecha_Emi: {type: 'datetime'},
                     Cod_Client: {type: 'number'},
                     Nomb_Client: {type: 'string'},
                     Tipo_NP: {type: 'string'},
                     Nro_NP: {type: 'string'},
-                    Fecha_Entr_Cabec: {type: 'date'},
-                    Fecha_Entr_Item: {type: 'date'},
-                    Fech_Prob_entr_Prov: {type: 'date'}
+                    Fecha_Entr_Cabec: {type: 'datetime'},
+                    Fecha_Entr_Item: {type: 'datetime'},
+                    Fech_Prob_entr_Prov: {type: 'datetime'}
                 }
              }
       },

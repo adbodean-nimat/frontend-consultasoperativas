@@ -16,7 +16,7 @@
    </div>
   </div>
   
-  <datasource ref="remoteDataSource5"
+  <datasource ref="remoteDataSource4"
                     :transport-read="readData"
                     :transport-update-url="UrlApiBase"
                     :transport-update-content-type="'application/json; charset=utf-8'"
@@ -30,6 +30,7 @@
                     :transport-parameter-map="parameterMap"
                     :schema-model-id="'id'"
                     :schema-model-fields="fields"
+                    :page-size='15'
                     :batch="true"
                     @error="onError"
                     @requestend="requestEnd"
@@ -37,15 +38,16 @@
   </datasource>
   <grid ref="grid"
               :height="'100vh'"
-              :data-source-ref="'remoteDataSource5'"
+              :data-source-ref="'remoteDataSource4'"
               :navigatable="true"
+              :filterable="true"
               :pageable='false'
               :editable="'inline'"
               :toolbar="['create']">
         <grid-column :field="'id'" :title="'Id'" :hidden="true"></grid-column>
-        <grid-column :field="'cod_cant_mov'" :title="'Código Cant. Movimiento'"></grid-column>
-        <grid-column :field="'nombre_movimiento'" :title="'Nombre Movimiento'"></grid-column>
-        <grid-column :field="'cant_mov_nro'" :title="'Cant. Movimiento Nro.'"></grid-column>
+        <grid-column :field="'clas4_clas5'" :title="'Código'"></grid-column>
+        <grid-column :field="'nombre'" :title="'Nombre'"></grid-column>
+        <grid-column :field="'medidas_dimensiones'" :title="'Medidas interiores aproximadas (mts)'" :columns="detallesMedidas"></grid-column>
         <grid-column :command="['edit','destroy']" :title="'&nbsp;'"></grid-column>
   </grid>
 </div>
@@ -54,7 +56,7 @@
 
 <script>
 import $ from 'jquery'
-import store from "../store";
+import store from "../store"
 import '@progress/kendo-ui'
 import '@progress/kendo-ui/js/messages/kendo.messages.es-AR'
 import '@progress/kendo-ui/js/cultures/kendo.culture.es-AR'
@@ -65,7 +67,7 @@ import { Button } from '@progress/kendo-buttons-vue-wrapper'
 import { directive as fullscreen } from 'vue-fullscreen'
 
 export default {
-  name: 'movimientosContenedores',
+  name: 'dimensionesContenedores',
   directives: {
     fullscreen,
   },
@@ -80,18 +82,27 @@ export default {
             fullscreen: false,
             teleport: true,
             pageOnly: true,
-            title: 'Movimientos de contenedores',
+            title: 'Dimensiones aprox. de contenedores',
             fields: {
                 id: { editable: false, nullable: true},
-                cod_cant_mov: { type: 'varchar'},
-                nombre_movimiento: { type: 'varchar'},
-                cant_mov_nro: { type: 'numberic'}
-            }
+                clas4_clas5: { type: 'string'},
+                nombre: { type: 'string'},
+                /* medidas_ancho: { type: 'varchar'},
+                medidas_alto_puerta: { type: 'varchar'},
+                medidas_alto_interior: { type: 'varchar'},
+                medidas_largo: { type: 'varchar'}, */
+            },
+            detallesMedidas: [
+              {field: "medidas_ancho", title: "Ancho"},
+              {field: "medidas_alto_puerta", title: "Alto puerta"},
+              {field: "medidas_alto_interior", title: "Alto interior"},
+              {field: "medidas_largo", title: "Largo"}
+              ]
          }
     },
   computed: {
     UrlApiBase(){
-          return `${process.env.VUE_APP_API_BASE}/movimientosdecontenedores/`
+          return `${process.env.VUE_APP_API_BASE}/dimensionescontenedores/`
     },
     options () {
       return {
@@ -108,7 +119,7 @@ export default {
     readData: function (e) {
               // console.log(store.state.token)
               var token = store.state.token
-              var urlApi = `${process.env.VUE_APP_API_BASE}/movimientosdecontenedores/`
+              var urlApi = `${process.env.VUE_APP_API_BASE}/dimensionescontenedores/`
               $.ajax({
                 url: urlApi,
                 beforeSend: function (xhr) {
@@ -158,15 +169,21 @@ export default {
                 //console.log(JSON.stringify(options));
                 return options
             } 
-            if (operation == 'destroy') {              
+            if (operation == 'destroy') {
+                //console.log(operation + " operation");
+                //console.log(JSON.stringify(options.models[0].id));
+                
                 var Id = JSON.stringify(options.models[0].id);
                 let params = {
-                "cod_cant_mov": JSON.stringify(options.models[0].cod_cant_mov),
-                "nombre_movimiento": JSON.stringify(options.models[0].nombre_movimiento),
-                "cant_mov_nro": JSON.stringify(options.models[0].cant_mov_nro),
+                "clas4_clas5": JSON.stringify(options.models[0].clas4_clas5),
+                "nombre": JSON.stringify(options.models[0].nombre),
+                "medidas_ancho": JSON.stringify(options.models[0].medidas_ancho),
+                "medidas_alto_puerta": JSON.stringify(options.models[0].medidas_alto_puerta),
+                "medidas_alto_interior": JSON.stringify(options.models[0].medidas_alto_interior),
+                "medidas_largo": JSON.stringify(options.models[0].medidas_largo),
                 };
                 let json = JSON.stringify(params);
-                var destroyUrl = `${process.env.VUE_APP_API_BASE}/movimientosdecontenedores/`
+                var destroyUrl = `${process.env.VUE_APP_API_BASE}/dimensionescontenedores/`
                 $.ajax({
                     method: "DELETE",
                     url: destroyUrl + Id,
@@ -178,9 +195,13 @@ export default {
                 });   
             } 
             if (operation == 'create') {
-                let params = JSON.stringify(options.models[0],["cod_cant_mov","nombre_movimiento","cant_mov_nro"])
+                //console.log(operation);
+                //console.log(JSON.stringify(options.models[0],["cod_comp", "nomb_comp"]))
+                //console.log(JSON.stringify(options.models[0],["cod_depos","nombre_deposito"]));
+                //return JSON.stringify(options.models[0],["cod_comp","nomb_comp"]);
+                let params = JSON.stringify(options.models[0],["clas4_clas5", "nombre", "medidas_ancho", "medidas_alto_puerta", "medidas_alto_interior", "medidas_largo"])
                 let json = JSON.parse(params)
-                var createUrl = `${process.env.VUE_APP_API_BASE}/movimientosdecontenedores/`
+                var createUrl = `${process.env.VUE_APP_API_BASE}/dimensionescontenedores/`
                 $.ajax({
                     method: "POST",
                     url: createUrl,
@@ -192,10 +213,14 @@ export default {
                 });
             } 
             if (operation == 'update') {
+                //console.log(operation);
+                //console.log(JSON.stringify(options.models[0],["cod_comp", "nomb_comp"]))
+                //console.log(JSON.stringify(options.models[0],["id","cod_depos","nombre_deposito"]));
+                //return JSON.stringify(options.models[0],["cod_comp","nomb_comp"]);
                 var Id = JSON.stringify(options.models[0].id);
-                let params = JSON.stringify(options.models[0],["cod_cant_mov","nombre_movimiento","cant_mov_nro"]);
+                let params = JSON.stringify(options.models[0],["clas4_clas5", "nombre", "medidas_ancho", "medidas_alto_puerta", "medidas_alto_interior", "medidas_largo"]);
                 let json = JSON.parse(params);
-                var updateUrl = `${process.env.VUE_APP_API_BASE}/movimientosdecontenedores/`
+                var updateUrl = `${process.env.VUE_APP_API_BASE}/dimensionescontenedores/`
                 $.ajax({
                     method: "PUT",
                     url: updateUrl + Id,

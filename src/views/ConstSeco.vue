@@ -113,7 +113,7 @@
 
               <grid-column field="ARTS_CLASIF_1" title="Art. Clasif." :hidden="true"></grid-column>
               <grid-column field="configcs" title="Config. CS" :hidden="true"></grid-column>
-              <grid-column field="nombre_conf_cs" title="Config."  :hidden="true"></grid-column>
+              <grid-column field="nombre_conf_cs" title="Config." :group-header-template="groupHeaderTemplate" :hidden="true"></grid-column>
               <grid-column :template="templateNombreConfCs" :hidden="true"></grid-column>
               <grid-column field="uni_lp_x_cada_uni_ptf" title="Uni LP x cada uni PTF" :hidden="true"></grid-column>
               <grid-column field="fracciona_uni_ptf" title="Fracciona Uni PTF" :filterable-multi="true" :hidden="true"></grid-column>
@@ -147,14 +147,14 @@
     import $ from 'jquery'
     import store from "../store";
     import '@progress/kendo-ui'
-    import '@progress/kendo-ui/js/messages/kendo.messages.es-AR'
-    import '@progress/kendo-ui/js/cultures/kendo.culture.es-AR'
+    import '@progress/kendo-ui/js/messages/kendo.messages.es-ES'
+    import '@progress/kendo-ui/js/cultures/kendo.culture.es-ES'
     import '@progress/kendo-theme-bootstrap/dist/all.css'
     import { DataSource} from '@progress/kendo-datasource-vue-wrapper'
     import { Grid, GridColumn } from '@progress/kendo-grid-vue-wrapper'
     import { Button } from '@progress/kendo-buttons-vue-wrapper'
     import { directive as fullscreen } from 'vue-fullscreen'
-    
+
     export default {
       name: 'ListaConstSeco',
       directives: {
@@ -219,7 +219,7 @@
         readData: function (e) {
               // console.log(store.state.token)
               var token = store.state.token
-              var urlApi = `${process.env.VUE_APP_API_BASE}/listaconstseco`
+              var urlApi = this.UrlApiBase
               $.ajax({
                 url: urlApi,
                 beforeSend: function (xhr) {
@@ -239,6 +239,10 @@
           var templateItem = kendo.template(kendo.jQuery('#pdfTemplate').html())
           return templateItem(e)
         },
+        groupHeaderTemplate: function(e){
+          var groupTemplate = kendo.template('#=value#');
+            return groupTemplate(e)
+        },
         dataBound: function(){
           kendo.ui.Grid.prototype._positionColumnResizeHandle= function() {
           var that = this,
@@ -254,10 +258,10 @@
           });
         };
           const ultima_columna = document.querySelectorAll("span#idItemPrecioCliente2");
-          var idem = [...ultima_columna].map(e=> parseFloat(e.innerHTML.replace(/[,$]/g, "")));
+          var idem = [...ultima_columna].map(e=> kendo.parseFloat(e.innerHTML));
 
           const ultima_columna2 = document.querySelectorAll("span#idItemPrecio2");
-          var idem2 = [...ultima_columna2].map(e=> parseFloat(e.innerHTML.replace(/[,$]/g, "")));
+          var idem2 = [...ultima_columna2].map(e=> kendo.parseFloat(e.innerHTML));
           
           const initialValue = 0;
           const sumWithInitial = idem.reduce(
@@ -270,8 +274,8 @@
           );
           var idItemTotal = document.getElementById('totalItemPrecioCliente2');
           var idItemTotal2 = document.getElementById('totalItemPrecio2');
-          var itemTotal = idItemTotal.innerText = kendo.toString(sumWithInitial, "c2")
-          var itemTotal2 = idItemTotal2.innerText = kendo.toString(sumWithInitial2, "c2");
+          var itemTotal = idItemTotal.innerText = kendo.toString(sumWithInitial, "c")
+          var itemTotal2 = idItemTotal2.innerText = kendo.toString(sumWithInitial2, "c")
 
           const idemCodCte = document.querySelector(".k-input-value-text:nth-child(1)").innerText
           var idCodCte = document.getElementById("cod_cte")
@@ -282,7 +286,7 @@
           var valConfigCs = idConfigCs.innerText = kendo.toString(idemConfigCs)
 
           const idemNombreConfigCs = document.getElementById('nombreconfigcs').innerText
-          var idNombreConfigCs = document.getElementById("nombre_config_cs")
+          var idNombreConfigCs = document.getElementById('nombre_config_cs')
           var valNombreConfigCs = idNombreConfigCs.innerText = kendo.toString(idemNombreConfigCs)
 
           const idemM2 = document.getElementById("numberM2").ariaValueNow
@@ -445,9 +449,9 @@
           var cantitemptf = cantxm2 / unilpptf
           var cantitemptf2 = cantitemptf.toFixed(2) - Math.round(cantitemptf,1)
           var masde1 = 1.00
-          var return1 = kendo.toString(cantitemptf, "0.00")
-          var return2 = kendo.toString(Math.round(cantitemptf.toFixed(2)), "0.00") 
-          var return3 = kendo.toString(Math.round(cantitemptf) + masde1, "0.00")
+          var return1 = kendo.toString(cantitemptf, "##.#")
+          var return2 = kendo.toString(Math.round(cantitemptf.toFixed(2)), "##.#") 
+          var return3 = kendo.toString(Math.round(cantitemptf) + masde1, "##.#")
           var CantItemPTF = item.fracciona_uni_ptf == "SI" ? return1 : cantitemptf2 <= 0 ? return2 : cantitemptf2 > 0 ? return3 : null;
           var ARPV_PRECIO_VTA = item.ARPV_PRECIO_VTA;
           var CIMP_TASA = item.CIMP_TASA;
@@ -459,8 +463,8 @@
           var precio3 = agregaruna - DtoMonto / 100
           var precio4 = agregaruna - DCA1_POR_DESCUENTO / 100
           var PrecioIVAcDtoPTF = ARPV_PRECIO_VTA * precio1 * (DCA1_POR_DESCUENTO ? precio4 : agregaruna) * precio2 * precio3 * (COTI_COTIZACION ? COTI_COTIZACION : agregaruna)
-          var precioTotal = CantItemPTF * PrecioIVAcDtoPTF
-          return '<span id="idItemPrecio2">'+ kendo.htmlEncode(kendo.toString(precioTotal, "c2")) +'</span>'
+          var precioTotalItem = (CantItemPTF * PrecioIVAcDtoPTF)
+          return '<span id="idItemPrecio2">'+ kendo.htmlEncode(kendo.toString(precioTotalItem, "c2")) +'</span>'
         },
         templateItemPrecioCliente: function(item){
           var grid = this.$refs.grid.kendoWidget();
@@ -551,11 +555,11 @@
             return kendo.template(templateHtml);
             },
             footerPrecio: function(){
-              var templateHtml = '<span id="totalItemPrecioCliente2">$</span>'
+              var templateHtml = '<span id="totalItemPrecioCliente2"></span>'
               return templateHtml
             },
             footerPrecio2: function(){
-              var templateHtml = '<span id="totalItemPrecio2">$</span>'
+              var templateHtml = '<span id="totalItemPrecio2"></span>'
               return templateHtml
             },
             dvc1listaprecvta: function(item){

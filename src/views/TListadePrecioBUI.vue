@@ -35,6 +35,8 @@
       <grid ref="grid"
                   :height="'95vh'"
                   :data-source-ref="'remoteDataSourceLPBUI'"
+                  :filterable="true"
+                  :resizable="true"
                   :pageable-page-sizes="[5, 10, 15, 20, 25, 50, 100]"
                   :navigatable="true"
                   :pageable='true'

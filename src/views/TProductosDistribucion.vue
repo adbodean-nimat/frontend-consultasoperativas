@@ -17,13 +17,13 @@
        </div>
       </div>
       
-      <datasource ref="remoteDataSourceVinculararticulosafamilia"
+      <datasource ref="remoteDataSourceProductosDistribucion"
                         :transport-read="readData"
                         :transport-update="updateData"
                         :transport-destroy="destroyData"
                         :transport-create="createData"
                         :transport-parameter-map="parameterMap"
-                        :schema-model-id="'cod'"
+                        :schema-model-id="'id'"
                         :schema-model-fields="fields"
                         :batch="true"
                         @error="onError"
@@ -32,16 +32,15 @@
       </datasource>
       <grid ref="grid"
                   :height="'100vh'"
-                  :data-source-ref="'remoteDataSourceVinculararticulosafamilia'"
+                  :data-source-ref="'remoteDataSourceProductosDistribucion'"
                   :navigatable="true"
                   :filterable="true"
                   :pageable='false'
                   :editable="'inline'"
                   :toolbar="['create']">
-            <grid-column :field="'cod'" :title="'Código'" :hidden="false"></grid-column>
-            <grid-column :field="'cod_art'" :title="'Código Art.'"></grid-column>
-            <grid-column :field="'cod_familia'" :title="'Código Familia '"></grid-column>
-            <grid-column :field="'orden_art_familia'" :title="'Orden Art. Familia'"></grid-column>
+            <grid-column :field="'id'" :title="'Id'" :hidden="true"></grid-column>
+            <grid-column :field="'Codigo_producto'" :title="'Código'"></grid-column>
+            <grid-column :field="'Nombre_producto'" :title="'Nombre Producto'"></grid-column>
             <grid-column :command="['edit','destroy']" :title="'&nbsp;'"></grid-column>
       </grid>
     </div>
@@ -61,7 +60,7 @@
     import { directive as fullscreen } from 'vue-fullscreen'
     
     export default {
-      name: 'SetsDeVentas',
+      name: 'ProductospDistribucion',
       directives: {
         fullscreen,
       },
@@ -75,19 +74,18 @@
              return {
                 fullscreen: false,
                 teleport: true,
-                pageOnly: true, 
-                title: 'Tabla: Vincular articulo a familia',
+                pageOnly: true,
+                title: 'Tabla: Productos para Distribución',
                 fields: {
-                    cod: { editable: false, nullable: true},
-                    cod_art: { type: 'string'},
-                    cod_familia: { type: 'string'},
-                    orden_art_familia: {type: 'number'}
+                    id: { editable: false, nullable: true},
+                    Codigo_producto: { type: 'string'},
+                    Nombre_producto: { type: 'string'},
                 },
              }
         },
       computed: {
         UrlApiBase(){
-              return `${process.env.VUE_APP_API_BASE}/vinculararticulosafamilia/`
+              return `${process.env.VUE_APP_API_BASE}/productospdistribucion/`
         },
         token(){
           return store.state.token
@@ -105,7 +103,6 @@
       },
        methods: {
         readData: function (e) {
-              // console.log(store.state.token)
               var tkn = this.token
               var urlApi = this.UrlApiBase
               $.ajax({
@@ -119,14 +116,14 @@
                 },
                 type: 'GET'
               })
-      },
-      updateData: function(e) {
+          },
+          updateData: function(e) {
             var tkn = this.token
             var urlApi = this.UrlApiBase
             $.ajax({
               method: 'PUT',
               type: 'PUT',
-              url: urlApi + JSON.stringify(e.data.models[0].cod),
+              url: urlApi + JSON.stringify(e.data.models[0].id),
               beforeSend: function(xhr) {
                 xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
               },
@@ -136,7 +133,7 @@
               error: function(data){
                 e.error(data)
               },
-              data: JSON.stringify(e.data.models[0],["cod_art", "cod_familia", "orden_art_familia"]),
+              data: JSON.stringify(e.data.models[0],["Codigo_producto", "Nombre_producto"]),
               dataType: 'json',
               contentType: 'application/json',
             })
@@ -147,7 +144,7 @@
             $.ajax({
               method: 'DELETE',
               type: 'DELETE',
-              url: urlApi + JSON.stringify(e.data.models[0].cod),
+              url: urlApi + JSON.stringify(e.data.models[0].id),
               beforeSend: function(xhr) {
                 xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
               },
@@ -179,9 +176,9 @@
             },
             dataType: 'json',
             contentType: 'application/json',
-            data: JSON.stringify(e.data.models[0],["cod_art", "cod_familia", "orden_art_familia"]),
+            data:  JSON.stringify(e.data.models[0],["Codigo_producto", "Nombre_producto"]),
           })
-        },  
+        },
             onError: function(e){
               console.log(e.status); // displays "error"
               console.log(e.error);
@@ -201,13 +198,13 @@
                 /* The result can be observed in the DevTools(F12) console of the browser. */
                 // console.log(response.length);
                 if (type == "create") {
-                    e.sender.read();
+                  e.sender.read();
                 }
                 if (type == "update") {
-                    e.sender.read();
+                  e.sender.read();
                 }
                 if (type == undefined) {
-                    e.sender.read();
+                  e.sender.read();
                 }
             },
             parameterMap: function(options, operation) {

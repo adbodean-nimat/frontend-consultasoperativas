@@ -4,7 +4,6 @@
   <div class="encabezado-titulo">
     <div style="margin-left: 5px; color: white;" class="icon-title">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#fff" class="bi bi-table" viewBox="0 0 16 16"><path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm15 2h-4v3h4V4zm0 4h-4v3h4V8zm0 4h-4v3h3a1 1 0 0 0 1-1v-2zm-5 3v-3H6v3h4zm-5 0v-3H1v2a1 1 0 0 0 1 1h3zm-4-4h4V8H1v3zm0-4h4V4H1v3zm5-3v3h4V4H6zm4 4H6v3h4V8z"/></svg>
-      <!-- <span style="margin-left: 5px; color: white;" class="k-icon k-i-grid-layout"></span> -->
       <span style="color: white; margin-left: 5px;">{{ title }}</span>
     </div>
     <div class="button-fullscreen">
@@ -17,10 +16,8 @@
    </div>
   </div>
   
-  <datasource ref="remoteDataSource3"
-                    :transport-read-url="UrlApiBase"
-                    :transport-read-content-type="'application/json; charset=utf-8'"
-                    :transport-read-data-type="'json'"
+  <datasource ref="remoteDataSource5"
+                    :transport-read="readData"
                     :transport-update-url="UrlApiBase"
                     :transport-update-content-type="'application/json; charset=utf-8'"
                     :transport-update-data-type="'json'"
@@ -33,7 +30,6 @@
                     :transport-parameter-map="parameterMap"
                     :schema-model-id="'id'"
                     :schema-model-fields="fields"
-                    :page-size='15'
                     :batch="true"
                     @error="onError"
                     @requestend="requestEnd"
@@ -41,14 +37,16 @@
   </datasource>
   <grid ref="grid"
               :height="'100vh'"
-              :data-source-ref="'remoteDataSource3'"
+              :data-source-ref="'remoteDataSource5'"
               :navigatable="true"
+              :filterable="true"
               :pageable='false'
               :editable="'inline'"
               :toolbar="['create']">
         <grid-column :field="'id'" :title="'Id'" :hidden="true"></grid-column>
-        <grid-column :field="'cod_depos'" :title="'Código Deposito'"></grid-column>
-        <grid-column :field="'nombre_deposito'" :title="'Nombre Deposito'"></grid-column>
+        <grid-column :field="'cod_cant_mov'" :title="'Código Cant. Movimiento'"></grid-column>
+        <grid-column :field="'nombre_movimiento'" :title="'Nombre Movimiento'"></grid-column>
+        <grid-column :field="'cant_mov_nro'" :title="'Cant. Movimiento Nro.'"></grid-column>
         <grid-column :command="['edit','destroy']" :title="'&nbsp;'"></grid-column>
   </grid>
 </div>
@@ -57,6 +55,7 @@
 
 <script>
 import $ from 'jquery'
+import store from "../store";
 import '@progress/kendo-ui'
 import '@progress/kendo-ui/js/messages/kendo.messages.es-AR'
 import '@progress/kendo-ui/js/cultures/kendo.culture.es-AR'
@@ -67,7 +66,7 @@ import { Button } from '@progress/kendo-buttons-vue-wrapper'
 import { directive as fullscreen } from 'vue-fullscreen'
 
 export default {
-  name: 'DeposaNoConsiderar',
+  name: 'movimientosContenedores',
   directives: {
     fullscreen,
   },
@@ -82,17 +81,18 @@ export default {
             fullscreen: false,
             teleport: true,
             pageOnly: true,
-            title: 'Deposito a No Considerar',
+            title: 'Movimientos de contenedores',
             fields: {
                 id: { editable: false, nullable: true},
-                cod_depos: { type: 'number'},
-                nombre_deposito: { type: 'varchar'},
-              }
+                cod_cant_mov: { type: 'varchar'},
+                nombre_movimiento: { type: 'varchar'},
+                cant_mov_nro: { type: 'numberic'}
             }
+         }
     },
   computed: {
     UrlApiBase(){
-          return `${process.env.VUE_APP_API_BASE}/deposanoconsiderar/`
+          return `${process.env.VUE_APP_API_BASE}/movimientosdecontenedores/`
     },
     options () {
       return {
@@ -106,10 +106,33 @@ export default {
     }
   },
    methods: {
+    readData: function (e) {
+              // console.log(store.state.token)
+              var token = store.state.token
+              var urlApi = `${process.env.VUE_APP_API_BASE}/movimientosdecontenedores/`
+              $.ajax({
+                url: urlApi,
+                beforeSend: function (xhr) {
+                  xhr.setRequestHeader('Authorization', 'Bearer ' + token)
+                },
+                dataType: 'json',
+                success: function (data) {
+                  e.success(data)
+                },
+                type: 'GET'
+              })
+          },
         onError: function(e){
           console.log(e.status); // displays "error"
           console.log(e.error);
         },
+        /* onChange: function(e) {
+          console.log("request change");
+        },
+        requestStart: function(e) {
+          /* The result can be observed in the DevTools(F12) console of the browser. */
+          //console.log("request started"); 
+        //},
         requestEnd: function(e) {
             var response = e.response;
             var type = e.type;
@@ -124,58 +147,64 @@ export default {
                 e.sender.read();
                 }
         },
+        /* parameterMap: function(options, operation) {
+            if (operation !== 'read' && options.models) {
+                return JSON.stringify(options.models)
+            }
+        }, */
         parameterMap: function(options, operation) {            
-            if (operation == 'read') {
+             if (operation == 'read') {
                 //console.log(operation + " operation");
-                //console.log(options.models);
+                //console.log(options);
                 //console.log(JSON.stringify(options));
                 return options
             } 
-            if (operation == 'destroy') {
-                //console.log(operation);
-                //console.log(options.models);
-                //console.log(JSON.stringify(options.models[0],["id"]));
+            if (operation == 'destroy') {              
                 var Id = JSON.stringify(options.models[0].id);
                 let params = {
-                "cod_depos": JSON.stringify(options.models[0].cod_depos),
-                "nombre_deposito": JSON.stringify(options.models[0].nombre_deposito),
+                "cod_cant_mov": JSON.stringify(options.models[0].cod_cant_mov),
+                "nombre_movimiento": JSON.stringify(options.models[0].nombre_movimiento),
+                "cant_mov_nro": JSON.stringify(options.models[0].cant_mov_nro),
                 };
                 let json = JSON.stringify(params);
-                var destroyUrl = `${process.env.VUE_APP_API_BASE}/deposanoconsiderar/`
+                var destroyUrl = `${process.env.VUE_APP_API_BASE}/movimientosdecontenedores/`
                 $.ajax({
                     method: "DELETE",
                     url: destroyUrl + Id,
                     dataType: "json",
-                    data: json
-                });  
+                    data: json,
+                    headers: {
+                          'Authorization': 'Bearer ' + store.state.token
+                        }
+                });   
             } 
             if (operation == 'create') {
-                //console.log(operation);
-                //console.log(options.models);
-                //console.log(JSON.stringify(options.models[0],["cod_depos","nombre_deposito"]));
-                let params = JSON.stringify(options.models[0],["cod_depos", "nombre_deposito"])
+                let params = JSON.stringify(options.models[0],["cod_cant_mov","nombre_movimiento","cant_mov_nro"])
                 let json = JSON.parse(params)
-                var createUrl = `${process.env.VUE_APP_API_BASE}/deposanoconsiderar/`
+                var createUrl = `${process.env.VUE_APP_API_BASE}/movimientosdecontenedores/`
                 $.ajax({
                     method: "POST",
                     url: createUrl,
                     dataType: "json",
-                    data: json
+                    data: json,
+                    headers: {
+                          'Authorization': 'Bearer ' + store.state.token
+                        }
                 });
             } 
             if (operation == 'update') {
-                //console.log(operation);
-                //console.log(options.models);
-                //console.log(JSON.stringify(options.models[0],["id","cod_depos","nombre_deposito"]));
                 var Id = JSON.stringify(options.models[0].id);
-                let params = JSON.stringify(options.models[0],["cod_depos", "nombre_deposito"]);
+                let params = JSON.stringify(options.models[0],["cod_cant_mov","nombre_movimiento","cant_mov_nro"]);
                 let json = JSON.parse(params);
-                var updateUrl = `${process.env.VUE_APP_API_BASE}/deposanoconsiderar/`
+                var updateUrl = `${process.env.VUE_APP_API_BASE}/movimientosdecontenedores/`
                 $.ajax({
                     method: "PUT",
                     url: updateUrl + Id,
                     dataType: "json",
-                    data: json
+                    data: json,
+                    headers: {
+                          'Authorization': 'Bearer ' + store.state.token
+                        }
                 });
             }
            

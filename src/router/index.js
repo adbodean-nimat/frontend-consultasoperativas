@@ -2,10 +2,10 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Tablero from '../views/Tablero.vue'
 import ControlAltaClientes from '../views/ControlAltaClientes.vue'
 import ListadeClientes from '../views/ListadeClientes.vue'
-import DeposANoConsiderar from '../views/DeposaNoConsiderar.vue'
-import NPAConsiderar from '../views/NPaConsiderar.vue'
-import DimensionesContenedores from '../views/DimensionesContenedores.vue'
-import MovimientosContenedores from '../views/MovimientosDeContenedores.vue'
+import DeposANoConsiderar from '../views/TDeposaNoConsiderar.vue'
+import NPAConsiderar from '../views/TNPaConsiderar.vue'
+import DimensionesContenedores from '../views/TDimensionesContenedores.vue'
+import MovimientosContenedores from '../views/TMovimientosDeContenedores.vue'
 import ListaContenedores from '../views/Containers.vue'
 import ListaPyR from '../views/PisosyRevistimiento.vue'
 import ListaBUI from '../views/BreveUsoInterno.vue'
@@ -14,6 +14,7 @@ import ListaConstSeco from "../views/ConstSeco.vue"
 import Tablas from '../views/Tablas.vue'
 import Login from "../views/Login.vue"
 import ListaRubrosVtas from "../views/RubrosVentas.vue"
+import ListaSetsVtas from "../views/SetsVentas.vue"
 import SetsDeVentas from "../views/TSetsVentas.vue"
 import FamiliaDeArticulos from "../views/TFamiliaArticulos.vue"
 import VincularArticuloAFamilia from "../views/TVincularArticuloAFamilia.vue"
@@ -25,6 +26,8 @@ import VblesEntrNP from "../views/VblesEntrNP.vue"
 import VblesEntrNPPR from "../views/VblesEntrNPPR.vue"
 import ListaPrecioCostoDeReposicion from "../views/ListaPrecioCostoReposicion.vue"
 import ListaPrecioVentaAlPublico from "../views/ListaPrecioVentaAlPublico.vue"
+import ListaDistribucion from "../views/RVDistribucion.vue"
+import ProductosParaDistribucion from "../views/TProductosDistribucion.vue"
 
 const routes = [
   {
@@ -236,6 +239,19 @@ const routes = [
     }
   },
   {
+    path: '/tabla/productospdistribucion',
+    name: 'Tabla: Productos para Distribucion',
+    component: ProductosParaDistribucion,
+    props: true,
+    meta: {
+      title: 'Tabla: Productos para Distribucion',
+      metaTags: [
+        {
+          name: 'Tabla: Productos para Distribucion'
+        }      ]
+    }
+  },
+  {
     path: '/containers',
     name: 'Lista de precio - Containers',
     component: ListaContenedores,
@@ -301,6 +317,19 @@ const routes = [
     }
   },
   {
+    path: '/listasetsvtas',
+    name: 'Lista de precio - Sets Ventas',
+    component: ListaSetsVtas,
+    props: true,
+    meta: {
+      title: 'Lista de precio - Sets Ventas',
+      metaTags: [
+        {
+          name: 'Lista de precio - Sets Ventas'
+        }      ]
+    }
+  },
+  {
     path: '/rowaplancanjexsiempre',
     name: 'Rowa - Plan canje por siempre',
     component: RowaPlanCanje,
@@ -362,6 +391,19 @@ const routes = [
       metaTags: [
         {
           name: 'Lista de precios - Venta al público'
+        }      ]
+    }
+  },
+  {
+    path: '/listadodistribucion',
+    name: 'Lista de precios - Distribución',
+    component: ListaDistribucion,
+    props: true,
+    meta: {
+      title: 'Lista de precios - Distribución',
+      metaTags: [
+        {
+          name: 'Lista de precios - Distribución'
         }      ]
     }
   }
