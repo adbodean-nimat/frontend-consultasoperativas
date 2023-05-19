@@ -89,7 +89,7 @@
               >
               
               <grid-column title="Código" :template="ArtsArticuloEmp" :column-menu="false" :hidden="true"></grid-column>
-              <grid-column field="ARTS_ARTICULO_EMP" title="Código" :column-menu="false"  :width="60" :hidden="false"></grid-column>
+              <grid-column field="ARTS_ARTICULO_EMP" title="Código" :column-menu="false"  :width="80" :hidden="false"></grid-column>
               <grid-column field="ARTS_NOMBRE" title="Articulo" :column-menu="false" :width="400" :hidden="false"></grid-column>
               <grid-column field="ARTS_UNIMED_STOCK" title="&nbsp;" :column-menu="false" :width="40" :hidden="false"></grid-column>
               <grid-column field="PRECIO_LISTA_CON_IVA" title="Precio lista c/IVA" template="#: kendo.toString(PRECIO_LISTA_CON_IVA, 'c2')#" :hidden="false" :width="100"></grid-column>

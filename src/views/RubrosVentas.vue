@@ -299,8 +299,8 @@
           
           // e.workbook.sheets[0].rows = newRows
           
-          console.log(dataItems)
-          console.log(newRows)
+          //console.log(dataItems)
+          //console.log(newRows)
           //////////////////////////////////////////////////////////////////////////////////////////////////////
 
           // Recorra todas las filas exportadas.
@@ -309,7 +309,7 @@
               // Recorra las plantillas de columna y aplíquelas para cada fila en la posición de columna almacenada
               if(row.type !== "group-header"){
                 var iRow = row
-                console.log(iRow)  
+                //console.log(iRow)  
               }
               // Obtenga el elemento de datos correspondiente a la fila actual.
               var dataItem = dataItems[i - 1];
