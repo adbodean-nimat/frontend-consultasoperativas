@@ -209,7 +209,7 @@
                             </span>
                         </div>
                         <div class="column-bottom text-center h-10 d-flex justify-content-between align-items-center px-4 rounded-bottom bg-light">
-                            <span class="fs-6">1.0.0</span>
+                            <span class="fs-6">1.1.0</span>
                             <span class="fs-6">LDPPR</span>
                         </div>
                     </div>

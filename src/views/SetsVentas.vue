@@ -277,8 +277,6 @@
             
             // e.workbook.sheets[0].rows = newRows
             
-            //console.log(dataItems)
-            //console.log(newRows)
             //////////////////////////////////////////////////////////////////////////////////////////////////////
 
             // Recorra todas las filas exportadas.
@@ -345,9 +343,6 @@
           var valueFechaCambiosPrecios = fechaCambiosPrecios.data('kendoDatePicker').value();
           var fechaHasta = new Date();
           var modificados = document.getElementById("modificados");
-          console.log(idemArtsArticuloEmp.length)
-          console.log(sumVeriSinMod)
-          console.log(sumVeriMod)
           if (idemArtsArticuloEmp.length == sumVeriSinMod){
             modificados.innerText = 'No se existen modificaciones en los precios de los artículos de esta lista, entre ' + kendo.toString(valueFechaCambiosPrecios, "dd-MM-yyyy") + ' y el ' + kendo.toString(fechaHasta, "dd-MM-yyyy")
           } else

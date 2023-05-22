@@ -186,7 +186,7 @@
               
               // Obtenga el elemento de datos correspondiente a la fila actual.
               var dataItem = data[i - 1];
-              console.log(dataItem)
+              //console.log(dataItem)
               
               for (var j = 0; j < columnTemplates.length; j++) {
                 var columnTemplate = columnTemplates[j];

@@ -181,8 +181,8 @@
                 var FechaEmision = new Date(item.Fecha_Emi) 
                 var diasDif = diaHoy.getTime() - FechaEmision.getTime()
                 var antiguedad = Math.round(diasDif/(1000*60*60*24))
-                console.log(diaHoy.getTime)
-                console.log(FechaEmision.getTime)
+                //console.log(diaHoy.getTime)
+                //console.log(FechaEmision.getTime)
                 return kendo.toString(antiguedad)
               },
               toolbarTemplate: function() {

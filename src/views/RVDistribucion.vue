@@ -293,8 +293,6 @@
             
             // e.workbook.sheets[0].rows = newRows
             
-            console.log(dataItems)
-            console.log(newRows)
             //////////////////////////////////////////////////////////////////////////////////////////////////////
 
             // Recorra todas las filas exportadas.
@@ -303,7 +301,7 @@
                 // Recorra las plantillas de columna y aplíquelas para cada fila en la posición de columna almacenada
                 if(row.type !== "group-header"){
                   var iRow = row
-                  console.log(iRow)  
+                  //console.log(iRow)  
                 }
                 // Obtenga el elemento de datos correspondiente a la fila actual.
                 var dataItem = dataItems[i - 1];
@@ -362,9 +360,6 @@
           var valueFechaCambiosPrecios = fechaCambiosPrecios.data('kendoDatePicker').value();
           var fechaHasta = new Date();
           var modificados = document.getElementById("modificados");
-          console.log(idemArtsArticuloEmp.length)
-          console.log(sumVeriSinMod)
-          console.log(sumVeriMod)
           if (idemArtsArticuloEmp.length == sumVeriSinMod){
             modificados.innerText = 'No se existen modificaciones en los precios de los artículos de esta lista, entre ' + kendo.toString(valueFechaCambiosPrecios, "dd-MM-yyyy") + ' y el ' + kendo.toString(fechaHasta, "dd-MM-yyyy")
           } else
