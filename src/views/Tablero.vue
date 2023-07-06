@@ -1,5 +1,5 @@
 <template>
-<tablero-vue></tablero-vue>
+  <tablero-vue></tablero-vue>
 </template>
 
 <script>

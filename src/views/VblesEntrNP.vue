@@ -32,7 +32,7 @@
               :sortable-show-indexes="true"
               :pageable-always-visible="true"
               :filterable="true"
-              :filterable-extra="false"
+              :filterable-extra="true"
               :reorderable="true"
               :resizable="true"
               :groupable="false"
@@ -44,11 +44,13 @@
               :selectable="false"
               :scrollable-virtual="false"
               :scrollable-endless="false"
+              :excel-file-name="'Variables Entregas NP - General.xlsx'"
+              :excel-all-pages="true"
+              :excel-filterable="false"
               >
               <grid-column field="Cod_Vend" :title="'Cod. Vend.'" :filterable-multi="true" :locked="true" :width="60"></grid-column>
-              <grid-column field="Nomb_Vend" :title="'Nomb. Vend.'" :filterable-multi="true"  :locked="true" :width="200"></grid-column>
-              <grid-column field="Fecha_Emi" title="Fecha Emisión" :locked="true" :hidden="true" :width="120"></grid-column>
-              <grid-column title="Fecha Emisión" template="#: kendo.toString(kendo.parseDate(Fecha_Emi, 'yyyy-MM-dd'), 'dd/MM/yyyy') #" :locked="true" :width="120"></grid-column>
+              <grid-column field="Nomb_Vend" :title="'Nomb. Vend.'" :filterable-multi="true" :locked="true" :width="200"></grid-column>
+              <grid-column field="Fecha_Emi" title="Fecha Emisión" template="#: kendo.toString(kendo.parseDate(Fecha_Emi, 'yyyy-MM-dd'), 'dd/MM/yyyy') #" :locked="true" :width="120"></grid-column>
               <grid-column field="Cod_Client" :title="'Cod. Clientes'" :locked="true" :width="80"></grid-column>
               <grid-column field="Nomb_Client" :title="'Nomb. Clientes'" :locked="true" :width="200"></grid-column>
               <grid-column field="Tipo_NP" :title="'Tipo NP'" :locked="true" :width="80"></grid-column>
@@ -100,6 +102,7 @@
     <script>
     import $ from 'jquery'
     import store from "../store";
+    import JSZip from 'jszip'
     import '@progress/kendo-ui'
     import '@progress/kendo-ui/js/messages/kendo.messages.es-AR'
     import '@progress/kendo-ui/js/cultures/kendo.culture.es-AR'
@@ -140,6 +143,9 @@
                     Fech_Prob_entr_Prov: {type: 'datetime'}
                 }
              }
+      },
+      created: function(){
+        window.JSZip = JSZip;
       },
       computed: {
         UrlApiBase(){
@@ -191,6 +197,7 @@
                             '<a class="k-pager-refresh k-link k-button play" title="Ralizar consulta" style="margin-right:5px"><span class="k-icon k-i-play"></span></a>' +
                             '<a class="k-pager-refresh k-link k-button filter-clear" title="Limpiar filtro" style="margin-right:5px"><span class="k-icon k-i-filter-clear"></span></a>'+
                             '<a class="k-pager-refresh k-link k-button" title="Nueva consulta" onClick="window.location.reload();"><span class="k-icon k-i-file"></span></a>' +
+                            '<a class="k-pager-refresh k-link k-button k-button-icontext k-grid-excel" style="margin-left:5px"><span class="k-icon k-i-excel"></span></a>' +
                             '<a class="k-pager-refresh k-link k-button refresh" title="Actualizar" style="margin-left:5px"><span class="k-icon k-i-reload"></span></a>' +
                         '</div>' +
                     '</form>';

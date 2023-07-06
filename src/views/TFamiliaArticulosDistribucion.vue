@@ -17,24 +17,23 @@
        </div>
       </div>
       
-      <datasource ref="remoteDataSourceProductosDistribucion"
-        :data="ProductosParaDistribucion"
-        :transport-read="readData"
-        :transport-update="updateData"
-        :transport-destroy="destroyData"
-        :transport-create="createData"
-        :transport-parameter-map="parameterMap"
-        :schema-model-id="'id'"
-        :schema-model-fields="fields"
-        :batch="true"
-        :page-size='100'
-        @error="onError"
-        @requestend="requestEnd">
+      <datasource ref="remoteDataSourceFamiliaArticulosDistribucion"
+                        :transport-read="readData"
+                        :transport-update="updateData"
+                        :transport-destroy="destroyData"
+                        :transport-create="createData"
+                        :transport-parameter-map="parameterMap"
+                        :schema-model-id="'id'"
+                        :schema-model-fields="fields"
+                        :batch="true"
+                        :page-size='100'
+                        @error="onError"
+                        @requestend="requestEnd"
+                        >
       </datasource>
-
       <grid ref="grid"
                   :height="'100vh'"
-                  :data-source-ref="'remoteDataSourceProductosDistribucion'"
+                  :data-source-ref="'remoteDataSourceFamiliaArticulosDistribucion'"
                   :navigatable="true"
                   :filterable="true"
                   :pageable='true'
@@ -44,10 +43,11 @@
                   :editable="'inline'"
                   :toolbar="['create']">
             <grid-column :field="'id'" :title="'Id'" :hidden="true"></grid-column>
-            <grid-column :field="'Codigo_producto'" :title="'Código'" :width="200"></grid-column>
-            <grid-column :field="'Nombre_producto'" :title="'Nombre Producto'" :width="500"></grid-column>
-            <grid-column :field="'Orden_producto'" :title="'Nro. Orden'"></grid-column>
-            <grid-column :field="'Familia_producto'" :title="'Grupo familia'" :editor="FamiliaDropDownEditor" :filterable-multi="true"></grid-column>
+            <grid-column :field="'cod_familia_art'" :title="'Código Familia Art.'" :width="100"></grid-column>
+            <grid-column :field="'nombre_familia_art'" :title="'Nombre Familia Art.'" :width="300" :filterable-multi="true"></grid-column>
+            <grid-column :field="'nro_orden_familia'" :title="'Nro. Orden de la familia'"></grid-column>
+            <grid-column :field="'cod_set_art'" :title="'Código Set de la familia'" :editor="CodSetFamiliaDropDownEditor"></grid-column>
+            <grid-column :field="'nombre_set_art'" :title="'Set de la familia'" :editor="SetFamiliaDropDownEditor" :filterable-multi="true"></grid-column>
             <grid-column :command="['edit','destroy']" :title="'&nbsp;'"></grid-column>
       </grid>
     </div>
@@ -67,7 +67,7 @@
     import { directive as fullscreen } from 'vue-fullscreen'
     
     export default {
-      name: 'ProductospDistribucion',
+      name: 'FamiliaArticulosDistribuciones',
       directives: {
         fullscreen,
       },
@@ -82,31 +82,23 @@
                 fullscreen: false,
                 teleport: true,
                 pageOnly: true,
-                title: 'Tabla: Productos para Distribución',
+                title: 'Tabla: Familia de Articulo para Distribución',
                 fields: {
                     id: { editable: false, nullable: true},
-                    Codigo_producto: { type: 'string'},
-                    Nombre_producto: { type: 'string'},
-                    Orden_producto: {type: 'number'},
-                    Familia_producto: {type: 'string', defaultValue: 'CHAPAS LISAS PREPINTADAS'}
+                    cod_familia_art: { type: 'string'},
+                    nombre_familia_art: { type: 'string'},
+                    nro_orden_familia: {type: 'number'},
+                    cod_set_art: {type: 'string', defaultValue: '0018'},
+                    nombre_set_art: {type: 'string', defaultValue: 'SET TECHOS'}
                 },
-                fields2: {
-                  ARVE_RUBRO_VENTA: {type: 'string'},
-                  RUBV_NOMBRE: {type: 'string'},
-                  ARTS_ARTICULO: {type: 'string'},
-                  ARTS_ARTICULO_EMP: {type: 'string'}
-                }
              }
         },
       computed: {
         UrlApiBase(){
-              return `${process.env.VUE_APP_API_BASE}/productospdistribucion/`
+              return `${process.env.VUE_APP_API_BASE}/familiaartdistribucion/`
         },
-        UrlApiBaseFamiliaArt(){
-            return `${process.env.VUE_APP_API_BASE}/familiaartdistribucion`
-        },
-        UrlApiBaseDatosDesdePlataforma(){
-          return `${process.env.VUE_APP_API_BASE}/vnsindtofinanc`
+        UrlApiBaseSetArt(){
+            return `${process.env.VUE_APP_API_BASE}/setsdeventas`
         },
         token(){
           return store.state.token
@@ -154,7 +146,7 @@
               error: function(data){
                 e.error(data)
               },
-              data: JSON.stringify(e.data.models[0],["Codigo_producto", "Nombre_producto", "Orden_producto", "Familia_producto"]),
+              data: JSON.stringify(e.data.models[0],["cod_familia_art", "nombre_familia_art", "nro_orden_familia", "cod_set_art", "nombre_set_art"]),
               dataType: 'json',
               contentType: 'application/json',
             })
@@ -197,7 +189,7 @@
             },
             dataType: 'json',
             contentType: 'application/json',
-            data: JSON.stringify(e.data.models[0],["Codigo_producto", "Nombre_producto", "Orden_producto", "Familia_producto"]),
+            data: JSON.stringify(e.data.models[0],["cod_familia_art", "nombre_familia_art", "nro_orden_familia", "cod_set_art", "nombre_set_art"]),
           })
         },
         onError: function(e){
@@ -211,7 +203,7 @@
               /* The result can be observed in the DevTools(F12) console of the browser. */
               //console.log("request started"); 
             //},
-        requestEnd: function(e) {
+            requestEnd: function(e) {
                 var response = e.response;
                 var type = e.type;
                 /* The result can be observed in the DevTools(F12) console of the browser. */
@@ -227,32 +219,52 @@
                 if (type == undefined) {
                   e.sender.read();
                 }
-        },
-        parameterMap: function(options, operation) {
+            },
+            parameterMap: function(options, operation) {
                 if (operation !== 'read' && options.models) {
                     return JSON.stringify(options.models)
                 }
-        },
-        FamiliaDropDownEditor: function(container, options) {
-                kendo.jQuery('<input name="'+ options.field +'" />').appendTo(container).kendoDropDownList({
-                    autoBind: true,
-                    dataTextField: "nombre_familia_art",
-                    dataValueField: "nombre_familia_art",
+            },
+            SetFamiliaDropDownEditor: function(container, options) {
+                kendo.jQuery('<input required name="'+ options.field +'" />').appendTo(container).kendoDropDownList({
+                    autoBind: false,
+                    dataTextField: "nombre_set_art",
+                    dataValueField: "nombre_set_art",
                     dataSource: {
                         transport:{
                             read:{
                                 contentType: 'application/json',
                                 dataType: 'json',
                                 type: 'GET',
-                                url: this.UrlApiBaseFamiliaArt,
+                                url: this.UrlApiBaseSetArt,
                                 headers: {
-                                  'Authorization': 'Bearer ' + store.state.token
+                                'Authorization': 'Bearer ' + store.state.token
                                 }
                             }
                         }
                     }
                 })
-        }
+            },
+            CodSetFamiliaDropDownEditor: function(container, options) {
+                kendo.jQuery('<input required name="'+ options.field +'" />').appendTo(container).kendoDropDownList({
+                    autoBind: false,
+                    dataTextField: "nombre_set_art",
+                    dataValueField: "cod_set_art",
+                    dataSource: {
+                        transport:{
+                            read:{
+                                contentType: 'application/json',
+                                dataType: 'json',
+                                type: 'GET',
+                                url: this.UrlApiBaseSetArt,
+                                headers: {
+                                'Authorization': 'Bearer ' + store.state.token
+                                }
+                            }
+                        }
+                    }
+                })
+            }
       }
     }
     </script>

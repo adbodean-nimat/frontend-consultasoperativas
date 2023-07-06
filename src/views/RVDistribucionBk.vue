@@ -48,7 +48,6 @@
                           :transport-read="readData"
                           :schema-model-fields="schemaModelFields"
                           :group="groupDefinicion"
-                          :sort="sortDefinicion"
                           @error="onError"
                           @requestend="requestEnd"
                           >
@@ -103,15 +102,16 @@
               <grid-column title="Sin Modif" :template="SinModif" :hidden="true" ></grid-column>
               <grid-column title="Verfi sin Modif" :template="VeriSinModif" :hidden="true" ></grid-column>
 
-              <grid-column field="ARVE_RUBRO_VENTA" :hidden="true" :width="50"></grid-column>
-              <grid-column field="RUBV_NOMBRE" :hidden="true" :width="50" :group-header-template="'#= value #'"></grid-column>
-              <grid-column field="RUBV_ORDEN" :hidden="true" :group-header-template="groupHeaderTemplateRUBVNOMBRE" :width="100"></grid-column>
+              <grid-column field="ARVE_RUBRO_VENTA" :hidden="true"></grid-column>
+              <grid-column field="RUBV_NOMBRE" :hidden="true" :group-header-template="groupHeaderRUBV_NOMBRE"></grid-column>
               <grid-column :template="templateRUBV_NOMBRE" :hidden="true"></grid-column>
               <grid-column field="cod_set_art" :hidden="true"></grid-column>
               <grid-column field="nombre_set_art" :hidden="true"></grid-column>
-              <grid-column field="cod_familia_art" :hidden="true"></grid-column>
-              <grid-column field="nombre_familia_art" title="Familia Art." :hidden="true" :group-header-template="'#= value #'"></grid-column>
-              <grid-column field="nro_orden_familia" title="Nro. Orden" :hidden="true" :group-header-template="groupHeaderTemplateFamilia"></grid-column>
+              <grid-column field="cod_fami_art" :hidden="true"></grid-column>
+              <grid-column field="nombre_fami_art" title="Familia Art." :hidden="true" :group-header-template="groupHeaderTemplateNombreArt"></grid-column>
+              <grid-column field="nro_orden_de_la_fami" title="Nro. Orden" :hidden="true" :group-header-template="groupHeaderTemplateNroOrden"></grid-column>
+              <grid-column title="Orden más nombre de la familia" :template="OrdenMasNombre" :width="100" :hidden="true"></grid-column>
+              <grid-column field="orden_art_familia" title="Orden Art." :hidden="true"></grid-column>
               <grid-column field="ARTS_ARTICULO" :hidden="true"></grid-column>
               <grid-column field="ARVE_BLOQUEO_VENTA" :hidden="true"></grid-column>
               <grid-column field="ARTS_FACTOR_HOMSTO" :hidden="true"></grid-column>
@@ -167,48 +167,28 @@
                 pageOnly: true,
                 title: 'Lista de precios - Distribución',
                 dataSource: ['remoteDataSourceDistribucion'],
-                groupDefinicion:[
-                  { field: 'RUBV_ORDEN'},
-                  { field: 'RUBV_NOMBRE'},
-                  { field: 'nro_orden_familia'},
-                  { field: 'nombre_familia_art'}
-                ],
-                sortDefinicion:[
-                  
-                ],
                 schemaModelFields: {
-                  ARVE_RUBRO_VENTA: {type: 'string'},
-                  RUBV_NOMBRE: {type: 'string'},
-                  RUBV_ORDEN: {type: 'number'},
-                  cod_familia_art: {type: 'string'},
-                  nombre_familia_art: {type: 'string'},
-                  nro_orden_familia: {type: 'number'},
-                  cod_set_art: {type: 'string'},
-                  nombre_set_art: {type: 'string'},
-                  ORDEN_ARTICULO: {type: 'number'},
-                  ARTS_ARTICULO: {type: 'number'},
-                  ARTS_ARTICULO_EMP: {type: 'string'},
-                  ARTS_NOMBRE: {type: 'string'},
-                  ARTS_UNIMED_STOCK: {type: 'string'},
-                  ARVE_BLOQUEO_VENTA: {type: 'number'},
-                  ARTS_FACTOR_HOMSTO: {type: 'number'},
-                  COD_CTE: {type: 'string'},
-                  ARTS_CLASIF_1: {type: 'string'},
-                  ARTS_CLASIF_8: {type: 'string'},
-                  CIMP_TASA: {type: 'number'},
-                  ARTS_PESO_EMB_UMS: {type: 'number'},
-                  DVC1_LISTA_PRECVTA: {type: 'number'},
-                  DCA1_POR_DESCUENTO: {type: 'number'},
-                  ARPV_PRECIO_VTA: {type: 'number'},
-                  ARPV_MONEDA: {type: 'string'},
-                  ARPV_FECHA_ULT_ACT: {type: 'datetime'},
-                  COTI_COTIZACION: {type: 'string'},
-                  COTI_FECHA: {type: 'datetime'},
-                  Fecha_cambio_precios_hasta: {type: 'datetime'},
-                  PRECIO_LISTA_CON_IVA: {type: 'number'},
-                  Fecha_Ult_Modif: {type: 'datetime'},
-                  Delay_cambio_precio: {type: 'string'}
-                }
+                    orden_art_familia: {type: 'number'},
+                    cod_set_art: {type: 'string'},
+                    Fecha_cambio_precios_hasta: {type: 'datetime'},
+                    Fecha_Ult_Modif: {type: 'datetime'},
+                    nro_orden_de_la_fami: {type: 'number'},
+                    ARPV_PRECIO_VTA: {type: 'string'},
+                    DCA1_POR_DESCUENTO: {type: 'number'}
+                },
+                groupDefinicion:[
+                    {
+                        field: 'RUBV_NOMBRE'
+                    },
+                    {
+                        field: 'nro_orden_de_la_fami',
+                        dir: 'asc'
+                    },
+                    {
+                        field: 'nombre_fami_art'
+                    }
+                ],
+                
              }
       },
       created: function(){
@@ -217,9 +197,6 @@
       computed: {
         UrlApiBase(){
           return `${process.env.VUE_APP_API_BASE}/lpvndistribucion`
-        },
-        UrlApiBaseRubros(){
-          return `${process.env.VUE_APP_API_BASE}/rubrosventas`
         },
         options() {
           return {
@@ -233,6 +210,18 @@
         }
       },
       methods: {
+        groupHeaderRUBV_NOMBRE: function(e){
+            var groupTemplate = kendo.template('#=value#');
+            return groupTemplate(e)
+        },
+        groupHeaderTemplateNroOrden: function(e){
+            var groupTemplate = kendo.template('');
+            return groupTemplate(e)
+        },
+        groupHeaderTemplateNombreArt: function(e){
+            var groupTemplate = kendo.template('#=value#');
+            return groupTemplate(e)
+        },
         readData: function (e) {
               // console.log(store.state.token)
               var token = store.state.token
@@ -258,7 +247,7 @@
             var dataItems = [];
             var newRows = [];
             var dataItem;
-            console.log(dataItems)
+
             // Crear elemento para generar plantillas
             var elem = document.createElement('div');
             
@@ -277,17 +266,16 @@
             }
 
             for(var i=0; i< data.length; i++){
+                //dataItems.push(data[i]);
                 if(data[i].items.length){
                   for(var j=0; j< data[i].items.length; j++){
+                    //dataItems.push(data[i].items[j]);
                     if(data[i].items[j].items.length){
                       for(var d=0; d< data[i].items[j].items.length; d++){
+                        //dataItems.push(data[i].items[j].items[d])
                         if(data[i].items[j].items[d].items.length){
                           for(var e=0;e< data[i].items[j].items[d].items.length; e++){
-                            if(data[i].items[j].items[d].items[e].items.length){
-                              for(var f=0; f< data[i].items[j].items[d].items[e].items.length; f++){
-                                dataItems.push(data[i].items[j].items[d].items[e].items[f])
-                              }
-                            }
+                            dataItems.push(data[i].items[j].items[d].items[e])
                           }
                         }
                       }
@@ -297,31 +285,24 @@
             }
 
             for (var ri = 0; ri < rows.length; ri++) {
-                  var row = rows[ri];              
-
+                  var row = rows[ri];
                   if (row.type !== "group-header") {
                     newRows.push(row)
-                  }  
-
-                  if (row.type !== "data"){
-                    for (var ci = 0; ci < row.cells.length; ci++) {
-                      row.cells[ci].fontSize = 18;
-                      row.cells[ci].bold = true;
-                    }
                   }
             }
+            
+            // e.workbook.sheets[0].rows = newRows
             
             //////////////////////////////////////////////////////////////////////////////////////////////////////
 
             // Recorra todas las filas exportadas.
             for (var i = 1; i < newRows.length; i++) {
                 var row = newRows[i];
-                
                 // Recorra las plantillas de columna y aplíquelas para cada fila en la posición de columna almacenada
                 if(row.type !== "group-header"){
                   var iRow = row
+                  //console.log(iRow)  
                 }
-                
                 // Obtenga el elemento de datos correspondiente a la fila actual.
                 var dataItem = dataItems[i - 1];
                 
@@ -331,9 +312,11 @@
                   // Genere el contenido de la plantilla para la celda actual.
                   elem.innerHTML = columnTemplate.template(dataItem);
                   
-                  if (row.cells[columnTemplate.cellIndex + 4] != undefined)                
+                  //var groupOffset = e.sender.dataSource.group().length;
+                  
+                  if (row.cells[columnTemplate.cellIndex + 3] != undefined)                
                   // Envíe el contenido de texto de la celda con plantilla a la celda exportada.
-                  row.cells[columnTemplate.cellIndex + 4].value = elem.textContent || elem.innerText || "";
+                  row.cells[columnTemplate.cellIndex + 3].value = elem.textContent || elem.innerText || "";
                 }
             }
           },
@@ -383,6 +366,8 @@
           if(sumVeriMod > 0){
             modificados.innerText = 'Sobre ' + idemArtsArticuloEmp.length + ' artículos de esta lista de precios, se identifican ' + sumVeriMod + ' modificados entre el ' + kendo.toString(valueFechaCambiosPrecios, "dd-MM-yyyy") + ' y el ' + kendo.toString(fechaHasta, "dd-MM-yyyy")
           }
+
+          
         },
         pdfTemplate: function(e){
           var templateItem = kendo.template(kendo.jQuery('#pdfTemplate').html())
@@ -397,6 +382,7 @@
             var type = e.type;
         },
         dataBound: function(){
+
           /* var idemRubVNombre = document.querySelector("span#rubvnombre").innerText
           var idRubVNombre = document.getElementById("rubrovnombre")
           var ValRubVNombre = idRubVNombre.innerText = kendo.toString(idemRubVNombre) */
@@ -432,6 +418,12 @@
             initialValue
           );
 
+        },
+        OrdenMasNombre: function(item){
+            var NroOrden = item.nro_orden_de_la_fami
+            var NombreFamilia = item.nombre_fami_art
+            var OrdenMasNombre = NroOrden + ' - ' + NombreFamilia
+            return '<span id="ordennombre">' + kendo.toString(OrdenMasNombre) + '</span>'
         },
         CambiosPrecioDesde: function(){
           kendo.culture("es-AR");
@@ -553,12 +545,6 @@
             templateRUBV_NOMBRE: function(item){
               var templateRUBVNOMBRE = '<span id="rubvnombre">'+ item.RUBV_NOMBRE + '</span>'
               return templateRUBVNOMBRE
-            },
-            groupHeaderTemplateRUBVNOMBRE: function(){
-              return '<span></span>'
-            },
-            groupHeaderTemplateFamilia: function(){
-              return ''
             }
           },
           mounted: function(){
@@ -582,6 +568,25 @@
               min: 0,
               max: 20
             })
+
+            /* dropDownElement2.kendoDropDownList({
+              dataTextField: "RUBV_NOMBRE",
+              dataValueField: "RUBV_RUBRO_VENTA",
+              autoBind: true,
+              dataSource: {
+                transport:{
+                  read: {
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    type: 'GET',
+                    url: `${process.env.VUE_APP_API_BASE}/rubrovta`,
+                    headers: {
+                      'Authorization': 'Bearer ' + store.state.token
+                    }
+                  }
+                }
+              }
+            }) */
 
             dropDownElement.kendoDropDownList({
               dataTextField: "CLC1_CLASIF_1",
@@ -620,6 +625,7 @@
               var filter = { logic: "and", filters: [] };
               
               filter.filters.push(
+                    /* { field: "ARVE_RUBRO_VENTA", operator: "contains", value: RubroVta }, */
                     { field: "COD_CTE", operator: "contains", value: PerfilComercial }
                     );
               if (DtoFinan == null){
@@ -631,7 +637,7 @@
                 classFechaDesde.classList.remove('is-invalid');
                 classDtoFinan.classList.remove('is-invalid');
                 grid.dataSource.filter(filter);
-                grid.dataSource.sort({field: "ORDEN_ARTICULO", dir: "asc"});
+                grid.dataSource.sort({field: "orden_art_familia", dir: "asc"});
               }
             });
             toolbarElement.on("click", ".filter-clear", function(){

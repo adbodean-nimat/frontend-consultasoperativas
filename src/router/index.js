@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Tablero from '../views/Tablero.vue'
+import ConsultasOperativas from '../views/ConsultasOperativas.vue'
+import Cartelerias from '../views/Cartelerias.vue'
 import ControlAltaClientes from '../views/ControlAltaClientes.vue'
 import ListadeClientes from '../views/ListadeClientes.vue'
 import DeposANoConsiderar from '../views/TDeposaNoConsiderar.vue'
@@ -17,6 +19,7 @@ import ListaRubrosVtas from "../views/RubrosVentas.vue"
 import ListaSetsVtas from "../views/SetsVentas.vue"
 import SetsDeVentas from "../views/TSetsVentas.vue"
 import FamiliaDeArticulos from "../views/TFamiliaArticulos.vue"
+import FamiliaDeArticulosDistribucion from "../views/TFamiliaArticulosDistribucion.vue"
 import VincularArticuloAFamilia from "../views/TVincularArticuloAFamilia.vue"
 import ConstSecoArmadoConfig1 from "../views/TCSArmadoConfig1.vue"
 import ConstSecoArmadoConfig2 from "../views/TCSArmadoConfig2.vue"
@@ -28,6 +31,12 @@ import ListaPrecioCostoDeReposicion from "../views/ListaPrecioCostoReposicion.vu
 import ListaPrecioVentaAlPublico from "../views/ListaPrecioVentaAlPublico.vue"
 import ListaDistribucion from "../views/RVDistribucion.vue"
 import ProductosParaDistribucion from "../views/TProductosDistribucion.vue"
+import CartelCombo from "../views/CartelxCombo.vue"
+import CartelM2 from "../views/CartelxM2.vue"
+import CartelM2Saldo from "../views/CartelxM2Saldo.vue"
+import CartelArticulo from "../views/CartelxCodArt.vue"
+import CartelManual from "../views/CartelxManual.vue"
+import RubrosVentas from "../views/TRubrosVentas.vue"
 
 const routes = [
   {
@@ -53,6 +62,97 @@ const routes = [
       metaTags: [
         {
           name: 'Tablero'
+        }      ]
+    }
+  },
+  {
+    path: '/consultas',
+    name: 'Consultas Operativas',
+    component: ConsultasOperativas,
+    props: true,
+    meta: {
+      title: 'Consultas Operativas',
+      metaTags: [
+        {
+          name: 'Consultas Operativas'
+        }      ]
+    }
+  },
+  {
+    path: '/cartelerias',
+    name: 'Cartelería',
+    component: Cartelerias,
+    props: true,
+    meta: {
+      title: 'Cartelería',
+      metaTags: [
+        {
+          name: 'Cartelería'
+        }      ]
+    }
+  },
+  {
+    path: '/cartelerias/combo',
+    name: 'Cartel Combo',
+    component: CartelCombo,
+    props: true,
+    meta: {
+      title: 'Cartel Combo',
+      metaTags: [
+        {
+          name: 'Cartel Combo'
+        }      ]
+    }
+  },
+  {
+    path: '/cartelerias/m2',
+    name: 'Cartel M2',
+    component: CartelM2,
+    props: true,
+    meta: {
+      title: 'Cartel M2',
+      metaTags: [
+        {
+          name: 'Cartel M2'
+        }      ]
+    }
+  },
+  {
+    path: '/cartelerias/m2saldo',
+    name: 'Cartel M2 Saldo',
+    component: CartelM2Saldo,
+    props: true,
+    meta: {
+      title: 'Cartel M2 Saldo',
+      metaTags: [
+        {
+          name: 'Cartel M2 Saldo'
+        }      ]
+    }
+  },
+  {
+    path: '/cartelerias/articulo',
+    name: 'Cartel Articulo',
+    component: CartelArticulo,
+    props: true,
+    meta: {
+      title: 'Cartel Articulo',
+      metaTags: [
+        {
+          name: 'Cartel Articulo'
+        }      ]
+    }
+  },
+  {
+    path: '/cartelerias/manual',
+    name: 'Cartel Manual',
+    component: CartelManual,
+    props: true,
+    meta: {
+      title: 'Cartel Manual',
+      metaTags: [
+        {
+          name: 'Cartel Manual'
         }      ]
     }
   },
@@ -248,6 +348,32 @@ const routes = [
       metaTags: [
         {
           name: 'Tabla: Productos para Distribucion'
+        }      ]
+    }
+  },
+  {
+    path: '/tabla/rubrosventas',
+    name: 'Tabla: Rubros Ventas',
+    component: RubrosVentas,
+    props: true,
+    meta: {
+      title: 'Tabla: Rubros Ventas',
+      metaTags: [
+        {
+          name: 'Tabla: Rubros Ventas'
+        }      ]
+    }
+  },
+  {
+    path: '/tabla/familiaarticulosdistribucion',
+    name: 'Tabla: Familia de articulos para Distribución',
+    component: FamiliaDeArticulosDistribucion,
+    props: true,
+    meta: {
+      title: 'Tabla: Familia de articulos para Distribución',
+      metaTags: [
+        {
+          name: 'Tabla: Familia de articulos para Distribución'
         }      ]
     }
   },

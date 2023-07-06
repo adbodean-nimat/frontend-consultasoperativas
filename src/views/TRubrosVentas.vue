@@ -17,37 +17,35 @@
        </div>
       </div>
       
-      <datasource ref="remoteDataSourceProductosDistribucion"
-        :data="ProductosParaDistribucion"
-        :transport-read="readData"
-        :transport-update="updateData"
-        :transport-destroy="destroyData"
-        :transport-create="createData"
-        :transport-parameter-map="parameterMap"
-        :schema-model-id="'id'"
-        :schema-model-fields="fields"
-        :batch="true"
-        :page-size='100'
-        @error="onError"
-        @requestend="requestEnd">
+      <datasource ref="remoteDataSourceRubrosVentas"
+                        :transport-read="readData"
+                        :transport-update="updateData"
+                        :transport-destroy="destroyData"
+                        :transport-create="createData"
+                        :transport-parameter-map="parameterMap"
+                        :schema-model-id="'id'"
+                        :schema-model-fields="fields"
+                        :batch="true"
+                        @error="onError"
+                        @requestend="requestEnd"
+                        >
       </datasource>
-
       <grid ref="grid"
                   :height="'100vh'"
-                  :data-source-ref="'remoteDataSourceProductosDistribucion'"
+                  :data-source-ref="'remoteDataSourceRubrosVentas'"
                   :navigatable="true"
                   :filterable="true"
-                  :pageable='true'
+                  :pageable='false'
+                  :sorteable="true"
                   :sortable-mode="'multiple'"
                   :sortable-allow-unsort="true"
                   :sortable-show-indexes="true"
                   :editable="'inline'"
                   :toolbar="['create']">
             <grid-column :field="'id'" :title="'Id'" :hidden="true"></grid-column>
-            <grid-column :field="'Codigo_producto'" :title="'Código'" :width="200"></grid-column>
-            <grid-column :field="'Nombre_producto'" :title="'Nombre Producto'" :width="500"></grid-column>
-            <grid-column :field="'Orden_producto'" :title="'Nro. Orden'"></grid-column>
-            <grid-column :field="'Familia_producto'" :title="'Grupo familia'" :editor="FamiliaDropDownEditor" :filterable-multi="true"></grid-column>
+            <grid-column :field="'rubros_id'" :title="'Código'" :width="150"></grid-column>
+            <grid-column :field="'rubros_nombres'" :title="'Nombre'"></grid-column>
+            <grid-column :field="'orden_rubros'" :title="'Nro. Orden'"></grid-column>
             <grid-column :command="['edit','destroy']" :title="'&nbsp;'"></grid-column>
       </grid>
     </div>
@@ -67,7 +65,7 @@
     import { directive as fullscreen } from 'vue-fullscreen'
     
     export default {
-      name: 'ProductospDistribucion',
+      name: 'RubrosVentas',
       directives: {
         fullscreen,
       },
@@ -82,31 +80,18 @@
                 fullscreen: false,
                 teleport: true,
                 pageOnly: true,
-                title: 'Tabla: Productos para Distribución',
+                title: 'Tabla: Rubros Ventas',
                 fields: {
                     id: { editable: false, nullable: true},
-                    Codigo_producto: { type: 'string'},
-                    Nombre_producto: { type: 'string'},
-                    Orden_producto: {type: 'number'},
-                    Familia_producto: {type: 'string', defaultValue: 'CHAPAS LISAS PREPINTADAS'}
+                    rubros_id: { type: 'string'},
+                    rubros_nombres: { type: 'string'},
+                    orden_rubros: { type: 'number'},
                 },
-                fields2: {
-                  ARVE_RUBRO_VENTA: {type: 'string'},
-                  RUBV_NOMBRE: {type: 'string'},
-                  ARTS_ARTICULO: {type: 'string'},
-                  ARTS_ARTICULO_EMP: {type: 'string'}
-                }
              }
         },
       computed: {
         UrlApiBase(){
-              return `${process.env.VUE_APP_API_BASE}/productospdistribucion/`
-        },
-        UrlApiBaseFamiliaArt(){
-            return `${process.env.VUE_APP_API_BASE}/familiaartdistribucion`
-        },
-        UrlApiBaseDatosDesdePlataforma(){
-          return `${process.env.VUE_APP_API_BASE}/vnsindtofinanc`
+              return `${process.env.VUE_APP_API_BASE}/rubrosventas/`
         },
         token(){
           return store.state.token
@@ -137,8 +122,8 @@
                 },
                 type: 'GET'
               })
-        },
-        updateData: function(e) {
+          },
+          updateData: function(e) {
             var tkn = this.token
             var urlApi = this.UrlApiBase
             $.ajax({
@@ -154,7 +139,7 @@
               error: function(data){
                 e.error(data)
               },
-              data: JSON.stringify(e.data.models[0],["Codigo_producto", "Nombre_producto", "Orden_producto", "Familia_producto"]),
+              data: JSON.stringify(e.data.models[0],["rubros_id", "rubros_nombres", "orden_rubros"]),
               dataType: 'json',
               contentType: 'application/json',
             })
@@ -197,10 +182,10 @@
             },
             dataType: 'json',
             contentType: 'application/json',
-            data: JSON.stringify(e.data.models[0],["Codigo_producto", "Nombre_producto", "Orden_producto", "Familia_producto"]),
+            data:  JSON.stringify(e.data.models[0],["rubros_id", "rubros_nombres", "orden_rubros"]),
           })
         },
-        onError: function(e){
+            onError: function(e){
               console.log(e.status); // displays "error"
               console.log(e.error);
             },
@@ -211,7 +196,7 @@
               /* The result can be observed in the DevTools(F12) console of the browser. */
               //console.log("request started"); 
             //},
-        requestEnd: function(e) {
+            requestEnd: function(e) {
                 var response = e.response;
                 var type = e.type;
                 /* The result can be observed in the DevTools(F12) console of the browser. */
@@ -227,32 +212,12 @@
                 if (type == undefined) {
                   e.sender.read();
                 }
-        },
-        parameterMap: function(options, operation) {
+            },
+            parameterMap: function(options, operation) {
                 if (operation !== 'read' && options.models) {
                     return JSON.stringify(options.models)
                 }
-        },
-        FamiliaDropDownEditor: function(container, options) {
-                kendo.jQuery('<input name="'+ options.field +'" />').appendTo(container).kendoDropDownList({
-                    autoBind: true,
-                    dataTextField: "nombre_familia_art",
-                    dataValueField: "nombre_familia_art",
-                    dataSource: {
-                        transport:{
-                            read:{
-                                contentType: 'application/json',
-                                dataType: 'json',
-                                type: 'GET',
-                                url: this.UrlApiBaseFamiliaArt,
-                                headers: {
-                                  'Authorization': 'Bearer ' + store.state.token
-                                }
-                            }
-                        }
-                    }
-                })
-        }
+            },
       }
     }
     </script>
