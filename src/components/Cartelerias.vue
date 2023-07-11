@@ -109,7 +109,7 @@
                         </div>
                     </div>
                     <div class="col col-h">
-                    <router-link to="">
+                    <router-link to="/cartelerias/manual">
                         <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                             <div class="column d-flex flex-row justify-content-between p-3 rounded text-secondary link-success">
                                 <div class="d-flex justify-content-center align-items-center flex-shrink-0 icon rounded">

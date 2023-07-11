@@ -231,6 +231,7 @@
                         itemsCodArts.push(data[i].ARTS_ARTICULO_EMP)
                       }
                     }
+                    var itemPrecioCdoSinRedond = data[0].Pre_M2_UN_Cdo_con_IVA_L1
                     var itemPrecioLista = data[0].Pre_M2_UN_Lista_con_IVA_L1
                     var itemPrecioCdo = data[0].Pre_M2_UN_Cdo_con_IVA_L1_Redond
                     var theDate = new Date();
@@ -270,7 +271,7 @@
 
                       '<div class="row pb-2 mb-4 border-bottom border-success border-3">' +
                           '<div class="col text-start">' +
-                              '<span><small>Precio lista del M2: </small></span><span style="font-size: 20px;"><strong>'+ kendo.toString(itemPrecioLista, "c2") +'</strong></span>' +
+                              '<span><small>Precio del M2: </small></span><span style="font-size: 20px;"><strong>'+ kendo.toString(itemPrecioCdoSinRedond, "c2") +'</strong></span>' +
                           '</div>' +
                           '<div class="col text-end">' +
                               '<span><small>Fecha de emisión: '+ kendo.toString(theDate, "dd/MM/yyyy") +'</small></span>' +
@@ -318,7 +319,7 @@
 
                       '<div class="row pb-2 mb-4 border-bottom border-success border-3">' +
                           '<div class="col text-start">' +
-                              '<span><small>Precio lista del M2: </small></span><span style="font-size: 20px;"><strong>'+ kendo.toString(itemPrecioLista, "c2") +'</strong></span>' +
+                              '<span><small>Precio del M2: </small></span><span style="font-size: 20px;"><strong>'+ kendo.toString(itemPrecioCdoSinRedond, "c2") +'</strong></span>' +
                           '</div>' +
                           '<div class="col text-end">' +
                               '<span><small>Fecha de emisión: '+ kendo.toString(theDate, "dd/MM/yyyy") +'</small></span>' +

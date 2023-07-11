@@ -57,7 +57,7 @@
                             <span class="fs-6">LDC</span>
                         </div>
                     </div>
-                    <div v-if="IsAllow === 'cfernandez'||IsAllow === 'abodean'||IsAllow === 'avillasalte'" class="col col-h">
+                    <div class="col col-h">
                     <router-link to="/vblesentrnp">
                         <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                             <div class="column d-flex flex-row justify-content-between p-3 rounded text-secondary link-success">
@@ -83,7 +83,7 @@
                             <span class="fs-6">VENPG</span>
                         </div>
                     </div>
-                    <div v-if="IsAllow === 'cfernandez'||IsAllow === 'abodean'||IsAllow === 'avillasalte'" class="col col-h">
+                    <div class="col col-h">
                     <router-link to="/vblesentrnppr">
                         <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                             <div class="column d-flex flex-row justify-content-between p-3 rounded text-secondary link-success">
@@ -109,7 +109,7 @@
                             <span class="fs-6">VENPPR</span>
                         </div>
                     </div>
-                    <div v-if="IsAllow === 'ggarin'||IsAllow === 'abodean'||IsAllow === 'avillasalte'" class="col col-h">
+                    <div class="col col-h">
                     <router-link to="/listaprecioscostoreposicion">
                         <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                             <div class="column d-flex flex-row justify-content-between p-3 rounded text-secondary link-success">
