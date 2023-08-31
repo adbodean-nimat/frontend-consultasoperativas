@@ -35,11 +35,14 @@
       <grid ref="grid"
                   :height="'95vh'"
                   :data-source-ref="'remoteDataSourceLPBUI'"
-                  :filterable="true"
-                  :resizable="true"
-                  :pageable-page-sizes="[5, 10, 15, 20, 25, 50, 100]"
                   :navigatable="true"
+                  :filterable="true"
                   :pageable='true'
+                  :resizable="true"
+                  :reorderable="true"
+                  :sortable-mode="'multiple'"
+                  :sortable-allow-unsort="true"
+                  :sortable-show-indexes="true"
                   :editable="'inline'"
                   :toolbar="['create']">
             <grid-column :field="'id'" :title="'Id'" :hidden="true" :width="50"></grid-column>
@@ -47,7 +50,7 @@
             <grid-column :field="'arts_nombre'" :title="'Nombre Art'"></grid-column>
             <grid-column :field="'grupo_del_art'" :title="'Grupo del Art'" :filterable-multi="true" ></grid-column>
             <grid-column :field="'comentario'" :title="'Comentario'"></grid-column>
-            <grid-column :field="'nro_orden_art'" :title="'Nro. Orden Art'" :width="100"></grid-column>
+            <grid-column :field="'nro_orden_art'" :title="'Nro. Orden Art'" :width="100" :filterable-multi="true"></grid-column>
             <grid-column :command="['edit','destroy']" :title="'&nbsp;'"></grid-column>
       </grid>
     </div>
@@ -98,12 +101,12 @@
                     arts_nombre: { type: 'string'},
                     grupo_del_art: { type: 'string'},
                     comentario: { type: 'text'},
-                    nro_orden_art: { type: 'numeric', validation:{
+                    nro_orden_art: { type: 'number', validation:{
                       required: true,
                       numberonly: function(input) {
                         if(input.is("[name='nro_orden_art']") && input.val() != ""){
                           input.attr("data-numberonly-msg", "Debe tener números");
-                          return /^[0-9]$/.test(input.val());
+                          return /^-?(0|[1-9]\d*)$/.test(input.val());
                         }
                         return true;
                       }

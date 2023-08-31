@@ -33,7 +33,7 @@
               :groupable="false"
               :column-menu="true"
               :toolbar="toolbarTemplate"
-              :excel-file-name="'LP VN - Pisos y Revistimiento.xlsx'"
+              :excel-file-name="'LP VN - Pisos y Revestimiento.xlsx'"
               :excel-all-pages="true"
               :excel-filterable="false"
               :allow-copy="true"
@@ -96,7 +96,7 @@
                 fullscreen: false,
                 teleport: true,
                 pageOnly: true,
-                title: 'Lista de precios - Pisos y Revistimiento con Stock',
+                title: 'Lista de precios - Pisos y Revestimiento',
                 schemaModelFields: {
                     CA03_NOMBRE: {type: 'string'},
                     Tipología: {type: 'string'},

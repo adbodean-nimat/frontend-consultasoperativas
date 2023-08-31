@@ -9,7 +9,8 @@ import NPAConsiderar from '../views/TNPaConsiderar.vue'
 import DimensionesContenedores from '../views/TDimensionesContenedores.vue'
 import MovimientosContenedores from '../views/TMovimientosDeContenedores.vue'
 import ListaContenedores from '../views/Containers.vue'
-import ListaPyR from '../views/PisosyRevistimiento.vue'
+import ListaPyR from '../views/PisosyRevestimiento.vue'
+import ListaPyRConStock from '../views/PisosyRevestimientoCStock.vue'
 import ListaBUI from '../views/BreveUsoInterno.vue'
 import ListadePrecioBUI from '../views/TListadePrecioBUI.vue'
 import ListaConstSeco from "../views/ConstSeco.vue"
@@ -37,6 +38,11 @@ import CartelM2Saldo from "../views/CartelxM2Saldo.vue"
 import CartelArticulo from "../views/CartelxCodArt.vue"
 import CartelManual from "../views/CartelxManual.vue"
 import RubrosVentas from "../views/TRubrosVentas.vue"
+import WebNimat from "../views/WebNimat.vue"
+import CategoriasWeb from "../views/CategoriasWeb.vue"
+import ArticulosWeb from "../views/ArticulosWeb.vue"
+import DeposANoConsiderarParaStockFisico from "../views/TDepositoANoConsiderarParaStockFisico.vue"
+
 
 const routes = [
   {
@@ -157,6 +163,45 @@ const routes = [
     }
   },
   {
+    path: '/webnimat',
+    name: 'Web NIMAT',
+    component: WebNimat,
+    props: true,
+    meta: {
+      title: 'Web NIMAT',
+      metaTags: [
+        {
+          name: 'Web NIMAT'
+        }      ]
+    }
+  },
+  {
+    path: '/webnimat/categorias',
+    name: 'Categorias',
+    component: CategoriasWeb,
+    props: true,
+    meta: {
+      title: 'Web NIMAT - Categorias',
+      metaTags: [
+        {
+          name: 'Web NIMAT - Categorias'
+        }      ]
+    }
+  },
+  {
+    path: '/webnimat/articulos',
+    name: 'Articulos',
+    component: ArticulosWeb,
+    props: true,
+    meta: {
+      title: 'Web NIMAT - Articulos',
+      metaTags: [
+        {
+          name: 'Web NIMAT - Articulos'
+        }      ]
+    }
+  },
+  {
     path: '/controlaltaclientes',
     name: 'Control Alta Clientes',
     component: ControlAltaClientes,
@@ -205,6 +250,19 @@ const routes = [
       metaTags: [
         {
           name: 'Deposito a No Considerar'
+        }      ]
+    }
+  },
+  {
+    path: '/tabla/deposanoconsiderarparastockfisico',
+    name: 'Tabla: Deposito a No Considerar para Stock Físico',
+    component: DeposANoConsiderarParaStockFisico,
+    props: true,
+    meta: {
+      title: 'Deposito a No Considerar para Stock Físico',
+      metaTags: [
+        {
+          name: 'Deposito a No Considerar para Stock Físico'
         }      ]
     }
   },
@@ -391,9 +449,22 @@ const routes = [
     }
   },
   {
-    path: '/pisosyrevistimiento',
-    name: 'Lista de precio - Pisos y Revistimiento con Stock',
+    path: '/pisosyrevestimiento',
+    name: 'Lista de precio - Pisos y Revestimiento',
     component: ListaPyR,
+    props: true,
+    meta: {
+      title: 'Lista de precio - Pisos y Revestimiento',
+      metaTags: [
+        {
+          name: 'Lista de precio - Pisos y Revestimiento'
+        }      ]
+    }
+  },
+  {
+    path: '/pisosyrevestimientoconstock',
+    name: 'Lista de precio - Pisos y Revistimiento con Stock',
+    component: ListaPyRConStock,
     props: true,
     meta: {
       title: 'Lista de precio - Pisos y Revistimiento con Stock',

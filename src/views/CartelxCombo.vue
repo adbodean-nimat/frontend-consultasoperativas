@@ -248,14 +248,16 @@
                         itemsCodArts.push(data[i].ARTS_ARTICULO_EMP)
                       }
                     }
+                    var cantidad = data[0].CMBD_CANTIDAD
                     var itemPrecioLista = dataAggregates.Pre_M2_UN_Cdo_con_IVA_L1
                     var itemPrecioDtoCombo = dataAggregates.Pre_M2_UN_Cdo_con_IVA_L1_Redond_con_dto_combo
+                    var itemPrecioxCantidad = itemPrecioDtoCombo.sum * cantidad
                     var theDate = new Date();
                     var itemCombo = data[0].CMBA_COMBO_ART
                     var itemTextoPresentacion = data[0].Texto_presentacion
                     var checkboxCuotas = checkCuotas[0].checked
                     var NroCuotas = nroCuotas.val();
-                    var valorCuotas = itemPrecioDtoCombo.sum / NroCuotas
+                    var valorCuotas = itemPrecioxCantidad / NroCuotas
                     var Ahora12 = NroCuotas == 12 ? '- AHORA 12' : '';
                     var win = window.open('', '', 'width=1200, height=800, resizable=1, scrollbars=1'),
                     doc = win.document.open();
@@ -303,7 +305,7 @@
 
                       '<div class="row">' +
                           '<div class="col text-center">' +
-                              '<span style="font-size:200px; font-weight: bold;">'+ kendo.toString(itemPrecioDtoCombo.sum, "c0")+'</span>' +
+                              '<span style="font-size:200px; font-weight: bold;">'+ kendo.toString(itemPrecioxCantidad, "c0")+'</span>' +
                           '</div>' +
                       '</div>' +
 
@@ -351,7 +353,7 @@
 
                       '<div class="row">' +
                           '<div class="col text-center">' +
-                              '<span style="font-size:10rem; font-weight: bold;">'+ kendo.toString(itemPrecioDtoCombo.sum, "c0")+'</span>' +
+                              '<span style="font-size:10rem; font-weight: bold;">'+ kendo.toString(itemPrecioxCantidad, "c0")+'</span>' +
                           '</div>' +
                       '</div>' +
 
@@ -385,7 +387,6 @@
                       printableContent = contentBodyConCuotas
                     }
 
-                    
                     doc.write(htmlStart + printableContent + htmlEnd);
                     doc.close();
                     setTimeout(function(){
