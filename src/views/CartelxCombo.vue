@@ -56,6 +56,7 @@
               <grid-column field="CMBD_POR_DESC" title="Descuento" template="#: kendo.format('{0:p2}', CMBD_POR_DESC / 100)#"></grid-column>
               <grid-column field="CMBA_FECHA_VIG_DESDE" title="Fecha vigente desde" template="#: kendo.toString(kendo.parseDate(CMBA_FECHA_VIG_DESDE, 'yyyy-MM-dd'), 'dd/MM/yyyy') #"></grid-column>
               <grid-column field="Fecha_vigencia_hasta" title="Fecha vigente hasta" template="#: kendo.toString(kendo.parseDate(Fecha_vigencia_hasta, 'yyyy-MM-dd'), 'dd/MM/yyyy') #"></grid-column>
+              <grid-column field="Clas_Art_2" title="Clasif. Art. 2" :hidden="true"></grid-column>
               <grid-column field="Pre_M2_UN_Lista_con_IVA_L1" title="Precio Lista" template="#: kendo.toString(Pre_M2_UN_Lista_con_IVA_L1, 'c2')#"></grid-column>
               <grid-column field="Pre_M2_UN_Cdo_con_IVA_L1" title="Precio Cdo." template="#: kendo.toString(Pre_M2_UN_Cdo_con_IVA_L1, 'c2')#" :aggregates="['sum']" footer-template="#: kendo.toString(sum, 'c2')#"></grid-column>
               <grid-column field="Pre_M2_UN_Cdo_con_IVA_L1_Redond_con_dto_combo" template="#: kendo.toString(Pre_M2_UN_Cdo_con_IVA_L1_Redond_con_dto_combo, 'c2')#" title="Precio Cdo. c/Dto." :aggregates="['sum']" footer-template="#: kendo.toString(sum, 'c2')#"></grid-column>
@@ -107,6 +108,7 @@
                     CMBD_POR_DESC: {type: 'number'},
                     CMBA_FECHA_VIG_DESDE: {type: 'datetime'},
                     Fecha_vigencia_hasta: {type: 'datatime'},
+                    Clas_Art_2: {type: 'string'},
                     Pre_M2_UN_Lista_con_IVA_L1: {type: 'number'},
                     Pre_M2_UN_Cdo_con_IVA_L1: {type: 'number'},
                     Pre_M2_UN_Cdo_con_IVA_L1_Redond_con_dto_combo: {type: 'number'},
@@ -254,6 +256,8 @@
                     var itemPrecioxCantidad = itemPrecioDtoCombo.sum * cantidad
                     var theDate = new Date();
                     var itemCombo = data[0].CMBA_COMBO_ART
+                    var ClasArt2 = data[0].Clas_Art_2
+                    var unidMed = ClasArt2 == '0004' ? 'M2' : 'unidad';
                     var itemTextoPresentacion = data[0].Texto_presentacion
                     var checkboxCuotas = checkCuotas[0].checked
                     var NroCuotas = nroCuotas.val();
@@ -311,7 +315,7 @@
 
                       '<div class="row mb-4">' +
                           '<div class="col"></div>' +
-                          '<div class="col text-center bg-success text-white"><span style="font-size: 25px;"><strong>Por unidad, contado*</strong></span></div>' +
+                          '<div class="col text-center bg-success text-white"><span style="font-size: 25px;"><strong>Por '+ unidMed +', contado*</strong></span></div>' +
                           '<div class="col"></div>' +
                       '</div>' +
 
@@ -359,7 +363,7 @@
 
                       '<div class="row mb-4">' +
                           '<div class="col"></div>' +
-                          '<div class="col text-center bg-success text-white"><span style="font-size: 25px;"><strong>Por unidad, contado*</strong></span></div>' +
+                          '<div class="col text-center bg-success text-white"><span style="font-size: 25px;"><strong>Por '+ unidMed +', contado*</strong></span></div>' +
                           '<div class="col"></div>' +
                       '</div>' +
 

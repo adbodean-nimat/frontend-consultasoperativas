@@ -258,14 +258,17 @@
             var dataItems = [];
             var newRows = [];
             var dataItem;
-            console.log(dataItems)
+
             // Crear elemento para generar plantillas
             var elem = document.createElement('div');
             
             // Obtener una lista de columnas visibles
             for (var i = 0; i < gridColumns.length; i++) {
               if (!gridColumns[i].hidden) {
-                visibleGridColumns.push(gridColumns[i]);
+                
+                if (gridColumns[i].field !== "PRECIO_LISTA_CON_IVA" && gridColumns[i].field !== "DCA1_POR_DESCUENTO" && gridColumns[i].field !== "dtoFinan" ){
+                  visibleGridColumns.push(gridColumns[i]);
+                }    
               }
             }
 
@@ -297,16 +300,20 @@
             }
 
             for (var ri = 0; ri < rows.length; ri++) {
-                  var row = rows[ri];              
+                  var row = rows[ri];
 
                   if (row.type !== "group-header") {
+                    for (var ci = 0; ci < row.cells.length; ci++) {
+                      row.cells[ci].background = '';
+                    }
                     newRows.push(row)
-                  }  
+                  }
 
                   if (row.type !== "data"){
                     for (var ci = 0; ci < row.cells.length; ci++) {
                       row.cells[ci].fontSize = 18;
                       row.cells[ci].bold = true;
+                      row.cells[ci].background = '';
                     }
                   }
             }
@@ -316,7 +323,7 @@
             // Recorra todas las filas exportadas.
             for (var i = 1; i < newRows.length; i++) {
                 var row = newRows[i];
-                
+
                 // Recorra las plantillas de columna y aplíquelas para cada fila en la posición de columna almacenada
                 if(row.type !== "group-header"){
                   var iRow = row
@@ -324,7 +331,7 @@
                 
                 // Obtenga el elemento de datos correspondiente a la fila actual.
                 var dataItem = dataItems[i - 1];
-                
+
                 for (var j = 0; j < columnTemplates.length; j++) {
                   var columnTemplate = columnTemplates[j];
 
@@ -555,7 +562,7 @@
               return templateRUBVNOMBRE
             },
             groupHeaderTemplateRUBVNOMBRE: function(){
-              return '<span></span>'
+              return ''
             },
             groupHeaderTemplateFamilia: function(){
               return ''
