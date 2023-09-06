@@ -23,7 +23,7 @@
               <img style="width: 100%;" src="../assets/membretada.png" alt="Membretada - Nimat de Prades S.A.">
             </div>
             <div class="row">
-              <div class="col-sm">Fecha de impresión #=kendo.toString(theDate, "dd-MM-yyyy", "es-AR")#</div>
+              <div class="col-sm">Fecha de impresión: #=kendo.toString(theDate, "dd-MM-yyyy", "es-AR")#</div>
               <div class="col-sm"><small><span id="cod_cte"></span> <span id="dvc1listaprecvta"></span></small></div>
               <div class="col-sm text-end" style="margin-right: 50px;"><strong>VN RV Listado Distribución</strong></div>
             </div>
@@ -250,6 +250,37 @@
               })
           },
           exportGridWithTemplatesContent: function(e){
+            var idemArtsArticuloEmp = document.querySelectorAll("span#idArtsArticuloEmp")
+            var initialValue = 0;
+            var VeriSinMod = document.querySelectorAll("span#idVeriSinMod");
+            var idem = [...VeriSinMod].map(e=> parseInt(e.innerText))
+            var sumVeriSinMod = idem.reduce(
+              (accumulator, currentValue) => accumulator + currentValue,
+              initialValue
+            );
+            var VeriMod = document.querySelectorAll("span#idVerifMod");
+            var idem2 = [...VeriMod].map(e=> parseInt(e.innerText))
+            var sumVeriMod = idem2.reduce(
+              (accumulator, currentValue) => accumulator + currentValue,
+              initialValue
+            );
+            var grid = this.$refs.grid.kendoWidget();
+            var gridElement = grid.element;
+            var fechaCambiosPrecios = gridElement.find('#fechaCambiosPrecio');
+            var valueFechaCambiosPrecios = fechaCambiosPrecios.data('kendoDatePicker').value();
+            var fechaHasta = new Date();
+            var modificados = [];
+            if (idemArtsArticuloEmp.length == sumVeriSinMod){
+              modificados = 'No se existen modificaciones en los precios de los artículos de esta lista, entre ' + kendo.toString(valueFechaCambiosPrecios, "dd-MM-yyyy") + ' y el ' + kendo.toString(fechaHasta, "dd-MM-yyyy")+'.';
+            } else
+            if(sumVeriMod > 0){
+              modificados = 'Sobre ' + idemArtsArticuloEmp.length + ' artículos de esta lista de precios, se identifican ' + sumVeriMod + ' modificados entre el ' + kendo.toString(valueFechaCambiosPrecios, "dd-MM-yyyy") + ' y el ' + kendo.toString(fechaHasta, "dd-MM-yyyy")+'.';
+            }
+
+            var idemCodCte = document.querySelector(".k-input-value-text:nth-child(1)").innerText
+            var idemDvc1 = document.querySelector("#dvc1listaprevcta").innerText
+            
+            e.workbook.sheets[0].freezePane.rowSplit = 0;
             var data = e.data;
             var gridColumns = e.sender.columns;
             var rows = e.workbook.sheets[0].rows;
@@ -258,7 +289,6 @@
             var dataItems = [];
             var newRows = [];
             var dataItem;
-
             // Crear elemento para generar plantillas
             var elem = document.createElement('div');
             
@@ -301,20 +331,56 @@
 
             for (var ri = 0; ri < rows.length; ri++) {
                   var row = rows[ri];
-
-                  if (row.type !== "group-header") {
-                    for (var ci = 0; ci < row.cells.length; ci++) {
-                      row.cells[ci].background = '';
-                    }
-                    newRows.push(row)
+                  
+                  if (rows[ri].type == "header"){
+                    rows.splice(ri,1)
+                    rows.unshift({cells:[
+                      {value: new Date(), colSpan: 4},
+                      {value: idemCodCte+' '+idemDvc1},
+                      {value: modificados + ' Precios con IVA Incluido sujetos a variación sin previo aviso.', background: "#FFFF00"},
+                      {value: 'Precio con descuentos incluidos.', colSpan: 3, background: "#92D050"}                      
+                  ]});
                   }
 
-                  if (row.type !== "data"){
-                    for (var ci = 0; ci < row.cells.length; ci++) {
-                      row.cells[ci].fontSize = 18;
-                      row.cells[ci].bold = true;
-                      row.cells[ci].background = '';
+                  if(row.type == "header"){
+                    for (var hei = 0; hei < row.cells.length; hei++) {
+                      row.cells[hei].background = '';
+                      row.cells[hei].firstCell = false;
                     }
+                  }
+
+                  if (rows[ri].type == "group-header"){
+                    rows.splice(ri,1);
+                    // rows[ri].cells.splice(0,1);
+                    // rows[ri].cells.splice(1,1)
+                    for (var i = 0; i < rows[ri].cells.length; i++) {                
+                      var colspan = rows[ri].cells[i].colSpan
+                      rows[ri].cells[i].background = '';
+                      
+                      if(colspan == 9){
+                        rows[ri].cells[i].fontSize = 16;
+                        rows[ri].cells[i].bold = true;
+                        rows[ri].cells[i].background = '';
+                        rows[ri].cells[i].colSpan = 7;
+                      }
+
+                      if(colspan == 11){
+                        rows[ri].cells[i].fontSize = 20;
+                        rows[ri].cells[i].bold = true;
+                        rows[ri].cells[i].background = '';
+                        rows[ri].cells[i].colSpan = 9;
+                      } 
+                    }
+                  }
+                  
+                  if (rows[ri].type == "data"){
+                    for (var di = 0; di < rows[ri].cells.length; di++) {
+                      rows[ri].cells[di].background = '';
+                    }
+                  }
+
+                  if (row.type !== "group-header") {
+                    newRows.push(row)
                   }
             }
             
