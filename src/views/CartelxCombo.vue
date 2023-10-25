@@ -205,7 +205,7 @@
 
                 comboArt.kendoNumericTextBox({
                     culture: "es-US",
-                    format: "n0"
+                    format: "{0:0000}"
                 })
 
                 toolbarElement.on("click", ".refresh", function (e) {

@@ -37,13 +37,16 @@
                   :navigatable="true"
                   :filterable="true"
                   :pageable='true'
+                  :sortable-mode="'multiple'"
+                  :sortable-allow-unsort="true"
+                  :sortable-show-indexes="true"
                   :editable="'inline'"
                   :toolbar="['create']">
             <grid-column :field="'id'" :title="'Id'" :hidden="true"></grid-column>
             <grid-column :field="'cod_fami_art'" :title="'Código Familia Art.'"></grid-column>
             <grid-column :field="'nombre_fami_art'" :title="'Nombre Familia Art.'"></grid-column>
             <grid-column :field="'nro_orden_de_la_fami'" :title="'Nro. Orden de la familia'"></grid-column>
-            <grid-column :field="'set_de_la_familia'" :title="'Set de la familia'"></grid-column>
+            <grid-column :field="'set_de_la_familia'" :title="'Set de la familia'" :filterable-multi="true"></grid-column>
             <grid-column :command="['edit','destroy']" :title="'&nbsp;'"></grid-column>
       </grid>
     </div>
@@ -128,7 +131,7 @@
             $.ajax({
               method: 'PUT',
               type: 'PUT',
-              url: urlApi + JSON.stringify(e.data.models[0].id),
+              url: urlApi + kendo.stringify(e.data.models[0].id),
               beforeSend: function(xhr) {
                 xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
               },
@@ -138,8 +141,7 @@
               error: function(data){
                 e.error(data)
               },
-              data: JSON.stringify(e.data.models[0],["cod_fami_art", "nombre_fami_art", "nro_orden_de_la_fami", "set_de_la_familia"]),
-              dataType: 'json',
+              data: kendo.stringify(e.data.models[0],["cod_fami_art", "nombre_fami_art", "nro_orden_de_la_fami", "set_de_la_familia"]),
               contentType: 'application/json',
             })
         },

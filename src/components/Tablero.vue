@@ -59,7 +59,7 @@
                         </div>
                     </div>
                     <div class="col col-h">
-                        <router-link to="">
+                        <router-link to="/webnimat">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div class="column d-flex flex-row justify-content-between p-3 text-secondary link-success">
                                     <div class="d-flex justify-content-center align-items-center flex-shrink-0 icon rounded">
@@ -81,7 +81,7 @@
                         </div>
                         <div class="column-bottom text-center h-10 d-flex justify-content-between align-items-center rounded-bottom px-4 bg-light">
                             <span class="fs-6">1.0.0</span>
-                            <span class="fs-6">Próximamente</span>
+                            <span class="fs-6">WN</span>
                         </div>
                     </div>
                 </div>

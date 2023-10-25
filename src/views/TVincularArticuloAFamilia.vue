@@ -36,6 +36,9 @@
                   :navigatable="true"
                   :filterable="true"
                   :pageable='false'
+                  :sortable-mode="'multiple'"
+                  :sortable-allow-unsort="true"
+                  :sortable-show-indexes="true"
                   :editable="'inline'"
                   :toolbar="['create']">
             <grid-column :field="'cod'" :title="'Código'" :hidden="false"></grid-column>

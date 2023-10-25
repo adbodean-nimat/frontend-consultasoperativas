@@ -47,6 +47,7 @@
               <grid-column field="Cod_Vend" :title="'Cod. Vend.'" :filterable-multi="true" :locked="true" :width="60"></grid-column>
               <grid-column field="Nomb_Vend" :title="'Nomb. Vend.'" :filterable-multi="true"  :locked="true" :width="200"></grid-column>
               <grid-column field="Fecha_Emi" :title="'Fecha Emisión'" template="#: kendo.toString(kendo.parseDate(Fecha_Emi, 'yyyy-MM-dd'), 'dd/MM/yyyy') #" :locked="true" :width="120"></grid-column>
+              <grid-column field="Fecha_Entr_Item" :title="'Fecha Entr. Item'" template="#: kendo.toString(kendo.parseDate(Fecha_Entr_Item, 'yyyy-MM-dd'), 'dd/MM/yyyy') #" :locked="true" :width="120" :hidden="false"></grid-column>
               <grid-column field="Cod_Client" :title="'Cod. Clientes'" :locked="true" :width="80"></grid-column>
               <grid-column field="Nomb_Client" :title="'Nomb. Clientes'" :locked="true" :width="200"></grid-column>
               <grid-column field="Tipo_NP" :title="'Tipo NP'" :locked="true" :width="80"></grid-column>
@@ -71,7 +72,6 @@
               <grid-column field="Domicilio" :width="200"></grid-column>
               <grid-column field="Localidad" :width="200"></grid-column>
               <grid-column field="Fecha_Entr_Cabec" :title="'Fecha Entr. Cabec.'" template="#: kendo.toString(kendo.parseDate(Fecha_Entr_Cabec, 'yyyy-MM-dd'), 'dd/MM/yyyy') #" :width="120" :hidden="true"></grid-column>
-              <grid-column field="Fecha_Entr_Item" :title="'Fecha Entr. Item'" template="#: kendo.toString(kendo.parseDate(Fecha_Entr_Item, 'yyyy-MM-dd'), 'dd/MM/yyyy') #" :width="120" :hidden="true"></grid-column>
               <grid-column field="Verif_fecha_entr" title="Verif. Fecha Entr." :width="200"></grid-column>
               <grid-column field="Observacion_NP" title="Observación NP" :width="400"></grid-column>
               <grid-column field="Nomb_Est_Aprob" title="Nomb. Est. Aprob." :width="80"></grid-column>

@@ -184,7 +184,7 @@
 
                 codArt.kendoNumericTextBox({
                     culture: "es-US",
-                    format: "00000000"
+                    format: "{0:00000000}"
                 })
 
                 toolbarElement.on("click", ".refresh", function (e) {

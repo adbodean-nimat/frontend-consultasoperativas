@@ -16,7 +16,6 @@
             </div>
        </div>
       </div>
-      
       <datasource ref="remoteDataSourceArticulosWeb"
                         :transport-read="readData"
                         :transport-update="updateData"
@@ -26,23 +25,31 @@
                         :schema-model-id="'id'"
                         :schema-model-fields="fields"
                         :batch="true"
+                        :page-size='100'
                         @error="onError"
                         @requestend="requestEnd"
                         >
       </datasource>
-      <grid ref="grid"
-                  :height="'100vh'"
+      <datasource ref="remoteDataSourceCategoriasWeb"
+                        :transport-read="readDataCategorias"
+                        >
+      </datasource>
+      <grid id="grid" ref="grid"
+                  :height="'95vh'"
                   :data-source-ref="'remoteDataSourceArticulosWeb'"
                   :navigatable="true"
                   :filterable="true"
-                  :pageable='false'
+                  :reorderable="true"
+                  :resizable="true"
+                  :column-menu="true"
+                  :pageable="true"
                   :editable="'popup'"
                   :toolbar="['create']">
-            <grid-column :field="'id'" :title="'Id'" :hidden="true" :width="100"></grid-column>
+            <grid-column :command="['edit','destroy']" :title="'&nbsp;'" :width="220"></grid-column>
             <grid-column :field="'publicado'" :title="'Publicado'" template="#= publicado == true ? 'Si' : 'No' #" :width="100"></grid-column>
             <grid-column :field="'codigo_art'" :title="'Código'" :width="100"></grid-column>
             <grid-column :field="'nombre_art'" :title="'Nombre'" :width="400"></grid-column>
-            <grid-column :field="'orden_art'" :title="'Orden'" :width="100"></grid-column>
+            <grid-column :field="'orden_art'" :title="'Orden'" :format="'{0:0000}'" :width="100"></grid-column>
             <grid-column :field="'marcar_nuevo'" :title="'Marcar como nuevo'" template="#= marcar_nuevo == true ? 'Si' : 'No' #" :width="100"></grid-column>
             <grid-column :field="'mostrar_inicio'" :title="'Mostrar en la página de inicio'" template="#= mostrar_inicio == true ? 'Si' : 'No' #" :width="100"></grid-column>
             <grid-column :field="'outlet'" :title="'Outlet'" template="#= outlet == true ? 'Si' : 'No' #" :width="100"></grid-column>
@@ -50,12 +57,15 @@
             <grid-column :field="'descripcion'" :title="'Descripción'" :width="100"></grid-column>
             <grid-column :field="'bloq_vtas'" :title="'Ver si Bloq. Vtas?'" template="#= bloq_vtas == true ? 'Si' : 'No' #" :width="100"></grid-column>
             <grid-column :field="'min_para_web'" :title="'Uni / M2 Ceram mín para Ver en web'" :width="100"></grid-column>
-            <grid-column :field="'min_para_obs'" :title="'Uni / M2 Ceram mín para Obs. en web'" :width="100"></grid-column>
-            <grid-column :field="'categorias1'" :title="'Categoria'" :editor="GetCategoriasWeb" :template="'#=categorias1#'" :width="200"></grid-column>
-            <grid-column :field="'categorias2'" :title="'Categoria 2'" :editor="GetCategoriasWeb" :width="200"></grid-column>
-            <grid-column :field="'categorias3'" :title="'Categoria 3'" :editor="GetCategoriasWeb" :width="200"></grid-column>
-            <grid-column :field="'categorias4'" :title="'Categoria 4'" :editor="GetCategoriasWeb" :width="200"></grid-column>
-            <grid-column :command="['edit','destroy']" :title="'&nbsp;'" :width="300"></grid-column>
+            <grid-column :field="'stock'" :title="'Stock manual (si Bloq. Vtas es habilitado)'" :width="100"></grid-column>
+            <grid-column :field="'categorias1'" :title="'Categoria 1'" :editor="GetCategoriasWeb" :width="50" :hidden="true"></grid-column>
+            <grid-column :field="'namecategorias1'" :title="'Categoria 1'" :template="templateNameCategorias1" :width="200"></grid-column>
+            <grid-column :field="'categorias2'" :title="'Categoria 2'" :editor="GetCategoriasWebResto" :width="100" :hidden="true"></grid-column>
+            <grid-column :field="'namecategorias2'" :title="'Categoria 2'" :template="templateNameCategorias2" :width="200"></grid-column>
+            <grid-column :field="'categorias3'" :title="'Categoria 3'" :editor="GetCategoriasWebResto" :width="100" :hidden="true"></grid-column>
+            <grid-column :field="'namecategorias3'" :title="'Categoria 3'" :template="templateNameCategorias3" :width="200"></grid-column>
+            <grid-column :field="'categorias4'" :title="'Categoria 4'" :editor="GetCategoriasWebResto" :width="100" :hidden="true"></grid-column>
+            <grid-column :field="'namecategorias4'" :title="'Categoria 4'" :template="templateNameCategorias4" :width="200"></grid-column>
       </grid>
     </div>
     </div>
@@ -93,9 +103,9 @@
                 fields: {
                     id: {editable: false, nullable: true},
                     publicado: {type: 'boolean'},
-                    codigo_art: {type: 'string'},
+                    codigo_art: {type: 'string', validation: { required: {message: "es requerido"}}},
                     nombre_art: {type: 'string'},
-                    orden_art: {type: 'number', format: '0000'},
+                    orden_art: {type: 'number'},
                     marcar_nuevo: {type: 'boolean'},
                     mostrar_inicio: {type: 'boolean'},
                     outlet: {type: 'boolean'},
@@ -103,11 +113,15 @@
                     descripcion: {type: 'string'},
                     bloq_vtas: {type: 'boolean'},
                     min_para_web: {type: 'number'},
-                    min_para_obs: {type: 'number'},
-                    categorias1: {type: 'string'},
-                    categorias2: {type: 'string'},
-                    categorias3: {type: 'string'},
-                    categorias4: {type: 'string'},
+                    stock: {type: 'number'},
+                    categorias1: {type: 'string', defaultValue: ''},
+                    namecategorias1: {type: 'string', editable: false},
+                    categorias2: {type: 'string', defaultValue: ''},
+                    namecategorias2: {type: 'string', editable: false},
+                    categorias3: {type: 'string', defaultValue: ''},
+                    namecategorias3: {type: 'string', editable: false},
+                    categorias4: {type: 'string', defaultValue: ''},
+                    namecategorias4: {type: 'string', editable: false},
                   }
                 }
         },
@@ -132,7 +146,7 @@
           }
         }
       },
-       methods: {
+      methods: {
         readData: function (e) {
               var tkn = this.token
               var urlApi = this.UrlApiBase
@@ -148,12 +162,28 @@
                 method: 'GET',
                 type: 'GET'
               })
-          },
+        },
+        readDataCategorias: function(e){
+          var tkn = this.token
+          var urlApi = this.UrlApiCategoria
+          $.ajax({
+            url: urlApi,
+            beforeSend: function (xhr) {
+            xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
+            },
+            contentType: 'application/json',
+            success: function (data) {
+              e.success(data)
+            },
+            method: 'GET',
+            type: 'GET'
+          })
+        },
         updateData: function(e) {
             var tkn = this.token
             var urlApi = this.UrlApiBase
             var id = e.data.models[0].id
-            var data = kendo.stringify(e.data.models[0],["publicado", "codigo_art", "nombre_art", "orden_art", "marcar_nuevo", "mostrar_inicio", "outlet", "copete", "descripcion", "bloq_vtas", "min_para_web", "min_para_obs", "categorias1", "categorias2", "categorias3", "categorias4"])
+            var data = kendo.stringify(e.data.models[0],["publicado", "codigo_art", "nombre_art", "orden_art", "marcar_nuevo", "mostrar_inicio", "outlet", "copete", "descripcion", "bloq_vtas", "min_para_web", "stock", "categorias1", "categorias2", "categorias3", "categorias4"])
             $.ajax({
                 method: 'PUT',
                 type: 'PUT',
@@ -207,41 +237,43 @@
               e.error(data)
             },
             contentType: 'application/json',
-            data: kendo.stringify(e.data.models[0],["publicado", "codigo_art", "nombre_art", "orden_art", "marcar_nuevo", "mostrar_inicio", "outlet", "copete", "descripcion", "bloq_vtas", "min_para_web", "min_para_obs", "categorias1", "categorias2", "categorias3", "categorias4"]),
+            data: kendo.stringify(e.data.models[0],["publicado", "codigo_art", "nombre_art", "orden_art", "marcar_nuevo", "mostrar_inicio", "outlet", "copete", "descripcion", "bloq_vtas", "min_para_web", "stock", "categorias1", "categorias2", "categorias3", "categorias4"]),
           })
         },
         onError: function(e){
               console.log(e.status); 
               console.log(e.error);
-            },
-            requestEnd: function(e) {
+        },
+        requestEnd: function(e) {
                 var response = e.response;
                 var type = e.type;
-                /* The result can be observed in the DevTools(F12) console of the browser. */
+                
                 console.log("type => " + type);
-                /* The result can be observed in the DevTools(F12) console of the browser. */
-                // console.log(response.length);
-                 if (type == "create") {
+                
+                if (type == "create") {
                   e.sender.read();
                 }
+                
                 if (type == "update") {
                   e.sender.read();
                 } 
+                
                 /* if (type == undefined) {
                   e.sender.read();
                 } */
-            },
-            parameterMap: function(options, operation) {
+        },
+        parameterMap: function(options, operation) {
                 if (operation !== 'read' && options.models) {
                     return kendo.stringify(options.models)
                 }
-            },
-            GetCategoriasWeb: function(container, options) {
-                kendo.jQuery('<input name="'+ options.field +'" />').appendTo(container).kendoDropDownList({
-                    autoBind: false,
+        },
+        GetCategoriasWeb: function(container, options) {
+          kendo.jQuery('<input required data-bind="value:' + options.field + '" name="' + options.field + '"/>').appendTo(container).kendoDropDownList({
+                    autoBind: true,
                     dataTextField: "nombre_categorias",
                     dataValueField: "id_categorias",
                     dataSource: {
+                        serverFiltering: true,
                         transport:{
                             read:{
                                 contentType: 'application/json',
@@ -252,10 +284,93 @@
                                 'Authorization': 'Bearer ' + store.state.token
                                 }
                             }
+                        },
+                        schema:{
+                          model:  {
+                            id: "id",
+                            fields: {
+                              id_categorias : {type:"number"},
+                              nombre_categorias : {type:"string"},
+                            }
+                          }
+                        },
+                        sort: {
+                          field: 'nombre_categorias',
+                          dir: 'asc'
+                        }
+                    }
+                });
+          kendo.jQuery('<span class="k-invalid-msg" data-for="'+ options.field +'"></span>').appendTo(container);
+        },
+        GetCategoriasWebResto: function(container, options) {
+          kendo.jQuery('<input data-bind="value:' + options.field + '" name="' + options.field + '"/>').appendTo(container).kendoDropDownList({
+                    autoBind: true,
+                    dataTextField: "nombre_categorias",
+                    dataValueField: "id_categorias",
+                    dataSource: {
+                        serverFiltering: true,
+                        transport:{
+                            read:{
+                                contentType: 'application/json',
+                                dataType: 'json',
+                                type: 'GET',
+                                url: this.UrlApiCategoria,
+                                headers: {
+                                'Authorization': 'Bearer ' + store.state.token
+                                }
+                            }
+                        },
+                        schema:{
+                          model:  {
+                            id: "id",
+                            fields: {
+                              id_categorias : {type:"number"},
+                              nombre_categorias : {type:"string"},
+                            }
+                          }
+                        },
+                        sort: {
+                          field: 'nombre_categorias',
+                          dir: 'asc'
                         }
                     }
                 })
-            },
+        },
+        templateNameCategorias1: function(item){
+          var itemCategorias1 = item.categorias1
+          var dataSourceCategoria = this.$refs.remoteDataSourceCategoriasWeb.kendoWidget();
+          dataSourceCategoria.filter({field: 'id_categorias', operator: 'eq', value: itemCategorias1});
+          var data = dataSourceCategoria.view()
+          var nombreCategorias1 = data.length === 0 ? '' : data[0].nombre_categorias 
+          return kendo.toString(nombreCategorias1)   
+        },
+        templateNameCategorias2: function(item){
+          var itemCategorias2 = item.categorias2
+          var dataSourceCategoria2 = this.$refs.remoteDataSourceCategoriasWeb.kendoWidget();
+          dataSourceCategoria2.filter({field: 'id_categorias', operator: 'eq', value: itemCategorias2});
+          var data = dataSourceCategoria2.view()
+          var nombreCategorias2 = data.length === 0 ? '' : data[0].nombre_categorias 
+          return kendo.toString(nombreCategorias2)
+        },
+        templateNameCategorias3: function(item){
+          var itemCategorias3 = item.categorias3
+          var dataSourceCategoria3 = this.$refs.remoteDataSourceCategoriasWeb.kendoWidget();
+          dataSourceCategoria3.filter({field: 'id_categorias', operator: 'eq', value: itemCategorias3});
+          var data = dataSourceCategoria3.view()
+          var nombreCategorias3 = data.length === 0 ? '' : data[0].nombre_categorias 
+          return kendo.toString(nombreCategorias3)   
+        },
+        templateNameCategorias4: function(item){
+          var itemCategorias4 = item.categorias4
+          var dataSourceCategoria4 = this.$refs.remoteDataSourceCategoriasWeb.kendoWidget();
+          dataSourceCategoria4.filter({field: 'id_categorias', operator: 'eq', value: itemCategorias4});
+          var data = dataSourceCategoria4.view()
+          var nombreCategorias4 = data.length === 0 ? '' : data[0].nombre_categorias        
+          return kendo.toString(nombreCategorias4)
+        }
+      },
+      mounted:function(){
+        this.$refs.remoteDataSourceCategoriasWeb.kendoDataSource.fetch()
       }
     }
     </script>
