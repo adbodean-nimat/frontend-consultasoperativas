@@ -31,6 +31,10 @@
                         @requestend="requestEnd"
                         >
       </datasource>
+      <datasource ref="remoteDataSourceNombreSet"
+                        :transport-read="readDataNombreSet"
+                        >
+      </datasource>
       <grid ref="grid"
                   :height="'100vh'"
                   :data-source-ref="'remoteDataSourceFamiliaArticulos'"
@@ -47,6 +51,7 @@
             <grid-column :field="'nombre_fami_art'" :title="'Nombre Familia Art.'"></grid-column>
             <grid-column :field="'nro_orden_de_la_fami'" :title="'Nro. Orden de la familia'"></grid-column>
             <grid-column :field="'set_de_la_familia'" :title="'Set de la familia'" :filterable-multi="true"></grid-column>
+            <grid-column :field="'nombre_set_art'" :title="'Nombre Set Art.'" :template="TemplateNombreSet" :filterable="false"></grid-column>
             <grid-column :command="['edit','destroy']" :title="'&nbsp;'"></grid-column>
       </grid>
     </div>
@@ -86,14 +91,18 @@
                     id: { editable: false, nullable: true},
                     cod_fami_art: { type: 'string'},
                     nombre_fami_art: { type: 'string'},
-                    nro_orden_de_la_fami: {type: 'numeric'},
-                    set_de_la_familia: {type: 'string'}
+                    nro_orden_de_la_fami: {type: 'number'},
+                    set_de_la_familia: {type: 'string'},
+                    nombre_set_art: { type: 'string', editable: false},
                 },
              }
         },
       computed: {
         UrlApiBase(){
               return `${process.env.VUE_APP_API_BASE}/familiadearticulo/`
+        },
+        UrlApiBaseSetVentas(){
+          return `${process.env.VUE_APP_API_BASE}/setsdeventas/`
         },
         token(){
           return store.state.token
@@ -124,6 +133,22 @@
                 },
                 type: 'GET'
               })
+        },
+        readDataNombreSet: function(e){
+          var tkn = this.token
+          var urlApi = this.UrlApiBaseSetVentas
+          $.ajax({
+            url: urlApi,
+            beforeSend: function (xhr) {
+            xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
+            },
+            contentType: 'application/json',
+            success: function (data) {
+              e.success(data)
+            },
+            method: 'GET',
+            type: 'GET'
+          })
         },
         updateData: function(e) {
             var tkn = this.token
@@ -219,6 +244,17 @@
                     return JSON.stringify(options.models)
                 }
             },
+            TemplateNombreSet: function(item){
+              var itemSetVentas = item.set_de_la_familia
+              var dataSourceSetVentas = this.$refs.remoteDataSourceNombreSet.kendoWidget();
+              dataSourceSetVentas.filter({field: 'cod_set_art', operator: 'eq', value: itemSetVentas});
+              var data = dataSourceSetVentas.view()
+              var nombreSetVentas = data.length === 0 ? '' : data[0].nombre_set_art
+              return kendo.toString(nombreSetVentas)
+            }
+      },
+      mounted:function(){
+        this.$refs.remoteDataSourceNombreSet.kendoDataSource.fetch()
       }
     }
     </script>

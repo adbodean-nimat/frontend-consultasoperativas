@@ -30,6 +30,10 @@
                         @requestend="requestEnd"
                         >
       </datasource>
+      <datasource ref="remoteDataSourceNombreFam"
+                        :transport-read="readDataNombreFam"
+                        >
+      </datasource>
       <grid ref="grid"
                   :height="'100vh'"
                   :data-source-ref="'remoteDataSourceVinculararticulosafamilia'"
@@ -43,7 +47,8 @@
                   :toolbar="['create']">
             <grid-column :field="'cod'" :title="'Código'" :hidden="false"></grid-column>
             <grid-column :field="'cod_art'" :title="'Código Art.'"></grid-column>
-            <grid-column :field="'cod_familia'" :title="'Código Familia '"></grid-column>
+            <grid-column :field="'cod_familia'" :title="'Código Familia '" :filterable-multi="true"></grid-column>
+            <grid-column :field="'nombre_fami_art'" :title="'Nombre Familia'" :template="templateNombreFamilia" :filterable="false"></grid-column>
             <grid-column :field="'orden_art_familia'" :title="'Orden Art. Familia'"></grid-column>
             <grid-column :command="['edit','destroy']" :title="'&nbsp;'"></grid-column>
       </grid>
@@ -84,6 +89,7 @@
                     cod: { editable: false, nullable: true},
                     cod_art: { type: 'string'},
                     cod_familia: { type: 'string'},
+                    nombre_fami_art: {type: 'string', editable: false},
                     orden_art_familia: {type: 'number'}
                 },
              }
@@ -91,6 +97,9 @@
       computed: {
         UrlApiBase(){
               return `${process.env.VUE_APP_API_BASE}/vinculararticulosafamilia/`
+        },
+        UrlApiBaseNombreFam(){
+          return `${process.env.VUE_APP_API_BASE}/familiadearticulo/`
         },
         token(){
           return store.state.token
@@ -111,6 +120,21 @@
               // console.log(store.state.token)
               var tkn = this.token
               var urlApi = this.UrlApiBase
+              $.ajax({
+                url: urlApi,
+                beforeSend: function (xhr) {
+                  xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
+                },
+                dataType: 'json',
+                success: function (data) {
+                  e.success(data)
+                },
+                type: 'GET'
+              })
+      },
+      readDataNombreFam: function(e){
+              var tkn = this.token
+              var urlApi = this.UrlApiBaseNombreFam
               $.ajax({
                 url: urlApi,
                 beforeSend: function (xhr) {
@@ -218,6 +242,14 @@
                     return JSON.stringify(options.models)
                 }
             },
+            templateNombreFamilia: function(item){
+              var itemFam = item.cod_familia
+              var dataSourceNomFam = this.$refs.remoteDataSourceNombreFam.kendoWidget();
+              dataSourceNomFam.filter({field: 'cod_fami_art', operator: 'eq', value: itemFam});
+              var data = dataSourceNomFam.view()
+              var nombreFamilia = data.length === 0 ? '' : data[0].nombre_fami_art
+              return kendo.toString(nombreFamilia)
+            }
       }
     }
     </script>
