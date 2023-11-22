@@ -58,7 +58,6 @@
     </template>
     
     <script>
-    import $ from 'jquery'
     import store from "../store";
     import '@progress/kendo-ui'
     import '@progress/kendo-ui/js/messages/kendo.messages.es-AR'
@@ -136,7 +135,7 @@
         readData: function (e) {
           var tkn = this.token
           var urlApi = this.UrlApiBase
-          $.ajax({
+          kendo.jQuery.ajax({
             type: 'GET',
             url: urlApi,
             beforeSend: function (xhr) {
@@ -157,7 +156,7 @@
           var urlApi = this.UrlApiBase
           console.log(JSON.stringify(e.data.models[0].id))
           console.log(JSON.parse(JSON.stringify(e.data.models[0],["arts_articulo_emp", "arts_nombre", "grupo_del_art", "comentario", "nro_orden_art"])),)
-          $.ajax({
+          kendo.jQuery.ajax({
             method: 'PUT',
             url: urlApi + JSON.stringify(e.data.models[0].id),
             beforeSend: function(xhr) {
@@ -177,7 +176,7 @@
         destroyData: function(e){
           var tkn = this.token
           var urlApi = this.UrlApiBase
-          $.ajax({
+          kendo.jQuery.ajax({
             method: 'DELETE',
             type: 'DELETE',
             url: urlApi + JSON.stringify(e.data.models[0].id),
@@ -197,7 +196,7 @@
         createData: function(e){
           var tkn = this.token
           var urlApi = this.UrlApiBase
-          $.ajax({
+          kendo.jQuery.ajax({
             method: 'POST',
             type: 'POST',
             url: urlApi,

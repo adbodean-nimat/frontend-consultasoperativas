@@ -55,7 +55,6 @@
 </template>
 
 <script>
-import $ from 'jquery'
 import store from "../store"
 import '@progress/kendo-ui'
 import '@progress/kendo-ui/js/messages/kendo.messages.es-AR'
@@ -120,7 +119,7 @@ export default {
               // console.log(store.state.token)
               var token = store.state.token
               var urlApi = `${process.env.VUE_APP_API_BASE}/dimensionescontenedores/`
-              $.ajax({
+              kendo.jQuery.ajax({
                 url: urlApi,
                 beforeSend: function (xhr) {
                   xhr.setRequestHeader('Authorization', 'Bearer ' + token)
@@ -184,7 +183,7 @@ export default {
                 };
                 let json = JSON.stringify(params);
                 var destroyUrl = `${process.env.VUE_APP_API_BASE}/dimensionescontenedores/`
-                $.ajax({
+                kendo.jQuery.ajax({
                     method: "DELETE",
                     url: destroyUrl + Id,
                     dataType: "json",
@@ -202,7 +201,7 @@ export default {
                 let params = JSON.stringify(options.models[0],["clas4_clas5", "nombre", "medidas_ancho", "medidas_alto_puerta", "medidas_alto_interior", "medidas_largo"])
                 let json = JSON.parse(params)
                 var createUrl = `${process.env.VUE_APP_API_BASE}/dimensionescontenedores/`
-                $.ajax({
+                kendo.jQuery.ajax({
                     method: "POST",
                     url: createUrl,
                     dataType: "json",
@@ -221,7 +220,7 @@ export default {
                 let params = JSON.stringify(options.models[0],["clas4_clas5", "nombre", "medidas_ancho", "medidas_alto_puerta", "medidas_alto_interior", "medidas_largo"]);
                 let json = JSON.parse(params);
                 var updateUrl = `${process.env.VUE_APP_API_BASE}/dimensionescontenedores/`
-                $.ajax({
+                kendo.jQuery.ajax({
                     method: "PUT",
                     url: updateUrl + Id,
                     dataType: "json",

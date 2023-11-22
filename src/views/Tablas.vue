@@ -18,15 +18,9 @@
       
       <datasource ref="remoteDataSourceTablas"
                         :transport-read="readData"
-                        :transport-update-url="UrlApiBase"
-                        :transport-update-content-type="'application/json; charset=utf-8'"
-                        :transport-update-data-type="'json'"
-                        :transport-destroy-url="UrlApiBase"
-                        :transport-destroy-content-type="'application/json; charset=utf-8'"
-                        :transport-destroy-data-type="'json'"
-                        :transport-create-url="UrlApiBase"
-                        :transport-create-content-type="'application/json; charset=utf-8'"
-                        :transport-create-data-type="'json'"
+                        :transport-update="updateData"
+                        :transport-destroy="destroyData"
+                        :transport-create="createData"
                         :transport-parameter-map="parameterMap"
                         :schema-model-id="'id'"
                         :schema-model-fields="fields"
@@ -53,7 +47,6 @@
     </template>
     
     <script>
-    import $ from 'jquery'
     import store from "../store";
     import '@progress/kendo-ui'
     import '@progress/kendo-ui/js/messages/kendo.messages.es-AR'
@@ -82,7 +75,7 @@
                 pageOnly: true,
                 title: 'Tablas',
                 fields: {
-                    id: { editable: false, nullable: true},
+                    id: { editable: false},
                     nombre_tablas: { type: 'string'},
                     url_tablas: { type: 'string'},
                     consultas_tablas: {type: 'string'}
@@ -92,6 +85,9 @@
       computed: {
         UrlApiBase(){
           return `${process.env.VUE_APP_API_BASE}/tablas/`
+        },
+        token(){
+          return store.state.token
         },
         options () {
           return {
@@ -106,98 +102,114 @@
       },
        methods: {
         readData: function (e) {
-              // console.log(store.state.token)
-              var token = store.state.token
-              var urlApi = `${process.env.VUE_APP_API_BASE}/tablas`
-              $.ajax({
+              var tkn = this.token
+              var urlApi = this.UrlApiBase
+              kendo.jQuery.ajax({
+                method: 'GET',
+                type: 'GET',
                 url: urlApi,
                 beforeSend: function (xhr) {
-                  xhr.setRequestHeader('Authorization', 'Bearer ' + token)
+                  xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
                 },
-                dataType: 'json',
                 success: function (data) {
-                  e.success(data)
+                  e.success(data);
                 },
-                type: 'GET'
+                contentType: "application/json; charset=utf-8",
               })
           },
+          updateData: function(e) {
+            var tkn = this.token
+            var urlApi = this.UrlApiBase
+            var id = e.data.models[0].id
+            var data = kendo.stringify(e.data.models[0],["nombre_tablas", "url_tablas", "consultas_tablas"])
+            kendo.jQuery.ajax({
+              method: 'PUT',
+              type: 'PUT',
+              url: urlApi + id,
+              beforeSend: function(xhr) {
+                xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
+              },
+              success: function(data){
+                e.success(data);
+                
+              },
+              error: function(data){
+                e.error(data);
+              },
+              contentType: 'application/json',
+              data: data
+            });
+            
+        },
+        destroyData: function(e){
+            var tkn = this.token
+            var urlApi = this.UrlApiBase
+            kendo.jQuery.ajax({
+              method: 'DELETE',
+              type: 'DELETE',
+              url: urlApi + JSON.stringify(e.data.models[0].id),
+              beforeSend: function(xhr) {
+                xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
+              },
+              success: function(data){
+                e.success(data);
+              },
+              error: function(data){
+                e.error(data);
+              },
+              contentType: 'application/json',
+            });
+            
+        },
+        createData: function(e){
+            var tkn = this.token
+            var urlApi = this.UrlApiBase
+            kendo.jQuery.ajax({
+              method: 'POST',
+              type: 'POST',
+              url: urlApi,
+              beforeSend: function(xhr) {
+                xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
+              },
+              success: function(data){
+                e.success(data);
+              },
+              error: function(data){
+                e.error(data);
+              },
+              contentType: 'application/json',
+              data: kendo.stringify(e.data.models[0],["nombre_tablas", "url_tablas", "consultas_tablas"])
+            });
+        },
+        onError: function(e){
+          console.log(e.status); 
+          console.log(e.error);
+        },
+        requestEnd: function(e) {
+          var response = e.response;
+          var type = e.type;
+                
+          console.log("type => " + type);
+                
+          if (type == "create") {
+              e.sender.read();
+          }
+                
+          if (type == "update") {
+              e.sender.read();
+          } 
+        },
+        parameterMap: function(options, operation) {
+          if (operation !== 'read' && options.models) {
+              return kendo.stringify(options.models)
+          }
+        },
         templateBotonEditar: function(item){
             var templateHTML ='<span style="margin-left:5px">'+
                                 '<a class="k-pager-refresh k-link k-button edit" title="Editar tabla" href="'+ item.url_tablas +'"><span class="k-icon k-i-edit"></span></a>' +
                               '</span>'; 
             return templateHTML
-        },
-            onError: function(e){
-              console.log(e.status); // displays "error"
-              console.log(e.error);
-            },
-            requestEnd: function(e) {
-                var response = e.response;
-                var type = e.type;
-                console.log(type);
-                console.log(response.length);
-
-                if (type == "create") {
-                    e.sender.read();
-                }
-                if (type == "update") {
-                    e.sender.read();
-                }
-            },
-            parameterMap: function(options, operation) {            
-                if (operation == 'read') {
-                    return options
-                } 
-                if (operation == 'destroy') {              
-                    var Id = JSON.stringify(options.models[0].id);
-                    let params = {
-                    "nombre_tablas": JSON.stringify(options.models[0].nombre_tablas),
-                    "url_tablas": JSON.stringify(options.models[0].url_tablas),
-                    "consultas_tablas": JSON.stringify(options.models[0].consultas_tablas),
-                    };
-                    let json = JSON.stringify(params);
-                    var destroyUrl = `${process.env.VUE_APP_API_BASE}/tablas/`
-                    $.ajax({
-                        method: "DELETE",
-                        url: destroyUrl + Id,
-                        dataType: "json",
-                        data: json,
-                        headers: {
-                          'Authorization': 'Bearer ' + store.state.token
-                        }
-                    });   
-                } 
-                if (operation == 'create') {
-                    let params = JSON.stringify(options.models[0],["nombre_tablas","url_tablas", "consultas_tablas"])
-                    let json = JSON.parse(params)
-                    var createUrl = `${process.env.VUE_APP_API_BASE}/tablas/`
-                    $.ajax({
-                        method: "POST",
-                        url: createUrl,
-                        dataType: "json",
-                        data: json,
-                        headers: {
-                          'Authorization': 'Bearer ' + store.state.token
-                        }
-                    });
-                } 
-                if (operation == 'update') {
-                    var Id = JSON.stringify(options.models[0].id);
-                    let params = JSON.stringify(options.models[0],["nombre_tablas","url_tablas", "consultas_tablas"]);
-                    let json = JSON.parse(params);
-                    var updateUrl = `${process.env.VUE_APP_API_BASE}/tablas/`
-                    $.ajax({
-                        method: "PUT",
-                        url: updateUrl + Id,
-                        dataType: "json",
-                        data: json,
-                        headers: {
-                          'Authorization': 'Bearer ' + store.state.token
-                        }
-                    });
-                }
-               
-            },
+        }            
       },
     }
     </script>

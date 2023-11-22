@@ -57,9 +57,11 @@
               <grid-column field="CMBA_FECHA_VIG_DESDE" title="Fecha vigente desde" template="#: kendo.toString(kendo.parseDate(CMBA_FECHA_VIG_DESDE, 'yyyy-MM-dd'), 'dd/MM/yyyy') #"></grid-column>
               <grid-column field="Fecha_vigencia_hasta" title="Fecha vigente hasta" template="#: kendo.toString(kendo.parseDate(Fecha_vigencia_hasta, 'yyyy-MM-dd'), 'dd/MM/yyyy') #"></grid-column>
               <grid-column field="Clas_Art_2" title="Clasif. Art. 2" :hidden="true"></grid-column>
-              <grid-column field="Pre_M2_UN_Lista_con_IVA_L1" title="Precio Lista" template="#: kendo.toString(Pre_M2_UN_Lista_con_IVA_L1, 'c2')#"></grid-column>
+              <grid-column field="Pre_M2_UN_Lista_con_IVA_L1" title="Precio Lista" template="#: kendo.toString(Pre_M2_UN_Lista_con_IVA_L1, 'c2')#" :aggregates="['sum']" footer-template="#: kendo.toString(sum, 'c2')#"></grid-column>
               <grid-column field="Pre_M2_UN_Cdo_con_IVA_L1" title="Precio Cdo." template="#: kendo.toString(Pre_M2_UN_Cdo_con_IVA_L1, 'c2')#" :aggregates="['sum']" footer-template="#: kendo.toString(sum, 'c2')#"></grid-column>
-              <grid-column field="Pre_M2_UN_Cdo_con_IVA_L1_Redond_con_dto_combo" template="#: kendo.toString(Pre_M2_UN_Cdo_con_IVA_L1_Redond_con_dto_combo, 'c2')#" title="Precio Cdo. c/Dto." :aggregates="['sum']" footer-template="#: kendo.toString(sum, 'c2')#"></grid-column>
+              <grid-column title="Precio Cdo. Subtotal" :template="templatePrecioCdoSubtotal" :hidden="true"></grid-column>
+              <grid-column field="Pre_M2_UN_Cdo_con_IVA_L1_Redond_con_dto_combo" title="Precio Cdo. c/Dto." template="#: kendo.toString(Pre_M2_UN_Cdo_con_IVA_L1_Redond_con_dto_combo, 'c2')#" :aggregates="['sum']" footer-template="#: kendo.toString(sum, 'c2')#"></grid-column>
+              <grid-column title="Precio Cdo. c/Dto. subtotal" :template="templatePrecioCdoTotal" :hidden="true"></grid-column>
               <grid-column field="Texto_presentacion" title="Texto presentación" :hidden="true"></grid-column>
         </grid>
       </div>
@@ -67,7 +69,6 @@
     </template>
     
     <script>
-    import $ from 'jquery'
     import store from "../store";
     import '@progress/kendo-ui'
     import '@progress/kendo-ui/js/messages/kendo.messages.es-AR'
@@ -104,7 +105,7 @@
                     ARTS_ARTICULO_EMP: {type: 'string'},
                     ARTS_NOMBRE: {type: 'string'},
                     CMBD_UNIMED: {type: 'string'},
-                    CMBD_CANTIDAD: {type: 'string'},
+                    CMBD_CANTIDAD: {type: 'number'},
                     CMBD_POR_DESC: {type: 'number'},
                     CMBA_FECHA_VIG_DESDE: {type: 'datetime'},
                     Fecha_vigencia_hasta: {type: 'datatime'},
@@ -116,7 +117,8 @@
                 },
                 aggregateDefinition: [
                     {field: "Pre_M2_UN_Cdo_con_IVA_L1_Redond_con_dto_combo", aggregate: "sum"},
-                    {field: "Pre_M2_UN_Cdo_con_IVA_L1", aggregate: "sum"}
+                    {field: "Pre_M2_UN_Cdo_con_IVA_L1", aggregate: "sum"},
+                    {field: "Pre_M2_UN_Lista_con_IVA_L1", aggregate: "sum"}
                 ]
              }
       },
@@ -143,7 +145,7 @@
                   var gridElement = grid.element;
                   var comboart = gridElement.find('#comboart');
                   var ComboArt = comboart.data("kendoNumericTextBox").value()
-                  $.ajax({
+                  kendo.jQuery.ajax({
                     url: urlApi + ComboArt,
                     beforeSend: function (xhr) {
                       xhr.setRequestHeader('Authorization', 'Bearer ' + token)
@@ -185,13 +187,25 @@
                 '</div>';
                 return templateHtml;
               },
+              templatePrecioCdoSubtotal: function(item){
+                var precioxitem = item.Pre_M2_UN_Cdo_con_IVA_L1
+                var cantidadxitem = item.CMBD_CANTIDAD
+                var total = precioxitem * cantidadxitem
+                return '<span id="totalItemsPreciosCdo">'+ kendo.htmlEncode(kendo.toString(total, "c2")) +'</span>';
+              },
+              templatePrecioCdoTotal: function(item){
+                var precioxitem = item.Pre_M2_UN_Cdo_con_IVA_L1_Redond_con_dto_combo
+                var cantidadxitem = item.CMBD_CANTIDAD
+                var total = precioxitem * cantidadxitem
+                return '<span id="totalItemsPrecios">'+ kendo.htmlEncode(kendo.toString(total, "c2")) +'</span>';
+              },
               parameterMap: function(options, operation) {
                   if (operation !== 'read' && options.models) {
                     return JSON.stringify(options.models)
                   }
               },
               dataBound: function(e){
-                
+                                    
               }
             },
       mounted: function(){
@@ -250,18 +264,47 @@
                         itemsCodArts.push(data[i].ARTS_ARTICULO_EMP)
                       }
                     }
+                    const initialValue = 0;
+                    
+                    const ultima_columna = document.querySelectorAll("span#totalItemsPrecios");
+                    var idem = [...ultima_columna].map(e=> kendo.parseFloat(e.innerHTML));
+                    const sumWithInitial = idem.reduce(
+                      (accumulator, currentValue) => accumulator + currentValue,
+                      initialValue
+                    );
+
+                    const ultima_columna2 = document.querySelectorAll("span#totalItemsPreciosCdo");
+                    var idem2 = [...ultima_columna2].map(e=> kendo.parseFloat(e.innerHTML));
+                    const sumWithInitial2 = idem2.reduce(
+                      (accumulator, currentValue) => accumulator + currentValue,
+                      initialValue
+                    );
+                    
                     var cantidad = data[0].CMBD_CANTIDAD
+                    var itemsCantidad = [];
+                    for (var j = 0; j < data.length; j++){
+                      var itemCantidad = data[j].CMBD_CANTIDAD
+                      itemsCantidad.push(itemCantidad)
+                    }
+                    const sumItemsCantidad = itemsCantidad.reduce(
+                        (accumulator, currentValue) => accumulator + currentValue,
+                        initialValue
+                    )
                     var itemPrecioLista = dataAggregates.Pre_M2_UN_Cdo_con_IVA_L1
                     var itemPrecioDtoCombo = dataAggregates.Pre_M2_UN_Cdo_con_IVA_L1_Redond_con_dto_combo
                     var itemPrecioxCantidad = itemPrecioDtoCombo.sum * cantidad
+                    var itemPrecioxCantidadTotal = kendo.toString(sumWithInitial, "c0");
+                    var itemPrecioCdoxCantidadSubtotal = kendo.toString(sumWithInitial2, "c2");
                     var theDate = new Date();
                     var itemCombo = data[0].CMBA_COMBO_ART
                     var ClasArt2 = data[0].Clas_Art_2
                     var unidMed = ClasArt2 == '0004' ? 'M2' : 'unidad';
+                    var descuento = data[0].CMBD_POR_DESC
                     var itemTextoPresentacion = data[0].Texto_presentacion
+                    var itemTextoPresentacionMejorando = data.length > 1 && data[0].CMBD_POR_DESC === 0 ? "Comprando este articulo y accedes a la oferta de..." : data.length > 1 && data[0].CMBD_POR_DESC >= 1 ? "Si compras este articulo, te ganas un descuento del "+ kendo.format('{0:p2}', descuento / 100) +" y accedes a la oferta de..." : itemTextoPresentacion;
                     var checkboxCuotas = checkCuotas[0].checked
                     var NroCuotas = nroCuotas.val();
-                    var valorCuotas = itemPrecioxCantidad / NroCuotas
+                    var valorCuotas = sumWithInitial / NroCuotas
                     var Ahora12 = NroCuotas == 12 ? '- AHORA 12' : '';
                     var win = window.open('', '', 'width=1200, height=800, resizable=1, scrollbars=1'),
                     doc = win.document.open();
@@ -294,7 +337,7 @@
 
                       '<div class="row pb-2 mb-4 border-bottom border-success border-3">' +
                           '<div class="col text-start">' +
-                              '<span><small>Antes: </small></span><span style="font-size: 20px;"><strong>'+ kendo.toString(itemPrecioLista.sum, "c2") +'</strong></span>' +
+                              '<span><small>Antes: </small></span><span style="font-size: 20px;"><strong>'+ kendo.toString(itemPrecioCdoxCantidadSubtotal, "c2") +'</strong></span>' +
                           '</div>' +
                           '<div class="col text-end">' +
                               '<span><small>Nro. de combo: '+ itemCombo +'</small></span>' +
@@ -303,13 +346,13 @@
 
                       '<div class="row mb-4 bg-success text-white">' +
                           '<div class="col text-center">' +
-                              '<span><h4><strong>'+ itemTextoPresentacion +'</strong></h4></span>' +
+                              '<span><h4><strong>'+ itemTextoPresentacionMejorando +'</strong></h4></span>' +
                           '</div>' +
                       '</div>' +
 
                       '<div class="row">' +
                           '<div class="col text-center">' +
-                              '<span style="font-size:200px; font-weight: bold;">'+ kendo.toString(itemPrecioxCantidad, "c0")+'</span>' +
+                              '<span style="font-size:200px; font-weight: bold;">'+ kendo.toString(itemPrecioxCantidadTotal, "c0")+'</span>' +
                           '</div>' +
                       '</div>' +
 
@@ -342,7 +385,7 @@
 
                       '<div class="row pb-2 mb-4 border-bottom border-success border-3">' +
                           '<div class="col text-start">' +
-                              '<span><small>Antes: </small></span><span style="font-size: 20px;"><strong>'+ kendo.toString(itemPrecioLista.sum, "c2") +'</strong></span>' +
+                              '<span><small>Antes: </small></span><span style="font-size: 20px;"><strong>'+ kendo.toString(itemPrecioCdoxCantidadSubtotal, "c2") +'</strong></span>' +
                           '</div>' +
                           '<div class="col text-end">' +
                               '<span><small>Nro. de combo: '+ itemCombo +'</small></span>' +
@@ -351,13 +394,13 @@
 
                       '<div class="row mb-4 bg-success text-white">' +
                           '<div class="col text-center">' +
-                              '<span><h4><strong>'+ itemTextoPresentacion +'</strong></h4></span>' +
+                              '<span><h4><strong>'+ itemTextoPresentacionMejorando +'</strong></h4></span>' +
                           '</div>' +
                       '</div>' +
 
                       '<div class="row">' +
                           '<div class="col text-center">' +
-                              '<span style="font-size:10rem; font-weight: bold;">'+ kendo.toString(itemPrecioxCantidad, "c0")+'</span>' +
+                              '<span style="font-size:10rem; font-weight: bold;">'+ kendo.toString(itemPrecioxCantidadTotal, "c0")+'</span>' +
                           '</div>' +
                       '</div>' +
 

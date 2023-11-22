@@ -98,7 +98,6 @@
     </template>
     
     <script>
-    import $ from 'jquery'
     import store from "../store";
     import '@progress/kendo-ui'
     import '@progress/kendo-ui/js/messages/kendo.messages.es-AR'
@@ -164,7 +163,7 @@
                   var gridElement = grid.element;
                   var cantdiasatras = gridElement.find('#diasatras');
                   var DiasAtras = cantdiasatras.data("kendoNumericTextBox").value()
-                  $.ajax({
+                  kendo.jQuery.ajax({
                     url: urlApi + DiasAtras,
                     beforeSend: function (xhr) {
                       xhr.setRequestHeader('Authorization', 'Bearer ' + token)

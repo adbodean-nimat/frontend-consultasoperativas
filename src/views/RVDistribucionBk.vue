@@ -226,7 +226,7 @@
               // console.log(store.state.token)
               var token = store.state.token
               var urlApi = this.UrlApiBase
-              $.ajax({
+              kendo.jQuery.ajax({
                 url: urlApi,
                 beforeSend: function (xhr) {
                   xhr.setRequestHeader('Authorization', 'Bearer ' + token)

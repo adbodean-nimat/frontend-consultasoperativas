@@ -52,7 +52,6 @@
     </template>
     
     <script>
-    import $ from 'jquery'
     import store from "../store";
     import '@progress/kendo-ui'
     import '@progress/kendo-ui/js/messages/kendo.messages.es-AR'
@@ -141,7 +140,7 @@
         readData: function (e) {
               var token = store.state.token
               var urlApi = `${process.env.VUE_APP_API_BASE}/constsecoarmadoconfig2/`
-              $.ajax({
+              kendo.jQuery.ajax({
                 url: urlApi,
                 beforeSend: function (xhr) {
                   xhr.setRequestHeader('Authorization', 'Bearer ' + token)
@@ -156,7 +155,7 @@
         updateData: function(e) {
             var tkn = this.token
             var urlApi = this.UrlApiBase
-            $.ajax({
+            kendo.jQuery.ajax({
               method: 'PUT',
               type: 'PUT',
               url: urlApi + JSON.stringify(e.data.models[0].id),
@@ -177,7 +176,7 @@
         destroyData: function(e){
             var tkn = this.token
             var urlApi = this.UrlApiBase
-            $.ajax({
+            kendo.jQuery.ajax({
               method: 'DELETE',
               type: 'DELETE',
               url: urlApi + JSON.stringify(e.data.models[0].id),
@@ -197,7 +196,7 @@
         createData: function(e){
           var tkn = this.token
           var urlApi = this.UrlApiBase
-          $.ajax({
+          kendo.jQuery.ajax({
             method: 'POST',
             type: 'POST',
             url: urlApi,

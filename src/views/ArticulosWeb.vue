@@ -17,23 +17,30 @@
        </div>
       </div>
       <datasource ref="remoteDataSourceArticulosWeb"
-                        :transport-read="readData"
-                        :transport-update="updateData"
-                        :transport-destroy="destroyData"
-                        :transport-create="createData"
-                        :transport-parameter-map="parameterMap"
-                        :schema-model-id="'id'"
-                        :schema-model-fields="fields"
-                        :batch="true"
-                        :page-size='100'
-                        @error="onError"
-                        @requestend="requestEnd"
+        :transport-read="readData"
+        :transport-update="updateData"
+        :transport-destroy="destroyData"
+        :transport-create="createData"
+        :transport-parameter-map="parameterMap"
+        :schema-model-id="'id'"
+        :schema-model-fields="fields"
+        :batch="true"
+        :page-size='100'
+        @error="onError"
+        @requestend="requestEnd"
                         >
       </datasource>
-      <datasource ref="remoteDataSourceCategoriasWeb"
-                        :transport-read="readDataCategorias"
-                        >
+      
+      <datasource ref="remoteDataSourceCategoriasWeb" 
+        :transport-read="readDataCategorias" 
+        :batch="true">
       </datasource>
+      
+      <datasource ref="remoteDataSourceActualizacionWeb" 
+        :transport-read="readDataActualizacion" 
+        :batch="true">
+      </datasource>
+      
       <grid id="grid" ref="grid"
                   :height="'95vh'"
                   :data-source-ref="'remoteDataSourceArticulosWeb'"
@@ -43,8 +50,9 @@
                   :resizable="true"
                   :column-menu="true"
                   :pageable="true"
+                  :sortable-mode="'multiple'"
                   :editable="'popup'"
-                  :toolbar="['create']">
+                  :toolbar="['create', {name:'actualizar', text: 'Actualizar Web'}, {template: toolbarTemplate}, {template: toolbarLoading}]">
             <grid-column :command="['edit','destroy']" :title="'&nbsp;'" :width="220"></grid-column>
             <grid-column :field="'publicado'" :title="'Publicado'" template="#= publicado == true ? 'Si' : 'No' #" :width="100"></grid-column>
             <grid-column :field="'codigo_art'" :title="'Código'" :width="100"></grid-column>
@@ -72,8 +80,8 @@
     </template>
     
     <script>
-    import $ from 'jquery'
-    import store from "../store"
+    import store from '../store'
+    import axios from 'axios'
     import '@progress/kendo-ui'
     import '@progress/kendo-ui/js/messages/kendo.messages.es-AR'
     import '@progress/kendo-ui/js/cultures/kendo.culture.es-AR'
@@ -82,7 +90,7 @@
     import { Grid, GridColumn } from '@progress/kendo-grid-vue-wrapper'
     import { Button } from '@progress/kendo-buttons-vue-wrapper'
     import { directive as fullscreen } from 'vue-fullscreen'
-    
+
     export default {
       name: 'ArticulosWeb',
       directives: {
@@ -94,8 +102,10 @@
         "datasource": DataSource,
         "kbutton": Button
         },
-      data () {
+      data() {
              return {
+                fechaupdate: '',
+                timer: "",
                 fullscreen: false,
                 teleport: true,
                 pageOnly: true,
@@ -124,33 +134,30 @@
                     namecategorias4: {type: 'string', editable: false},
                   }
                 }
-        },
-      computed: {
-        UrlApiBase(){
-            return `${process.env.VUE_APP_API_BASE}/articulosweb/`
-        },
-        UrlApiCategoria(){
-            return `${process.env.VUE_APP_API_BASE}/categoriasweb/`
-        },
-        token(){
-            return store.state.token
-        },
-        options () {
-          return {
-            callback: (isFullscreen) => {
-              this.fullscreen = isFullscreen
-            },
-            target: '.directive-fullscreen-wrapper',
-            pageOnly: this.pageOnly,
-            teleport: this.teleport
-          }
-        }
+      },
+      created(){
+        this.getActualizacionWeb();
+        this.timer = setInterval(this.getActualizacionWeb, 60 * 1000 * 5); 
       },
       methods: {
+        async getActualizacionWeb(){
+          var token = this.token;
+          var urlApi2 = this.UrlApiActualizacionWeb;
+          const res = await fetch(urlApi2, {method: 'GET',headers: {Authorization: `Basic ${token}`}});
+          const data = await res.json();
+          
+          var fecha = kendo.toString(new Date(data[0].actualizacion_fecha), "g", "es-AR")
+          this.fechaupdate = fecha;
+          kendo.jQuery("div#lastupdate").empty();
+          kendo.jQuery("div#lastupdate").append(fecha);
+        },
+        cancelAutoUpdate() {
+          clearInterval(this.timer);
+        },
         readData: function (e) {
               var tkn = this.token
               var urlApi = this.UrlApiBase
-              $.ajax({
+              kendo.jQuery.ajax({
                 url: urlApi,
                 beforeSend: function (xhr) {
                   xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
@@ -166,7 +173,23 @@
         readDataCategorias: function(e){
           var tkn = this.token
           var urlApi = this.UrlApiCategoria
-          $.ajax({
+          kendo.jQuery.ajax({
+            url: urlApi,
+            beforeSend: function (xhr) {
+            xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
+            },
+            contentType: 'application/json',
+            success: function (data) {
+              e.success(data)
+            },
+            method: 'GET',
+            type: 'GET'
+          })
+        },
+        readDataActualizacion: function(e){
+          var tkn = this.token
+          var urlApi = this.UrlApiActualizacionWeb
+          kendo.jQuery.ajax({
             url: urlApi,
             beforeSend: function (xhr) {
             xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
@@ -184,7 +207,7 @@
             var urlApi = this.UrlApiBase
             var id = e.data.models[0].id
             var data = kendo.stringify(e.data.models[0],["publicado", "codigo_art", "nombre_art", "orden_art", "marcar_nuevo", "mostrar_inicio", "outlet", "copete", "descripcion", "bloq_vtas", "min_para_web", "stock", "categorias1", "categorias2", "categorias3", "categorias4"])
-            $.ajax({
+            kendo.jQuery.ajax({
                 method: 'PUT',
                 type: 'PUT',
                 url: urlApi + id,
@@ -204,7 +227,7 @@
         destroyData: function(e){
             var tkn = this.token
             var urlApi = this.UrlApiBase
-            $.ajax({
+            kendo.jQuery.ajax({
               method: 'DELETE',
               type: 'DELETE',
               url: urlApi + kendo.stringify(e.data.models[0].id),
@@ -223,7 +246,7 @@
         createData: function(e){
           var tkn = this.token
           var urlApi = this.UrlApiBase
-          $.ajax({
+          kendo.jQuery.ajax({
             method: 'POST',
             type: 'POST',
             url: urlApi,
@@ -257,10 +280,6 @@
                 if (type == "update") {
                   e.sender.read();
                 } 
-                
-                /* if (type == undefined) {
-                  e.sender.read();
-                } */
         },
         parameterMap: function(options, operation) {
                 if (operation !== 'read' && options.models) {
@@ -270,6 +289,7 @@
         GetCategoriasWeb: function(container, options) {
           kendo.jQuery('<input required data-bind="value:' + options.field + '" name="' + options.field + '"/>').appendTo(container).kendoDropDownList({
                     autoBind: true,
+                    optionLabel: "Categoria...",
                     dataTextField: "nombre_categorias",
                     dataValueField: "id_categorias",
                     dataSource: {
@@ -305,6 +325,7 @@
         GetCategoriasWebResto: function(container, options) {
           kendo.jQuery('<input data-bind="value:' + options.field + '" name="' + options.field + '"/>').appendTo(container).kendoDropDownList({
                     autoBind: true,
+                    optionLabel: "Categoria...",
                     dataTextField: "nombre_categorias",
                     dataValueField: "id_categorias",
                     dataSource: {
@@ -367,11 +388,101 @@
           var data = dataSourceCategoria4.view()
           var nombreCategorias4 = data.length === 0 ? '' : data[0].nombre_categorias        
           return kendo.toString(nombreCategorias4)
+        },
+        toolbarTemplate: function(){
+          var templateHTML = '<span>Última actualización:</span><div id="lastupdate"></div>';
+          return templateHTML
+        },
+        toolbarLoading: function(){
+          var templateHTML = '<div class="lds-ring" id="loading" style="display:none"><div></div><div></div><div></div><div></div></div>';
+          return templateHTML;
         }
       },
-      mounted:function(){
-        this.$refs.remoteDataSourceCategoriasWeb.kendoDataSource.fetch()
-      }
+      beforeDestroy() {
+        this.cancelAutoUpdate();
+      },
+      computed: {
+        UrlApiBase(){
+          return `${process.env.VUE_APP_API_BASE}/articulosweb/`
+        },
+        UrlApiCategoria(){
+          return `${process.env.VUE_APP_API_BASE}/categoriasweb/`
+        },
+        UrlToUpdateWeb(){
+          return `${process.env.VUE_APP_API_BASE}/jsontosheet/`
+        },
+        UrlApiActualizacionWeb(){
+          return `${process.env.VUE_APP_API_BASE}/actualizacionweb/`
+        },
+        token(){
+            return store.state.token
+        },
+        options(){
+          return {
+            callback: (isFullscreen) => {
+              this.fullscreen = isFullscreen
+            },
+            target: '.directive-fullscreen-wrapper',
+            pageOnly: this.pageOnly,
+            teleport: this.teleport
+          }
+        }
+      },
+      mounted(){               
+        //this.getActualizacionWeb(); 
+        this.$refs.remoteDataSourceCategoriasWeb.kendoDataSource.fetch();
+        /* var dataSourceActualizacion = this.$refs.remoteDataSourceActualizacionWeb.kendoWidget();
+        var fetchData = dataSourceActualizacion.fetch(function(){
+            let data = this.data();
+            var fecha = kendo.toString(new Date(data[0].actualizacion_fecha), "g", "es-AR")
+            kendo.jQuery("#updateAssignment").append(fecha);
+        }); */
+        var grid = this.$refs.grid.kendoWidget();
+        var gridElement = grid.element;
+        var toolbarElement = gridElement.find('.k-grid-toolbar');
+      
+        toolbarElement.on('click', '.k-grid-actualizar', (e)=>{
+              e.preventDefault();
+              kendo.jQuery("#loading").show();
+              var token = store.state.token
+              var urlApi = this.UrlToUpdateWeb
+              var urlApi2 = this.UrlApiActualizacionWeb
+              kendo.jQuery.ajax({
+                url: urlApi,
+                beforeSend: function (xhr) {
+                  xhr.setRequestHeader('Authorization', 'Bearer ' + token)
+                },
+                type: 'GET',
+                dataType: 'html',
+                success: function(data, textStatus){
+                  kendo.jQuery("#loading").hide();
+                  kendo.alert('Generado correctamente').element.getKendoAlert().title("Mensaje"); 
+                  grid.dataSource.read();
+                },
+                error: function(jqXHR, textStatus, errorThrown){
+                  console.log(jqXHR);
+                  console.log(textStatus);
+                  console.log(errorThrown);
+                }
+              });
+              kendo.jQuery.ajax({
+                url: urlApi2 + 1,
+                beforeSend: function (xhr) {
+                  xhr.setRequestHeader('Authorization', 'Bearer ' + token)
+                },
+                type: 'PUT',
+                success: function(data, textStatus){
+                  console.log(data)
+                  console.log(textStatus)
+                },
+                error: function(jqXHR, textStatus, errorThrown){
+                  console.log(jqXHR);
+                  console.log(textStatus);
+                  console.log(errorThrown);
+                }
+              })
+        })
+      },
     }
     </script>
     
@@ -379,6 +490,42 @@
     .k-grid td{
         white-space: nowrap;
         text-overflow: ellipsis;
+    }
+
+    .lds-ring {
+      display: inline-block;
+      position: relative;
+      width: 30px;
+      height: 30px;
+    }
+    .lds-ring div {
+      box-sizing: border-box;
+      display: block;
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      margin: 4px;
+      border: 4px solid #000;
+      border-radius: 50%;
+      animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+      border-color: #008645 transparent transparent transparent;
+    }
+    .lds-ring div:nth-child(1) {
+      animation-delay: -0.45s;
+    }
+    .lds-ring div:nth-child(2) {
+      animation-delay: -0.3s;
+    }
+    .lds-ring div:nth-child(3) {
+      animation-delay: -0.15s;
+    }
+    @keyframes lds-ring {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
     }
     </style>
     

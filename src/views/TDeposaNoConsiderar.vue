@@ -55,7 +55,6 @@
 </template>
 
 <script>
-import $ from 'jquery'
 import store from "../store"
 import '@progress/kendo-ui'
 import '@progress/kendo-ui/js/messages/kendo.messages.es-AR'
@@ -109,7 +108,7 @@ export default {
     readData: function (e) {
               var token = store.state.token
               var urlApi = this.UrlApiBase
-              $.ajax({
+              kendo.jQuery.ajax({
                 url: urlApi,
                 beforeSend: function (xhr) {
                   xhr.setRequestHeader('Authorization', 'Bearer ' + token)
@@ -157,7 +156,7 @@ export default {
                 };
                 let json = JSON.stringify(params);
                 var destroyUrl = `${process.env.VUE_APP_API_BASE}/deposanoconsiderar/`
-                $.ajax({
+                kendo.jQuery.ajax({
                     method: "DELETE",
                     url: destroyUrl + Id,
                     dataType: "json",
@@ -171,7 +170,7 @@ export default {
                 let params = JSON.stringify(options.models[0],["cod_depos", "nombre_deposito"])
                 let json = JSON.parse(params)
                 var createUrl = `${process.env.VUE_APP_API_BASE}/deposanoconsiderar/`
-                $.ajax({
+                kendo.jQuery.ajax({
                     method: "POST",
                     url: createUrl,
                     dataType: "json",
@@ -186,7 +185,7 @@ export default {
                 let params = JSON.stringify(options.models[0],["cod_depos", "nombre_deposito"]);
                 let json = JSON.parse(params);
                 var updateUrl = `${process.env.VUE_APP_API_BASE}/deposanoconsiderar/`
-                $.ajax({
+                kendo.jQuery.ajax({
                     method: "PUT",
                     url: updateUrl + Id,
                     dataType: "json",

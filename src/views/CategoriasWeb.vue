@@ -36,6 +36,7 @@
                   :navigatable="true"
                   :filterable="true"
                   :pageable='false'
+                  :sortable-mode="'multiple'"
                   :editable="'inline'"
                   :toolbar="['create']">
             <grid-column :field="'id'" :title="'Id'" :hidden="true" :width="100"></grid-column>
@@ -48,7 +49,6 @@
     </template>
     
     <script>
-    import $ from 'jquery'
     import store from "../store"
     import '@progress/kendo-ui'
     import '@progress/kendo-ui/js/messages/kendo.messages.es-AR'
@@ -105,7 +105,7 @@
         readData: function (e) {
               var tkn = this.token
               var urlApi = this.UrlApiBase
-              $.ajax({
+              kendo.jQuery.ajax({
                 url: urlApi,
                 beforeSend: function (xhr) {
                   xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
@@ -123,7 +123,7 @@
             var urlApi = this.UrlApiBase
             var id = e.data.models[0].id
             var data = kendo.stringify(e.data.models[0],["id_categorias", "nombre_categorias"])
-            $.ajax({
+            kendo.jQuery.ajax({
                 method: 'PUT',
                 type: 'PUT',
                 url: urlApi + id,
@@ -143,7 +143,7 @@
         destroyData: function(e){
             var tkn = this.token
             var urlApi = this.UrlApiBase
-            $.ajax({
+            kendo.jQuery.ajax({
               method: 'DELETE',
               type: 'DELETE',
               url: urlApi + kendo.stringify(e.data.models[0].id),
@@ -162,7 +162,7 @@
         createData: function(e){
           var tkn = this.token
           var urlApi = this.UrlApiBase
-          $.ajax({
+          kendo.jQuery.ajax({
             method: 'POST',
             type: 'POST',
             url: urlApi,

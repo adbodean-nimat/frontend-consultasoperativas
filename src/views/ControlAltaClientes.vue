@@ -69,7 +69,6 @@
 </template>
 
 <script>
-import $ from 'jquery'
 import store from "../store";
 import '@progress/kendo-ui'
 import '@progress/kendo-ui/js/messages/kendo.messages.es-AR'
@@ -140,7 +139,7 @@ export default {
               // console.log(store.state.token)
               var token = store.state.token
               var urlApi = `${process.env.VUE_APP_API_BASE}/control`
-              $.ajax({
+              kendo.jQuery.ajax({
                 url: urlApi,
                 beforeSend: function (xhr) {
                   xhr.setRequestHeader('Authorization', 'Bearer ' + token)

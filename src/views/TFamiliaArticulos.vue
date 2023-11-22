@@ -40,7 +40,8 @@
                   :data-source-ref="'remoteDataSourceFamiliaArticulos'"
                   :navigatable="true"
                   :filterable="true"
-                  :pageable='true'
+                  :pageable-always-visible="false"
+                  :pageable-page-sizes="[100, 200, 300, 400, 500]"
                   :sortable-mode="'multiple'"
                   :sortable-allow-unsort="true"
                   :sortable-show-indexes="true"
@@ -59,7 +60,6 @@
     </template>
     
     <script>
-    import $ from 'jquery'
     import store from "../store";
     import '@progress/kendo-ui'
     import '@progress/kendo-ui/js/messages/kendo.messages.es-AR'
@@ -122,7 +122,7 @@
         readData: function (e) {
               var tkn = this.token
               var urlApi = this.UrlApiBase
-              $.ajax({
+              kendo.jQuery.ajax({
                 url: urlApi,
                 beforeSend: function (xhr) {
                   xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
@@ -137,7 +137,7 @@
         readDataNombreSet: function(e){
           var tkn = this.token
           var urlApi = this.UrlApiBaseSetVentas
-          $.ajax({
+          kendo.jQuery.ajax({
             url: urlApi,
             beforeSend: function (xhr) {
             xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
@@ -153,7 +153,7 @@
         updateData: function(e) {
             var tkn = this.token
             var urlApi = this.UrlApiBase
-            $.ajax({
+            kendo.jQuery.ajax({
               method: 'PUT',
               type: 'PUT',
               url: urlApi + kendo.stringify(e.data.models[0].id),
@@ -173,7 +173,7 @@
         destroyData: function(e){
             var tkn = this.token
             var urlApi = this.UrlApiBase
-            $.ajax({
+            kendo.jQuery.ajax({
               method: 'DELETE',
               type: 'DELETE',
               url: urlApi + JSON.stringify(e.data.models[0].id),
@@ -193,7 +193,7 @@
         createData: function(e){
           var tkn = this.token
           var urlApi = this.UrlApiBase
-          $.ajax({
+          kendo.jQuery.ajax({
             method: 'POST',
             type: 'POST',
             url: urlApi,

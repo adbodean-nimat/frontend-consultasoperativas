@@ -55,7 +55,6 @@
     </template>
     
     <script>
-    import $ from 'jquery'
     import store from "../store";
     import '@progress/kendo-ui'
     import '@progress/kendo-ui/js/messages/kendo.messages.es-AR'
@@ -89,12 +88,6 @@
                     Nombre_producto: { type: 'string'},
                     Orden_producto: {type: 'number'},
                     Familia_producto: {type: 'string', defaultValue: 'CHAPAS LISAS PREPINTADAS'}
-                },
-                fields2: {
-                  ARVE_RUBRO_VENTA: {type: 'string'},
-                  RUBV_NOMBRE: {type: 'string'},
-                  ARTS_ARTICULO: {type: 'string'},
-                  ARTS_ARTICULO_EMP: {type: 'string'}
                 }
              }
         },
@@ -103,10 +96,10 @@
               return `${process.env.VUE_APP_API_BASE}/productospdistribucion/`
         },
         UrlApiBaseFamiliaArt(){
-            return `${process.env.VUE_APP_API_BASE}/familiaartdistribucion`
+            return `${process.env.VUE_APP_API_BASE}/familiaartdistribucion/`
         },
         UrlApiBaseDatosDesdePlataforma(){
-          return `${process.env.VUE_APP_API_BASE}/vnsindtofinanc`
+          return `${process.env.VUE_APP_API_BASE}/vnsindtofinanc/`
         },
         token(){
           return store.state.token
@@ -126,7 +119,7 @@
         readData: function (e) {
               var tkn = this.token
               var urlApi = this.UrlApiBase
-              $.ajax({
+              kendo.jQuery.ajax({
                 url: urlApi,
                 beforeSend: function (xhr) {
                   xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
@@ -141,7 +134,7 @@
         updateData: function(e) {
             var tkn = this.token
             var urlApi = this.UrlApiBase
-            $.ajax({
+            kendo.jQuery.ajax({
               method: 'PUT',
               type: 'PUT',
               url: urlApi + JSON.stringify(e.data.models[0].id),
@@ -162,7 +155,7 @@
         destroyData: function(e){
             var tkn = this.token
             var urlApi = this.UrlApiBase
-            $.ajax({
+            kendo.jQuery.ajax({
               method: 'DELETE',
               type: 'DELETE',
               url: urlApi + JSON.stringify(e.data.models[0].id),
@@ -182,7 +175,7 @@
         createData: function(e){
           var tkn = this.token
           var urlApi = this.UrlApiBase
-          $.ajax({
+          kendo.jQuery.ajax({
             method: 'POST',
             type: 'POST',
             url: urlApi,
@@ -248,7 +241,8 @@
                                 headers: {
                                   'Authorization': 'Bearer ' + store.state.token
                                 }
-                            }
+                            },
+                            sort: {field: "nombre_familia_art", dir: "asc"}
                         }
                     }
                 })

@@ -101,7 +101,6 @@
     </template>
     
     <script>
-    import $ from 'jquery'
     import store from "../store";
     import JSZip from 'jszip'
     import '@progress/kendo-ui'
@@ -171,7 +170,7 @@
                   var gridElement = grid.element;
                   var cantdiasatras = gridElement.find('#diasatras');
                   var DiasAtras = cantdiasatras.data("kendoNumericTextBox").value()
-                  $.ajax({
+                  kendo.jQuery.ajax({
                     url: urlApi + DiasAtras,
                     beforeSend: function (xhr) {
                       xhr.setRequestHeader('Authorization', 'Bearer ' + token)

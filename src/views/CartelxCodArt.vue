@@ -56,7 +56,6 @@
     </template>
     
     <script>
-    import $ from 'jquery'
     import store from "../store";
     import '@progress/kendo-ui'
     import '@progress/kendo-ui/js/messages/kendo.messages.es-AR'
@@ -122,7 +121,7 @@
                   var gridElement = grid.element;
                   var codart = gridElement.find('#codart');
                   var CodArt = codart.data("kendoNumericTextBox").value()
-                  $.ajax({
+                  kendo.jQuery.ajax({
                     url: urlApi + CodArt,
                     beforeSend: function (xhr) {
                       xhr.setRequestHeader('Authorization', 'Bearer ' + token)
