@@ -429,14 +429,7 @@
         }
       },
       mounted(){               
-        //this.getActualizacionWeb(); 
         this.$refs.remoteDataSourceCategoriasWeb.kendoDataSource.fetch();
-        /* var dataSourceActualizacion = this.$refs.remoteDataSourceActualizacionWeb.kendoWidget();
-        var fetchData = dataSourceActualizacion.fetch(function(){
-            let data = this.data();
-            var fecha = kendo.toString(new Date(data[0].actualizacion_fecha), "g", "es-AR")
-            kendo.jQuery("#updateAssignment").append(fecha);
-        }); */
         var grid = this.$refs.grid.kendoWidget();
         var gridElement = grid.element;
         var toolbarElement = gridElement.find('.k-grid-toolbar');
@@ -472,8 +465,8 @@
                 },
                 type: 'PUT',
                 success: function(data, textStatus){
-                  console.log(data)
-                  console.log(textStatus)
+                  kendo.jQuery("div#lastupdate").empty();
+                  kendo.jQuery("div#lastupdate").append(kendo.toString(new Date(), "g", "es-AR"));
                 },
                 error: function(jqXHR, textStatus, errorThrown){
                   console.log(jqXHR);

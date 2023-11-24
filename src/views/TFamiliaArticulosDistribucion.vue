@@ -45,7 +45,7 @@
                   :toolbar="['create']">
             <grid-column :field="'id'" :title="'Id'" :hidden="true"></grid-column>
             <grid-column :field="'cod_familia_art'" :title="'Código Familia Art.'" :width="100"></grid-column>
-            <grid-column :field="'nombre_familia_art'" :title="'Nombre Familia Art.'" :width="300" :filterable-multi="true"></grid-column>
+            <grid-column :field="'nombre_familia_art'" :title="'Nombre Familia Art.'" :width="300" :filterable-multi="true" :filterable-search="true"></grid-column>
             <grid-column :field="'nro_orden_familia'" :title="'Nro. Orden de la familia'"></grid-column>
             <grid-column :field="'cod_set_art'" :title="'Código Set de la familia'" :editor="CodSetFamiliaDropDownEditor"></grid-column>
             <grid-column :field="'nombre_set_art'" :title="'Set de la familia'" :editor="SetFamiliaDropDownEditor" :filterable-multi="true"></grid-column>
@@ -227,7 +227,8 @@
             },
             SetFamiliaDropDownEditor: function(container, options) {
                 kendo.jQuery('<input required name="'+ options.field +'" />').appendTo(container).kendoDropDownList({
-                    autoBind: false,
+                  filter: "startswith",  
+                  autoBind: true,
                     dataTextField: "nombre_set_art",
                     dataValueField: "nombre_set_art",
                     dataSource: {
@@ -247,7 +248,8 @@
             },
             CodSetFamiliaDropDownEditor: function(container, options) {
                 kendo.jQuery('<input required name="'+ options.field +'" />').appendTo(container).kendoDropDownList({
-                    autoBind: false,
+                  filter: "startswith",  
+                  autoBind: true,
                     dataTextField: "nombre_set_art",
                     dataValueField: "cod_set_art",
                     dataSource: {
