@@ -88,8 +88,8 @@
                     cod_familia_art: { type: 'string'},
                     nombre_familia_art: { type: 'string'},
                     nro_orden_familia: {type: 'number'},
-                    cod_set_art: {type: 'string', defaultValue: '0018'},
-                    nombre_set_art: {type: 'string', defaultValue: 'SET TECHOS'}
+                    cod_set_art: {type: 'string', defaultValue: ''},
+                    nombre_set_art: {type: 'string', defaultValue: ''}
                 },
              }
         },
@@ -123,41 +123,43 @@
                 beforeSend: function (xhr) {
                   xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
                 },
-                dataType: 'json',
+                contentType: "application/json; charset=utf-8",
                 success: function (data) {
                   e.success(data)
                 },
+                method: 'GET',
                 type: 'GET'
               })
         },
         updateData: function(e) {
             var tkn = this.token
             var urlApi = this.UrlApiBase
+            var id = kendo.stringify(e.data.models[0].id);
+            var data = kendo.stringify(e.data.models[0]);
             kendo.jQuery.ajax({
-              method: 'PUT',
               type: 'PUT',
-              url: urlApi + JSON.stringify(e.data.models[0].id),
+              url: urlApi + id,
               beforeSend: function(xhr) {
                 xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
               },
               success: function(data){
-                e.success(data)
+                e.success()
               },
               error: function(data){
                 e.error(data)
               },
-              data: JSON.stringify(e.data.models[0],["cod_familia_art", "nombre_familia_art", "nro_orden_familia", "cod_set_art", "nombre_set_art"]),
-              dataType: 'json',
-              contentType: 'application/json',
+              contentType: 'application/json; charset=utf-8',
+              data: data
             })
         },
         destroyData: function(e){
             var tkn = this.token
             var urlApi = this.UrlApiBase
+            var id = kendo.stringify(e.data.models[0].id);
             kendo.jQuery.ajax({
               method: 'DELETE',
               type: 'DELETE',
-              url: urlApi + JSON.stringify(e.data.models[0].id),
+              url: urlApi + id,
               beforeSend: function(xhr) {
                 xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
               },
@@ -167,13 +169,13 @@
               error: function(data){
                 e.error(data)
               },
-              dataType: 'json',
-              contentType: 'application/json',
+              contentType: 'application/json; charset=utf-8'
             })
         },
         createData: function(e){
           var tkn = this.token
           var urlApi = this.UrlApiBase
+          var data = kendo.stringify(e.data.models[0]);
           kendo.jQuery.ajax({
             method: 'POST',
             type: 'POST',
@@ -182,14 +184,14 @@
               xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
             },
             success: function(data){
-              e.success(data)
+              e.success()
+              console.log(data)
             },
             error: function(data){
               e.error(data)
             },
-            dataType: 'json',
-            contentType: 'application/json',
-            data: JSON.stringify(e.data.models[0],["cod_familia_art", "nombre_familia_art", "nro_orden_familia", "cod_set_art", "nombre_set_art"]),
+            contentType: 'application/json; charset=utf-8',
+            data: data
           })
         },
         onError: function(e){
@@ -206,19 +208,7 @@
             requestEnd: function(e) {
                 var response = e.response;
                 var type = e.type;
-                /* The result can be observed in the DevTools(F12) console of the browser. */
                 console.log(type + " => type");
-                /* The result can be observed in the DevTools(F12) console of the browser. */
-                // console.log(response.length);
-                if (type == "create") {
-                  e.sender.read();
-                }
-                if (type == "update") {
-                  e.sender.read();
-                }
-                if (type == undefined) {
-                  e.sender.read();
-                }
             },
             parameterMap: function(options, operation) {
                 if (operation !== 'read' && options.models) {
