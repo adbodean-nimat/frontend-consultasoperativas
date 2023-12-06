@@ -301,7 +301,8 @@
                     var unidMed = ClasArt2 == '0004' ? 'M2' : 'unidad';
                     var descuento = data[0].CMBD_POR_DESC
                     var itemTextoPresentacion = data[0].Texto_presentacion
-                    var itemTextoPresentacionMejorando = data.length > 1 && data[0].CMBD_POR_DESC === 0 ? "Comprando este articulo y accedes a la oferta de..." : data.length > 1 && data[0].CMBD_POR_DESC >= 1 ? "Si compras este articulo, te ganas un descuento del "+ kendo.format('{0:p2}', descuento / 100) +" y accedes a la oferta de..." : itemTextoPresentacion;
+                    console.log(descuento)
+                    var itemTextoPresentacionMejorando = data.length >= 1 && data[0].CMBD_POR_DESC == 0 ? "Comprando este articulo y accedes a la oferta de..." : data.length >= 1 && data[0].CMBD_POR_DESC >= 1 ? "Si compras este articulo, te ganas un descuento del "+ kendo.format('{0:p2}', descuento / 100) +" y accedes a la oferta de..." : itemTextoPresentacion;
                     var checkboxCuotas = checkCuotas[0].checked
                     var NroCuotas = nroCuotas.val();
                     var valorCuotas = sumWithInitial / NroCuotas

@@ -42,6 +42,7 @@ import WebNimat from "../views/WebNimat.vue"
 import CategoriasWeb from "../views/CategoriasWeb.vue"
 import ArticulosWeb from "../views/ArticulosWeb.vue"
 import DeposANoConsiderarParaStockFisico from "../views/TDepositoANoConsiderarParaStockFisico.vue"
+import ListaRubrosVtasAcopio from "../views/RubrosVentasAcopio.vue"
 
 
 const routes = [
@@ -510,6 +511,19 @@ const routes = [
       metaTags: [
         {
           name: 'Lista de precio - Rubros Ventas'
+        }      ]
+    }
+  },
+  {
+    path: '/listarubrosvtasacopio',
+    name: 'Lista de precio - Rubros Ventas Acopio',
+    component: ListaRubrosVtasAcopio,
+    props: true,
+    meta: {
+      title: 'Lista de precio - Rubros Ventas Acopio',
+      metaTags: [
+        {
+          name: 'Lista de precio - Rubros Ventas Acopio'
         }      ]
     }
   },
