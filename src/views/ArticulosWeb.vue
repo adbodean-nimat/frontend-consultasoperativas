@@ -205,8 +205,8 @@
                 method: 'PUT',
                 type: 'PUT',
                 success: function(data, textStatus){
-                  console.log(data);
-                  console.log(textStatus);
+                  //console.log(data);
+                  //console.log(textStatus);
                 },
                 error: function(jqXHR, textStatus, errorThrown){
                   console.log(jqXHR);
@@ -225,7 +225,7 @@
                 type: 'GET',
                 dataType: 'html',
                 success: function(data, textStatus){
-                  console.log(data)
+                  //console.log(data)
                 },
                 error: function(jqXHR, textStatus, errorThrown){
                   console.log(jqXHR);
@@ -300,7 +300,7 @@
                     xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
                 },
                 success: function(data){
-                    e.success(data)
+                    e.success()
                 },
                 error: function(data){
                     e.error(data)
@@ -339,7 +339,7 @@
               xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
             },
             success: function(data){
-              e.success(data)
+              e.success()
             },
             error: function(data){
               e.error(data)
@@ -578,25 +578,25 @@
             var data = {actualizacion_cron_lunesaviernes: cron1, actualizacion_cron_sabados: cron2}
             var token = store.state.token
             var urlApiCron = this.UrlApiActualizacionWebCron
-            kendo.jQuery.ajax({
+            var validCron1 = isValidCron(cron1, { seconds: true })
+            var validCron2 = isValidCron(cron2, { seconds: true })
+            //console.log(validCron1);
+            //console.log(validCron2);
+
+            if(validCron1 == false){
+              kendo.alert('Cron "Lunes a Viernes" inválida').element.getKendoAlert().title("Mensaje");
+            } else if(validCron2 == false){
+              kendo.alert('Cron "Sábados" inválida').element.getKendoAlert().title("Mensaje");
+            } else {
+              kendo.jQuery.ajax({
                 url: urlApiCron + 1,
                 beforeSend: function (xhr) {
                   xhr.setRequestHeader('Authorization', 'Bearer ' + token)
                 },
                 method: 'PUT',
                 type: 'PUT',
-                success: function(data, textStatus){
-                  if(isValidCron(cron1, { seconds: true }) && isValidCron(cron2, { seconds: true })){
-                    kendo.alert(data).element.getKendoAlert().title("Mensaje");
-                  } else {
-                    if(isValidCron(cron1, { seconds: true }) == false){
-                      kendo.alert('Cron "Lunes a Viernes" inválida').element.getKendoAlert().title("Mensaje");
-                    }
-                    if(isValidCron(cron2, { seconds: true }) == false){
-                      kendo.alert('Cron "Sábados" inválida').element.getKendoAlert().title("Mensaje");
-                    }
-                    return false 
-                  }
+                success: function(data, textStatus){      
+                  kendo.alert(data).element.getKendoAlert().title("Mensaje");
                 },
                 error: function(jqXHR, textStatus, errorThrown){
                   console.log(jqXHR);
@@ -606,6 +606,7 @@
                 data: kendo.stringify(data),
                 contentType: 'application/json',
               });
+
               kendo.jQuery.ajax({
                 url: this.UrlAplicarCambiosCron,
                 beforeSend: function (xhr) {
@@ -615,7 +616,7 @@
                 type: 'GET',
                 dataType: 'html',
                 success: function(data, textStatus){
-                  console.log(data)
+                  // console.log(data)
                 },
                 error: function(jqXHR, textStatus, errorThrown){
                   console.log(jqXHR);
@@ -623,6 +624,7 @@
                   console.log(errorThrown);
                 }
               });
+            }
           });
         });
       
@@ -631,7 +633,6 @@
               kendo.jQuery("#loading").show();
               var token = store.state.token
               var urlApi = this.UrlToUpdateWeb
-              var urlApi2 = this.UrlApiActualizacionWeb
               kendo.jQuery.ajax({
                 url: urlApi,
                 beforeSend: function (xhr) {
