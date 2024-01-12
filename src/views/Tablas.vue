@@ -40,7 +40,6 @@
             <grid-column :field="'url_tablas'" :title="'URL'" :hidden="true"></grid-column>
             <grid-column :field="'consultas_tablas'" :title="'Consultas'"></grid-column>
             <grid-column :template="templateBotonEditar"></grid-column>
-            <!-- <grid-column :command="['edit','destroy']" :title="'&nbsp;'"></grid-column> -->
       </grid>
     </div>
     </div>

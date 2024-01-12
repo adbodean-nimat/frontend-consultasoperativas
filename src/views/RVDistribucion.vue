@@ -48,7 +48,6 @@
                           :transport-read="readData"
                           :schema-model-fields="schemaModelFields"
                           :group="groupDefinicion"
-                          :sort="sortDefinicion"
                           @error="onError"
                           @requestend="requestEnd"
                           >
@@ -93,7 +92,7 @@
               <grid-column field="ARTS_ARTICULO_EMP" title="Código" :column-menu="false"  :width="80" :hidden="false"></grid-column>
               <grid-column field="ARTS_NOMBRE" title="Articulo" :column-menu="false" :width="400" :hidden="false"></grid-column>
               <grid-column field="ARTS_UNIMED_STOCK" title="&nbsp;" :column-menu="false" :width="40" :hidden="false"></grid-column>
-              <grid-column field="PRECIO_LISTA_CON_IVA" title="Precio lista c/IVA" template="#: kendo.toString(PRECIO_LISTA_CON_IVA, 'c2')#" :hidden="false" :width="100"></grid-column>
+              <grid-column field="PRECIO_LISTA_CON_IVA" title="Precio lista c/IVA" :template="this.precioLista" :hidden="false" :width="100"></grid-column>
               <grid-column field="DCA1_POR_DESCUENTO" title="Dto. Cliente" template="#=kendo.format('{0:p0}', DCA1_POR_DESCUENTO / 100)#" :width="80" :hidden="false"></grid-column>
               <grid-column field="dtoFinan" title="Dto. Financ." :template="this.dtoFinan" :width="80" :hidden="false"></grid-column>
               <grid-column field="precioContado" title="Precio contado c/IVA c/Dtos" :template="this.precioContado" :hidden="false" :width="100"></grid-column>
@@ -147,7 +146,7 @@
     import { Grid, GridColumn } from '@progress/kendo-grid-vue-wrapper'
     import { Button } from '@progress/kendo-buttons-vue-wrapper'
     import { directive as fullscreen } from 'vue-fullscreen'
-    kendo.culture("es-AR");
+    kendo.culture("es-US")
     export default {
       name: 'ListaDistribucion',
       directives: {
@@ -171,9 +170,6 @@
                   { field: 'RUBV_NOMBRE'},
                   { field: 'nro_orden_familia'},
                   { field: 'nombre_familia_art'}
-                ],
-                sortDefinicion:[
-                  
                 ],
                 schemaModelFields: {
                   ARVE_RUBRO_VENTA: {type: 'string'},
@@ -233,7 +229,6 @@
       },
       methods: {
         readData: function (e) {
-              // console.log(store.state.token)
               var token = store.state.token
               var urlApi = this.UrlApiBase
               kendo.jQuery.ajax({
@@ -248,7 +243,7 @@
                 type: 'GET'
               })
           },
-          exportGridWithTemplatesContent: function(e){
+          exportGridWithTemplatesContent: function(e){            
             var idemArtsArticuloEmp = document.querySelectorAll("span#idArtsArticuloEmp")
             var initialValue = 0;
             var VeriSinMod = document.querySelectorAll("span#idVeriSinMod");
@@ -280,16 +275,59 @@
             var idemDvc1 = document.querySelector("#dvc1listaprevcta").innerText
             
             e.workbook.sheets[0].freezePane.rowSplit = 0;
+            e.workbook.sheets[0].columns[0].width = 200;
+            e.workbook.sheets[0].columns[2].width = 0;
+            var rows2Cells = e.workbook.sheets[0].rows[2].cells
+            var rows3Cells = e.workbook.sheets[0].rows[4].cells
+            
+            var row2Cells = {
+                  value: 'PRECIO CON DESCUENTOS INCLUIDOS', 
+                  borderLeft: {color: "#000000", size: 1}, 
+                  borderRight: {color: "#000000", size: 1},
+                  borderBottom: {color: "#000000", size: 1},
+                  borderTop: {color: "#000000", size: 1},
+                  fontSize: 11, 
+                  textAlign: "center", 
+                  vAlign: "center", 
+                  colSpan: 2,
+                  bold: true, 
+                  wrap: true, 
+                  background: "#92D050"
+            }
+
+            var row3Cells = {
+                  value: 'sujetos a variación sin previo aviso', 
+                  borderLeft: {color: "#000000", size: 1}, 
+                  borderRight: {color: "#000000", size: 1},
+                  borderBottom: {color: "#000000", size: 1},
+                  borderTop: {color: "#000000", size: 1},
+                  fontSize: 13.5, 
+                  textAlign: "center", 
+                  vAlign: "center", 
+                  colSpan: 2,
+                  bold: false,  
+                  wrap: true, 
+                  background: "#FFFF00"
+            }
+
+            rows2Cells.splice(2, 0, row2Cells);
+            rows3Cells.splice(4, 0, row3Cells);
+
             var data = e.data;
             var gridColumns = e.sender.columns;
             var rows = e.workbook.sheets[0].rows;
+            var columns = e.workbook.sheets[0].columns
             var visibleGridColumns = [];
             var columnTemplates = [];
             var dataItems = [];
             var newRows = [];
             var dataItem;
+            var masItem = [];
+
+            console.log(rows)
+
             // Crear elemento para generar plantillas
-            var elem = document.createElement('div');
+            var elem = document.createElement('span');
             
             // Obtener una lista de columnas visibles
             for (var i = 0; i < gridColumns.length; i++) {
@@ -333,12 +371,27 @@
                   
                   if (rows[ri].type == "header"){
                     rows.splice(ri,1)
-                    rows.unshift({cells:[
-                      {value: new Date(), colSpan: 4},
-                      {value: idemCodCte+' '+idemDvc1},
-                      {value: modificados + ' Precios con IVA Incluido sujetos a variación sin previo aviso.', background: "#FFFF00"},
-                      {value: 'Precio con descuentos incluidos.', colSpan: 3, background: "#92D050"}                      
-                  ]});
+                    rows.unshift({
+                      height: 35.5,
+                      cells:[
+                        {value: ''},
+                        {value: kendo.toString(new Date(), "D", "es-AR"), colSpan: 5},
+                        {
+                          value: 'Precios con IVA Incluido', 
+                          borderLeft: {color: "#000000", size: 1}, 
+                          borderRight: {color: "#000000", size: 1},
+                          borderBottom: {color: "#000000", size: 1},
+                          borderTop: {color: "#000000", size: 1},
+                          fontSize: 14.5, 
+                          textAlign: "center", 
+                          vAlign: "center", 
+                          bold: true, 
+                          colSpan: 2, 
+                          wrap: true, 
+                          background: "#FFFF00"
+                        }                   
+                      ]
+                    });
                   }
 
                   if(row.type == "header"){
@@ -349,25 +402,32 @@
                   }
 
                   if (rows[ri].type == "group-header"){
+
                     rows.splice(ri,1);
-                    // rows[ri].cells.splice(0,1);
-                    // rows[ri].cells.splice(1,1)
+
                     for (var i = 0; i < rows[ri].cells.length; i++) {                
                       var colspan = rows[ri].cells[i].colSpan
-                      rows[ri].cells[i].background = '';
+                      rows[ri].cells[0].background = '';
+                      rows[ri].cells[1].background = '';
+                      
                       
                       if(colspan == 9){
+                        rows[ri].height = 35.5;
                         rows[ri].cells[i].fontSize = 16;
                         rows[ri].cells[i].bold = true;
                         rows[ri].cells[i].background = '';
-                        rows[ri].cells[i].colSpan = 7;
+                        rows[ri].cells[i].colSpan = 3;
+                        rows[ri].cells[i].vAlign = "center";                        
                       }
 
                       if(colspan == 11){
-                        rows[ri].cells[i].fontSize = 20;
+                        rows[ri].height = 50;
+                        rows[ri].cells[i].fontSize = 30;
                         rows[ri].cells[i].bold = true;
                         rows[ri].cells[i].background = '';
-                        rows[ri].cells[i].colSpan = 9;
+                        rows[ri].cells[i].colSpan = 5;
+                        rows[ri].cells[i].vAlign = "center"
+                        rows[ri].cells[i].underline = true;
                       } 
                     }
                   }
@@ -375,6 +435,8 @@
                   if (rows[ri].type == "data"){
                     for (var di = 0; di < rows[ri].cells.length; di++) {
                       rows[ri].cells[di].background = '';
+                      rows[ri].cells[7].textAlign = 'right';
+                      rows[ri].cells[8].textAlign = 'right';
                     }
                   }
 
@@ -384,11 +446,11 @@
             }
             
             //////////////////////////////////////////////////////////////////////////////////////////////////////
-
+            
             // Recorra todas las filas exportadas.
             for (var i = 1; i < newRows.length; i++) {
                 var row = newRows[i];
-
+          
                 // Recorra las plantillas de columna y aplíquelas para cada fila en la posición de columna almacenada
                 if(row.type !== "group-header"){
                   var iRow = row
@@ -402,10 +464,10 @@
 
                   // Genere el contenido de la plantilla para la celda actual.
                   elem.innerHTML = columnTemplate.template(dataItem);
-                  
+                  //var groupOffset = e.sender.dataSource.group().length;
                   if (row.cells[columnTemplate.cellIndex + 4] != undefined)                
                   // Envíe el contenido de texto de la celda con plantilla a la celda exportada.
-                  row.cells[columnTemplate.cellIndex + 4].value = elem.textContent || elem.innerText || "";
+                  row.cells[columnTemplate.cellIndex + 4].value = "" || elem.innerText || elem.textContent;
                 }
             }
           },
@@ -562,7 +624,13 @@
             var DtoFinan = numericDtoFinan.data("kendoNumericTextBox").value();
             return DtoFinan+'%'
         },
+        precioLista: function(item){
+          kendo.culture("es-US");
+          var precioListaConIVA = item.PRECIO_LISTA_CON_IVA
+          return kendo.toString(precioListaConIVA, "c2");
+        },
         precioContado: function(item){
+            kendo.culture("es-US");
             var grid = this.$refs.grid.kendoWidget();
             var gridElement = grid.element;
             var numericDtoFinan = gridElement.find('#dtofinan');
@@ -576,7 +644,7 @@
             var cal2 = (1-iDCA1_POR_DESCUENTO/100)
             var cal3 = (1+iCIMP_TASA/100)
             var precioTotal = cal * (iDCA1_POR_DESCUENTO ? cal2 : agregaruna) * cal3 * (iCOTI_COTIZACION ? iCOTI_COTIZACION : agregaruna);
-            return kendo.toString(precioTotal, "c2")
+            return kendo.toString(precioTotal, "c2");
         },
         toolbarTemplate: function() {
             var templateHtml =

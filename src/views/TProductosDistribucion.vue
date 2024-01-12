@@ -39,6 +39,9 @@
                   :navigatable="true"
                   :filterable="true"
                   :pageable='true'
+                  :pageable-always-visible="false"
+                  :pageable-page-sizes="[100, 200, 300, 400, 500]"
+                  :resizable="true"
                   :sortable-mode="'multiple'"
                   :sortable-allow-unsort="true"
                   :sortable-show-indexes="true"
@@ -198,7 +201,6 @@
                     Set_Familia: secondResult.filter(codigo => codigo.cod_familia_art == result[v].Cod_Familia_producto).map(data => data.nombre_set_art)
                   })
                 }
-                console.log(result2)
                 e.success(result2);
               });
         },
@@ -286,10 +288,7 @@
         requestEnd: function(e) {
                 var response = e.response;
                 var type = e.type;
-                /* The result can be observed in the DevTools(F12) console of the browser. */
                 console.log(type + " => type");
-                /* The result can be observed in the DevTools(F12) console of the browser. */
-                // console.log(response.length);
                 if (type == "create") {
                   e.sender.read();
                 }

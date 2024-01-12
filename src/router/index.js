@@ -43,7 +43,7 @@ import CategoriasWeb from "../views/CategoriasWeb.vue"
 import ArticulosWeb from "../views/ArticulosWeb.vue"
 import DeposANoConsiderarParaStockFisico from "../views/TDepositoANoConsiderarParaStockFisico.vue"
 import ListaRubrosVtasAcopio from "../views/RubrosVentasAcopio.vue"
-
+import ListaCombo from "../views/Combo.vue"
 
 const routes = [
   {
@@ -615,6 +615,19 @@ const routes = [
       metaTags: [
         {
           name: 'Lista de precios - Distribución'
+        }      ]
+    }
+  },
+  {
+    path: '/combo',
+    name: 'Lista de precios - Combo',
+    component: ListaCombo,
+    props: true,
+    meta: {
+      title: 'Lista de precios - Combo',
+      metaTags: [
+        {
+          name: 'Lista de precios - Combo'
         }      ]
     }
   }

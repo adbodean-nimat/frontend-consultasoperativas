@@ -37,6 +37,8 @@
                   :navigatable="true"
                   :filterable="true"
                   :pageable='true'
+                  :pageable-always-visible="false"
+                  :pageable-page-sizes="[100, 200, 300, 400, 500]"
                   :resizable="true"
                   :sortable-mode="'multiple'"
                   :sortable-allow-unsort="true"
@@ -195,27 +197,26 @@
           })
         },
         onError: function(e){
-              console.log(e.status); // displays "error"
+              console.log(e.status);
               console.log(e.error);
-            },
-            /* onChange: function(e) {
-              console.log("request change");
-            },
-            requestStart: function(e) {
-              /* The result can be observed in the DevTools(F12) console of the browser. */
-              //console.log("request started"); 
-            //},
-            requestEnd: function(e) {
+        },
+        requestEnd: function(e) {
                 var response = e.response;
                 var type = e.type;
                 console.log(type + " => type");
-            },
-            parameterMap: function(options, operation) {
+                if (type == "create") {
+                  e.sender.read();
+                }
+                if (type == "update") {
+                  e.sender.read();
+                }
+        },
+        parameterMap: function(options, operation) {
                 if (operation !== 'read' && options.models) {
                     return JSON.stringify(options.models)
                 }
-            },
-            SetFamiliaDropDownEditor: function(container, options) {
+        },
+        SetFamiliaDropDownEditor: function(container, options) {
                 kendo.jQuery('<input required name="'+ options.field +'" />').appendTo(container).kendoDropDownList({
                   filter: "startswith",  
                   autoBind: true,

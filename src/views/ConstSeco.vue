@@ -524,7 +524,7 @@
                     '</div>' +
                     '<div class="col d-flex flex-column">' +
                       '<label class="col-form-label" style="margin-right:5px">Código Config.</label>' +
-                      '<input type="search" id="codconfig" style="width: 150px" />' +
+                      '<input type="search" id="codconfig" style="width: 300px" />' +
                       '<div class="invalid-feedback">Falta completa este campo.</div>'+
                     '</div>' +
                     '<div class="col d-flex flex-column">' +
@@ -605,7 +605,7 @@
             })
 
             dropDownElement2.kendoDropDownList({
-              dataTextField: "cod_conf_cs",
+              dataTextField: "nombre_conf_cs",
               dataValueField: "cod_conf_cs",
               autoBind: true,
               optionLabel: "",

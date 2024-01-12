@@ -115,7 +115,7 @@
         customPrint: function(e){
             e.preventDefault();
             var grid = this.$refs.grid.kendoWidget();
-            var dataItem = grid.dataItem($(e.currentTarget).closest("tr"));
+            var dataItem = grid.dataItem(kendo.jQuery(e.currentTarget).closest("tr"));
             console.log(dataItem)
             var theDate = new Date();
             var printableContent = '';

@@ -16,6 +16,34 @@
             </div>
        </div>
       </div>
+      <div id="windowForAssign">
+        <div id="cron">        
+            <div class="row g-3 p-3 align-items-center">
+              <div class="col">
+                <label for="" class="col-form-label">Lunes a Viernes</label>
+                <input id="cron1" value="">
+              </div>
+            </div>
+          
+            <div class="row g-3 p-3 align-items-center">
+              <div class="col">
+                <label for="" class="col-form-label">Sábados</label>
+                <input id="cron2" value="">
+              </div>
+            </div>
+            
+            <div class="row g-3">
+              <button id="guardar-cron" class="guardar-cron btn btn-primary">Guardar</button>
+            </div>
+        
+            <div class="row g-3 text-center">
+              <div class="col pt-3">
+                <p>Generador Cron: <a href="https://crontab.guru/" target="_blank">Crontab Guru</a></p>
+              </div>
+            </div>
+        </div>
+      </div>
+      
       <datasource ref="remoteDataSourceArticulosWeb"
         :transport-read="readData"
         :transport-update="updateData"
@@ -27,8 +55,7 @@
         :batch="true"
         :page-size='100'
         @error="onError"
-        @requestend="requestEnd"
-                        >
+        @requestend="requestEnd">
       </datasource>
       
       <datasource ref="remoteDataSourceCategoriasWeb" 
@@ -52,7 +79,7 @@
                   :pageable="true"
                   :sortable-mode="'multiple'"
                   :editable="'popup'"
-                  :toolbar="['create', {name:'actualizar', text: 'Actualizar Web'}, {template: toolbarTemplate}, {template: toolbarLoading}]">
+                  :toolbar="['create', {name:'gear', text: 'Editar Cron', iconClass: 'k-icon k-i-gear'}, {name:'actualizar', text: 'Actualizar Web'}, {template: toolbarTemplate}, {template: toolbarLoading}, {template: actualizacionautomatica}]">
             <grid-column :command="['edit','destroy']" :title="'&nbsp;'" :width="220"></grid-column>
             <grid-column :field="'publicado'" :title="'Publicado'" template="#= publicado == true ? 'Si' : 'No' #" :width="100"></grid-column>
             <grid-column :field="'codigo_art'" :title="'Código'" :width="100"></grid-column>
@@ -86,6 +113,7 @@
     import '@progress/kendo-ui/js/messages/kendo.messages.es-AR'
     import '@progress/kendo-ui/js/cultures/kendo.culture.es-AR'
     import '@progress/kendo-theme-bootstrap/dist/all.css'
+    import { isValidCron } from 'cron-validator'
     import { DataSource } from '@progress/kendo-datasource-vue-wrapper'
     import { Grid, GridColumn } from '@progress/kendo-grid-vue-wrapper'
     import { Button } from '@progress/kendo-buttons-vue-wrapper'
@@ -104,6 +132,7 @@
         },
       data() {
              return {
+                IsAllow: '',
                 fechaupdate: '',
                 timer: "",
                 fullscreen: false,
@@ -138,18 +167,74 @@
       created(){
         this.getActualizacionWeb();
         this.timer = setInterval(this.getActualizacionWeb, 60 * 1000 * 5); 
+        if (!store.getters.isLoggedIn) {
+            this.$router.push('/');
+        }
+        //this.giveName = store.getters.getUser.givenName;
+        this.IsAllow = store.getters.getUser.sAMAccountName;
       },
       methods: {
+        isCronValid(freq){
+          var cronregex = new RegExp();
+          return cronregex.test(freq);
+        },
         async getActualizacionWeb(){
           var token = this.token;
           var urlApi2 = this.UrlApiActualizacionWeb;
           const res = await fetch(urlApi2, {method: 'GET',headers: {Authorization: `Basic ${token}`}});
           const data = await res.json();
-          
+          var checkedUpdate = data[0].actualizacion_automatica
           var fecha = kendo.toString(new Date(data[0].actualizacion_fecha), "g", "es-AR")
           this.fechaupdate = fecha;
           kendo.jQuery("div#lastupdate").empty();
           kendo.jQuery("div#lastupdate").append(fecha);
+          kendo.jQuery("input#cron1").val(data[0].actualizacion_cron_lunesaviernes);
+          kendo.jQuery("input#cron2").val(data[0].actualizacion_cron_sabados);
+
+          kendo.jQuery("#input-switch").kendoSwitch({
+            size: 'small',
+            checked: checkedUpdate,
+            change: (e)=>{
+              var checked = e.checked
+              var data = { actualizacion_automatica: checked }
+              kendo.jQuery.ajax({
+                url: this.UrlApiActualizacionWebChecked + 1,
+                beforeSend: function (xhr) {
+                  xhr.setRequestHeader('Authorization', 'Bearer ' + token)
+                },
+                method: 'PUT',
+                type: 'PUT',
+                success: function(data, textStatus){
+                  console.log(data);
+                  console.log(textStatus);
+                },
+                error: function(jqXHR, textStatus, errorThrown){
+                  console.log(jqXHR);
+                  console.log(textStatus);
+                  console.log(errorThrown);
+                },
+                data: kendo.stringify(data),
+                contentType: 'application/json',
+              });
+              kendo.jQuery.ajax({
+                url: this.UrlAplicarCambiosCron,
+                beforeSend: function (xhr) {
+                  xhr.setRequestHeader('Authorization', 'Bearer ' + token)
+                },
+                method: 'GET',
+                type: 'GET',
+                dataType: 'html',
+                success: function(data, textStatus){
+                  console.log(data)
+                },
+                error: function(jqXHR, textStatus, errorThrown){
+                  console.log(jqXHR);
+                  console.log(textStatus);
+                  console.log(errorThrown);
+                }
+              }); 
+            }
+          });
         },
         cancelAutoUpdate() {
           clearInterval(this.timer);
@@ -273,13 +358,13 @@
                 
                 console.log("type => " + type);
                 
-                if (type == "create") {
+                /* if (type == "create") {
                   e.sender.read();
                 }
                 
                 if (type == "update") {
                   e.sender.read();
-                } 
+                }  */
         },
         parameterMap: function(options, operation) {
                 if (operation !== 'read' && options.models) {
@@ -396,6 +481,18 @@
         toolbarLoading: function(){
           var templateHTML = '<div class="lds-ring" id="loading" style="display:none"><div></div><div></div><div></div><div></div></div>';
           return templateHTML;
+        },
+        actualizacionautomatica: function(){
+          var templateHTML = 
+          '<div class="position-absolute end-0">' +
+            '<div id="switch" class="row align-items-center">'+
+                '<div class="col">'+
+                  '<input id="input-switch" aria-label="Switch" />' +
+                  '<label style="margin: 0px 10px;" class="col-form-label">Actualización automática</label>' +
+                '</div>' +
+            '</div>' +
+          '</div>';
+          return templateHTML;
         }
       },
       beforeDestroy() {
@@ -413,6 +510,18 @@
         },
         UrlApiActualizacionWeb(){
           return `${process.env.VUE_APP_API_BASE}/actualizacionweb/`
+        },
+        UrlApiActualizacionWebNow(){
+          return `${process.env.VUE_APP_API_BASE}/actualizacionwebnow/`
+        },
+        UrlApiActualizacionWebCron(){
+          return `${process.env.VUE_APP_API_BASE}/actualizacionwebcron/`
+        },
+        UrlApiActualizacionWebChecked(){
+          return `${process.env.VUE_APP_API_BASE}/actualizacionwebchecked/`
+        },
+        UrlAplicarCambiosCron(){
+          return `${process.env.VUE_APP_API_BASE}/aplicarcambioscron/`
         },
         token(){
             return store.state.token
@@ -433,6 +542,89 @@
         var grid = this.$refs.grid.kendoWidget();
         var gridElement = grid.element;
         var toolbarElement = gridElement.find('.k-grid-toolbar');
+        var kendoWindowAssign = kendo.jQuery("#windowForAssign");
+        var toolbarGear = document.getElementsByClassName('k-grid-gear');
+        var actualizacionAuto = document.getElementById('switch');
+
+        if(this.IsAllow === 'abodean'|| this.IsAllow === 'abodean'|| this.IsAllow === 'dvazquez'|| this.IsAllow === 'ejescobar'){
+        } else {
+          toolbarGear[0].style.display = "none";
+          actualizacionAuto.style.display = "none";
+        }
+
+        kendo.jQuery("#cron1").kendoTextBox({
+          fillMode: 'flat'
+        });
+        kendo.jQuery("#cron2").kendoTextBox({
+          fillMode: 'flat'
+        });
+
+        kendoWindowAssign.kendoWindow({
+          width: "500px",
+          modal: true,
+          visible: false,
+          height: 'auto',
+          resizable: false,
+          title: 'Editar Cron'
+        })
+
+        toolbarElement.on('click', '.k-grid-gear', (e)=>{
+          var popup = kendo.jQuery("#windowForAssign").data('kendoWindow');
+          popup.open();
+          popup.center();
+          popup.wrapper.find(".guardar-cron").click((e)=>{
+            var cron1 = kendo.jQuery('#cron1').val();
+            var cron2 = kendo.jQuery('#cron2').val();
+            var data = {actualizacion_cron_lunesaviernes: cron1, actualizacion_cron_sabados: cron2}
+            var token = store.state.token
+            var urlApiCron = this.UrlApiActualizacionWebCron
+            kendo.jQuery.ajax({
+                url: urlApiCron + 1,
+                beforeSend: function (xhr) {
+                  xhr.setRequestHeader('Authorization', 'Bearer ' + token)
+                },
+                method: 'PUT',
+                type: 'PUT',
+                success: function(data, textStatus){
+                  if(isValidCron(cron1, { seconds: true }) && isValidCron(cron2, { seconds: true })){
+                    kendo.alert(data).element.getKendoAlert().title("Mensaje");
+                  } else {
+                    if(isValidCron(cron1, { seconds: true }) == false){
+                      kendo.alert('Cron "Lunes a Viernes" inválida').element.getKendoAlert().title("Mensaje");
+                    }
+                    if(isValidCron(cron2, { seconds: true }) == false){
+                      kendo.alert('Cron "Sábados" inválida').element.getKendoAlert().title("Mensaje");
+                    }
+                    return false 
+                  }
+                },
+                error: function(jqXHR, textStatus, errorThrown){
+                  console.log(jqXHR);
+                  console.log(textStatus);
+                  console.log(errorThrown);
+                },
+                data: kendo.stringify(data),
+                contentType: 'application/json',
+              });
+              kendo.jQuery.ajax({
+                url: this.UrlAplicarCambiosCron,
+                beforeSend: function (xhr) {
+                  xhr.setRequestHeader('Authorization', 'Bearer ' + token)
+                },
+                method: 'GET',
+                type: 'GET',
+                dataType: 'html',
+                success: function(data, textStatus){
+                  console.log(data)
+                },
+                error: function(jqXHR, textStatus, errorThrown){
+                  console.log(jqXHR);
+                  console.log(textStatus);
+                  console.log(errorThrown);
+                }
+              });
+          });
+        });
       
         toolbarElement.on('click', '.k-grid-actualizar', (e)=>{
               e.preventDefault();
@@ -459,7 +651,7 @@
                 }
               });
               kendo.jQuery.ajax({
-                url: urlApi2 + 1,
+                url: this.UrlApiActualizacionWebNow + 1,
                 beforeSend: function (xhr) {
                   xhr.setRequestHeader('Authorization', 'Bearer ' + token)
                 },
@@ -475,7 +667,7 @@
                 }
               })
         })
-      },
+      }
     }
     </script>
     
@@ -519,6 +711,9 @@
       100% {
         transform: rotate(360deg);
       }
+    }
+    .displaynone{
+      display: none !important
     }
     </style>
     

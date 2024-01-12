@@ -40,6 +40,7 @@
                   :data-source-ref="'remoteDataSourceFamiliaArticulos'"
                   :navigatable="true"
                   :filterable="true"
+                  :resizable="true"
                   :pageable-always-visible="false"
                   :pageable-page-sizes="[100, 200, 300, 400, 500]"
                   :sortable-mode="'multiple'"
@@ -51,8 +52,8 @@
             <grid-column :field="'cod_fami_art'" :title="'Código Familia Art.'"></grid-column>
             <grid-column :field="'nombre_fami_art'" :title="'Nombre Familia Art.'"></grid-column>
             <grid-column :field="'nro_orden_de_la_fami'" :title="'Nro. Orden de la familia'"></grid-column>
-            <grid-column :field="'set_de_la_familia'" :title="'Set de la familia'" :filterable-multi="true"></grid-column>
-            <grid-column :field="'nombre_set_art'" :title="'Nombre Set Art.'" :template="TemplateNombreSet" :filterable="false"></grid-column>
+            <grid-column :field="'set_de_la_familia'" :title="'Código Set de la familia'" :editor="CodSetFamiliaDropDownEditor" :filterable-multi="true"></grid-column>
+            <grid-column :field="'nombre_set_art'" :title="'Set de la familia'" :filterable-multi="true"></grid-column>
             <grid-column :command="['edit','destroy']" :title="'&nbsp;'"></grid-column>
       </grid>
     </div>
@@ -102,7 +103,7 @@
               return `${process.env.VUE_APP_API_BASE}/familiadearticulo/`
         },
         UrlApiBaseSetVentas(){
-          return `${process.env.VUE_APP_API_BASE}/setsdeventas/`
+          return `${process.env.VUE_APP_API_BASE}/setsdeventas`
         },
         token(){
           return store.state.token
@@ -118,65 +119,79 @@
           }
         }
       },
-       methods: {
+      methods: {
         readData: function (e) {
               var tkn = this.token
-              var urlApi = this.UrlApiBase
-              kendo.jQuery.ajax({
-                url: urlApi,
+              var data1 = kendo.jQuery.ajax({
+                url: this.UrlApiBase,
                 beforeSend: function (xhr) {
                   xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
                 },
-                dataType: 'json',
+                contentType: "application/json; charset=utf-8",
                 success: function (data) {
                   e.success(data)
                 },
+                method: 'GET',
                 type: 'GET'
-              })
-        },
-        readDataNombreSet: function(e){
-          var tkn = this.token
-          var urlApi = this.UrlApiBaseSetVentas
-          kendo.jQuery.ajax({
-            url: urlApi,
-            beforeSend: function (xhr) {
-            xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
-            },
-            contentType: 'application/json',
-            success: function (data) {
-              e.success(data)
-            },
-            method: 'GET',
-            type: 'GET'
-          })
+              });
+            var data2 = kendo.jQuery.ajax({
+              url: this.UrlApiBaseSetVentas,
+              beforeSend: function (xhr) {
+                  xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
+                },
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                  e.success(data)
+                },
+                method: 'GET',
+                type: 'GET'
+            });
+            kendo.jQuery.when(data1, data2).then(function(firstResponse, secondResponse){
+              var firstResult = firstResponse[0];
+              var secondResult = secondResponse[0];
+              var result = [];
+              for(var i = 0; i < firstResult.length; i++){
+                  result.push({
+                    id: firstResult[i].id,
+                    cod_fami_art: firstResult[i].cod_fami_art,
+                    nombre_fami_art: firstResult[i].nombre_fami_art,
+                    nro_orden_de_la_fami: firstResult[i].nro_orden_de_la_fami,
+                    set_de_la_familia: firstResult[i].set_de_la_familia,
+                    nombre_set_art: secondResult.filter(codigo => codigo.cod_set_art == firstResult[i].set_de_la_familia).map(data => data.nombre_set_art),
+                  })
+                }
+                e.success(result);
+            });
         },
         updateData: function(e) {
             var tkn = this.token
             var urlApi = this.UrlApiBase
+            var id = kendo.stringify(e.data.models[0].id);
+            var data = kendo.stringify(e.data.models[0]);
             kendo.jQuery.ajax({
-              method: 'PUT',
               type: 'PUT',
-              url: urlApi + kendo.stringify(e.data.models[0].id),
+              url: urlApi + id,
               beforeSend: function(xhr) {
                 xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
               },
               success: function(data){
-                e.success(data)
+                e.success();
               },
               error: function(data){
-                e.error(data)
+                e.error(data);
               },
-              data: kendo.stringify(e.data.models[0],["cod_fami_art", "nombre_fami_art", "nro_orden_de_la_fami", "set_de_la_familia"]),
-              contentType: 'application/json',
+              contentType: 'application/json; charset=utf-8',
+              data: data
             })
         },
         destroyData: function(e){
             var tkn = this.token
             var urlApi = this.UrlApiBase
+            var id = kendo.stringify(e.data.models[0].id);
             kendo.jQuery.ajax({
               method: 'DELETE',
               type: 'DELETE',
-              url: urlApi + JSON.stringify(e.data.models[0].id),
+              url: urlApi + id,
               beforeSend: function(xhr) {
                 xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
               },
@@ -186,13 +201,13 @@
               error: function(data){
                 e.error(data)
               },
-              dataType: 'json',
-              contentType: 'application/json',
+              contentType: 'application/json; charset=utf-8'
             })
         },
         createData: function(e){
           var tkn = this.token
           var urlApi = this.UrlApiBase
+          var data = kendo.stringify(e.data.models[0]);
           kendo.jQuery.ajax({
             method: 'POST',
             type: 'POST',
@@ -201,57 +216,72 @@
               xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
             },
             success: function(data){
-              e.success(data)
+              e.success();
+              console.log(data)
             },
             error: function(data){
-              e.error(data)
+              e.error(data);
             },
-            dataType: 'json',
-            contentType: 'application/json',
-            data: JSON.stringify(e.data.models[0],["cod_fami_art", "nombre_fami_art", "nro_orden_de_la_fami", "set_de_la_familia"]),
+            contentType: 'application/json; charset=utf-8',
+            data: data,
           })
         },
         onError: function(e){
-              console.log(e.status); // displays "error"
+              console.log(e.status);
               console.log(e.error);
-            },
-            /* onChange: function(e) {
-              console.log("request change");
-            },
-            requestStart: function(e) {
-              /* The result can be observed in the DevTools(F12) console of the browser. */
-              //console.log("request started"); 
-            //},
-            requestEnd: function(e) {
+        },
+        requestEnd: function(e) {
                 var response = e.response;
                 var type = e.type;
-                /* The result can be observed in the DevTools(F12) console of the browser. */
                 console.log(type + " => type");
-                /* The result can be observed in the DevTools(F12) console of the browser. */
-                // console.log(response.length);
                 if (type == "create") {
                   e.sender.read();
                 }
                 if (type == "update") {
                   e.sender.read();
                 }
-                if (type == undefined) {
-                  e.sender.read();
-                }
-            },
-            parameterMap: function(options, operation) {
+        },
+        parameterMap: function(options, operation) {
                 if (operation !== 'read' && options.models) {
                     return JSON.stringify(options.models)
                 }
-            },
-            TemplateNombreSet: function(item){
-              var itemSetVentas = item.set_de_la_familia
-              var dataSourceSetVentas = this.$refs.remoteDataSourceNombreSet.kendoWidget();
-              dataSourceSetVentas.filter({field: 'cod_set_art', operator: 'eq', value: itemSetVentas});
-              var data = dataSourceSetVentas.view()
-              var nombreSetVentas = data.length === 0 ? '' : data[0].nombre_set_art
-              return kendo.toString(nombreSetVentas)
-            }
+        },
+        CodSetFamiliaDropDownEditor: function(container, options) {
+                kendo.jQuery('<input data-bind="value:' + options.field + '" name="' + options.field + '"/>').appendTo(container).kendoDropDownList({
+                  filter: "contains",  
+                  autoBind: true,
+                  optionLabel: "Familia...",
+                  dataTextField: "nombre_set_art",
+                  dataValueField: "cod_set_art",
+                  valuePrimitive: true,
+                  dataSource: {
+                    transport:{
+                      read:{
+                        contentType: 'application/json',
+                        dataType: 'json',
+                        type: 'GET',
+                        url: this.UrlApiBaseSetVentas,
+                        headers: {
+                          'Authorization': 'Bearer ' + store.state.token
+                        }
+                      }
+                    },
+                    schema:{
+                      model:  {
+                        id: "id",
+                        fields: {
+                          cod_set_art: {type:"string"},
+                          nombre_set_art: {type:"string"}
+                        }
+                      }
+                    },
+                    sort: {
+                      field: 'nombre_set_art',
+                      dir: 'asc'
+                    }
+                  }
+                });
+        },
       },
       mounted:function(){
         this.$refs.remoteDataSourceNombreSet.kendoDataSource.fetch()
