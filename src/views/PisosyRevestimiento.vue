@@ -20,14 +20,18 @@
                           :transport-read="readData"
                           :schema-model-fields="schemaModelFields"
                           :page-size='200'
-                          :serverSorting="false"
                           >
         </datasource>
         <grid ref="grid"
               :height="'95vh'"
               :data-source-ref="'remoteDataSourcePyR'"
-              :sortable="false"
               :filterable="true"
+              :pageable='true'
+              :pageable-always-visible="false"
+              :pageable-page-sizes="[200, 300, 400, 500]"
+              :sortable-mode="'multiple'"
+              :sortable-allow-unsort="true"
+              :sortable-show-indexes="true"
               :reorderable="true"
               :resizable="true"
               :groupable="false"
@@ -42,7 +46,7 @@
               :auto-bind="false"
               @excelexport="excelExport"
               >
-              <grid-column field="ARTS_ARTICULO_EMP" title="Código" template="#: kendo.toString(ARTS_ARTICULO_EMP, '00000000') #" :width="100" :hidden="false"></grid-column>
+              <grid-column field="ARTS_ARTICULO_EMP" title="Código" :width="100" :hidden="false"></grid-column>
               <grid-column field="ARTS_NOMBRE" title="Nombre" :width="400" :hidden="false"></grid-column>
               <grid-column field="RAC_M2" title="M2 por caja aprox." :autoWidth="true" :hidden="false"></grid-column>
               <grid-column field="StockCaja" title="Stock Caja" :template="StockCaja" :type="'numeric'" :autoWidth="true" :hidden="false"></grid-column>
@@ -99,17 +103,17 @@
                 schemaModelFields: {
                     CA03_NOMBRE: {type: 'string'},
                     Tipología: {type: 'string'},
-                    ARTS_ARTICULO_EMP: {type: 'numeric'},
+                    ARTS_ARTICULO_EMP: {type: 'string'},
                     ARTS_NOMBRE: {type: 'string'},
-                    Pre_Cdo_con_IVA_L1: {type: 'numeric'},
-                    Pre_Cdo_con_IVA_M2: {type: 'numeric'},
-                    RAC_M2: {type: 'numeric'},
-                    Stock_Uni: {type: 'numeric'},
-                    Stock_M2: {type: 'numeric'},
-                    M2_Pte_Entr_NP: {type: 'numeric'},
-                    M2_Disp_Habil_Vta: {type: 'numeric'},
+                    Pre_Cdo_con_IVA_L1: {type: 'number'},
+                    Pre_Cdo_con_IVA_M2: {type: 'number'},
+                    RAC_M2: {type: 'number'},
+                    Stock_Uni: {type: 'number'},
+                    Stock_M2: {type: 'number'},
+                    M2_Pte_Entr_NP: {type: 'number'},
+                    M2_Disp_Habil_Vta: {type: 'number'},
                     Bloqueado_Vtas: {type: 'string'},
-                    M2_Bloqueado_Vta: {type: 'numeric'},
+                    M2_Bloqueado_Vta: {type: 'number'},
                     Uso: {type: 'string'},
                     DVC1_CLC1_CLASIF_1: {type: 'string'},
                     LIPV_NOMBRE: {type: 'string'}
