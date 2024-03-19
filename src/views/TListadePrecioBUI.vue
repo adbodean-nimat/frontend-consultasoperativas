@@ -87,7 +87,7 @@
                 title: 'Tabla: Lista de precio breve - Uso interno',
                 fields: {
                     id: { editable: false, nullable: true},
-                    arts_articulo_emp: { type: 'numeric', validation:{
+                    arts_articulo_emp: { type: 'number', validation:{
                       required: true,
                       minLength: function(input) { 
                         if (input.is("[name='arts_articulo_emp']") && input.val() != "") {

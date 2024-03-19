@@ -18,15 +18,9 @@
   
   <datasource ref="remoteDataSource4"
                     :transport-read="readData"
-                    :transport-update-url="UrlApiBase"
-                    :transport-update-content-type="'application/json; charset=utf-8'"
-                    :transport-update-data-type="'json'"
-                    :transport-destroy-url="UrlApiBase"
-                    :transport-destroy-content-type="'application/json; charset=utf-8'"
-                    :transport-destroy-data-type="'json'"
-                    :transport-create-url="UrlApiBase"
-                    :transport-create-content-type="'application/json; charset=utf-8'"
-                    :transport-create-data-type="'json'"
+                    :transport-update="updateData"
+                    :transport-destroy="destroyData"
+                    :transport-create="createData"
                     :transport-parameter-map="parameterMap"
                     :schema-model-id="'id'"
                     :schema-model-fields="fields"
@@ -83,14 +77,17 @@ export default {
             title: 'NP a Considerar',
             fields: {
                 id: { editable: false, nullable: true},
-                cod_comp: { type: 'varchar'},
-                nomb_comp: { type: 'varchar'},
+                cod_comp: { type: 'string'},
+                nomb_comp: { type: 'string'},
             },
          }
     },
   computed: {
     UrlApiBase(){
-          return `${process.env.VUE_APP_API_BASE}/npaconsiderar/`
+      return `${process.env.VUE_APP_API_BASE}/npaconsiderar/`
+    },
+    token(){
+      return store.state.token
     },
     options () {
       return {
@@ -103,120 +100,99 @@ export default {
       }
     }
   },
-   methods: {
+  methods: {
     readData: function (e) {
-              // console.log(store.state.token)
-              var token = store.state.token
-              var urlApi = `${process.env.VUE_APP_API_BASE}/npaconsiderar/`
-              kendo.jQuery.ajax({
-                url: urlApi,
-                beforeSend: function (xhr) {
-                  xhr.setRequestHeader('Authorization', 'Bearer ' + token)
-                },
-                dataType: 'json',
-                success: function (data) {
-                  e.success(data)
-                },
-                type: 'GET'
-              })
-          },
-        onError: function(e){
-          console.log(e.status); // displays "error"
-          console.log(e.error);
+      var token = this.token
+      var urlApi = `${process.env.VUE_APP_API_BASE}/npaconsiderar/`
+      kendo.jQuery.ajax({
+        url: urlApi,
+        beforeSend: function (xhr) {
+          xhr.setRequestHeader('Authorization', 'Bearer ' + token)
         },
-        /* onChange: function(e) {
-          console.log("request change");
+        contentType: 'application/json; charset=utf-8',
+        success: function (data) {
+          e.success(data)
         },
-        requestStart: function(e) {
-          /* The result can be observed in the DevTools(F12) console of the browser. */
-          //console.log("request started"); 
-        //},
-        requestEnd: function(e) {
-            var response = e.response;
-            var type = e.type;
-            /* The result can be observed in the DevTools(F12) console of the browser. */
-            console.log(type + " => type");
-            /* The result can be observed in the DevTools(F12) console of the browser. */
-            console.log(response.length);
-            if (type == "create") {
-                e.sender.read();
-                } else
-            if (type == "update") {
-                e.sender.read();
-                }
+        method: 'GET',
+        type: 'GET'
+      })
+    },
+    updateData: function(e) {
+      var tkn = this.token
+      var urlApi = this.UrlApiBase
+      var id = e.data.models[0].id
+      var data = kendo.stringify(e.data.models[0],["cod_comp","nomb_comp"])
+      kendo.jQuery.ajax({
+        method: 'PUT',
+        type: 'PUT',
+        url: urlApi + id,
+        beforeSend: function(xhr) {
+          xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
         },
-        /* parameterMap: function(options, operation) {
-            if (operation !== 'read' && options.models) {
-                return JSON.stringify(options.models)
-            }
-        }, */
-        parameterMap: function(options, operation) {            
-             if (operation == 'read') {
-                //console.log(operation + " operation");
-                //console.log(options);
-                //console.log(JSON.stringify(options));
-                return options
-            } 
-            if (operation == 'destroy') {
-                //console.log(operation + " operation");
-                //console.log(JSON.stringify(options.models[0].id));
-                
-                var Id = JSON.stringify(options.models[0].id);
-                let params = {
-                "cod_comp": JSON.stringify(options.models[0].cod_comp),
-                "nomb_comp": JSON.stringify(options.models[0].nomb_comp),
-                };
-                let json = JSON.stringify(params);
-                var destroyUrl = `${process.env.VUE_APP_API_BASE}/npaconsiderar/`
-                kendo.jQuery.ajax({
-                    method: "DELETE",
-                    url: destroyUrl + Id,
-                    dataType: "json",
-                    data: json,
-                    headers: {
-                          'Authorization': 'Bearer ' + store.state.token
-                        }
-                });   
-            } 
-            if (operation == 'create') {
-                //console.log(operation);
-                //console.log(JSON.stringify(options.models[0],["cod_comp", "nomb_comp"]))
-                //console.log(JSON.stringify(options.models[0],["cod_depos","nombre_deposito"]));
-                //return JSON.stringify(options.models[0],["cod_comp","nomb_comp"]);
-                let params = JSON.stringify(options.models[0],["cod_comp", "nomb_comp"])
-                let json = JSON.parse(params)
-                var createUrl = `${process.env.VUE_APP_API_BASE}/npaconsiderar/`
-                kendo.jQuery.ajax({
-                    method: "POST",
-                    url: createUrl,
-                    dataType: "json",
-                    data: json,
-                    headers: {
-                          'Authorization': 'Bearer ' + store.state.token
-                        }
-                });
-            } 
-            if (operation == 'update') {
-                //console.log(operation);
-                //console.log(JSON.stringify(options.models[0],["cod_comp", "nomb_comp"]))
-                //console.log(JSON.stringify(options.models[0],["id","cod_depos","nombre_deposito"]));
-                //return JSON.stringify(options.models[0],["cod_comp","nomb_comp"]);
-                var Id = JSON.stringify(options.models[0].id);
-                let params = JSON.stringify(options.models[0],["cod_comp", "nomb_comp"]);
-                let json = JSON.parse(params);
-                var updateUrl = `${process.env.VUE_APP_API_BASE}/npaconsiderar/`
-                kendo.jQuery.ajax({
-                    method: "PUT",
-                    url: updateUrl + Id,
-                    dataType: "json",
-                    data: json,
-                    headers: {
-                          'Authorization': 'Bearer ' + store.state.token
-                        }
-                });
-            }
-           
+        success: function(data){
+          e.success()
         },
+        error: function(data){
+          e.error(data)
+        },
+        contentType: 'application/json; charset=utf-8',
+        data: data
+      })
+    },
+    destroyData: function(e){
+      var tkn = this.token
+      var urlApi = this.UrlApiBase
+      kendo.jQuery.ajax({
+        method: 'DELETE',
+        type: 'DELETE',
+        url: urlApi + kendo.stringify(e.data.models[0].id),
+        beforeSend: function(xhr) {
+          xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
+        },
+        success: function(data){
+          e.success(data)
+        },
+        error: function(data){
+          e.error(data)
+        },
+        contentType: 'application/json; charset=utf-8',
+      })
+    },
+    createData: function(e){
+      var tkn = this.token
+      var urlApi = this.UrlApiBase
+      var data = kendo.stringify(e.data.models[0]);
+      kendo.jQuery.ajax({
+        method: 'POST',
+        type: 'POST',
+        url: urlApi,
+        beforeSend: function(xhr) {
+          xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
+        },
+        success: function(data){
+          e.success();
+        },
+        error: function(data){
+          e.error(data)
+        },
+        contentType: 'application/json; charset=utf-8',
+        data: data
+      })
+    },
+    onError: function(e){
+      console.log(e.status); 
+      console.log(e.error);
+    },
+    requestEnd: function(e) {
+      var response = e.response;
+      var type = e.type;
+      console.log(type + " => type");
+    },
+    parameterMap: function(options, operation) {
+      if (operation !== 'read' && options.models) {
+        return JSON.stringify(options.models)
+      }
+    }
   }
 }
 </script>

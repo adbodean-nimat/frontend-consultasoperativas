@@ -79,7 +79,9 @@
                   :pageable="true"
                   :sortable-mode="'multiple'"
                   :editable="'popup'"
-                  :toolbar="['create', {name:'gear', text: 'Editar Cron', iconClass: 'k-icon k-i-gear'}, {name:'actualizar', text: 'Actualizar Web'}, {template: toolbarTemplate}, {template: toolbarLoading}, {template: actualizacionautomatica}]">
+                  :toolbar="['create', {name:'gear', text: 'Editar Cron', iconClass: 'k-icon k-i-gear'}, {name:'actualizar', text: 'Actualizar Web'}, {template: toolbarTemplate}, {template: toolbarLoading}, {template: actualizacionautomatica}]"
+                  @save="onSave"
+                  >
             <grid-column :command="['edit','destroy']" :title="'&nbsp;'" :width="220"></grid-column>
             <grid-column :field="'publicado'" :title="'Publicado'" template="#= publicado == true ? 'Si' : 'No' #" :width="100"></grid-column>
             <grid-column :field="'codigo_art'" :title="'Código'" :width="100"></grid-column>
@@ -142,7 +144,16 @@
                 fields: {
                     id: {editable: false, nullable: true},
                     publicado: {type: 'boolean'},
-                    codigo_art: {type: 'string', validation: { required: {message: "es requerido"}}},
+                    codigo_art: {type: 'string', validation:{
+                      required: true,
+                      minLength: function(input) { 
+                        if (input.is("[name='codigo_art']") && input.val() != "") {
+                          input.attr("data-minlength-msg", "Debe tener desde 4 hasta 8 caracteres"); 
+                          return /[0-9]{4,8}/.test(input.val());
+                        }                                
+                        return true;
+                      }
+                    }},
                     nombre_art: {type: 'string'},
                     orden_art: {type: 'number'},
                     marcar_nuevo: {type: 'boolean'},
@@ -205,8 +216,8 @@
                 method: 'PUT',
                 type: 'PUT',
                 success: function(data, textStatus){
-                  //console.log(data);
-                  //console.log(textStatus);
+                  console.log(data);
+                  console.log(textStatus);
                 },
                 error: function(jqXHR, textStatus, errorThrown){
                   console.log(jqXHR);
@@ -225,7 +236,7 @@
                 type: 'GET',
                 dataType: 'html',
                 success: function(data, textStatus){
-                  //console.log(data)
+                  console.log(data)
                 },
                 error: function(jqXHR, textStatus, errorThrown){
                   console.log(jqXHR);
@@ -365,6 +376,19 @@
                 if (type == "update") {
                   e.sender.read();
                 }  */
+        },
+        onSave: function(e){
+          var currentCodArt = e.model.codigo_art;
+          var dataSourceArtWeb = this.$refs.remoteDataSourceArticulosWeb.kendoWidget();
+          var data = dataSourceArtWeb.data()
+          console.log(currentCodArt)
+          console.log(data)
+          for(var i = 0; i < data.length; i++){
+              if(data[i].codigo_art == currentCodArt){
+                  e.preventDefault();
+                  kendo.alert("Este articulo ya existe").element.getKendoAlert().title("Mensaje");
+              }
+          }
         },
         parameterMap: function(options, operation) {
                 if (operation !== 'read' && options.models) {
@@ -539,6 +563,7 @@
       },
       mounted(){               
         this.$refs.remoteDataSourceCategoriasWeb.kendoDataSource.fetch();
+        this.$refs.remoteDataSourceArticulosWeb.kendoDataSource.fetch();
         var grid = this.$refs.grid.kendoWidget();
         var gridElement = grid.element;
         var toolbarElement = gridElement.find('.k-grid-toolbar');
@@ -546,7 +571,7 @@
         var toolbarGear = document.getElementsByClassName('k-grid-gear');
         var actualizacionAuto = document.getElementById('switch');
 
-        if(this.IsAllow === 'abodean'|| this.IsAllow === 'abodean'|| this.IsAllow === 'dvazquez'|| this.IsAllow === 'ejescobar'){
+        if(this.IsAllow === 'abodean'|| this.IsAllow === 'avillasalte'|| this.IsAllow === 'dvazquez'|| this.IsAllow === 'ejescobar'){
         } else {
           toolbarGear[0].style.display = "none";
           actualizacionAuto.style.display = "none";
@@ -616,7 +641,7 @@
                 type: 'GET',
                 dataType: 'html',
                 success: function(data, textStatus){
-                  // console.log(data)
+                  console.log(data)
                 },
                 error: function(jqXHR, textStatus, errorThrown){
                   console.log(jqXHR);

@@ -268,7 +268,7 @@
               modificados = 'No se existen modificaciones en los precios de los artículos de esta lista, entre ' + kendo.toString(valueFechaCambiosPrecios, "dd-MM-yyyy") + ' y el ' + kendo.toString(fechaHasta, "dd-MM-yyyy")+'.';
             } else
             if(sumVeriMod > 0){
-              modificados = 'Sobre ' + idemArtsArticuloEmp.length + ' artículos de esta lista de precios, se identifican ' + sumVeriMod + ' modificados entre el ' + kendo.toString(valueFechaCambiosPrecios, "dd-MM-yyyy") + ' y el ' + kendo.toString(fechaHasta, "dd-MM-yyyy")+'.';
+              modificados = 'Se identifican ' + sumVeriMod + ' modificados entre el ' + kendo.toString(valueFechaCambiosPrecios, "dd-MM-yyyy") + ' y el ' + kendo.toString(fechaHasta, "dd-MM-yyyy")+'.';
             }
 
             var idemCodCte = document.querySelector(".k-input-value-text:nth-child(1)").innerText
@@ -277,6 +277,7 @@
             e.workbook.sheets[0].freezePane.rowSplit = 0;
             e.workbook.sheets[0].columns[0].width = 200;
             e.workbook.sheets[0].columns[2].width = 0;
+            
             var rows2Cells = e.workbook.sheets[0].rows[2].cells
             var rows3Cells = e.workbook.sheets[0].rows[4].cells
             
@@ -323,8 +324,6 @@
             var newRows = [];
             var dataItem;
             var masItem = [];
-
-            console.log(rows)
 
             // Crear elemento para generar plantillas
             var elem = document.createElement('span');
@@ -392,6 +391,14 @@
                         }                   
                       ]
                     });
+                    rows.unshift({
+                      height: 35.5,
+                      cells:[
+                        {value: ''},
+                        {value: modificados},
+                        {value: ''}                   
+                      ]
+                    });
                   }
 
                   if(row.type == "header"){
@@ -447,13 +454,16 @@
             
             //////////////////////////////////////////////////////////////////////////////////////////////////////
             
+            dataItems.unshift(masItem);
+
             // Recorra todas las filas exportadas.
             for (var i = 1; i < newRows.length; i++) {
                 var row = newRows[i];
-          
+                
                 // Recorra las plantillas de columna y aplíquelas para cada fila en la posición de columna almacenada
                 if(row.type !== "group-header"){
                   var iRow = row
+                  //console.log(iRow)
                 }
                 
                 // Obtenga el elemento de datos correspondiente a la fila actual.
@@ -565,7 +575,18 @@
             (accumulator, currentValue) => accumulator + currentValue,
             initialValue
           );
-
+          var grid = this.$refs.grid.kendoWidget();
+          var gridElement = grid.element;
+          var fechaCambiosPrecios = gridElement.find('#fechaCambiosPrecio');
+          var valueFechaCambiosPrecios = fechaCambiosPrecios.data('kendoDatePicker').value();
+          var fechaHasta = new Date();
+          var modificados = document.getElementById("modificados_encabezado");
+          if (idemArtsArticuloEmp.length == sumVeriSinMod){
+            modificados.innerText = 'No se existen modificaciones en los precios de los artículos de esta lista'
+          } else
+          if(sumVeriMod > 0){
+            modificados.innerText = 'Se identifican ' + sumVeriMod + ' modificados entre el ' + kendo.toString(valueFechaCambiosPrecios, "dd-MM-yyyy") + ' y el ' + kendo.toString(fechaHasta, "dd-MM-yyyy")
+          }
         },
         CambiosPrecioDesde: function(){
           kendo.culture("es-AR");
@@ -649,17 +670,12 @@
         toolbarTemplate: function() {
             var templateHtml =
             '<div class="container-fluid">' +
-                '<form id="form" class="requires-validation row align-items-end row-cols-4" novalidate>' +
+                '<form id="form" class="requires-validation row align-items-end p-1" novalidate>' +
                     '<div class="col d-flex flex-column">' +
                       '<label class="col-form-label">Perfil Comercial</label>' +
                       '<input type="search" id="codcte" style="width: 150px"/>' +
                       '<div class="invalid-feedback">Falta completa este campo.</div>'+
                     '</div>' +
-                    /* '<div class="col d-flex flex-column">' +
-                      '<label class="col-form-label">Rubro Vta.</label>' +
-                      '<input type="search" id="codconfig" style="width: 150px"/>' +
-                      '<div class="invalid-feedback">Falta completa este campo.</div>'+
-                    '</div>' + */
                     '<div class="col d-flex flex-column">' +
                       '<label class="col-form-label">Dto. Finan.</label>' +
                       '<input type="number" id="dtofinan" style="width: 150px" v-model.number="dtofinan"/>' +
@@ -667,7 +683,7 @@
                     '</div>' +
                     '<div class="col d-flex flex-column">' +
                       '<label class="col-form-label">Cambios precio desde</label>' +
-                      '<input type="date" id="fechaCambiosPrecio" style="width: 150px"/>' +
+                      '<input type="date" id="fechaCambiosPrecio" style="width: 200px"/>' +
                       '<div class="invalid-feedback">Falta completa este campo.</div>'+
                     '</div>' +
                     '<div class="col d-flex">'+
@@ -679,6 +695,9 @@
                     '<a class="k-pager-refresh k-link k-button refresh" title="Actualizar" style="margin-left:5px"><span class="k-icon k-i-reload"></span></a>' +
                     '</div>' +
                   '</form>' +
+                  '<div class="row align-items-end p-1">' +
+                      '<span id="modificados_encabezado"></span>'+
+                  '</div>' +
                 '</div>';
             return kendo.template(templateHtml);
             },

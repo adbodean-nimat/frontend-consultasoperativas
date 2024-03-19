@@ -30,12 +30,12 @@
               <div class="col-sm-1"></div>
             </div>
             <div class="row">
-              <div class="col-sm bg-secondary text-white d-flex align-items-center"><small><span id="configcs"></span></small><strong><span id="nombre_config_cs"></span></strong></div>
+              <div class="col-sm bg-secondary text-white d-flex align-items-center"><!-- <small><span id="configcs"></span></small> --><strong><span id="nombre_config_cs"></span></strong></div>
               <div class="col-sm-3"></div>
               <div class="col-sm bg-secondary text-white d-flex align-items-center">Presupuesto aproximado para <strong><span id="cuadro2"></span>m<sup>2</sup></strong></div>
               <div class="col-sm-4"><small>Los precios incluyen dto. financiero del <span id="descuentofinanciero"></span>%<br>Los precios incluyen dto. por volumen del <span id="descuentopormonto"></span>%</small></div>
             </div>
-            <div class="float-end" style="margin-top:-80px;margin-right: 18px;"><img src="../assets/logo.jpg" height="80"/></div>
+            <div class="float-end" style="margin-top:-80px;margin-right: 18px;"><img src="../assets/logo-50.jpg" height="80"/></div>
             <div class="row" style="margin-top:500px;">
               <div class="col"></div>
               <div class="col"></div>
@@ -280,9 +280,9 @@
           var idCodCte = document.getElementById("cod_cte")
           var valCodCte = idCodCte.innerText = kendo.toString(idemCodCte)
 
-          const idemConfigCs = document.querySelector("#form > div:nth-child(2) .k-input-value-text").innerText
+          /* const idemConfigCs = document.querySelector("#form > div:nth-child(2) .k-input-value-text").innerText
           var idConfigCs = document.getElementById("configcs")
-          var valConfigCs = idConfigCs.innerText = kendo.toString(idemConfigCs)
+          var valConfigCs = idConfigCs.innerText = kendo.toString(idemConfigCs) */
 
           const idemNombreConfigCs = document.getElementById('nombreconfigcs').innerText
           var idNombreConfigCs = document.getElementById('nombre_config_cs')

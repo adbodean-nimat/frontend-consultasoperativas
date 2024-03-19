@@ -44,6 +44,9 @@ import ArticulosWeb from "../views/ArticulosWeb.vue"
 import DeposANoConsiderarParaStockFisico from "../views/TDepositoANoConsiderarParaStockFisico.vue"
 import ListaRubrosVtasAcopio from "../views/RubrosVentasAcopio.vue"
 import ListaCombo from "../views/Combo.vue"
+import ComprobantesAOmitir from "../views/TComprobantesAOmitir.vue"
+import AcopioCementoLN from "../views/AcopioCemento.vue"
+import RemitosVtas from "../views/TRemitosVtas.vue"
 
 const routes = [
   {
@@ -437,6 +440,32 @@ const routes = [
     }
   },
   {
+    path: '/tabla/acopio/comprobantesaomitir',
+    name: 'Tabla Acopio: Comprobantes a Omitir',
+    component: ComprobantesAOmitir,
+    props: true,
+    meta: {
+      title: 'Tabla Acopio: Comprobantes a Omitir',
+      metaTags: [
+        {
+          name: 'Tabla Acopio: Comprobantes a Omitir'
+        }      ]
+    }
+  },
+  {
+    path: '/tabla/acopio/remitosdeventas',
+    name: 'Tabla Acopio: Remitos de Ventas',
+    component: RemitosVtas,
+    props: true,
+    meta: {
+      title: 'Tabla Acopio: Remitos de Ventas',
+      metaTags: [
+        {
+          name: 'Tabla Acopio: Remitos de Ventas'
+        }      ]
+    }
+  },
+  {
     path: '/containers',
     name: 'Lista de precio - Containers',
     component: ListaContenedores,
@@ -628,6 +657,19 @@ const routes = [
       metaTags: [
         {
           name: 'Lista de precios - Combo'
+        }      ]
+    }
+  },
+  {
+    path: '/acopiocemento',
+    name: 'Acopio - Cemento Loma Negra',
+    component: AcopioCementoLN,
+    props: true,
+    meta: {
+      title: 'Acopio - Cemento Loma Negra',
+      metaTags: [
+        {
+          name: 'Acopio - Cemento Loma Negra'
         }      ]
     }
   }
