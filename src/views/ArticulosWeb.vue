@@ -377,19 +377,19 @@
                   e.sender.read();
                 }  */
         },
-        onSave: function(e){
-          var currentCodArt = e.model.codigo_art;
-          var dataSourceArtWeb = this.$refs.remoteDataSourceArticulosWeb.kendoWidget();
-          var data = dataSourceArtWeb.data()
-          console.log(currentCodArt)
-          console.log(data)
-          for(var i = 0; i < data.length; i++){
-              if(data[i].codigo_art == currentCodArt){
-                  e.preventDefault();
-                  kendo.alert("Este articulo ya existe").element.getKendoAlert().title("Mensaje");
-              }
-          }
-        },
+        // onSave: function(e){
+        //   var currentCodArt = e.model.codigo_art;
+        //   var dataSourceArtWeb = this.$refs.remoteDataSourceArticulosWeb.kendoWidget();
+        //   var data = dataSourceArtWeb.data()
+        //   console.log(currentCodArt)
+        //   console.log(data)
+        //   for(var i = 0; i < data.length; i++){
+        //       if(data[i].codigo_art == currentCodArt){
+        //           e.preventDefault();
+        //           kendo.alert("Este articulo ya existe").element.getKendoAlert().title("Mensaje");
+        //       }
+        //   }
+        // },
         parameterMap: function(options, operation) {
                 if (operation !== 'read' && options.models) {
                     return kendo.stringify(options.models)
