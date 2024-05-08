@@ -301,11 +301,12 @@
                     var unidMed = ClasArt2 == '0004' ? 'M2' : 'unidad';
                     var descuento = data[0].CMBD_POR_DESC
                     var itemTextoPresentacion = data[0].Texto_presentacion
+                    var itemAntesPrecio = data[0].CMBD_POR_DESC == 0 ? '' : '<span><small>Antes: </small></span><span style="font-size: 20px;"><strong>'+ kendo.toString(itemPrecioCdoxCantidadSubtotal, "c2") +'</strong></span>';
                     var itemTextoPresentacionMejorando = data.length >= 1 && data[0].CMBD_POR_DESC == 0 ? "Comprando este articulo y accedes a la oferta de..." : data.length >= 1 && data[0].CMBD_POR_DESC >= 1 ? "Si compras este articulo, te ganas un descuento del "+ kendo.format('{0:p2}', descuento / 100) +" y accedes a la oferta de..." : itemTextoPresentacion;
                     var checkboxCuotas = checkCuotas[0].checked
                     var NroCuotas = nroCuotas.val();
                     var valorCuotas = sumWithInitial / NroCuotas
-                    var Ahora12 = NroCuotas == 12 ? '- AHORA 12' : '';
+                    //var Ahora12 = NroCuotas == 12 ? '- AHORA 12' : '';
                     var win = window.open('', '', 'width=1200, height=800, resizable=1, scrollbars=1'),
                     doc = win.document.open();
                     var htmlStart =
@@ -336,9 +337,7 @@
                       '</div>' +
 
                       '<div class="row pb-2 mb-4 border-bottom border-success border-3">' +
-                          '<div class="col text-start">' +
-                              '<span><small>Antes: </small></span><span style="font-size: 20px;"><strong>'+ kendo.toString(itemPrecioCdoxCantidadSubtotal, "c2") +'</strong></span>' +
-                          '</div>' +
+                          '<div class="col text-start">' + itemAntesPrecio + '</div>' +
                           '<div class="col text-end">' +
                               '<span><small>Nro. de combo: '+ itemCombo +'</small></span>' +
                           '</div>' +
@@ -384,9 +383,7 @@
                       '</div>' +
 
                       '<div class="row pb-2 mb-4 border-bottom border-success border-3">' +
-                          '<div class="col text-start">' +
-                              '<span><small>Antes: </small></span><span style="font-size: 20px;"><strong>'+ kendo.toString(itemPrecioCdoxCantidadSubtotal, "c2") +'</strong></span>' +
-                          '</div>' +
+                          '<div class="col text-start">' + itemAntesPrecio + '</div>' +
                           '<div class="col text-end">' +
                               '<span><small>Nro. de combo: '+ itemCombo +'</small></span>' +
                           '</div>' +
@@ -416,7 +413,7 @@
 
                       '<div class="row">' +
                           '<div class="col text-center">' +
-                              '<p class="uppercase text-decoration-underline"><strong>PAGALO EN '+ NroCuotas +' CUOTAS SIN INTERÉS CON TARJETA DE CREDITO '+ Ahora12 +' - VISA - MASTERCARD - CABAL - NATIVA</strong></p>' +
+                              '<p class="uppercase text-decoration-underline"><strong>PAGALO EN '+ NroCuotas +' CUOTAS SIN INTERÉS CON TARJETA DE CREDITO - VISA - MASTERCARD - CABAL - NATIVA</strong></p>' +
                               '<P>Valor de la cuota: <strong class="text-decoration-underline">'+ kendo.toString(valorCuotas, 'c0') +'</strong></P>' +
                           '</div>' +
                       '</div>' +

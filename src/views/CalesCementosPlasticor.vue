@@ -19,14 +19,14 @@
         <div id="window">
           <div class="row">
             <div class="col m-3">
-              <a class="icon-link" target="_black" href="/tabla/acopio/comprobantesaomitir">
-                Comprobantes a Omitir
+              <a class="icon-link" target="_black" href="/tabla/calescementosplasticor">
+                Articulos: Cales, Cementos, Plasticor
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-right-square-fill" viewBox="0 0 16 16"><path d="M14 0a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2zM5.904 10.803 10 6.707v2.768a.5.5 0 0 0 1 0V5.5a.5.5 0 0 0-.5-.5H6.525a.5.5 0 1 0 0 1h2.768l-4.096 4.096a.5.5 0 0 0 .707.707"/></svg>
               </a>
             </div>
             <div class="col m-3">
-              <a class="icon-link" target="_black" href="/tabla/acopio/remitosdeventas">
-                Remitos de Ventas
+              <a class="icon-link" target="_black" href="/tabla/deposanoconsiderar">
+                Deposito A No Considerar
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-right-square-fill" viewBox="0 0 16 16"><path d="M14 0a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2zM5.904 10.803 10 6.707v2.768a.5.5 0 0 0 1 0V5.5a.5.5 0 0 0-.5-.5H6.525a.5.5 0 1 0 0 1h2.768l-4.096 4.096a.5.5 0 0 0 .707.707"/></svg>
               </a>
             </div>
@@ -40,16 +40,15 @@
             </div>
           </div>
         </div>
-        <datasource ref="remoteDataSourceAcopioCementoLN"
+        <datasource ref="remoteDataSourceCalesCementosPlasticor"
                           :transport-read="readData"
                           :schema-model-fields="schemaModelFields"
                           :page-size='100'
-                          :aggregate="aggregateDefinition"
                           >
         </datasource>
         <grid ref="grid"
               :height="'95vh'"
-              :data-source-ref="'remoteDataSourceAcopioCementoLN'"
+              :data-source-ref="'remoteDataSourceCalesCementosPlasticor'"
               :sortable-mode="'multiple'"
               :pageable-page-sizes="[5, 10, 15, 20, 25, 100]"
               :filterable="true"
@@ -60,15 +59,16 @@
               :toolbar="toolbarTemplate"
               :allow-copy="true"
               :selectable="true"
-              :auto-bind="false"
+              :auto-bind="true"
               @databound="dataBound"
               >
-              <grid-column :field="'CVCL_FECHA_EMI'" :title="'Fecha'" template="#: kendo.toString(kendo.parseDate(CVCL_FECHA_EMI, 'yyyy-MM-dd'), 'dd/MM/yyyy') #"></grid-column>
-              <grid-column :field="'Dia_semana'" :title="'Día semana'"></grid-column>
-              <grid-column :field="'Cantidad_de_facturas'" :title="'Facturado'" :aggregates="['sum']" :footer-template="'#=sum#'"></grid-column>
-              <grid-column :field="'Cantidad_de_remitos'" :title="'Remitos'" :aggregates="['sum']" :footer-template="'#=sum#'"></grid-column>
-              <grid-column :field="'SumaDePendentregNP'" :title="'Pend. Entrega NP'" :hidden="true"></grid-column>
-              <grid-column :field="'Stock_Cemento_todos_los_Depos'" :title="'Stock Cemento todos los Depositos'" :hidden="true"></grid-column>
+              
+              <grid-column :field="'ARTS_ARTICULO_EMP'" :title="'Código'" :width="100"></grid-column>
+              <grid-column :field="'ARTS_NOMBRE'" :title="'Nombre'" :width="500"></grid-column>
+              <grid-column :field="'Stock_Uni_todos_los_depos'" :title="'Stock Uni. todos los depositos'"></grid-column>
+              <grid-column :field="'Pend_entreg_NP'" :title="'Pend. Entrega NP'" ></grid-column>
+              <grid-column :field="'Stock_disponible'" :title="'Stock Disponible'"></grid-column>
+              <grid-column :field="'Cant_pend_ent_OC'" :title="'Cant. Pend. Ent. OC'"></grid-column>
         </grid>
       </div>
     </div>
@@ -86,7 +86,7 @@
     import { directive as fullscreen } from 'vue-fullscreen'
     
     export default {
-      name: 'AcopioCementoLN',
+      name: 'STOCKNPOCCalesCementosPlasticor',
       directives: {
         fullscreen,
       },
@@ -101,25 +101,21 @@
                 fullscreen: false,
                 teleport: true,
                 pageOnly: true,
-                title: 'Acopio - Cemento Loma Negra',
-                emocion: require('@/assets/emocion.png'),
+                title: 'Stock NP OC - Cales, Cementos, Plasticor',
+                emocion: require('@/assets/emocion-mm.png'),
                 schemaModelFields: {
-                    CVCL_FECHA_EMI: {type: 'datetime'},
-                    Dia_semana: {type: 'string'},
-                    Cantidad_de_facturas: {type: 'number'},
-                    Cantidad_de_remitos: {type: 'number'},
-                    SumaDePendentregNP: {type: 'number'},
-                    Stock_Cemento_todos_los_Depos: {type: 'number'}      
-                },
-                aggregateDefinition: [
-                    {field: "Cantidad_de_facturas", aggregate: "sum"},
-                    {field: "Cantidad_de_remitos", aggregate: "sum"}
-                ]
+                  ARTS_ARTICULO_EMP: {type: 'string'},
+                  ARTS_NOMBRE: {type: 'string'},
+                  Stock_Uni_todos_los_depos: {type: 'number'},
+                  Pend_entreg_NP: {type: 'number'},
+                  Stock_disponible: {type: 'number'},
+                  Cant_pend_ent_OC: {type: 'number'}   
+                }
              }
       },
       computed: {
         UrlApiBase(){
-          return `${process.env.VUE_APP_API_BASE}/acopiocemento/`
+          return `${process.env.VUE_APP_API_BASE}/stocknpoc/calescementosplasticor`
         },
         token(){
             return store.state.token
@@ -139,10 +135,8 @@
         readData: function (e) {
             var token = this.token
             var urlApi = this.UrlApiBase
-            var fdesde = kendo.jQuery("#fechadesde").data("kendoDatePicker").value();
-            //console.log(kendo.toString(fdesde, "MM-dd-yyyy"))
             kendo.jQuery.ajax({
-              url: urlApi + kendo.toString(fdesde, "MM-dd-yyyy"),
+              url: urlApi,
               beforeSend: function (xhr) {
                 xhr.setRequestHeader('Authorization', 'Bearer ' + token)
               },
@@ -157,59 +151,27 @@
             var templateHtml =
               '<div class="d-flex flex-column" id="form">' +
                 '<div>' +
-                  `<label style="margin-right: 5px;" for="fechadesde">Fecha desde: </label>` +
-                  '<input id="fechadesde"/>' +
-                  '<span style="margin-left:5px">'+
-                    '<a class="k-pager-refresh k-link k-button play" title="Ralizar consulta"><span class="k-icon k-i-play"></span></a>' +
-                  '</span>'+
                   '<span style="margin-left:5px">'+
                     '<a class="k-pager-refresh k-link k-button refresh" title="Actualizar"><span class="k-icon k-i-reload"></span></a>' +
                   '</span>' +
                   '<span style="margin-left:5px">'+
                     '<a class="k-pager-refresh k-link k-button edit" title="Editar tablas"><span class="k-icon k-i-edit"></span></a>' +
                   '</span>' +
-                  '<span style="margin-left:5px" id="text3"></span>' +
-                  '<span style="margin-left:5px" id="text4"></span>' +
-                  '<span style="margin-left:5px" id="text1"></span>' + 
-                  '<span style="margin-left:5px" id="text2"></span>' +
                   '<span style="position: absolute; right: 15px" id="img1"></span>' + 
                 '</div>' +
-                
-                '<div>' +
-                  '<small>En "Facturado" se excluyen las facturas de acopio M2. En "Remitos" están las que corresponden a acopios y a ventas normales.</small>' +
-                '</div>' +  
               '</div>';
             return templateHtml;
         },
         dataBound: function(e){
-            var fdesde = kendo.jQuery("#fechadesde").data("kendoDatePicker").value();
-            var dataSource = e.sender.dataSource;
-            var data = dataSource.view();
-            var data1 = data[0].SumaDePendentregNP
-            var data2 = data[0].Stock_Cemento_todos_los_Depos
-            var text1 = document.getElementById("text1");
-            var text2 = document.getElementById("text2");
-            var text3 = document.getElementById("text3");
-            var text4 = document.getElementById("text4");
-            var img1 = document.getElementById("img1");
-            text1.innerHTML = '| Pendiente en NP sin fact.: <strong>' + data1 + '</strong>';
-            text2.innerHTML = '| Stock actual: <strong>' + data2 + '</strong>';
-            text3.innerHTML = 'Bolsas acopiadas en LN: <strong>2880</strong>';
-            text4.innerHTML = '| Stock hora 0 del '+ kendo.toString(fdesde, "dd-MM-yyyy") +': <strong>1965</strong>'
-            img1.innerHTML = '<img src="'+ this.emocion + '" height="64" widght="64"/>';
+          var img1 = document.getElementById("img1");
+          img1.innerHTML = '<img src="'+ this.emocion + '" height="64" widght="64"/>';
         },
     },
       mounted: function(){
           var grid = this.$refs.grid.kendoWidget();
           var gridElement = grid.element;
           var toolbarElement = gridElement.find('.k-grid-toolbar');
-          var fechadesde = gridElement.find('#fechadesde');
           var kendoWindowAssign = kendo.jQuery("#window");
-
-          fechadesde.kendoDatePicker({
-            culture: "es-AR",
-            format: "dd-MM-yyyy"
-          });
 
           kendoWindowAssign.kendoWindow({
             width: "500px",
@@ -222,17 +184,7 @@
 
           toolbarElement.on("click", ".refresh", function (e) {
             e.preventDefault(); 
-            var fdesde = fechadesde.data("kendoDatePicker").value();
-            if(fdesde){
-              grid.dataSource.read();
-            }
-          });
-
-          toolbarElement.on("click", ".play", function(){
-            var fdesde = fechadesde.data("kendoDatePicker").value();
-            if(fdesde){
-              grid.dataSource.read();
-            }
+            grid.dataSource.read();
           });
 
           toolbarElement.on('click', '.edit', (e)=>{

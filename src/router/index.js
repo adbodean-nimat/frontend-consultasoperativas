@@ -47,6 +47,8 @@ import ListaCombo from "../views/Combo.vue"
 import ComprobantesAOmitir from "../views/TComprobantesAOmitir.vue"
 import AcopioCementoLN from "../views/AcopioCemento.vue"
 import RemitosVtas from "../views/TRemitosVtas.vue"
+import STOCKNPOCCalesCementosPlasticor from "../views/CalesCementosPlasticor.vue"
+import ArtCalesCementosPlasticor from "../views/TCalesCementosPlasticor.vue"
 
 const routes = [
   {
@@ -466,6 +468,19 @@ const routes = [
     }
   },
   {
+    path: '/tabla/calescementosplasticor',
+    name: 'Table: Articulos - Cales, Cementos, Plasticor',
+    component: ArtCalesCementosPlasticor,
+    props: true,
+    meta: {
+      title: 'Tabla: Articulos - Cales, Cementos, Plasticor',
+      metaTags: [
+        {
+          name: 'Table: Articulos - Cales, Cementos, Plasticor'
+        }      ]
+    }
+  },
+  {
     path: '/containers',
     name: 'Lista de precio - Containers',
     component: ListaContenedores,
@@ -670,6 +685,19 @@ const routes = [
       metaTags: [
         {
           name: 'Acopio - Cemento Loma Negra'
+        }      ]
+    }
+  },
+  {
+    path: '/stocknpoc/calescementosplasticor',
+    name: 'Stock NP OC - Cales, Cementos, Plasticor',
+    component: STOCKNPOCCalesCementosPlasticor,
+    props: true,
+    meta: {
+      title: 'Stock NP OC - Cales, Cementos, Plasticor',
+      metaTags: [
+        {
+          name: 'Stock NP OC - Cales, Cementos, Plasticor'
         }      ]
     }
   }

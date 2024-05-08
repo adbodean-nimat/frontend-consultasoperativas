@@ -235,7 +235,7 @@
                     var checkboxCuotas = checkCuotas[0].checked
                     var NroCuotas = nroCuotas.val();
                     var valorCuotas = itemPrecioCdo / NroCuotas
-                    var Ahora12 = NroCuotas == 12 ? '- AHORA 12' : '';
+                    // var Ahora12 = NroCuotas == 12 ? '- AHORA 12' : '';
                     var win = window.open('', '', 'width=1200, height=800, resizable=1, scrollbars=1'),
                     doc = win.document.open();
                     var htmlStart =
@@ -346,7 +346,7 @@
 
                       '<div class="row">' +
                           '<div class="col text-center">' +
-                              '<p class="uppercase text-decoration-underline"><strong>PAGALO EN '+ NroCuotas +' CUOTAS SIN INTERÉS CON TARJETA DE CREDITO '+ Ahora12 +' - VISA - MASTERCARD - CABAL - NATIVA</strong></p>' +
+                              '<p class="uppercase text-decoration-underline"><strong>PAGALO EN '+ NroCuotas +' CUOTAS SIN INTERÉS CON TARJETA DE CREDITO - VISA - MASTERCARD - CABAL - NATIVA</strong></p>' +
                               '<P>Valor de la cuota: <strong class="text-decoration-underline">'+ kendo.toString(valorCuotas, 'c0') +'</strong></P>' +
                           '</div>' +
                       '</div>' +
