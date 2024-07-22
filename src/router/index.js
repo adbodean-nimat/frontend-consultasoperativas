@@ -49,6 +49,7 @@ import AcopioCementoLN from "../views/AcopioCemento.vue"
 import RemitosVtas from "../views/TRemitosVtas.vue"
 import STOCKNPOCCalesCementosPlasticor from "../views/CalesCementosPlasticor.vue"
 import ArtCalesCementosPlasticor from "../views/TCalesCementosPlasticor.vue"
+import ConsultasClientesCADPLATAFORMA from "../views/ClientesCADPlataforma.vue"
 
 const routes = [
   {
@@ -87,6 +88,19 @@ const routes = [
       metaTags: [
         {
           name: 'Consultas Operativas'
+        }      ]
+    }
+  },
+  {
+    path: '/consultascadplataforma',
+    name: 'Consultas Clientes entre CAD y Plataforma',
+    component: ConsultasClientesCADPLATAFORMA,
+    props: true,
+    meta: {
+      title: 'Consultas Clientes entre CAD y Plataforma',
+      metaTags: [
+        {
+          name: 'Consultas Clientes entre CAD y Plataforma'
         }      ]
     }
   },

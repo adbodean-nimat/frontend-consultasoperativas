@@ -217,47 +217,47 @@
                 }
         },
         SetFamiliaDropDownEditor: function(container, options) {
-                kendo.jQuery('<input required name="'+ options.field +'" />').appendTo(container).kendoDropDownList({
-                  filter: "startswith",  
-                  autoBind: true,
-                    dataTextField: "nombre_set_art",
-                    dataValueField: "nombre_set_art",
-                    dataSource: {
-                        transport:{
-                            read:{
-                                contentType: 'application/json',
-                                dataType: 'json',
-                                type: 'GET',
-                                url: this.UrlApiBaseSetArt,
-                                headers: {
-                                'Authorization': 'Bearer ' + store.state.token
-                                }
-                            }
-                        }
-                    }
-                })
-            },
-            CodSetFamiliaDropDownEditor: function(container, options) {
-                kendo.jQuery('<input required name="'+ options.field +'" />').appendTo(container).kendoDropDownList({
-                  filter: "startswith",  
-                  autoBind: true,
-                    dataTextField: "nombre_set_art",
-                    dataValueField: "cod_set_art",
-                    dataSource: {
-                        transport:{
-                            read:{
-                                contentType: 'application/json',
-                                dataType: 'json',
-                                type: 'GET',
-                                url: this.UrlApiBaseSetArt,
-                                headers: {
-                                'Authorization': 'Bearer ' + store.state.token
-                                }
-                            }
-                        }
-                    }
-                })
+          kendo.jQuery('<input required name="'+ options.field +'" />').appendTo(container).kendoDropDownList({
+            filter: "startswith",  
+            autoBind: true,
+            dataTextField: "nombre_set_art",
+            dataValueField: "nombre_set_art",
+            dataSource: {
+              transport:{
+                read:{
+                  contentType: 'application/json',
+                  dataType: 'json',
+                  type: 'GET',
+                  url: this.UrlApiBaseSetArt,
+                  headers: {
+                    'Authorization': 'Bearer ' + store.state.token
+                  }
+                }
+              }
             }
+          });
+        },
+        CodSetFamiliaDropDownEditor: function(container, options) {
+                kendo.jQuery('<input required name="'+ options.field +'" />').appendTo(container).kendoDropDownList({
+                  filter: "startswith",  
+                  autoBind: true,
+                  dataTextField: "nombre_set_art",
+                  dataValueField: "cod_set_art",
+                  dataSource: {
+                    transport:{
+                      read:{
+                        contentType: 'application/json',
+                        dataType: 'json',
+                        type: 'GET',
+                        url: this.UrlApiBaseSetArt,
+                        headers: {
+                          'Authorization': 'Bearer ' + store.state.token
+                        }
+                      }
+                    }
+                  }
+                })
+        }
       }
     }
     </script>

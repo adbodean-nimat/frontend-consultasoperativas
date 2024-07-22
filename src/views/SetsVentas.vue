@@ -104,9 +104,9 @@
 
               <grid-column field="ARVE_RUBRO_VENTA" :hidden="true"></grid-column>
               <grid-column field="RUBV_NOMBRE" :hidden="true"></grid-column>
-              <grid-column field="cod_set_art" :hidden="true"></grid-column>
+              <grid-column field="set_ventas" :hidden="true"></grid-column>
               <grid-column field="nombre_set_art" :hidden="true"></grid-column>
-              <grid-column field="cod_fami_art" :hidden="true"></grid-column>
+              <grid-column field="cod_familia" :hidden="true"></grid-column>
               <grid-column field="nombre_fami_art" title="Familia Art." :group-header-template="groupHeaderTemplateFamiliaArt" :hidden="true"></grid-column>
               <grid-column field="nro_orden_de_la_fami" title="Nro. Orden" :hidden="true" :group-header-template="groupHeaderTemplateNroOrden"></grid-column>
               <grid-column field="orden_art_familia" title="Orden Art." :hidden="true"></grid-column>
@@ -167,7 +167,7 @@
                 dataSource: ['remoteDataSourceSetsVtas'],
                 schemaModelFields: {
                     orden_art_familia: {type: 'number'},
-                    cod_set_art: {type: 'string'},
+                    set_ventas: {type: 'string'},
                     Fecha_cambio_precios_hasta: {type: 'datetime'},
                     Fecha_Ult_Modif: {type: 'datetime'},
                     nro_orden_de_la_fami: {type: 'number'},
@@ -677,6 +677,7 @@
                     '<a class="k-pager-refresh k-link k-button" title="Nueva consulta" onClick="window.location.reload();" style="margin-left:5px"><span class="k-icon k-i-file"></span></a>' +
                     '<a class="k-pager-refresh k-link k-button k-button-icontext k-grid-pdf" style="margin-left:5px"><span class="k-icon k-i-pdf"></span></a>' +
                     '<a class="k-pager-refresh k-link k-button k-button-icontext k-grid-excel" style="margin-left:5px"><span class="k-icon k-i-excel"></span></a>' +
+                    '<a class="k-pager-refresh k-link k-button k-button-icontext k-grid-edit" style="margin-left:5px" href="/tabla/vinculararticuloafamilia" target="_blank"><span class="k-icon k-i-edit"></span></a>' +
                     '<a class="k-pager-refresh k-link k-button refresh" title="Actualizar" style="margin-left:5px"><span class="k-icon k-i-reload"></span></a>' +
                     '</div>' +  
                   '</form>' +
@@ -719,7 +720,7 @@
 
             dropDownElement3.kendoDropDownList({
               dataTextField: "nombre_set_art",
-              dataValueField: "cod_set_art",
+              dataValueField: "id",
               autoBind: true,
               dataSource: {
                 transport:{
@@ -770,8 +771,8 @@
               var classFechaDesde = document.querySelector("#form > div:nth-child(4) > .k-datepicker");
               var filter = { logic: "and", filters: [] };
               filter.filters.push(
-                    { field: "cod_set_art", operator: "contains", value: SetsVta },
-                    { field: "COD_CTE", operator: "contains", value: PerfilComercial }
+                    { field: "set_ventas", operator: "eq", value: SetsVta },
+                    { field: "COD_CTE", operator: "eq", value: PerfilComercial }
                     );
               if (DtoFinan == null){
                 classDtoFinan.classList.add('is-invalid');

@@ -39,7 +39,6 @@
                   :editable="'inline'"
                   :toolbar="['create']">
             <grid-column :field="'id'" :title="'Id'" :hidden="true"></grid-column>
-            <grid-column :field="'cod_set_art'" :title="'Código Set Art.'"></grid-column>
             <grid-column :field="'nombre_set_art'" :title="'Nombre Set Art.'"></grid-column>
             <grid-column :command="['edit','destroy']" :title="'&nbsp;'"></grid-column>
       </grid>
@@ -77,7 +76,6 @@
                 title: 'Tabla: Sets de Ventas',
                 fields: {
                     id: { editable: false, nullable: true},
-                    cod_set_art: { type: 'string'},
                     nombre_set_art: { type: 'string'},
                 },
              }
@@ -132,7 +130,7 @@
               error: function(data){
                 e.error(data)
               },
-              data: JSON.stringify(e.data.models[0],["cod_set_art", "nombre_set_art"]),
+              data: JSON.stringify(e.data.models[0],["nombre_set_art"]),
               dataType: 'json',
               contentType: 'application/json',
             })
@@ -175,7 +173,7 @@
             },
             dataType: 'json',
             contentType: 'application/json',
-            data:  JSON.stringify(e.data.models[0],["cod_set_art", "nombre_set_art"]),
+            data:  JSON.stringify(e.data.models[0],["nombre_set_art"]),
           })
         },
             onError: function(e){

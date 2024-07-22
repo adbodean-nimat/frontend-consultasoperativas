@@ -692,6 +692,7 @@
                     '<a class="k-pager-refresh k-link k-button" title="Nueva consulta" onClick="window.location.reload();" style="margin-left:5px"><span class="k-icon k-i-file"></span></a>' +
                     '<a class="k-pager-refresh k-link k-button k-button-icontext k-grid-pdf" style="margin-left:5px"><span class="k-icon k-i-pdf"></span></a>' +
                     '<a class="k-pager-refresh k-link k-button k-button-icontext k-grid-excel" style="margin-left:5px"><span class="k-icon k-i-excel"></span></a>' +
+                    '<a class="k-pager-refresh k-link k-button k-button-icontext k-grid-edit" style="margin-left:5px" href="/tabla/productospdistribucion" target="_blank"><span class="k-icon k-i-edit"></span></a>' +
                     '<a class="k-pager-refresh k-link k-button refresh" title="Actualizar" style="margin-left:5px"><span class="k-icon k-i-reload"></span></a>' +
                     '</div>' +
                   '</form>' +
@@ -779,7 +780,7 @@
               var filter = { logic: "and", filters: [] };
               
               filter.filters.push(
-                    { field: "COD_CTE", operator: "contains", value: PerfilComercial }
+                    { field: "COD_CTE", operator: "eq", value: PerfilComercial }
                     );
               if (DtoFinan == null){
                 classDtoFinan.classList.add('is-invalid');

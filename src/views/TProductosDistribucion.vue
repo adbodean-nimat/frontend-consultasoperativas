@@ -17,6 +17,88 @@
        </div>
       </div>
       
+      <component id="kendoDropDownListFooter" :is="'script'" type="text/x-kendo-tmpl">
+        <!-- <div class="k-button k-button-md k-rounded-md k-button-solid k-button-solid-base m-1 agregar">
+          <span class="k-icon k-i-plus k-button-icon"></span>
+          <span class="k-button-text">Agregar</span>
+        </div> -->
+        <div id="buttoneditar">
+          <button class="k-button k-button-md k-rounded-md k-button-solid k-button-solid-base m-1 editar">
+            <span class="k-icon k-i-edit k-button-icon"></span>
+            <span class="k-button-text">Editar</span>
+          </button>
+          <!-- <button class="k-button k-button-md k-rounded-md k-button-solid k-button-solid-base m-1 eliminar">
+            <span class="k-icon k-i-close k-button-icon"></span>
+            <span class="k-button-text">Eliminar</span>
+          </button> -->
+        </div>
+      </component>
+
+      <component :is="'script'" id="templateDropList" type="text/x-kendo-tmpl">
+       <small> #: nombre_familia #</small>
+      </component>
+      
+      <datasource ref="remoteDataSourceFamiliaDistribuciones"
+        :transport-read="readData2"
+        :transport-update="updateData2"
+        :transport-destroy="destroyData2"
+        :transport-create="createData2"
+        :schema-model-id="'id'"
+        :schema-model-fields="fields2"
+        :batch="true"
+        @error="onError2"
+        @requestend="requestEnd2">
+      </datasource>
+
+      <div id="windowForAssign">
+        <grid ref="grid2" 
+          :height="'700px'"
+          :data-source-ref="'remoteDataSourceFamiliaDistribuciones'"
+          :navigatable="true"
+          :filterable="true"
+          :sortable-mode="'multiple'"
+          :sortable-allow-unsort="true"
+          :sortable-show-indexes="true"
+          :editable="'inline'"
+          :toolbar="['create', 'search']">
+          <grid-column :field="'id'" :title="'Id'" :hidden="true"></grid-column>
+          <grid-column :field="'nombre_familia'" :title="'Nombre Familia'"></grid-column>
+          <grid-column :field="'orden_familia'" :title="'Orden'"></grid-column>
+          <grid-column :command="['edit','destroy']" :title="'&nbsp;'"></grid-column>
+        </grid>
+      </div>
+
+      <datasource ref="remoteDataSourceRubros"
+        :transport-read="readData3"
+        :transport-update="updateData3"
+        :transport-destroy="destroyData3"
+        :transport-create="createData3"
+        :schema-model-id="'id'"
+        :schema-model-fields="fields3"
+        :batch="true"
+        @error="onError3"
+        @requestend="requestEnd3">
+      </datasource>
+
+      <div id="windowForAssign2">
+        <grid ref="grid3" 
+          :height="'700px'"
+          :data-source-ref="'remoteDataSourceRubros'"
+          :navigatable="true"
+          :filterable="true"
+          :sortable-mode="'multiple'"
+          :sortable-allow-unsort="true"
+          :sortable-show-indexes="true"
+          :editable="'inline'"
+          :toolbar="['create', 'search']">
+          <grid-column :field="'id'" :title="'Id'" :hidden="true"></grid-column>
+          <grid-column :field="'rubros_id'" :title="'Código'"></grid-column>
+          <grid-column :field="'rubros_nombres'" :title="'Nombre'"></grid-column>
+          <grid-column :field="'orden_rubros'" :title="'Nro. Orden'"></grid-column>
+          <grid-column :command="['edit','destroy']" :title="'&nbsp;'"></grid-column>
+        </grid>
+      </div>
+
       <datasource ref="remoteDataSourceProductosDistribucion"
         :transport-read="readData"
         :transport-update="updateData"
@@ -34,28 +116,28 @@
       <datasource ref="remoteDataSourceFamiliaDistribucion" :transport-read="readDataFamilia" :batch="true"></datasource>
 
       <grid ref="grid"
-                  :height="'100vh'"
+                  :height="'95vh'"
                   :data-source-ref="'remoteDataSourceProductosDistribucion'"
+                  :groupable="true"
                   :navigatable="true"
                   :filterable="true"
                   :pageable='true'
                   :pageable-always-visible="false"
-                  :pageable-page-sizes="[100, 200, 300, 400, 500]"
                   :resizable="true"
                   :sortable-mode="'multiple'"
                   :sortable-allow-unsort="true"
                   :sortable-show-indexes="true"
-                  :sortable-initial-direction="'asc'"
                   @filtermenuinit="filterMenuInitSort"
                   :editable="'inline'"
-                  :toolbar="['create']">
+                  :toolbar="['create' , {name:'editar', text: 'Editar Familia', iconClass: 'k-icon k-i-edit'}, {name:'editar2', text: 'Editar Rubros Vtas', iconClass: 'k-icon k-i-edit'}, {name: 'refresh', text: '', iconClass: 'k-icon k-i-reload'}]">
             <grid-column :field="'id'" :title="'Id'" :hidden="true"></grid-column>
-            <grid-column :field="'Codigo_producto'" :title="'Código'" :width="200"></grid-column>
-            <grid-column :field="'ARTS_NOMBRE'" :title="'Nombre'" :width="500"></grid-column>
-            <grid-column :field="'Orden_producto'" :title="'Nro. Orden'"></grid-column>
-            <grid-column :field="'Cod_Familia_producto'" :title="'Código grupo familia'" :editor="CodFamiliaDropDownEditor" :filterable-multi="true" :filterable-search="true"></grid-column>
-            <grid-column :field="'Familia_producto'" :title="'Grupo familia'" :filterable-multi="true" :filterable-search="true"></grid-column>
-            <grid-column :field="'Set_Familia'" :title="'Set Familia'" :filterable-multi="true" :filterable-search="true"></grid-column>
+            <grid-column :field="'Codigo_producto'" :title="'Código'" :width="150"></grid-column>
+            <grid-column :field="'ARTS_NOMBRE'" :title="'Nombre'" :width="400"></grid-column>
+            <grid-column :field="'Orden_producto'" :title="'Nro. Orden Art.'" :width="150"></grid-column>
+            <!-- <grid-column :field="'Familia_producto'" :title="'Grupo familia'" :filterable-multi="true" :filterable-search="true" :width="350"></grid-column> -->
+            <grid-column :field="'Cod_Familia_producto'" :title="'Grupo familia'" :editor="CodFamiliaDropDownEditor" :filterable-multi="true" :filterable-search="true" :filterable-item-template="filterableItemTemplate" :width="500" template="#= Familia_producto #" :group-header-template="groupHeaderTemplateFamilia"></grid-column>
+            <grid-column :field="'Familia_orden'" :title="'Nro. Orden Familia'" :filterable-multi="true" :filterable-search="true" :width="150" :hidden="false"></grid-column>
+            <grid-column :field="'Set_Familia'" :title="'Rubros'" :filterable-multi="true" :filterable-search="true"></grid-column>
             <grid-column :command="['edit','destroy']" :title="'&nbsp;'"></grid-column>
       </grid>
     </div>
@@ -91,13 +173,25 @@
                 pageOnly: true,
                 title: 'Tabla: Productos para Distribución',
                 fields: {
-                    id: { editable: false, type: 'number', nullable: true},
+                    id: {editable: false, type: 'number', nullable: true},
                     Codigo_producto: {editable: true, type: 'string'},
                     ARTS_NOMBRE: {editable: false, type: 'string'},
                     Orden_producto: {editable: true, type: 'number'},
-                    Cod_Familia_producto: {editable: true, type: 'string', defaultValue: '', nullable: true},
+                    Cod_Familia_producto: {editable: true, type: 'string'},
                     Familia_producto: {editable: false, type: 'string', defaultValue: ''},
+                    Familia_orden: {editable: false, type: 'number'},
                     Set_Familia: {editable: false, type: 'string'}
+                },
+                fields2: {
+                  id: {editable: false, type: 'number', nullable: true},
+                  nombre_familia: {type: 'string'},
+                  orden_familia: {type: 'number'}
+                },
+                fields3: {
+                  id: {editable: false, type: 'number', nullable: true},
+                  rubros_id: {editable: false, type: 'string'},
+                  rubros_nombres: {editable: false, type: 'string'},
+                  orden_rubros: {type: 'number'},
                 }
              }
         },
@@ -110,6 +204,13 @@
         },
         UrlApiStocArts(){
           return `${process.env.VUE_APP_API_BASE}/stocarts/`
+        },
+        UrlApiFamiliaDistribuciones(){
+          return `${process.env.VUE_APP_API_BASE}/familiadistribuciones/`
+        },
+        
+        UrlApiRubros(){
+          return `${process.env.VUE_APP_API_BASE}/rubrosventas/`
         },
         token(){
           return store.state.token
@@ -126,10 +227,21 @@
         }
       },
        methods: {
+        filterableItemTemplate: function(e) {
+          if (e.field == "all") {
+          return '<li class="k-item k-check-all-wrap"><label class="k-label k-checkbox-label"><input type="checkbox" class="k-checkbox k-checkbox-md k-rounded-md k-check-all"/>#: data.all #</label></div>';
+        } else {
+          return '<li class="k-item"><label class="k-label k-checkbox-label"><input type="checkbox" class="k-checkbox k-checkbox-md k-rounded-md" value="#: data.Cod_Familia_producto #" /><span>#: data.Familia_producto #</span></label></li>';
+        }
+        },
+        groupHeaderTemplateFamilia: function(e){
+          var groupTemplate = kendo.template('');
+          return groupTemplate(e)
+        },  
         readData: function (e) {
               var tkn = this.token
               var urlApi1 = this.UrlApiBase
-              var urlApi2 = this.UrlApiBaseFamiliaArt
+              var urlApi2 = this.UrlApiFamiliaDistribuciones
               var urlApi3 = this.UrlApiStocArts
 
               var data1 = kendo.jQuery.ajax({
@@ -197,27 +309,58 @@
                     ARTS_NOMBRE: result[v].ARTS_NOMBRE,
                     Orden_producto: result[v].Orden_producto,
                     Cod_Familia_producto: result[v].Cod_Familia_producto,
-                    Familia_producto: secondResult.filter(codigo => codigo.cod_familia_art == result[v].Cod_Familia_producto).map(data => data.nombre_familia_art),
-                    Set_Familia: secondResult.filter(codigo => codigo.cod_familia_art == result[v].Cod_Familia_producto).map(data => data.nombre_set_art)
+                    Familia_producto: secondResult.filter(codigo => codigo.id == result[v].Cod_Familia_producto).map(data => data.nombre_familia),
+                    Familia_orden: secondResult.filter(codigo => codigo.id == result[v].Cod_Familia_producto).map(data => data.orden_familia),
+                    Set_Familia: threeResult.filter(codigo => codigo.ARTS_ARTICULO_EMP == result[v].Codigo_producto).map(data => data.RUBV_NOMBRE)
                   })
                 }
                 e.success(result2);
               });
         },
+        readData2: function (e) {
+          var tkn = this.token
+          var urlApi = this.UrlApiFamiliaDistribuciones
+          kendo.jQuery.ajax({
+            url: urlApi,
+            beforeSend: function (xhr) {
+              xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
+            },
+            dataType: 'json',
+            success: function (data) {
+              e.success(data)
+            },
+            type: 'GET'
+          })
+        },
+        readData3: function (e) {
+          var tkn = this.token
+          var urlApi = this.UrlApiRubros
+          kendo.jQuery.ajax({
+            url: urlApi,
+            beforeSend: function (xhr) {
+              xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
+            },
+            dataType: 'json',
+            success: function (data) {
+              e.success(data)
+            },
+            type: 'GET'
+          })
+        },
         readDataFamilia: function(e){
           var tkn = this.token
-              var urlApi = this.UrlApiBaseFamiliaArt
-              kendo.jQuery.ajax({
-                url: urlApi,
-                beforeSend: function (xhr) {
-                  xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
-                },
-                dataType: 'json',
-                success: function (data) {
-                  e.success(data)
-                },
-                type: 'GET'
-              })
+          var urlApi = this.UrlApiBaseFamiliaArt
+          kendo.jQuery.ajax({
+            url: urlApi,
+            beforeSend: function (xhr) {
+              xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
+            },
+            dataType: 'json',
+            success: function (data) {
+              e.success(data)
+            },
+            type: 'GET'
+          })
         },
         updateData: function(e) {
             var tkn = this.token
@@ -264,8 +407,130 @@
           var tkn = this.token
           var urlApi = this.UrlApiBase
           var data = kendo.stringify(e.data.models[0]);
+          console.log(data)
           kendo.jQuery.ajax({
-            method: 'POST',
+            type: 'POST',
+            url: urlApi,
+            beforeSend: function(xhr) {
+              xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
+            },
+            success: function(data){
+              e.success()
+            },
+            error: function(data){
+              e.error(data)
+            },
+            contentType: 'application/json; charset=utf-8',
+            data: data
+          })
+        },
+        updateData2: function(e) {
+            var tkn = this.token
+            var urlApi = this.UrlApiFamiliaDistribuciones
+            var id = kendo.stringify(e.data.models[0].id);
+            var data = kendo.stringify(e.data.models[0]);
+            kendo.jQuery.ajax({
+              type: 'PUT',
+              url: urlApi + id,
+              beforeSend: function(xhr) {
+                xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
+              },
+              success: function(data){
+                e.success()
+              },
+              error: function(data){
+                e.error(data)
+              },
+              contentType: 'application/json; charset=utf-8',
+              data: data
+            })
+        },
+        destroyData2: function(e){
+            var tkn = this.token
+            var urlApi = this.UrlApiFamiliaDistribuciones
+            var id = kendo.stringify(e.data.models[0].id);
+            kendo.jQuery.ajax({
+              method: 'DELETE',
+              type: 'DELETE',
+              url: urlApi + id,
+              beforeSend: function(xhr) {
+                xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
+              },
+              success: function(data){
+                e.success(data)
+              },
+              error: function(data){
+                e.error(data)
+              },
+              contentType: 'application/json; charset=utf-8'
+            })
+        },
+        createData2: function(e){
+          var tkn = this.token
+          var urlApi = this.UrlApiFamiliaDistribuciones
+          var data = kendo.stringify(e.data.models[0]);
+          kendo.jQuery.ajax({
+            type: 'POST',
+            url: urlApi,
+            beforeSend: function(xhr) {
+              xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
+            },
+            success: function(data){
+              e.success()
+            },
+            error: function(data){
+              e.error(data)
+            },
+            contentType: 'application/json; charset=utf-8',
+            data: data
+          })
+        },
+        updateData3: function(e) {
+            var tkn = this.token
+            var urlApi = this.UrlApiRubros
+            var id = kendo.stringify(e.data.models[0].id);
+            var data = kendo.stringify(e.data.models[0]);
+            kendo.jQuery.ajax({
+              type: 'PUT',
+              url: urlApi + id,
+              beforeSend: function(xhr) {
+                xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
+              },
+              success: function(data){
+                e.success()
+              },
+              error: function(data){
+                e.error(data)
+              },
+              contentType: 'application/json; charset=utf-8',
+              data: data
+            })
+        },
+        destroyData3: function(e){
+            var tkn = this.token
+            var urlApi = this.UrlApiRubros
+            var id = kendo.stringify(e.data.models[0].id);
+            kendo.jQuery.ajax({
+              method: 'DELETE',
+              type: 'DELETE',
+              url: urlApi + id,
+              beforeSend: function(xhr) {
+                xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
+              },
+              success: function(data){
+                e.success(data)
+              },
+              error: function(data){
+                e.error(data)
+              },
+              contentType: 'application/json; charset=utf-8'
+            })
+        },
+        createData3: function(e){
+          var tkn = this.token
+          var urlApi = this.UrlApiRubros
+          var data = kendo.stringify(e.data.models[0]);
+          kendo.jQuery.ajax({
             type: 'POST',
             url: urlApi,
             beforeSend: function(xhr) {
@@ -282,28 +547,56 @@
           })
         },
         onError: function(e){
-              console.log(e.status);
-              console.log(e.error);
-            },
+          console.log(e.status);
+          console.log(e.error);
+        },
         requestEnd: function(e) {
-                var response = e.response;
-                var type = e.type;
-                console.log(type + " => type");
-                if (type == "create") {
-                  e.sender.read();
-                }
-                if (type == "update") {
-                  e.sender.read();
-                }
+          var response = e.response;
+          var type = e.type;
+          console.log(type + " => type");
+          if (type == "create") {
+            e.sender.read();
+          }
+          if (type == "update") {
+            e.sender.read();
+          } 
+        },
+        onError2: function(e){
+          console.log(e.status);
+          console.log(e.error);
+        },
+        requestEnd2: function(e) {
+          var type = e.type;
+          console.log(type + " => type 2");
+          if (type == "create") {
+            e.sender.read();
+          }
+          if (type == "update") {
+            e.sender.read();
+          }
+        },
+        onError3: function(e){
+          console.log(e.status);
+          console.log(e.error);
+        },
+        requestEnd3: function(e) {
+          var type = e.type;
+          console.log(type + " => type 3");
+          if (type == "create") {
+            e.sender.read();
+          }
+          if (type == "update") {
+            e.sender.read();
+          }
         },
         filterMenuInitSort: function(e){
           var grid = this.$refs.grid.kendoWidget();
           var gridElement = grid.element;
-
-          if (e.field === "Familia_producto") {
-                var filterMultiCheck = gridElement.find("[data-field=" + e.field + "]").data("kendoFilterMultiCheck")
+          if (e.field === "Cod_Familia_producto") {
+                var filterMultiCheck = gridElement.find("[data-field=" + e.field + "]").data("kendoFilterMultiCheck")                
                 filterMultiCheck.container.empty();
                 filterMultiCheck.checkSource.sort({field: e.field, dir: "asc"});
+                filterMultiCheck.checkSource.filter([])
                 filterMultiCheck.checkSource.data(filterMultiCheck.checkSource.view().toJSON());
                 filterMultiCheck.createCheckBoxes();
               }
@@ -315,27 +608,44 @@
         },
         templateSetFamilia: function(item){
           var itemFamilia = item.Familia_producto
-          var dataSourceFamiliaDistribucion = this.$refs.remoteDataSourceFamiliaDistribucion.kendoWidget();
-          dataSourceFamiliaDistribucion.filter({field: 'nombre_familia_art', operator: 'eq', value: itemFamilia});
+          var dataSourceFamiliaDistribucion = this.$refs.remoteDataSourceFamiliaDistribuciones.kendoWidget();
+          dataSourceFamiliaDistribucion.filter({field: 'nombre_familia', operator: 'eq', value: itemFamilia});
           var data = dataSourceFamiliaDistribucion.view()
           var dataFamilia = data.length === 0 ? '' : data[0].nombre_set_art 
           return kendo.toString(dataFamilia) 
         },
         CodFamiliaDropDownEditor: function(container, options) {
-                kendo.jQuery('<input data-bind="value:' + options.field + '" name="' + options.field + '"/>').appendTo(container).kendoDropDownList({
+          var grid = this.$refs.grid.kendoWidget();
+          
+          kendo.jQuery('<input id="CodFamiliaDropDownEditor" data-bind="' + options.field + '" name="' + options.field + '"/>').appendTo(container).kendoDropDownList({
                   filter: "contains",  
                   autoBind: true,
-                  optionLabel: "Familia...",
-                  dataTextField: "nombre_familia_art",
-                  dataValueField: "cod_familia_art",
-                  valuePrimitive: true,
+                  // optionLabel: "Familia...",
+                  dataTextField: "nombre_familia",
+                  dataValueField: "id",
+                  valueTemplate: kendo.jQuery("#templateDropList").html(),
+                  template: kendo.jQuery("#templateDropList").html(),
+                  footerTemplate: kendo.jQuery('#kendoDropDownListFooter').html(),
+                  open: function(e){                    
+                    var listFooter = kendo.jQuery(e.sender.footer)
+                    listFooter.on('click', '.editar', function(){
+                      var popup = kendo.jQuery("#windowForAssign").data('kendoWindow');
+                      popup.open();
+                      popup.center();
+                      popup.bind("close", ()=>{
+                        e.preventDefault();
+                        grid.dataSource.read();
+                      })
+                    })
+                  },
+                  noDataTemplate: '<span>Datos no encontrados.</span>',
                   dataSource: {
                     transport:{
                       read:{
                         contentType: 'application/json',
                         dataType: 'json',
                         type: 'GET',
-                        url: this.UrlApiBaseFamiliaArt,
+                        url: this.UrlApiFamiliaDistribuciones,
                         headers: {
                           'Authorization': 'Bearer ' + store.state.token
                         }
@@ -345,34 +655,32 @@
                       model:  {
                         id: "id",
                         fields: {
-                          cod_familia_art: {type:"string"},
-                          nombre_familia_art: {type:"string"},
-                          nro_orden_familia: {type:"string"},
-                          cod_set_art: {type:"string"},
-                          nombre_set_art: {type:"string"}
+                          id: {type:"string"},
+                          nombre_familia: {type:"string"},
+                          orden_familia: {type:"number"}
                         }
                       }
                     },
                     sort: {
-                      field: 'nombre_familia_art',
+                      field: 'nombre_familia',
                       dir: 'asc'
                     }
                   }
-                })
+                });
         },
         FamiliaDropDownEditor: function(container, options) {
                 kendo.jQuery('<input name="'+ options.field +'" />').appendTo(container).kendoDropDownList({
                   filter: "contains",  
                   autoBind: false,
-                  dataTextField: "nombre_familia_art",
-                  dataValueField: "nombre_familia_art",
+                  dataTextField: "nombre_familia",
+                  dataValueField: "nombre_familia",
                   dataSource: {
                     transport:{
                       read:{
                         contentType: 'application/json',
                         dataType: 'json',
                         type: 'GET',
-                        url: this.UrlApiBaseFamiliaArt,
+                        url: this.UrlApiFamiliaDistribuciones,
                         headers: {
                           'Authorization': 'Bearer ' + store.state.token
                         }
@@ -382,21 +690,69 @@
                       model:  {
                         id: "id",
                         fields: {
-                          cod_familia_art: {type:"number"},
-                          nombre_familia_art: {type:"string"},
-                          nro_orden_familia: {type:"number"},
-                          cod_set_art: {type:"string"},
-                          nombre_set_art: {type:"string"}
+                          id: {type:"number"},
+                          nombre_familia: {type:"string"},
+                          orden_familia: {type:"number"}
                         }
                       }
                     },
                     sort: {
-                      field: 'nombre_familia_art',
+                      field: 'nombre_familia',
                       dir: 'asc'
                     }
                   }
                 })
         }
+      },
+      mounted(){
+        var grid = this.$refs.grid.kendoWidget();
+        var gridElement = grid.element;
+        var toolbarElement = gridElement.find('.k-grid-toolbar');
+
+        var kendoWindowAssign = kendo.jQuery("#windowForAssign");
+        var kendoWindowAssign2 = kendo.jQuery("#windowForAssign2");
+        
+        kendoWindowAssign.kendoWindow({
+          width: "1200px",
+          height: '800px',
+          modal: true,
+          visible: false,
+          resizable: true,
+          title: 'Editar Familia'
+        });
+
+        kendoWindowAssign2.kendoWindow({
+          width: "1200px",
+          height: '800px',
+          modal: true,
+          visible: false,
+          resizable: true,
+          title: 'Editar Rubros Ventas'
+        });
+
+        toolbarElement.on('click', '.k-grid-editar', (e)=>{
+          e.preventDefault();
+          var popup = kendo.jQuery("#windowForAssign").data('kendoWindow');
+          popup.open();
+          popup.center();
+          popup.bind("close", ()=>{
+            e.preventDefault();
+            this.$refs.remoteDataSourceFamiliaDistribuciones.kendoDataSource.read();
+            grid.dataSource.read();
+          })
+        });
+
+        toolbarElement.on('click', '.k-grid-editar2', (e)=>{
+          e.preventDefault();
+          var popup = kendo.jQuery("#windowForAssign2").data('kendoWindow');
+          popup.open();
+          popup.center();
+        });
+
+        toolbarElement.on("click", ".k-grid-refresh", (e)=> {
+          e.preventDefault(); 
+          grid.dataSource.read();
+        });
       }
     }
     </script>
@@ -406,5 +762,11 @@
         white-space: nowrap;
         text-overflow: ellipsis;
     }
+
+    .k-no-data{
+          display: table;
+          width: 100%;
+          padding-top: 20px;
+        }
     </style>
     
