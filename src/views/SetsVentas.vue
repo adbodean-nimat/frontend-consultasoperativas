@@ -341,81 +341,85 @@
               }
             }
 
-            for(var i=0; i< data.length; i++){
-                if(data[i].items.length){
-                  for(var j=0; j< data[i].items.length; j++){
-                    if(data[i].items[j].items.length){
-                      for(var d=0; d< data[i].items[j].items.length; d++){
-                        dataItems.push(data[i].items[j].items[d])
-                      }
+            for(var i=0; i< data.length; i++){  
+              if(data[i].items.length){
+                for(var j=0; j< data[i].items.length; j++){  
+                  if(data[i].items[j].items.length){
+                    for(var d=0; d< data[i].items[j].items.length; d++){
+                      dataItems.push(data[i].items[j].items[d])
                     }
                   }
-                } 
+                }
+              } 
             }
 
             for (var ri = 0; ri < rows.length; ri++) {
-                  var row = rows[ri];
+                var row = rows[ri];
+                
+                if (rows[ri].type == "header"){
+                  rows.splice(ri,1)
                   
-                  if (rows[ri].type == "header"){
-                    rows.splice(ri,1)
-                    rows.unshift({
-                      height: 35.5,
-                      cells:[
-                        {value: ''},
-                        {value: kendo.toString(new Date(), "D", "es-AR"), colSpan: 3},
-                        {
-                          value: 'Precios con IVA Incluido', 
-                          borderLeft: {color: "#000000", size: 1}, 
-                          borderRight: {color: "#000000", size: 1},
-                          borderBottom: {color: "#000000", size: 1},
-                          borderTop: {color: "#000000", size: 1},
-                          fontSize: 14.5, 
-                          textAlign: "center", 
-                          vAlign: "center", 
-                          bold: true, 
-                          colSpan: 2, 
-                          wrap: true, 
-                          background: "#FFFF00"
-                        }                   
-                      ]
-                    });
-                    rows.unshift({
-                      height: 35.5,
-                      cells:[
-                        {value: ''},
-                        {value: modificados, colSpan: 6, vAlign: "center"},
-                        {value: ''}                   
-                      ]
-                    });
+                  rows.unshift({
+                    height: 35.5,
+                    cells:[
+                      {value: ''},
+                      {value: kendo.toString(new Date(), "D", "es-AR"), colSpan: 3},
+                      {
+                        value: 'Precios con IVA Incluido', 
+                        borderLeft: {color: "#000000", size: 1}, 
+                        borderRight: {color: "#000000", size: 1},
+                        borderBottom: {color: "#000000", size: 1},
+                        borderTop: {color: "#000000", size: 1},
+                        fontSize: 14.5, 
+                        textAlign: "center", 
+                        vAlign: "center", 
+                        bold: true, 
+                        colSpan: 2, 
+                        wrap: true, 
+                        background: "#FFFF00"
+                      }                   
+                    ]
+                  });
+                rows.unshift({
+                  height: 35.5,
+                  cells:[
+                    {value: ''},
+                    {value: modificados, colSpan: 6, vAlign: "center"},
+                    {value: ''}                   
+                  ]
+                });
+              }
+
+              if(row.type == "header"){
+                  for (var hei = 0; hei < row.cells.length; hei++) {
+                    row.cells[hei].background = '';
+                    row.cells[hei].firstCell = false;
                   }
+              }
 
-                  if(row.type == "header"){
-                    for (var hei = 0; hei < row.cells.length; hei++) {
-                      row.cells[hei].background = '';
-                      row.cells[hei].firstCell = false;
-                    }
+              if (rows[ri].type == "group-header"){
+                               
+                if(rows[ri].cells.length == 1){
+                  rows.splice(ri,1);
+                }
+                
+                console.log(rows)
+                console.log(rows[ri].cells)
+
+                for (var i = 0; i < rows[ri].cells.length; i++) {                
+                  var colspan = rows[ri].cells[i].colSpan
+                  rows[ri].cells[0].background = '';
+                  rows[ri].cells[1].background = '';
+                  if(colspan == 8){
+                    rows[ri].height = 35.5;
+                    rows[ri].cells[i].fontSize = 16;
+                    rows[ri].cells[i].bold = true;
+                    rows[ri].cells[i].background = '';
+                    rows[ri].cells[i].colSpan = 3;
+                    rows[ri].cells[i].vAlign = "center";                        
                   }
-
-                  if (rows[ri].type == "group-header"){
-
-                    rows.splice(ri,1);
-
-                    for (var i = 0; i < rows[ri].cells.length; i++) {                
-                      var colspan = rows[ri].cells[i].colSpan
-                      rows[ri].cells[0].background = '';
-                      rows[ri].cells[1].background = '';
-                      
-                      if(colspan == 8){
-                        rows[ri].height = 35.5;
-                        rows[ri].cells[i].fontSize = 16;
-                        rows[ri].cells[i].bold = true;
-                        rows[ri].cells[i].background = '';
-                        rows[ri].cells[i].colSpan = 3;
-                        rows[ri].cells[i].vAlign = "center";                        
-                      }
-                      
-                    }
-                  }
+                }
+              }
                   
                   if (rows[ri].type == "data"){
                     for (var di = 0; di < rows[ri].cells.length; di++) {
@@ -668,7 +672,7 @@
                     '</div>' +
                     '<div class="col d-flex flex-column">' +
                       '<label class="col-form-label">Cambios precio desde</label>' +
-                      '<input type="date" id="fechaCambiosPrecio" style="width: 200px"/>' +
+                      '<input type="date" id="fechaCambiosPrecio" style="width: auto"/>' +
                       '<div class="invalid-feedback">Falta completa este campo.</div>'+
                     '</div>' +
                     '<div class="col d-flex">'+

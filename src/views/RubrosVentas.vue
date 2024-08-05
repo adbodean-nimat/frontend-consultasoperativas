@@ -451,7 +451,7 @@
         toolbarTemplate: function() {
             var templateHtml =
             '<div class="container-fluid">' +
-                '<form id="form" class="requires-validation row align-items-end row-cols-5" novalidate>' +
+                '<form id="form" class="requires-validation row align-items-end" novalidate>' +
                     '<div class="col d-flex flex-column">' +
                       '<label class="col-form-label">Perfil Comercial</label>' +
                       '<input type="search" id="codcte" style="width: 150px"/>' +
@@ -469,7 +469,7 @@
                     '</div>' +
                     '<div class="col d-flex flex-column">' +
                       '<label class="col-form-label">Cambios precio desde</label>' +
-                      '<input type="date" id="fechaCambiosPrecio" style="width: 150px"/>' +
+                      '<input type="date" id="fechaCambiosPrecio"/>' +
                       '<div class="invalid-feedback">Falta completa este campo.</div>'+
                     '</div>' +
                     '<div class="col d-flex">'+
@@ -544,7 +544,7 @@
 
             fechaInformarCambiosPrecio.kendoDatePicker({
                 culture: "es-AR", 
-                format: "dd-MM-yyyy"
+                format: "dd/MM/yyyy"
             })
             
             numericDtoFinan.kendoNumericTextBox({

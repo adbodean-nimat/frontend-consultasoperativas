@@ -683,7 +683,7 @@
                     '</div>' +
                     '<div class="col d-flex flex-column">' +
                       '<label class="col-form-label">Cambios precio desde</label>' +
-                      '<input type="date" id="fechaCambiosPrecio" style="width: 200px"/>' +
+                      '<input type="date" id="fechaCambiosPrecio" style="width: auto"/>' +
                       '<div class="invalid-feedback">Falta completa este campo.</div>'+
                     '</div>' +
                     '<div class="col d-flex">'+
@@ -732,7 +732,7 @@
 
             fechaInformarCambiosPrecio.kendoDatePicker({
                 culture: "es-AR", 
-                format: "dd-MM-yyyy"
+                format: "dd/MM/yyyy",
             })
             
             numericDtoFinan.kendoNumericTextBox({

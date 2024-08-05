@@ -50,6 +50,7 @@ import RemitosVtas from "../views/TRemitosVtas.vue"
 import STOCKNPOCCalesCementosPlasticor from "../views/CalesCementosPlasticor.vue"
 import ArtCalesCementosPlasticor from "../views/TCalesCementosPlasticor.vue"
 import ConsultasClientesCADPLATAFORMA from "../views/ClientesCADPlataforma.vue"
+import npconproblemaei from "../views/NPConProblemaEI.vue"
 
 const routes = [
   {
@@ -218,6 +219,19 @@ const routes = [
       metaTags: [
         {
           name: 'Web NIMAT - Articulos'
+        }      ]
+    }
+  },
+  {
+    path: '/npconproblemaentregainmediata',
+    name: 'Nota de pedido con problema - Entrega inmediata',
+    component: npconproblemaei,
+    props: true,
+    meta: {
+      title: 'Nota de pedido con problema - Entrega inmediata',
+      metaTags: [
+        {
+          name: 'Nota de pedido con problema - Entrega inmediata'
         }      ]
     }
   },
