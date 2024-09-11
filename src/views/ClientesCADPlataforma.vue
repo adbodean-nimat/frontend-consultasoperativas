@@ -168,7 +168,7 @@
             var token = this.token;
             const res = await fetch(this.UrlApiBaseFiltroClientesCtaCtePlataforma, {method: 'GET', headers: {Authorization: `Basic ${token}`}});
             const data = await res.json();
-            //console.log(data)
+            console.log(data)
             kendo.jQuery('#input1').data("kendoMultiSelect").value(data[0].tipo_de_cliente['tc']);
             kendo.jQuery('#input2').data("kendoMultiSelect").value(data[0].perfil_crediticio['pc']);
         },

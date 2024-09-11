@@ -258,20 +258,20 @@
           clearInterval(this.timer);
         },
         readData: function (e) {
-              var tkn = this.token
-              var urlApi = this.UrlApiBase
-              kendo.jQuery.ajax({
-                url: urlApi,
-                beforeSend: function (xhr) {
-                  xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
-                },
-                contentType: 'application/json',
-                success: function (data) {
-                  e.success(data)
-                },
-                method: 'GET',
-                type: 'GET'
-              })
+          var tkn = this.token
+          var urlApi = this.UrlApiBase
+          kendo.jQuery.ajax({
+            url: urlApi,
+            beforeSend: function (xhr) {
+              xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
+            },
+            contentType: 'application/json',
+            success: function (data) {
+              e.success(data)
+            },
+            method: 'GET',
+            type: 'GET'
+          })
         },
         readDataCategorias: function(e){
           var tkn = this.token
@@ -367,13 +367,13 @@
           })
         },
         onError: function(e){
-              console.log(e.status); 
-              console.log(e.error);
+          console.log(e.status); 
+          console.log(e.error);
         },
         requestEnd: function(e) {
-                var response = e.response;
-                var type = e.type;
-                console.log("type => " + type);
+          var response = e.response;
+          var type = e.type;
+          console.log("type => " + type);
         },
         onSave: function(e){
           var currentCodArt = e.model.codigo_art;
@@ -388,9 +388,9 @@
             }
         },
         parameterMap: function(options, operation) {
-                if (operation !== 'read' && options.models) {
-                    return kendo.stringify(options.models)
-                }
+          if (operation !== 'read' && options.models) {
+            return kendo.stringify(options.models)
+          }
         },
         GetCategoriasWeb: function(container, options) {
           kendo.jQuery('<input required data-bind="value:' + options.field + '" name="' + options.field + '"/>').appendTo(container).kendoDropDownList({

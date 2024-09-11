@@ -51,6 +51,11 @@ import STOCKNPOCCalesCementosPlasticor from "../views/CalesCementosPlasticor.vue
 import ArtCalesCementosPlasticor from "../views/TCalesCementosPlasticor.vue"
 import ConsultasClientesCADPLATAFORMA from "../views/ClientesCADPlataforma.vue"
 import npconproblemaei from "../views/NPConProblemaEI.vue"
+import ConsultaInformesAcindar from "../views/InformesAcindar.vue"
+import ConsultaInformesAcindarFechas from "../views/InformesAcindarFechas.vue"
+import ClasifClientes from "../views/TClasifClientesAcindar.vue"
+import AcindarComprobantes from "../views/TComprobantesAcindar.vue"
+import EquivalCodFactorCant from "../views/TEquivalCodFactorCant.vue"
 
 const routes = [
   {
@@ -103,6 +108,34 @@ const routes = [
         {
           name: 'Consultas Clientes entre CAD y Plataforma'
         }      ]
+    }
+  },
+  {
+    path: '/consultainformesacindar',
+    name: 'Consulta Informes de Acindar',
+    component: ConsultaInformesAcindar,
+    props: true,
+    meta: {
+      title: 'Consulta informes de Acindar',
+      metaTags: [
+        {
+          name: 'Consulta informes de Acindar'
+        }
+      ]
+    }
+  },
+  {
+    path: '/consultainformesacindarentrefechas',
+    name: 'Consulta Informes de Acindar',
+    component: ConsultaInformesAcindarFechas,
+    props: true,
+    meta: {
+      title: 'Consulta informes de Acindar',
+      metaTags: [
+        {
+          name: 'Consulta informes de Acindar'
+        }
+      ]
     }
   },
   {
@@ -497,14 +530,53 @@ const routes = [
   },
   {
     path: '/tabla/calescementosplasticor',
-    name: 'Table: Articulos - Cales, Cementos, Plasticor',
+    name: 'Tabla: Articulos - Cales, Cementos, Plasticor',
     component: ArtCalesCementosPlasticor,
     props: true,
     meta: {
       title: 'Tabla: Articulos - Cales, Cementos, Plasticor',
       metaTags: [
         {
-          name: 'Table: Articulos - Cales, Cementos, Plasticor'
+          name: 'Tabla: Articulos - Cales, Cementos, Plasticor'
+        }      ]
+    }
+  },
+  {
+    path: '/tabla/informesacindar/clasifclientes',
+    name: 'Tabla: Clasif. Clientes',
+    component: ClasifClientes,
+    props: true,
+    meta: {
+      title: 'Tabla: Clasif. Clientes',
+      metaTags: [
+        {
+          name: 'Tabla: Clasif. Clientes'
+        }      ]
+    }
+  },
+  {
+    path: '/tabla/informesacindar/comprobantes',
+    name: 'Tabla: Comprobantes',
+    component: AcindarComprobantes,
+    props: true,
+    meta: {
+      title: 'Tabla: Comprobantes',
+      metaTags: [
+        {
+          name: 'Tabla: Comprobantes'
+        }      ]
+    }
+  },
+  {
+    path: '/tabla/informesacindar/equivalcodfactorcant',
+    name: 'Tabla: Equival. Cod. y Factor Cant.',
+    component: EquivalCodFactorCant,
+    props: true,
+    meta: {
+      title: 'Tabla: Equival. Cod. y Factor Cant.',
+      metaTags: [
+        {
+          name: 'Tabla: Equival. Cod. y Factor Cant.'
         }      ]
     }
   },
@@ -732,7 +804,6 @@ const routes = [
 ]
 
 const router = createRouter({
-  mode: "history",
   history: createWebHistory(),
   routes
 })

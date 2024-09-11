@@ -116,6 +116,34 @@
                     </router-link>
                     </div>
                     </div>
+                    <div class="col col-h">
+                    <div v-if="IsAllow === 'abodean'||IsAllow === 'avillasalte'||IsAllow === 'dvazquez'||IsAllow === 'ejescobar'||IsAllow === 'gescobar'" class="col col-h">
+                    <router-link to="/consultainformesacindarentrefechas">
+                        <div class="d-flex flex-column justify-content-between rounded-top bg-white">
+                            <div class="column d-flex flex-row justify-content-between p-3 text-secondary link-success">
+                                <div class="d-flex justify-content-center align-items-center flex-shrink-0 icon rounded">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="#fff" class="bi bi-table" viewBox="0 0 16 16"><path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm15 2h-4v3h4V4zm0 4h-4v3h4V8zm0 4h-4v3h3a1 1 0 0 0 1-1v-2zm-5 3v-3H6v3h4zm-5 0v-3H1v2a1 1 0 0 0 1 1h3zm-4-4h4V8H1v3zm0-4h4V4H1v3zm5-3v3h4V4H6zm4 4H6v3h4V8z"/></svg>
+                                </div>
+                                <div class="title-column" style="text-align: right;">
+                                   <p>Informes Acindar</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="column-question text-center h-10 d-flex justify-content-between align-items-center px-4 bg-white">
+                            <span class="fs-6"></span>
+                            <span class="fs-6">
+                                <div id="tooltip" data-toggle="tooltip" data-placement="right" title="Consulta informes de Acindar">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-question-circle-fill text-secondary" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.496 6.033h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286a.237.237 0 0 0 .241.247zm2.325 6.443c.61 0 1.029-.394 1.029-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94 0 .533.425.927 1.01.927z"/></svg>
+                                </div>
+                            </span>
+                        </div>
+                        <div class="column-bottom text-center h-10 d-flex justify-content-between align-items-center rounded-bottom px-4 bg-light">
+                            <span class="fs-6 text-secondary">1.0.0</span>
+                            <span class="fs-6 text-secondary">CIA</span>
+                        </div>
+                    </router-link>
+                    </div>
+                    </div>
                 </div>
             </div>
         </div>
