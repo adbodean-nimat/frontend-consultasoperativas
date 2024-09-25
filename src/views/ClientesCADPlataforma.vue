@@ -76,7 +76,8 @@
               <grid-column field="CLIE_DATE" title="Fecha de creación en CAD" template="#: kendo.toString(CLIE_DATE, 'g', 'es-AR') == null ? '' : kendo.toString(CLIE_DATE, 'dd/MM/yyyy', 'es-AR') #"></grid-column>
               <grid-column field="CLIE_UPDATE" title="Fecha de actualización del usuario en CAD" template="#: kendo.toString(CLIE_UPDATE, 'g', 'es-AR') == null ? '' : kendo.toString(CLIE_UPDATE, 'dd/MM/yyyy', 'es-AR') #" :hidden="true"></grid-column>
               <grid-column field="CLIE_ACOPIOS" title="Cliente Acopio" template="#= CLIE_ACOPIOS == true ? 'Si' : 'No' #"></grid-column>
-              <grid-column field="CLIE_ACOPIOS_DATE" title="Fecha de emisión Acopio" template="#: kendo.toString(CLIE_ACOPIOS_DATE, 'g', 'es-AR') == null ? '' : kendo.toString(CLIE_ACOPIOS_DATE, 'dd/MM/yyyy', 'es-AR') #"></grid-column>
+              <grid-column field="CLIE_ACOPIOS_EMI" title="Fecha de emisión Acopio" template="#: kendo.toString(CLIE_ACOPIOS_EMI, 'g', 'es-AR') == null ? '' : kendo.toString(CLIE_ACOPIOS_EMI, 'dd/MM/yyyy', 'es-AR') #"></grid-column>
+              <grid-column field="CLIE_ACOPIOS_VIG" title="Fecha de vigente Acopio" template="#: kendo.toString(CLIE_ACOPIOS_VIG, 'g', 'es-AR') == null ? '' : kendo.toString(CLIE_ACOPIOS_VIG, 'dd/MM/yyyy', 'es-AR') #"></grid-column>
               <grid-column field="CLIE_CTACTE" title="Cliente Cta Cte" template="#= CLIE_CTACTE == true ? 'Si' : 'No' #"></grid-column>
         </grid>
       </div>
@@ -119,12 +120,14 @@
                     CLIE_DATE: {type: 'date'},
                     CLIE_UPDATE: {type: 'date'},
                     CLIE_ACOPIOS: {type: 'boolean'},
-                    CLIE_ACOPIOS_DATE: {type: 'date'},
+                    CLIE_ACOPIOS_EMI: {type: 'date'},
+                    CLIE_ACOPIOS_VIG: {type: 'date'},
                     CLIE_CTACTE: {type: 'boolean'}
                 }
             }
         },
         computed: {
+            
             UrlApiBaseClientesPlataforma(){
                 return `${process.env.VUE_APP_API_BASE}/listaclientesplataforma`
             },
@@ -242,7 +245,8 @@
                         CLIE_DATE: fechaClienteCAD.length == 0 ? '' : fechaClienteCAD[0].UserCreDate,
                         CLIE_UPDATE: fechaClienteCAD.length == 0 ? '' : fechaClienteCAD[0].UserUpdDate,
                         CLIE_ACOPIOS: threeResult.some(item => item.PACA_CLIENTE == firstResult[y].CLIE_CLIENTE),
-                        CLIE_ACOPIOS_DATE: fechaEmisionAcopio.length == 0 ? '' : fechaEmisionAcopio[0].FECHA_EMI,
+                        CLIE_ACOPIOS_EMI: fechaEmisionAcopio.length == 0 ? '' : fechaEmisionAcopio[0].FECHA_EMI,
+                        CLIE_ACOPIOS_VIG: fechaEmisionAcopio.length == 0 ? '' : fechaEmisionAcopio[0].FECHA_VIG_HASTA,
                         CLIE_CTACTE: fourResult.some(item => item.CLIE_CLIENTE == firstResult[y].CLIE_CLIENTE)
                     })
                 }
@@ -356,7 +360,7 @@
             if (FechaEmisionDesde == null){
                 grid.dataSource.read();
             } else {
-                grid.dataSource.filter({ field: "CLIE_ACOPIOS_DATE", operator: "gte", value: FechaEmisionDesde });
+                grid.dataSource.filter({ field: "CLIE_ACOPIOS_EMI", operator: "gte", value: FechaEmisionDesde });
             }            
         });
 

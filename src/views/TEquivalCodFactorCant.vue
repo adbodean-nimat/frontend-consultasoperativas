@@ -80,8 +80,9 @@
                 :toolbar="['create', {name:'editar', text: 'Filtro', iconClass: 'k-icon k-i-edit'}, {name:'faltante', text: 'Ver art. faltantes', iconClass: 'k-icon k-i-data'}, {template: descripcionResumen}]">
           <grid-column :field="'id'" :title="'Id'" :hidden="true"></grid-column>
           <grid-column :field="'codigo_ptf'" :title="'Código Plataforma'" :width="150"></grid-column>
-          <grid-column :field="'nombre_ptf'" :title="'Nombre'" :width="500"></grid-column>
+          <grid-column :field="'nombre_ptf'" :title="'Nombre PTF'" :width="500"></grid-column>
           <grid-column :field="'codigo_acindar'" :title="'Código para Acindar'"></grid-column>
+          <grid-column :field="'nombre_acindar'" :title="'Nombre Acindar'" :width="500"></grid-column>
           <grid-column :field="'factor_cant'" :title="'Factor conver. cant.'"></grid-column>
           <grid-column :field="'obvs_ptf'" :title="'Comentarios'"></grid-column>
           <grid-column :command="['edit','destroy']" :title="'&nbsp;'"></grid-column>
@@ -123,6 +124,7 @@
           codigo_ptf: { type: 'string'},
           nombre_ptf: {type: 'string', editable: false},
           codigo_acindar: { type: 'string'},
+          nombre_acindar: { type: 'string'},
           factor_cant: { type: 'string'},
           obvs_ptf: {type: 'string', editable: false}
         },
@@ -208,6 +210,7 @@
               codigo_ptf: data1[i].codigo_ptf,
               nombre_ptf: data2.filter(item => item.ARTS_ARTICULO_EMP == data1[i].codigo_ptf).map(data => data.ARTS_NOMBRE),
               codigo_acindar: data1[i].codigo_acindar,
+              nombre_acindar: data2.filter(item => item.ARTS_ARTICULO_EMP == data1[i].codigo_acindar).map(data => data.ARTS_NOMBRE),
               factor_cant: data1[i].factor_cant,
               obvs_ptf: (data2.filter(item => item.ARTS_ARTICULO_EMP == data1[i].codigo_ptf).map(data => data.ARVE_BLOQUEO_VENTA )) == 1 ? 'Bloqueado para la venta.' : data2.filter(item => item.ARTS_ARTICULO_EMP == data1[i].codigo_ptf).map(data => data.ARTS_NOMBRE) == '' ? 'Este art. está excluido por filtro o PTF.' : ''
             })

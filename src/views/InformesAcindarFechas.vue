@@ -53,6 +53,13 @@
               </a>
           </div>
         </div>
+        <div id="window3">
+          <div class="col">
+            <div class="col m-3">
+              <span id="resumenarticulos"></span>
+            </div>
+          </div>
+        </div>
         <datasource ref="remoteDataSourceInformesAcindarEntreFechas"
                           :transport-read="readData"
                           :schema-model-fields="schemaModelFields"
@@ -309,6 +316,7 @@
                     '<a class="k-pager-refresh k-link k-button edit" title="Editar tablas" style="margin-left:5px"><span class="k-icon k-i-edit"></span></a>' +
                     '<a class="k-pager-refresh k-link k-button refresh" title="Actualizar" style="margin-left:5px"><span class="k-icon k-i-reload"></span></a>' +
                     '</span>' +
+                    '<span id="resumen" style="margin-left: 15px"></span>' +
                     '<div class="d-flex flex-row align-items-start position-absolute top-0 end-0 w-auto">' +
                       '<button type="button" class="k-grid-exportar k-button k-button-md k-rounded-md k-button-solid k-button-solid-base"><span class="k-icon k-i-export k-button-icon"></span><span class="k-button-text">Exportar xlsx/csv/txt</span></button>' +
                       '<div class="p-1">' +
@@ -335,6 +343,7 @@
       var toolbarElement = gridElement.find('.k-grid-toolbar');
       var kendoWindowEditar = kendo.jQuery("#window");
       var kendoWindowsPopup = kendo.jQuery("#window2");
+      var kendoWindowsPopup2 = kendo.jQuery("#window3");
 
       kendoWindowEditar.kendoWindow({
         width: "500px",
@@ -352,6 +361,15 @@
         height: 'auto',
         resizable: false,
         title: 'Aviso'
+      })
+
+      kendoWindowsPopup2.kendoWindow({
+        width: "500px",
+        modal: true,
+        visible: false,
+        height: 'auto',
+        resizable: false,
+        title: 'Articulos'
       })
             
       fechadesde.kendoDatePicker({
@@ -375,7 +393,9 @@
         fechadesde.data("kendoDatePicker").value(null);
       })
 
-      toolbarElement.on("click", ".play", ()=>{              
+      toolbarElement.on("click", ".play", ()=>{      
+        kendo.jQuery('#resumenarticulos').empty();
+        kendo.jQuery("#resumen").empty();
         var fdesde = fechadesde.data("kendoDatePicker").value();
         var fhasta = fechahasta.data("kendoDatePicker").value();
         if (fdesde && fhasta) {
@@ -419,14 +439,34 @@
             function(data1, data2){
               const getdata1 = data1[0]
               const getdata2 = data2[0]
+              const date = new Date();
+              const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+              const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+              var getfechadesde = kendo.jQuery('#fechadesde').data("kendoDatePicker").value()
+              var getfechahasta = kendo.jQuery('#fechahasta').data("kendoDatePicker").value()
+              kendo.culture("es-AR");
+              const newArt = getdata2.filter(item => kendo.toString(item.ARTS_FECHA_ALTA) >= kendo.toString(getfechadesde, 'u') && kendo.toString(item.ARTS_FECHA_ALTA) <= kendo.toString(getfechahasta, 'u')).map(data => data);
+              console.log(newArt)
               var totalfalta = getdata2.length - getdata1.length
-              var resumen = totalfalta + ' articulos faltantes en la tabla "Equival cod. y factor cant."' 
+              for(let i = 0; i < newArt.length; i++){
+                
+                const nameElement = document.createElement("p");
+                nameElement.textContent = newArt[i].ARTS_ARTICULO_EMP + " - " + newArt[i].ARTS_NOMBRE;
+
+                // Append the elements to the "dataDisplay" div
+                kendo.jQuery('#resumenarticulos').append(nameElement);
+                
+              }
+              
+              var resumen = newArt.length == 0 ? '' : newArt.length == 1 ?'<span id="verarticulos" class="k-icon k-i-eye"></span> '+ newArt.length +' articulo nuevo desde '+kendo.toString(getfechadesde, 'd') + ' hasta ' + kendo.toString(getfechahasta, 'd') : '<span id="verarticulos" class="k-icon k-i-eye"></span> '+newArt.length +' articulos nuevos desde '+kendo.toString(getfechadesde, 'd')+ ' hasta ' + kendo.toString(getfechahasta, 'd')
+              
               kendo.jQuery("#resumen").append(resumen);
-              /* if(totalfalta >= 0){
-                var popup = kendo.jQuery("#window2").data('kendoWindow');
+              kendo.jQuery("#verarticulos").click((e)=>{
+                e.preventDefault();
+                var popup = kendo.jQuery("#window3").data('kendoWindow');
                 popup.open();
                 popup.center();
-              } */
+              });
             }
           )
           grid.dataSource.read();  
