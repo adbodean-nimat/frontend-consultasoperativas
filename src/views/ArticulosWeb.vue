@@ -306,25 +306,31 @@
           })
         },
         updateData: function(e) {
-            var tkn = this.token
-            var urlApi = this.UrlApiBase
-            var id = e.data.models[0].id
-            var data = kendo.stringify(e.data.models[0],["publicado", "codigo_art", "nombre_art", "orden_art", "marcar_nuevo", "mostrar_inicio", "outlet", "copete", "descripcion", "bloq_vtas", "min_para_web", "stock", "categorias1", "categorias2", "categorias3", "categorias4"])
-            kendo.jQuery.ajax({
-                method: 'PUT',
-                type: 'PUT',
-                url: urlApi + id,
-                beforeSend: function(xhr) {
-                    xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
-                },
-                success: function(data){
-                    e.success()
-                },
-                error: function(data){
-                    e.error(data)
-                },
-                contentType: 'application/json',
-                data: data
+          var grid = this.$refs.grid.kendoWidget();
+          var tkn = this.token
+          var urlApi = this.UrlApiBase
+          var id = e.data.models[0].id
+          var data = kendo.stringify(e.data.models[0],["publicado", "codigo_art", "nombre_art", "orden_art", "marcar_nuevo", "mostrar_inicio", "outlet", "copete", "descripcion", "bloq_vtas", "min_para_web", "stock", "categorias1", "categorias2", "categorias3", "categorias4"])
+          kendo.jQuery.ajax({
+            method: 'PUT',
+            type: 'PUT',
+            url: urlApi + id,
+            contentType: 'application/json',
+            data: data,
+            beforeSend: function(xhr) {
+              xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
+            },
+            success: function(data){
+              e.success()
+            },
+            error: function(data){
+              e.error(data)
+            },
+            complete: function(e){
+              grid.dataSource.bind('sync', () => {
+                grid.dataSource.read();
+              });
+            }
             })
         },
         destroyData: function(e){
@@ -347,12 +353,15 @@
             })
         },
         createData: function(e){
+          var grid = this.$refs.grid.kendoWidget();
           var tkn = this.token
           var urlApi = this.UrlApiBase
           kendo.jQuery.ajax({
             method: 'POST',
             type: 'POST',
             url: urlApi,
+            contentType: 'application/json',
+            data: kendo.stringify(e.data.models[0],["publicado", "codigo_art", "nombre_art", "orden_art", "marcar_nuevo", "mostrar_inicio", "outlet", "copete", "descripcion", "bloq_vtas", "min_para_web", "stock", "categorias1", "categorias2", "categorias3", "categorias4"]),
             beforeSend: function(xhr) {
               xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
             },
@@ -362,8 +371,11 @@
             error: function(data){
               e.error(data)
             },
-            contentType: 'application/json',
-            data: kendo.stringify(e.data.models[0],["publicado", "codigo_art", "nombre_art", "orden_art", "marcar_nuevo", "mostrar_inicio", "outlet", "copete", "descripcion", "bloq_vtas", "min_para_web", "stock", "categorias1", "categorias2", "categorias3", "categorias4"]),
+            complete: function(e){
+              grid.dataSource.bind('sync', () => {
+                grid.dataSource.read();
+              });
+            }
           })
         },
         onError: function(e){
