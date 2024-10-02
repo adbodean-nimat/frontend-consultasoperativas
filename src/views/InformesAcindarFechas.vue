@@ -109,7 +109,7 @@
         <grid-column field="DESCRIPCION" title="DESCRIPCION"></grid-column>
         <grid-column field="UMV" title="UMV"></grid-column>
         <grid-column field="CANTIDAD" title="CANTIDAD"></grid-column>
-        <grid-column field="MONTO" title="MONTO" format="{0:c}"></grid-column>
+        <grid-column field="MONTO" title="MONTO" format="{0:c2}"></grid-column>
         <grid-column field="FECHA_COSTO" title="FECHA COSTO"></grid-column>
         <grid-column field="DESCRIPCION_COND_VTA" title="DESCRIPCION COND VTA"></grid-column>
         <grid-column field="DIAS" title="DIAS"></grid-column>
