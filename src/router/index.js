@@ -56,6 +56,7 @@ import ConsultaInformesAcindarFechas from "../views/InformesAcindarFechas.vue"
 import ClasifClientes from "../views/TClasifClientesAcindar.vue"
 import AcindarComprobantes from "../views/TComprobantesAcindar.vue"
 import EquivalCodFactorCant from "../views/TEquivalCodFactorCant.vue"
+import ConsultaQR from "../views/ConsultaQR.vue"
 
 const routes = [
   {
@@ -134,6 +135,20 @@ const routes = [
       metaTags: [
         {
           name: 'Consulta informes de Acindar'
+        }
+      ]
+    }
+  },
+  {
+    path: '/consultaporqr',
+    name: 'Consulta QR',
+    component: ConsultaQR,
+    props: true,
+    meta: {
+      title: 'Consulta por QR',
+      metaTags: [
+        {
+          name: 'Consulta por QR'
         }
       ]
     }

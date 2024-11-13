@@ -221,6 +221,7 @@
     methods: {
       dataBound: function(e) {
           var grid = this.$refs.grid.kendoWidget();
+          var gridElement = grid.element;
           for (var i = 0; i < grid.columns.length; i++) {
                 grid.autoFitColumn(i);
             }
@@ -231,6 +232,37 @@
           var totalItem = e.sender.dataSource.total();
           var modificados = document.getElementById("modificados_encabezado");
           modificados.innerText = ' Item: '+totalItem+' - Cantidad ingr.: '+kendo.toString(aggSumCantidadIngr, "n2")+ ' - Cantidad por factor: '+kendo.toString(aggSumCantidad, "n2")+ ' - Monto SI: '+ kendo.toString(aggSumMontoSI, "c2") +' - Monto: '+ kendo.toString(aggSumMonto, "c2")
+
+           // get the index of the UnitsInStock cell
+          var columns = e.sender.columns;
+          var columnIndex = gridElement.find(".k-grid-header [data-field=" + "CODIGO_ART" + "]").index();
+          //console.log(columns)
+          //console.log(columnIndex)
+
+          // iterate the data items and apply row styles where necessary
+          var dataItems = e.sender.dataSource.data();
+          //console.log(dataItems)
+          for (var j = 0; j < dataItems.length; j++) {
+            // Get the value of the discontinued cell from the current dataItem.
+            var codigoart = dataItems[j].get('CODIGO_ART');
+            var cuit = dataItems[j].get('CUIT');
+            // Find the table row that corresponds to the dataItem by using the uid property.
+            var row = e.sender.tbody.find("[data-uid='" + dataItems[j].uid + "']");
+            // Add the class if the row is discontinued.
+            if(codigoart == ''){
+              //console.log(dataItems[j])
+              var resumen = '<span>Hay código(s) sale sin información</span>'
+              kendo.jQuery("#resumen2").empty();
+              kendo.jQuery("#resumen2").append(resumen);
+              row.addClass("discontinued")
+            }
+            if(cuit == ''){
+              var resumen = '<span>Hay CUIT vacío</span>'
+              kendo.jQuery("#resumen3").empty();
+              kendo.jQuery("#resumen3").append(resumen);
+              row.addClass("discontinued")
+            }
+          } 
         },
         readData: function(e) {
             var tkn = this.token
@@ -309,7 +341,7 @@
                     `<label for="fechahasta" style="margin-left: 0.5rem; text-align: center">hasta</label>` +
                     '<input id="fechahasta" style="width: auto"/>' +
                     '<span style="margin-left: 15px">'+
-                    '<a class="k-pager-refresh k-link k-button play" title="Ralizar consulta" style="margin-right:5px"><span class="k-icon k-i-play"></span></a>' +
+                    '<a class="k-pager-refresh k-link k-button play" title="Realizar consulta" style="margin-right:5px"><span class="k-icon k-i-play"></span></a>' +
                     '<a class="k-pager-refresh k-link k-button filter-clear" title="Limpiar filtro" style="margin-right:5px"><span class="k-icon k-i-filter-clear"></span></a>'+
                     '<a class="k-pager-refresh k-link k-button" title="Nueva consulta" onClick="window.location.reload();"><span class="k-icon k-i-file"></span></a>' +
                     '<a class="k-pager-refresh k-link k-button k-button-icontext k-grid-excel" style="margin-left:5px"><span class="k-icon k-i-excel"></span></a>' +
@@ -317,6 +349,8 @@
                     '<a class="k-pager-refresh k-link k-button refresh" title="Actualizar" style="margin-left:5px"><span class="k-icon k-i-reload"></span></a>' +
                     '</span>' +
                     '<span id="resumen" style="margin-left: 15px"></span>' +
+                    '<span id="resumen2" style="margin-left: 15px"></span>' +
+                    '<span id="resumen3" style="margin-left: 15px"></span>' +
                     '<div class="d-flex flex-row align-items-start position-absolute top-0 end-0 w-auto">' +
                       '<button type="button" class="k-grid-exportar k-button k-button-md k-rounded-md k-button-solid k-button-solid-base"><span class="k-icon k-i-export k-button-icon"></span><span class="k-button-text">Exportar xlsx/csv/txt</span></button>' +
                       '<div class="p-1">' +
@@ -396,6 +430,7 @@
       toolbarElement.on("click", ".play", ()=>{      
         kendo.jQuery('#resumenarticulos').empty();
         kendo.jQuery("#resumen").empty();
+        kendo.jQuery("#resumen2").empty();
         var fdesde = fechadesde.data("kendoDatePicker").value();
         var fhasta = fechahasta.data("kendoDatePicker").value();
         if (fdesde && fhasta) {
@@ -446,7 +481,7 @@
               var getfechahasta = kendo.jQuery('#fechahasta').data("kendoDatePicker").value()
               kendo.culture("es-AR");
               const newArt = getdata2.filter(item => kendo.toString(item.ARTS_FECHA_ALTA) >= kendo.toString(getfechadesde, 'u') && kendo.toString(item.ARTS_FECHA_ALTA) <= kendo.toString(getfechahasta, 'u')).map(data => data);
-              console.log(newArt)
+              //console.log(newArt)
               var totalfalta = getdata2.length - getdata1.length
               for(let i = 0; i < newArt.length; i++){
                 
@@ -510,7 +545,7 @@
     }
   }
 </script>
-<style scoped>
+<style>
 .lds-ring {
   position: relative;
   width: 30px;
@@ -548,5 +583,9 @@
 .displaynone{
   display: none !important
 }
+.discontinued {
+        font-weight: bold !important;
+        color: #f00 !important;
+    }
 </style>
     
