@@ -37,11 +37,12 @@
               :toolbar="toolbarTemplate"
               :allow-copy="true"
               :selectable="true"
+              :scrollable="true"
               >
         <grid-column field="NPCA_DIVISION_NPCA" title="Número de división"></grid-column>
         <grid-column field="NPCA_TIPO_NPCA" title="Tipo de pedido"></grid-column>
         <grid-column field="NPCA_NUMERO_NPCA" title="Numero de pedido"></grid-column>
-        <grid-column field="NPCA_FECHA_EMI" title="Fecha de emisión" template="#: kendo.toString(kendo.parseDate(NPCA_FECHA_EMI, 'yyyy-MM-dd'), 'dd/MM/yyyy') #"></grid-column>
+        <grid-column field="NPCA_FECHA_EMI" title="Fecha de emisión" :filterable-ui="'datepicker'" :format="'{0:dd/MM/yyyy}'"></grid-column>
         <grid-column field="NPCA_CLIENTE" title="Código de cliente"></grid-column>
         <grid-column field="CLIE_NOMBRE" title="Nombre de cliente"></grid-column>
         <grid-column field="NPCA_REFERENCIA" title="Referencia"></grid-column>
@@ -64,7 +65,7 @@
     import { Grid, GridColumn } from '@progress/kendo-grid-vue-wrapper'
     import { Button } from '@progress/kendo-buttons-vue-wrapper'
     import { directive as fullscreen } from 'vue-fullscreen'
-    kendo.culture("es-US");
+    kendo.culture("es-AR");
     export default {
       name: 'ConsultaporQR',
       directives: {
@@ -86,7 +87,7 @@
                   NPCA_DIVISION_NPCA: {type: 'string'},
                   NPCA_TIPO_NPCA: {type: 'string'},
                   NPCA_NUMERO_NPCA: {type: 'number'},
-                  NPCA_FECHA_EMI: {type: 'datetime'},
+                  NPCA_FECHA_EMI: {type: 'date'},
                   NPCA_CLIENTE: {type: 'number'},
                   CLIE_NOMBRE: {type: 'string'},
                   NPCA_REFERENCIA: {type: 'string'},
@@ -122,11 +123,18 @@
             var tkn = this.token
             var urlApi = this.UrlApiBase
             var getfechadesde = kendo.jQuery('#fechadesde').data("kendoDatePicker").value()
+            var fechaEmision = getfechadesde = '' ? '' : kendo.toString(new Date(getfechadesde), "yyyy-MM-dd")
             var getScanner = kendo.jQuery('#scanner').data("kendoTextBox").value()
-            var data = {"fechaemision": kendo.toString(new Date(getfechadesde), "yyyy-MM-dd"), "qr": kendo.toString(getScanner)}
+            
+            var getData = fechaEmision == "" && getScanner ? '?fechaemision=""&qr='+ kendo.toString(getScanner) 
+            : getScanner == null && fechaEmision ? '?fechaemision='+ fechaEmision +'&qr='
+            : '?fechaemision='+ fechaEmision +'&qr='+ kendo.toString(getScanner)
+            
+            var data = {"fechaemision": fechaEmision, "qr": kendo.toString(getScanner)}
             console.log(JSON.stringify(data))
+            console.log(getData)
             kendo.jQuery.ajax({
-              url: urlApi + '?fechaemision='+kendo.toString(new Date(getfechadesde), "yyyy-MM-dd")+'&qr='+kendo.toString(getScanner),
+              url: urlApi + getData,
               beforeSend: function(xhr){
                   xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
                 },
@@ -190,9 +198,10 @@
       toolbarElement.on("click", ".play", ()=>{      
         var fdesde = fechadesde.data("kendoDatePicker").value();
         var gscanner = scanner.data("kendoTextBox").value();
-        if (fdesde && gscanner) {
+        if (fdesde || gscanner){
           grid.dataSource.read();  
         }
+        
       });
     }
   }
