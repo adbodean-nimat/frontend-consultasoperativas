@@ -57,6 +57,7 @@ import ClasifClientes from "../views/TClasifClientesAcindar.vue"
 import AcindarComprobantes from "../views/TComprobantesAcindar.vue"
 import EquivalCodFactorCant from "../views/TEquivalCodFactorCant.vue"
 import ConsultaQR from "../views/ConsultaQR.vue"
+import artsclasif5stockmanual from "../views/TArtsClasif5StockManual.vue"
 
 const routes = [
   {
@@ -553,6 +554,19 @@ const routes = [
       metaTags: [
         {
           name: 'Tabla: Articulos - Cales, Cementos, Plasticor'
+        }      ]
+    }
+  },
+  {
+    path: '/tabla/artsclasif5stockmanual',
+    name: 'Tabla: Arts Clasif. 5 - Stock Manual para la WEB NIMAT',
+    component: artsclasif5stockmanual,
+    props: true,
+    meta: {
+      title: 'Tabla: Arts Clasif. 5 - Stock Manual para la WEB NIMAT',
+      metaTags: [
+        {
+          name: 'Tabla: Arts Clasif. 5 - Stock Manual para la WEB NIMAT'
         }      ]
     }
   },

@@ -43,6 +43,27 @@
             </div>
         </div>
       </div>
+      <div id="windowForAssign2">
+        <div id="form">        
+            <div class="row g-3 p-3 align-items-center">
+              <div class="col">
+                <label for="" class="col-form-label">Clasif. 5</label>
+                <input id="input1" value="">
+              </div>
+            </div>
+          
+            <div class="row g-3 p-3 align-items-center">
+              <div class="col">
+                <label for="" class="col-form-label">Cantidad Stock</label>
+                <input id="input2" type="number" value="">
+              </div>
+            </div>
+            
+            <div class="row g-3">
+              <button id="guardar-form" class="guardar-form btn btn-primary">Guardar</button>
+            </div>
+        </div>
+      </div>
       
       <datasource ref="remoteDataSourceArticulosWeb"
         :transport-read="readData"
@@ -84,7 +105,7 @@
                   :pageable="true"
                   :sortable-mode="'multiple'"
                   :editable="'popup'"
-                  :toolbar="['create', {name:'gear', text: 'Editar Cron', iconClass: 'k-icon k-i-gear'}, {name:'download', text: 'Descargar Excel', iconClass: 'k-icon k-i-excel'}, {name:'actualizar', text: 'Actualizar Web'}, {template: toolbarTemplate}, {template: toolbarLoading}, {template: actualizacionautomatica}]"
+                  :toolbar="['create', {name:'gear', text: 'Editar Cron', iconClass: 'k-icon k-i-gear'},{name:'gear2', text: 'Editar Stock por Clasif. 5', iconClass: 'k-icon k-i-gear'}, {name:'download', text: 'Descargar Excel', iconClass: 'k-icon k-i-excel'}, {name:'actualizar', text: 'Actualizar Web'}, {template: toolbarTemplate}, {template: toolbarLoading}, {template: actualizacionautomatica}]"
                   @save="onSave"
                   >
             <grid-column :command="['edit','destroy']" :title="'&nbsp;'" :width="220"></grid-column>
@@ -182,6 +203,7 @@
       },
       created(){
         this.getActualizacionWeb();
+        this.getArtsClasif5Form();
         this.timer = setInterval(this.getActualizacionWeb, 60 * 1000 * 5); 
         if (!store.getters.isLoggedIn) {
             this.$router.push('/');
@@ -190,6 +212,14 @@
         this.IsAllow = store.getters.getUser.sAMAccountName;
       },
       methods: {
+        async getArtsClasif5Form(){
+            var token = this.token;
+            const res = await fetch(this.UrlApiArtsClasif5StockManual, {method: 'GET', headers: {Authorization: `Basic ${token}`}});
+            const data = await res.json();
+            console.log(data)
+            kendo.jQuery('#input1').data("kendoMultiSelect").value(data[0].arts_clasif_5[0]['input']);
+            kendo.jQuery('#input2').data("kendoTextBox").value(data[0].stock_manual);
+        },
         isCronValid(freq){
           var cronregex = new RegExp();
           return cronregex.test(freq);
@@ -562,6 +592,12 @@
         UrlApiDownload(){
           return `${process.env.VUE_APP_API_BASE}/jsontosheetdownload/`
         },
+        UrlApiClasif5(){
+          return `${process.env.VUE_APP_API_BASE}/stockartsclasif5/`
+        },
+        UrlApiArtsClasif5StockManual(){
+          return `${process.env.VUE_APP_API_BASE}/artsclasif5stockmanual/`
+        },
         token(){
             return store.state.token
         },
@@ -583,6 +619,7 @@
         var gridElement = grid.element;
         var toolbarElement = gridElement.find('.k-grid-toolbar');
         var kendoWindowAssign = kendo.jQuery("#windowForAssign");
+        var kendoWindowAssign2 = kendo.jQuery("#windowForAssign2");
         var toolbarDownload = document.getElementsByClassName('k-i-excel');
         var toolbarGear = document.getElementsByClassName('k-grid-gear');
         var actualizacionAuto = document.getElementById('switch');
@@ -601,6 +638,30 @@
           fillMode: 'flat'
         });
 
+        kendo.jQuery("#input1").kendoMultiSelect({
+          fillMode: 'flat',
+            dataSource:{ 
+                transport: {
+                    read: {
+                        url: this.UrlApiClasif5,
+                        contentType: 'application/json',
+                        dataType: 'json',
+                        type: 'GET',
+                        headers: {
+                          'Authorization': 'Bearer ' + this.token
+                        }
+                    }
+                }
+            },
+            dataTextField: "CA05_CLASIF_5",
+            dataValueField: "CA05_CLASIF_5",
+            itemTemplate: '<span>#: CA05_CLASIF_5 # - #: CA05_NOMBRE #</span>'
+        })
+
+        kendo.jQuery("#input2").kendoTextBox({
+          fillMode: 'flat'
+        })
+
         kendoWindowAssign.kendoWindow({
           width: "500px",
           modal: true,
@@ -608,6 +669,15 @@
           height: 'auto',
           resizable: false,
           title: 'Editar Cron'
+        })
+
+        kendoWindowAssign2.kendoWindow({
+          width: "500px",
+          modal: true,
+          visible: false,
+          height: 'auto',
+          resizable: false,
+          title: 'Editar Stock por Clasif. 5'
         })
 
         toolbarElement.on('click', '.k-grid-download', (e)=>{
@@ -695,6 +765,40 @@
             }
           });
         });
+
+        toolbarElement.on('click', '.k-grid-gear2', (e)=>{
+            e.preventDefault();
+            var popup = kendo.jQuery("#windowForAssign2").data('kendoWindow');
+            popup.open();
+            popup.center();
+            popup.wrapper.find(".guardar-form").click((e)=>{
+              e.preventDefault();
+              var input1 = kendo.jQuery('#input1').data("kendoMultiSelect").value();
+              var input2 = kendo.jQuery('#input2').val();
+              var data = {"arts_clasif_5": [{input: input1}], "stock_manual": input2}
+              //console.log(kendo.stringify(data))
+              var token = this.token
+              kendo.jQuery.ajax({
+                  url: this.UrlApiArtsClasif5StockManual + 1,
+                  beforeSend: function (xhr) {
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + token)
+                  },
+                  method: 'PUT',
+                  type: 'PUT',
+                  success: function(data, textStatus){      
+                    //console.log(textStatus);  
+                    kendo.alert('Modificado correctamente').element.getKendoAlert().title("Mensaje");             
+                  },
+                  error: function(jqXHR, textStatus, errorThrown){
+                    console.log(jqXHR);
+                    console.log(textStatus);
+                    console.log(errorThrown);
+                  },
+                  data: kendo.stringify(data),
+                  contentType: 'application/json',
+                })
+            });
+          });
       
         toolbarElement.on('click', '.k-grid-actualizar', (e)=>{
               e.preventDefault();

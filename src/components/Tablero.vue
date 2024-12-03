@@ -82,7 +82,7 @@
                             </span>
                         </div>
                         <div class="column-bottom text-center h-10 d-flex justify-content-between align-items-center rounded-bottom px-4 bg-light">
-                            <span class="fs-6 text-secondary">1.0.0</span>
+                            <span class="fs-6 text-secondary">1.3.0</span>
                             <span class="fs-6 text-secondary">WN</span>
                         </div>
                         </router-link> 
