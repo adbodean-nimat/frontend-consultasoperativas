@@ -622,6 +622,7 @@
         var kendoWindowAssign2 = kendo.jQuery("#windowForAssign2");
         var toolbarDownload = document.getElementsByClassName('k-i-excel');
         var toolbarGear = document.getElementsByClassName('k-grid-gear');
+        var toolbarGear2 = document.getElementsByClassName('k-grid-gear2');
         var actualizacionAuto = document.getElementById('switch');
 
         if(this.IsAllow === 'abodean'|| this.IsAllow === 'avillasalte'|| this.IsAllow === 'dvazquez'|| this.IsAllow === 'ejescobar'){
@@ -629,6 +630,11 @@
           toolbarDownload[0].style.display = "none";
           toolbarGear[0].style.display = "none";
           actualizacionAuto.style.display = "none";
+        }
+        
+        if(this.IsAllow === 'cfernandez' || this.IsAllow === 'abodean' || this.IsAllow === 'avillasalte'|| this.IsAllow === 'dvazquez'|| this.IsAllow === 'ejescobar'){
+        } else {
+          toolbarGear2[0].style.display = "none";
         }
 
         kendo.jQuery("#cron1").kendoTextBox({
