@@ -43,8 +43,9 @@
             </div>
         </div>
       </div>
-      <div id="windowForAssign2">
-        <div id="form">        
+      <div id="windowForAssign2" class="row gx-5">
+        <div id="form" class="col">   
+          <h4>Stock manual</h4>     
             <div class="row g-3 p-3 align-items-center">
               <div class="col">
                 <label for="" class="col-form-label">Clasif. 5</label>
@@ -61,6 +62,32 @@
             
             <div class="row g-3">
               <button id="guardar-form" class="guardar-form btn btn-primary">Guardar</button>
+            </div>
+        </div>
+        <div id="form-2" class="col">
+          <h4>Sin stock - Consultar</h4>
+          <div class="row g-3 p-3 align-items-center">
+              <div class="col">
+                <label for="" class="col-form-label">Clasif. 5</label>
+                <input id="input1-2" value="">
+              </div>
+            </div>
+          
+            <div class="row g-3 p-3 align-items-center">
+              <div class="col">
+                <label for="" class="col-form-label">Descripción corto</label>
+                <input id="input2-2" type="text" value="">
+              </div>
+            </div>
+
+            <div class="row g-3 p-3 align-items-center">
+              <div class="col">
+                <input id="input3-2" value="">
+              </div>
+            </div>
+            
+            <div class="row g-3">
+              <button id="guardar-form-2" class="guardar-form-2 btn btn-primary">Guardar</button>
             </div>
         </div>
       </div>
@@ -105,7 +132,7 @@
                   :pageable="true"
                   :sortable-mode="'multiple'"
                   :editable="'popup'"
-                  :toolbar="['create', {name:'gear', text: 'Editar Cron', iconClass: 'k-icon k-i-gear'},{name:'gear2', text: 'Editar Stock por Clasif. 5', iconClass: 'k-icon k-i-gear'}, {name:'download', text: 'Descargar Excel', iconClass: 'k-icon k-i-excel'}, {name:'actualizar', text: 'Actualizar Web'}, {template: toolbarTemplate}, {template: toolbarLoading}, {template: actualizacionautomatica}]"
+                  :toolbar="['create', {name:'gear', text: 'Editar Cron', iconClass: 'k-icon k-i-gear'},{name:'gear2', text: 'Editar por Clasif. 5', iconClass: 'k-icon k-i-gear'}, {name:'download', text: 'Descargar Excel', iconClass: 'k-icon k-i-excel'}, {name:'actualizar', text: 'Actualizar Web'}, {template: toolbarTemplate}, {template: toolbarLoading}, {template: actualizacionautomatica}]"
                   @save="onSave"
                   >
             <grid-column :command="['edit','destroy']" :title="'&nbsp;'" :width="220"></grid-column>
@@ -216,9 +243,14 @@
             var token = this.token;
             const res = await fetch(this.UrlApiArtsClasif5StockManual, {method: 'GET', headers: {Authorization: `Basic ${token}`}});
             const data = await res.json();
-            console.log(data)
+            const res2 = await fetch(this.UrlApiArtsClasif5AlConsultar, {method: 'GET', headers: {Authorization: `Basic ${token}`}});
+            const data2 = await res2.json();
+            console.log(data2)
             kendo.jQuery('#input1').data("kendoMultiSelect").value(data[0].arts_clasif_5[0]['input']);
             kendo.jQuery('#input2').data("kendoTextBox").value(data[0].stock_manual);
+            kendo.jQuery('#input1-2').data("kendoMultiSelect").value(data2[0].arts_clasif_5[0]['input']);
+            kendo.jQuery('#input2-2').data("kendoTextBox").value(data2[0].descripcion);
+            kendo.jQuery('#input3-2').data("kendoMaskedTextBox").value(data2[0].whatsapp);
         },
         isCronValid(freq){
           var cronregex = new RegExp();
@@ -598,6 +630,9 @@
         UrlApiArtsClasif5StockManual(){
           return `${process.env.VUE_APP_API_BASE}/artsclasif5stockmanual/`
         },
+        UrlApiArtsClasif5AlConsultar(){
+          return `${process.env.VUE_APP_API_BASE}/artsclasif5alconsultar/`
+        },
         token(){
             return store.state.token
         },
@@ -664,8 +699,43 @@
             itemTemplate: '<span>#: CA05_CLASIF_5 # - #: CA05_NOMBRE #</span>'
         })
 
+        kendo.jQuery("#input1-2").kendoMultiSelect({
+          fillMode: 'flat',
+            dataSource:{ 
+                transport: {
+                    read: {
+                        url: this.UrlApiClasif5,
+                        contentType: 'application/json',
+                        dataType: 'json',
+                        type: 'GET',
+                        headers: {
+                          'Authorization': 'Bearer ' + this.token
+                        }
+                    }
+                }
+            },
+            dataTextField: "CA05_CLASIF_5",
+            dataValueField: "CA05_CLASIF_5",
+            itemTemplate: '<span>#: CA05_CLASIF_5 # - #: CA05_NOMBRE #</span>'
+        })
+
         kendo.jQuery("#input2").kendoTextBox({
           fillMode: 'flat'
+        })
+
+        kendo.jQuery("#input2-2").kendoTextBox({
+          fillMode: 'flat'
+        })
+
+        kendo.jQuery("#input3-2").kendoMaskedTextBox({
+          fillMode: 'flat',
+          label: "WhatsApp",
+          mask: "+00 000 000 0000",
+          unmaskOnPost: true,
+          change: function(e) {
+            var value = e.sender.value().replace(/\s+/g, '')
+            console.log(value)
+          }
         })
 
         kendoWindowAssign.kendoWindow({
@@ -678,12 +748,12 @@
         })
 
         kendoWindowAssign2.kendoWindow({
-          width: "500px",
+          width: "1200px",
           modal: true,
           visible: false,
           height: 'auto',
           resizable: false,
-          title: 'Editar Stock por Clasif. 5'
+          title: 'Editar por Clasif. 5 para chapas'
         })
 
         toolbarElement.on('click', '.k-grid-download', (e)=>{
@@ -786,6 +856,34 @@
               var token = this.token
               kendo.jQuery.ajax({
                   url: this.UrlApiArtsClasif5StockManual + 1,
+                  beforeSend: function (xhr) {
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + token)
+                  },
+                  method: 'PUT',
+                  type: 'PUT',
+                  success: function(data, textStatus){      
+                    //console.log(textStatus);  
+                    kendo.alert('Modificado correctamente').element.getKendoAlert().title("Mensaje");             
+                  },
+                  error: function(jqXHR, textStatus, errorThrown){
+                    console.log(jqXHR);
+                    console.log(textStatus);
+                    console.log(errorThrown);
+                  },
+                  data: kendo.stringify(data),
+                  contentType: 'application/json',
+                })
+            });
+            popup.wrapper.find(".guardar-form-2").click((e)=>{
+              e.preventDefault();
+              var input1 = kendo.jQuery('#input1-2').data("kendoMultiSelect").value();
+              var input2 = kendo.jQuery('#input2-2').val();
+              var input3 = kendo.jQuery('#input3-2').val();
+              var data = {"arts_clasif_5": [{input: input1}], "descripcion": input2, "whatsapp": input3.replace(/\s+/g, '')}
+              //console.log(kendo.stringify(data))
+              var token = this.token
+              kendo.jQuery.ajax({
+                  url: this.UrlApiArtsClasif5AlConsultar + 1,
                   beforeSend: function (xhr) {
                     xhr.setRequestHeader('Authorization', 'Bearer ' + token)
                   },
