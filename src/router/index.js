@@ -58,6 +58,7 @@ import AcindarComprobantes from "../views/TComprobantesAcindar.vue"
 import EquivalCodFactorCant from "../views/TEquivalCodFactorCant.vue"
 import ConsultaQR from "../views/ConsultaQR.vue"
 import artsclasif5stockmanual from "../views/TArtsClasif5StockManual.vue"
+import ConsultaOrdenesCompra from "../views/ConsultaOrdenesCompra.vue"
 
 const routes = [
   {
@@ -150,6 +151,20 @@ const routes = [
       metaTags: [
         {
           name: 'Consulta por QR'
+        }
+      ]
+    }
+  },
+  {
+    path: '/consultaordenescompra',
+    name: 'Consulta Orden Compra',
+    component: ConsultaOrdenesCompra,
+    props: true,
+    meta: {
+      title: 'Consulta Ordenes Compra',
+      metaTags: [
+        {
+          name: 'Consulta Ordenes Compra'
         }
       ]
     }
