@@ -572,7 +572,7 @@
                         </div>
                      </router-link>
                     </div>
-                    <div v-if="IsAllow === 'rmuriel'||IsAllow === 'abodean'||IsAllow === 'avillasalte'||IsAllow === 'ejescobar'||IsAllow === 'mniez'" class="col col-h">
+                    <div v-if="IsAllow === 'mniez'||IsAllow === 'gescobar'||IsAllow === 'rmuriel'||IsAllow === 'abodean'||IsAllow === 'avillasalte'||IsAllow === 'ejescobar'||IsAllow === 'mniez'" class="col col-h">
                      <router-link to="/consultaordenescompra">
                         <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                             <div class="column d-flex flex-row justify-content-between p-3 rounded text-secondary link-success">
