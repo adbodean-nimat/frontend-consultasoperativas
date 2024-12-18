@@ -37,6 +37,7 @@
               :selectable="true"
               :auto-bind="false"
               >
+              <grid-column :field="'Fecha_Compra'" :title="'Fecha de Compra'" template="#: kendo.toString(kendo.parseDate(Fecha_Compra, 'yyyy-MM-dd'), 'dd/MM/yyyy') #"></grid-column>
               <grid-column :field="'ARTS_ARTICULO_EMP'" :title="'Código'"></grid-column>
               <grid-column :field="'ARTS_NOMBRE'" :title="'Nombre'" ></grid-column>
               <grid-column :field="'Fecha_Ult_Venta'" :title="'Fecha Ult. Venta'" template="#: kendo.toString(kendo.parseDate(Fecha_Ult_Venta, 'yyyy-MM-dd'), 'dd/MM/yyyy') #"></grid-column>
@@ -73,8 +74,9 @@
                 fullscreen: false,
                 teleport: true,
                 pageOnly: true,
-                title: 'Consulta Ordenes Compra - Fecha Ult. Venta',
+                title: 'Consulta Ordenes Compra',
                 schemaModelFields: {
+                    Fecha_Compra: {type: 'datetime'},
                     ARTS_ARTICULO_EMP: {type: 'string'},
                     ARTS_NOMBRE: {type: 'string'},
                     Fecha_Ult_Venta: {type: 'datetime'},
