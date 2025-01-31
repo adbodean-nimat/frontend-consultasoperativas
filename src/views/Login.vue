@@ -115,7 +115,7 @@ export default {
 			}
 			catch(error){
 				console.log(error.toJSON());
-				if (error.response.status === 500) {
+				if (error.response.status === 400) {
 				// La respuesta fue hecha y el servidor respondió con un código de estado
 				// que esta fuera del rango de 2xx
 				this.msg = "Usuario / Contraseña invalida"
