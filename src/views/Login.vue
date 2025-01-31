@@ -106,20 +106,29 @@ export default {
 					"password": this.password
 				};
 				const response = await axios.post(`${process.env.VUE_APP_API_LOGIN}`, credentials);
-				// console.log(response.data.token);
-				// console.log(response.data.user);
+				//console.log(response.data.token);
+				//console.log(response.data.user);
 				const token = response.data.token;
 				const user = response.data.user;
 				store.dispatch('login', {token, user});
 				this.$router.push('/tablero');
 			}
 			catch(error){
-				console.log(error.toJSON());
-				if (error.response.status === 400) {
-				// La respuesta fue hecha y el servidor respondió con un código de estado
-				// que esta fuera del rango de 2xx
-				this.msg = "Usuario / Contraseña invalida"
-				console.log(error.response.data.error.message);
+                console.log(error)
+				//console.log(error.toJSON());
+				if (error.response.status) {
+				    if(error.response.status == 400){
+                        if(error.response.data == "Invalid username/password"){
+                            this.msg = "Nombre de usuario o contraseña inválidos"
+                        }
+                        if(error.response.data === "Missing credentials"){
+                            this.msg = "Faltan credenciales"        
+                        }
+                    }
+                    if(error.response.status == 500){
+                        this.msg = "Error interno del servidor"
+                    }
+                console.log(error.response.data);
 				console.log(error.response.status);
 				console.log(error.response.headers);
 				} else if (error.request) {
@@ -287,4 +296,3 @@ button {
     transform: scaleX(1.1) scaleY(1.3);
 }
 </style>
-    
