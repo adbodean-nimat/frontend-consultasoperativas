@@ -63,11 +63,11 @@
               :data-source-ref="'remoteDataSourceConstSeco'"
               :sortable-mode="'multiple'"
               :pageable-page-sizes="[5, 10, 15, 20, 25, 100]"
-              :filterable="true"
+              :filterable="false"
               :filterable-extra="false"
               :reorderable="true"
               :resizable="true"
-              :column-menu="true"
+              :column-menu="false"
               :navigatable="true"
               :toolbar="toolbarTemplate"
               :allow-copy="true"
@@ -89,26 +89,26 @@
               @pdfexport="pdfExport"
               @databound="dataBound"
               >
-              <grid-column field="nombre_art_lp" title="Articulo" :width="150"></grid-column>
-              <grid-column field="uni" title="Uni." :width="80"></grid-column>
-              <grid-column title="Cant. Item" :template="templateCantItem" :width="100"></grid-column>
-              <grid-column field="cant" title="Cant." :width="80" :hidden="true"></grid-column>
-              <grid-column title="Precio Contado c/IVA" :template="templatePrecioConver" :width="100"></grid-column>
-              <grid-column field="DCA1_POR_DESCUENTO" title="Dto. Cliente" :width="120"></grid-column>
-              <grid-column title="Precio Contado c/IVA c/Dto Cliente" :template="templateItemPrecioCliente2" :footer-template="footerPrecio" :width="100"></grid-column>
+              <grid-column field="nombre_art_lp" title="Articulo"></grid-column>
+              <grid-column field="uni" title="Uni."></grid-column>
+              <grid-column title="Cant. Item" :template="templateCantItem"></grid-column>
+              <grid-column field="cant" title="Cant." :hidden="true"></grid-column>
+              <grid-column title="Precio Contado c/IVA" :template="templatePrecioConver"></grid-column>
+              <grid-column field="DCA1_POR_DESCUENTO" title="Dto. Cliente"></grid-column>
+              <grid-column title="Precio Contado c/IVA c/Dto Cliente" :template="templateItemPrecioCliente2" :footer-template="footerPrecio"></grid-column>
 
               <!-- <grid-column :template="'&nbsp;'"></grid-column> -->
-              <grid-column :template="'#:observacion#'" :width="50"></grid-column>
+              <grid-column :template="'#:observacion#'"></grid-column>
               <!-- <grid-column :template="'&nbsp;'"></grid-column> -->
 
-              <grid-column field="codptf" title="Código" :width="90"></grid-column>
-              <grid-column field="ARTS_NOMBRE" title="Articulo" :width="400"></grid-column>
-              <grid-column field="ARTS_UNIMED_STOCK" title="Uni." :width="80"></grid-column>
-              <grid-column title="Cantidad" :template="templateCantItemPTF" :width="80"></grid-column>
-              <grid-column title="Precio Contado" :template="templatePrecio2" :width="100"></grid-column>
-              <grid-column field="DCA1_POR_DESCUENTO" title="Dto. Cliente" :width="80"></grid-column>
-              <grid-column :template="dvc1listaprecvta" :hidden="true" :width="100"></grid-column>
-              <grid-column title="Item c/IVA y Dto Finan c/Dto Cliente PTF" :template="templateItemPrecio2" :footer-template="footerPrecio2" :width="120"></grid-column>
+              <grid-column field="codptf" title="Código"></grid-column>
+              <grid-column field="ARTS_NOMBRE" title="Articulo"></grid-column>
+              <grid-column field="ARTS_UNIMED_STOCK" title="Uni."></grid-column>
+              <grid-column title="Cantidad" :template="templateCantItemPTF"></grid-column>
+              <grid-column title="Precio Contado" :template="templatePrecio2"></grid-column>
+              <grid-column field="DCA1_POR_DESCUENTO" title="Dto. Cliente"></grid-column>
+              <grid-column :template="dvc1listaprecvta" :hidden="true"></grid-column>
+              <grid-column title="Item c/IVA y Dto Finan c/Dto Cliente PTF" :template="templateItemPrecio2" :footer-template="footerPrecio2"></grid-column>
 
 
               <grid-column field="ARTS_CLASIF_1" title="Art. Clasif." :hidden="true"></grid-column>
@@ -124,7 +124,7 @@
               <grid-column field="COTI_COTIZACION" title="Cotización" :hidden="true"></grid-column>
               <grid-column title="Precio c/IVA Dto Finan s/Dto Cliente PTF" :template="templatePrecio" :hidden="true"></grid-column>
               <grid-column title="Item c/IVA y Dto Finan s/Dto Cliente" :template="templateItemPrecioCliente" :hidden="true"></grid-column>
-              <grid-column title="Precio c/IVA Dto Finan" :template="templatePrecioConver2" :width="120" :hidden="true"></grid-column>
+              <grid-column title="Precio c/IVA Dto Finan" :template="templatePrecioConver2" :hidden="true"></grid-column>
               <grid-column title="Item c/IVA y Dto Finan s/Dto Cliente PTF" :template="templateItemPrecio" :hidden="true"></grid-column>
         </grid>
         <div id="idpdftemplate">
@@ -243,7 +243,12 @@
             return groupTemplate(e)
         },
         dataBound: function(){
-          kendo.ui.Grid.prototype._positionColumnResizeHandle= function() {
+          var grid = this.$refs.grid.kendoWidget();
+          for (var i = 0; i < grid.columns.length; i++) {
+                grid.autoFitColumn(i);
+          }
+          
+          /* kendo.ui.Grid.prototype._positionColumnResizeHandle= function() {
           var that = this,
               indicatorWidth = that.options.columnResizeHandleWidth,
               lockedHead = that.lockedHeader ? that.lockedHeader.find("thead:first") : $();
@@ -255,7 +260,7 @@
             }
             that._createResizeHandle(th.closest("div"), th);
           });
-        };
+          }; */
           const ultima_columna = document.querySelectorAll("span#idItemPrecioCliente2");
           var idem = [...ultima_columna].map(e=> kendo.parseFloat(e.innerHTML));
 
@@ -303,7 +308,6 @@
           const idemDvc1 = document.querySelector("#dvc1listaprevcta").innerText
           var dvc1listaprecvta = document.getElementById("dvc1listaprecvta")
           var idemdvc1listaprecvta = dvc1listaprecvta.innerText = kendo.toString(idemDvc1)
-
         },
         templateCantItem: function(item){
           var grid = this.$refs.grid.kendoWidget();
