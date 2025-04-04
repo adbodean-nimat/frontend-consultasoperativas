@@ -195,36 +195,36 @@
                 pageOnly: true,
                 title: 'Web Nimat - Articulos',
                 fields: {
-                    id: {editable: false, nullable: true},
-                    publicado: {type: 'boolean'},
-                    codigo_art: {type: 'string', validation:{
-                      required: true,
-                      minLength: function(input) { 
-                        if (input.is("[name='codigo_art']") && input.val() != "") {
-                          input.attr("data-minlength-msg", "Debe tener desde 4 hasta 8 caracteres"); 
-                          return /^[0-9]{4,8}$/.test(input.val());
-                        }                                
-                        return true;
-                      }
-                    }},
-                    nombre_art: {type: 'string'},
-                    orden_art: {type: 'number'},
-                    marcar_nuevo: {type: 'boolean'},
-                    mostrar_inicio: {type: 'boolean'},
-                    outlet: {type: 'boolean'},
-                    copete: {type: 'string'},
-                    descripcion: {type: 'string'},
-                    bloq_vtas: {type: 'boolean'},
-                    min_para_web: {type: 'number'},
-                    stock: {type: 'number'},
-                    categorias1: {type: 'string', defaultValue: ''},
-                    namecategorias1: {type: 'string', editable: false},
-                    categorias2: {type: 'string', defaultValue: ''},
-                    namecategorias2: {type: 'string', editable: false},
-                    categorias3: {type: 'string', defaultValue: ''},
-                    namecategorias3: {type: 'string', editable: false},
-                    categorias4: {type: 'string', defaultValue: ''},
-                    namecategorias4: {type: 'string', editable: false},
+                  id: {editable: false, nullable: true},
+                  publicado: {type: 'boolean'},
+                  codigo_art: {type: 'string', validation:{
+                    required: true,
+                    minLength: function(input) { 
+                      if (input.is("[name='codigo_art']") && input.val() != "") {
+                        input.attr("data-minlength-msg", "Debe tener desde 4 hasta 8 caracteres"); 
+                        return /^[0-9]{4,8}$/.test(input.val());
+                      }                                
+                      return true;
+                    }
+                  }},
+                  nombre_art: {type: 'string'},
+                  orden_art: {type: 'number'},
+                  marcar_nuevo: {type: 'boolean'},
+                  mostrar_inicio: {type: 'boolean'},
+                  outlet: {type: 'boolean'},
+                  copete: {type: 'string'},
+                  descripcion: {type: 'string'},
+                  bloq_vtas: {type: 'boolean'},
+                  min_para_web: {type: 'number'},
+                  stock: {type: 'number'},
+                  categorias1: {type: 'string', defaultValue: ''},
+                  namecategorias1: {type: 'string', editable: false},
+                  categorias2: {type: 'string', defaultValue: ''},
+                  namecategorias2: {type: 'string', editable: false},
+                  categorias3: {type: 'string', defaultValue: ''},
+                  namecategorias3: {type: 'string', editable: false},
+                  categorias4: {type: 'string', defaultValue: ''},
+                  namecategorias4: {type: 'string', editable: false},
                   }
                 }
       },
@@ -319,7 +319,7 @@
         cancelAutoUpdate() {
           clearInterval(this.timer);
         },
-        readData: function (e) {
+        readData: function(e){
           var tkn = this.token
           var urlApi = this.UrlApiBase
           kendo.jQuery.ajax({
@@ -333,7 +333,7 @@
             },
             method: 'GET',
             type: 'GET'
-          })
+          });
         },
         readDataCategorias: function(e){
           var tkn = this.token
@@ -632,6 +632,9 @@
         },
         UrlApiArtsClasif5AlConsultar(){
           return `${process.env.VUE_APP_API_BASE}/artsclasif5alconsultar/`
+        },
+        UrlApiStockFisicoyDisponible(){
+          return `${process.env.VUE_APP_API_BASE}/stockfisicoydispon/`
         },
         token(){
             return store.state.token

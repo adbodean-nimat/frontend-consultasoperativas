@@ -50,6 +50,8 @@
           <grid-column field="Cod_domic" title="Cod domic" :width="100"></grid-column>
           <grid-column field="Fax_celular" title="Fax (celular)" :width="135"></grid-column>
           <grid-column field="Verificacion" title="Verificación" :filterable-multi="true" :width="150"></grid-column>
+          <grid-column field="CLIE_EMAIL" title="Email" :width="150"></grid-column>
+          <grid-column field="Validar_Email" title="Validar Email" :filterable-multi="true" :width="150"></grid-column>
           <grid-column field="Telefono" title="Teléfono" :width="135"></grid-column>
           <grid-column field="Observ_domicilio" title="Observ domicilio" :width="135"></grid-column>
           <grid-column field="Cobrador" title="Cobrador"></grid-column>
@@ -96,6 +98,8 @@ export default {
                 Cod_domic: {type: 'number'},
                 Fax_celular: {type: 'string'},
                 Verificacion: {type: 'string'},
+                CLIE_EMAIL: {type: 'string'},
+                Validar_Email: {type: 'string'},
                 Telefono: {type: 'string'},
                 Observ_domicilio: {type: 'string'},
                 Cobrador: {type: 'string'},
@@ -107,7 +111,10 @@ export default {
   },
   computed: {
     UrlApiBase(){
-      return `${process.env.VUE_APP_API_BASE}/listadeclientes`
+      return `${process.env.VUE_APP_API_BASE}/listadeclientes2`
+    },
+    token(){
+      return store.state.token
     },
     options () {
       return {
@@ -122,11 +129,12 @@ export default {
   },
   methods: {
     readData: function (e) {
-              // console.log(store.state.token)
-              var token = store.state.token
-              var urlApi = `${process.env.VUE_APP_API_BASE}/listadeclientes`
+              var token = this.token
+              var urlApi = this.UrlApiBase
+              var fdesde = kendo.jQuery("#fechadesde").data("kendoDatePicker").value();
+              var fhasta = kendo.jQuery("#fechahasta").data("kendoDatePicker").value();
               kendo.jQuery.ajax({
-                url: urlApi,
+                url: urlApi + '?fechadesde='+kendo.toString(new Date(fdesde), "yyyy-MM-dd")+'&fechahasta='+kendo.toString(new Date(fhasta), "yyyy-MM-dd"),
                 beforeSend: function (xhr) {
                   xhr.setRequestHeader('Authorization', 'Bearer ' + token)
                 },
@@ -163,41 +171,11 @@ export default {
 
             fechadesde.kendoDatePicker({
                 culture: "es-AR",
-                format: "dd-MM-yyyy",
-                dataValueField: "Fecha_alta_cliente",
-                /* optionLabel: "All", */
-                autoBind: false,
-                dataSource: ['remoteDataSource2']
-                /* change: function(e) {
-                    var fdesde = e.sender.value(),
-                    fhasta = fechahasta.data("kendoDatePicker").value();
-                    
-                    if (fdesde & fhasta) {
-                        var filter = { logic: "and", filters: [] };
-                        filter.filters.push({ field: "Fecha_alta_cliente", operator: "gte", value: new Date(fdesde) });
-                        filter.filters.push({ field: "Fecha_alta_cliente", operator: "lte", value: new Date(fhasta.getTime()+1000*60*60*24) });
-                        grid.dataSource.filter(filter);
-                    }
-                } */
+                autoBind: false
             });
             fechahasta.kendoDatePicker({
                 culture: "es-AR", 
-                format: "dd-MM-yyyy",
-                dataValueField: "Fecha_alta_cliente",
-                autoBind: false,
-                dataSource: ['remoteDataSource2']
-                /* change:function(e) {
-                    var fdesde = fechadesde.data("kendoDatePicker").value(),
-                    fhasta = e.sender.value();
-
-                    if (fdesde & fhasta) {
-                        var filter = { logic: "and", filters: [] };
-                        filter.filters.push({ field: "Fecha_alta_cliente", operator: "gte", value: new Date(fdesde) });
-                        filter.filters.push({ field: "Fecha_alta_cliente", operator: "lte", value: new Date(fhasta.getTime()+1000*60*60*24) });
-                        grid.dataSource.filter(filter);
-                        grid.dataSource.sort({field: "Fecha_alta_cliente", dir: "asc"})
-                    }
-                } */
+                autoBind: false
             });
             toolbarElement.on("click", ".refresh", function (e) {
               e.preventDefault(); 
@@ -206,17 +184,17 @@ export default {
             toolbarElement.on("click", ".play", function(){
               var fdesde = fechadesde.data("kendoDatePicker").value();
               var fhasta = fechahasta.data("kendoDatePicker").value();
-              if (fdesde && fhasta == null) {
-                        grid.dataSource.filter({ field: "Fecha_alta_cliente", operator: "gte", value: new Date(fdesde) });
-                        /* grid.dataSource.filter({ field: "Fecha_alta_cliente", operator: "lte", value: fhasta.addDays(1) }) */
-                        grid.dataSource.sort({field: "Fecha_alta_cliente", dir: "desc"});
-                    }
+              /* if (fdesde && fhasta == null) {
+                      grid.dataSource.filter({ field: "Fecha_alta_cliente", operator: "gte", value: new Date(fdesde) });
+                      grid.dataSource.sort({field: "Fecha_alta_cliente", dir: "desc"});
+                    } */
               if (fdesde & fhasta) {
-                        var filter = { logic: "and", filters: [] };
+                grid.dataSource.read();
+                        /* var filter = { logic: "and", filters: [] };
                         filter.filters.push({ field: "Fecha_alta_cliente", operator: "gte", value: new Date(fdesde) });
                         filter.filters.push({ field: "Fecha_alta_cliente", operator: "lte", value: new Date(fhasta) });
                         grid.dataSource.filter(filter);
-                        grid.dataSource.sort({field: "Fecha_alta_cliente", dir: "desc"});
+                        grid.dataSource.sort({field: "Fecha_alta_cliente", dir: "desc"}); */
               }
 
             });
@@ -227,10 +205,6 @@ export default {
               grid.dataSource.sort({});
               grid.dataSource.filter({});
               grid.dataSource.autoFitColumn();
-              /* grid.dataSource.read({}); */
-              /* grid.dataSource.refresh(); */
-              /* grid.dataSource.data("kendoGrid").empty(null); */
-              /* grid.dataSource.data('kendoGrid').({}); */
             })
         }
       }
