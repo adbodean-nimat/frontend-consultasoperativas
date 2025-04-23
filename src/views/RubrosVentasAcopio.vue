@@ -48,12 +48,14 @@
                           :transport-read="readData"
                           :schema-model-fields="schemaModelFields"
                           :group="groupDefinition"
+                          :page-size='100'
                           >
         </datasource>
         <grid ref="grid"
               :height="'95vh'"
               :data="'remoteDataSourceRubrosVtasAcopio'"
               :data-source-ref="'remoteDataSourceRubrosVtasAcopio'"
+              :pageable-page-sizes="[100, 200, 400, 'all']"
               :sortable-mode="'multiple'"
               :groupable-enabled="false"
               :filterable="true"
@@ -90,11 +92,11 @@
               <grid-column field="ARTS_NOMBRE" title="Articulo" :column-menu="false" :width="400" :hidden="false"></grid-column>
               <grid-column field="ARTS_UNIMED_STOCK" title="&nbsp;" :column-menu="false" :width="40" :hidden="false"></grid-column>
               <grid-column field="PRECIO_LISTA_CON_IVA" title="Precio lista c/IVA" template="#: kendo.toString(PRECIO_LISTA_CON_IVA, 'c2')#" :hidden="false" :width="100"></grid-column>
-              <grid-column field="DCA1_POR_DESCUENTO" title="Dto. Cliente" :width="80" template="#: kendo.toString(DCA1_POR_DESCUENTO+'%')#" :hidden="false"></grid-column>
+              <grid-column field="DCA1_POR_DESCUENTO" title="Dto. Cliente" :width="80" template="#: DCA1_POR_DESCUENTO == null ? '' : DCA1_POR_DESCUENTO + '%' #" :hidden="false"></grid-column>
               <grid-column field="dtoMonto" title="Dto. Monto" :template="dtoMonto" :width="80" :hidden="false"></grid-column>
               <grid-column field="dtoFinan" title="Dto. Financ." :template="dtoFinan" :width="80" :hidden="false"></grid-column>
               <grid-column field="precioContado" title="Precio contado c/IVA c/Dtos" :template="precioContado" :hidden="false" :width="100"></grid-column>
-              <grid-column field="Modif" title="Modif" :template="Modif" :hidden="false" :width="50"></grid-column>
+              <grid-column field="Modif" title="Modif" :hidden="false" :width="50" :filterable-multi="true"></grid-column>
 
               <grid-column field="VeriModif" title="Verfi Modif" :template="VeriModif" :hidden="true" :width="50"></grid-column>
               <grid-column field="SinModif" title="Sin Modif" :template="SinModif" :hidden="true" :width="50"></grid-column>
@@ -118,7 +120,7 @@
               <grid-column field="COTI_COTIZACION" :hidden="true"></grid-column>
               <grid-column field="COTI_FECHA" :hidden="true"></grid-column>              
               <grid-column field="Fecha_Ult_Modif" title="Fecha Ult Modif" template="#: kendo.toString(kendo.parseDate(Fecha_Ult_Modif, 'yyyy-MM-dd'), 'dd/MM/yyyy') #" :hidden="true" :width="80"></grid-column>
-              <grid-column field="Delay_cambio_precio" :hidden="true"></grid-column>
+              <grid-column field="Delaycambioprecio" :hidden="true" :filterable-multi="true" :width="80"></grid-column>
               <grid-column field="Fecha_cambio_precios_hasta" template="#: kendo.toString(kendo.parseDate(Fecha_cambio_precios_hasta, 'yyyy-MM-dd'), 'dd/MM/yyyy') #" :hidden="true" :width="80"></grid-column>
               <grid-column field="CambiosPrecioDesde" :template="CambiosPrecioDesde" :hidden="true"></grid-column>
         </grid>
@@ -171,14 +173,16 @@
                     CIMP_TASA: {type: 'string'},
                     ARTS_PESO_EMB_UMS: {type: 'string'},
                     DVC1_LISTA_PRECIO_ACOPIO: {type: 'string'},
-                    DCA1_POR_DESCUENTO: {type: 'string'},
+                    DCA1_POR_DESCUENTO: {type: 'number'},
                     ARPV_PRECIO_VTA: {type: 'string'},
                     ARPV_MONEDA: {type: 'string'},
                     COTI_COTIZACION: {type: 'string'},
                     COTI_FECHA: {type: 'datetime'},
                     Fecha_cambio_precios_hasta: {type: 'datetime'},
                     Fecha_Ult_Modif: {type: 'datetime'},
-                    Delay_cambio_precio: {type: 'string'}
+                    Delay_cambio_precio: {type: 'string'},
+                    Delaycambioprecio: {type: 'string'},
+                    Modif: { type: 'string'},
                 },
                 groupDefinition: {
                     field: 'RUBV_NOMBRE',
@@ -207,8 +211,13 @@
         readData: function (e) {
               var token = store.state.token
               var urlApi = this.UrlApiBase
-              kendo.jQuery.ajax({
-                url: urlApi,
+              var perfilComercial = kendo.jQuery("#codcte").data("kendoDropDownList").value()
+              var fechaDesde = kendo.jQuery("#fechaCambiosPrecio").data("kendoDatePicker").value()
+              var data = kendo.jQuery.ajax({
+                url: urlApi + '?' + kendo.jQuery.param({
+                  perfilcomercial: perfilComercial,
+                  fechadesde: kendo.toString(new Date(fechaDesde), "yyyy-MM-dd")
+                }),
                 beforeSend: function (xhr) {
                   xhr.setRequestHeader('Authorization', 'Bearer ' + token)
                 },
@@ -218,6 +227,8 @@
                 },
                 type: 'GET'
               })
+              console.log(data)
+              return data
         },
         groupHeaderTemplateFamiliaArt: function(e){
           var groupTemplate = kendo.template('#=value#');
@@ -480,9 +491,10 @@
               return templateRUBVNOMBRE
             },
             dataBound: function(){
-              var idemCodCte = document.querySelector(".k-input-value-text:nth-child(1)").innerText
+             /*  var perfilComercial = kendo.jQuery("#codcte").data("kendoDropDownList").value()
+              //var idemCodCte = document.querySelector(".k-input-value-text:nth-child(1)").innerText
               var idCodCte = document.getElementById("cod_cte")
-              var valCodCte = idCodCte.innerText = kendo.toString(idemCodCte)
+              var valCodCte = idCodCte.innerText = kendo.toString(perfilComercial)
 
               var idemDvc1 = document.querySelector("#dvc1listaprevcta").innerText
               var dvc1listaprecvta = document.getElementById("dvc1listaprecvta")
@@ -509,7 +521,8 @@
               var sumVeriMod = idem2.reduce(
                 (accumulator, currentValue) => accumulator + currentValue,
                 initialValue
-              );
+              ); */
+
             }
           },
           mounted: function(){
@@ -576,22 +589,24 @@
               var classDtoxMonto = document.querySelector("#form > div:nth-child(4) > .k-numerictextbox")
               var classDtoFinan = document.querySelector("#form > div:nth-child(3) > .k-numerictextbox");
               var classFechaDesde = document.querySelector("#form > div:nth-child(4) > .k-datepicker");
-              var filter = { logic: "and", filters: [] };
+              
+              /* var filter = { logic: "and", filters: [] };
               filter.filters.push(
                     { field: "COD_CTE", operator: "contains", value: PerfilComercial }
-                    );
+                    ); */
+
               if (DtoFinan == null){
-                classDtoFinan.classList.add('is-invalid');
-              }else if (DtoxMonto == null){
-                classDtoFinan.classList.remove('is-invalid');
-                classDtoxMonto.classList.add('is-invalid');
+                  classDtoFinan.classList.add('is-invalid');
+              } else if (DtoxMonto == null){
+                  classDtoFinan.classList.remove('is-invalid');
+                  classDtoxMonto.classList.add('is-invalid');
               } else if (FechaCambiosDesde == null) {
-                classFechaDesde.classList.add('is-invalid');
-                classDtoFinan.classList.remove('is-invalid');
+                  classFechaDesde.classList.add('is-invalid');
+                  classDtoFinan.classList.remove('is-invalid');
               } else {
-                classFechaDesde.classList.remove('is-invalid');
-                classDtoFinan.classList.remove('is-invalid');
-                grid.dataSource.filter(filter);
+                  classFechaDesde.classList.remove('is-invalid');
+                  classDtoFinan.classList.remove('is-invalid');
+                  grid.dataSource.read();
                 // grid.dataSource.sort({field: "ARTS_NOMBRE", dir: "asc"});
               }
             });
