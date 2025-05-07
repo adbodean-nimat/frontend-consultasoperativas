@@ -20,7 +20,7 @@
           # var theDate = new Date(); #
           <div class="pdfFont container position-absolute top-0" style="margin-top: 18px;">
             <div class="container d-flex align-items-start" >
-              <img style="width: 100%;" src="../assets/membretada.png" alt="Membretada - Nimat de Prades S.A.">
+              <img style="width: 100%;" src="../assets/membretada-2025.png" alt="Membretada - Nimat de Prades S.A.">
             </div>
             <div class="row">
               <div class="col-sm text-start">Fecha de impresión #=kendo.toString(theDate, "dd-MM-yyyy", "es-AR")#</div>

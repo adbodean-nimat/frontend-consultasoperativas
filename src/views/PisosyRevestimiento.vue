@@ -49,11 +49,11 @@
               <grid-column field="ARTS_ARTICULO_EMP" title="Código" :width="100" :hidden="false"></grid-column>
               <grid-column field="ARTS_NOMBRE" title="Nombre" :width="400" :hidden="false"></grid-column>
               <grid-column field="RAC_M2" title="M2 por caja aprox." :autoWidth="true" :hidden="false"></grid-column>
-              <grid-column field="StockCaja" title="Stock Caja" :template="StockCaja" :type="'numeric'" :autoWidth="true" :hidden="false"></grid-column>
+              <grid-column field="StockCaja" title="Stock Caja" :autoWidth="true" :hidden="false"></grid-column>
               <grid-column field="M2_Disp_Habil_Vta" title="Stock en M2" :autoWidth="true" :hidden="false"></grid-column>
               <grid-column field="Pre_Cdo_con_IVA_L1" title="Precio de la Caja"  template="#: kendo.toString(Pre_Cdo_con_IVA_L1, 'c2')#" :hidden="false"></grid-column>
               <!-- <grid-column field="Pre_Cdo_con_IVA_M2" title="Pre Cdo con IVA M2" :format="'{0:c}'" :hidden="false"></grid-column> -->
-              <grid-column field="PrecioContadoIVAcDtosM2" title="Precio del M2 aprox." :template="PrecioContadoIVAcDtosM2" :autoWidth="true" :hidden="false"></grid-column>
+              <grid-column field="PrecioContadoIVAcDtosM2" title="Precio del M2 aprox." template="#: kendo.toString(PrecioContadoIVAcDtosM2, 'c2')#" :autoWidth="true" :hidden="false"></grid-column>
               <!-- <grid-column field="PrecioContadoIVAcDtos" title="Precio de la Caja" :template="PrecioContadoIVAcDtos" :autoWidth="true" :hidden="false"></grid-column> -->
               <grid-column field="CA03_NOMBRE" title="Tipo" :autoWidth="true" :hidden="false"></grid-column>
               <grid-column field="Uso" title="Uso" :autoWidth="true" :hidden="false"></grid-column>
@@ -116,7 +116,9 @@
                     M2_Bloqueado_Vta: {type: 'number'},
                     Uso: {type: 'string'},
                     DVC1_CLC1_CLASIF_1: {type: 'string'},
-                    LIPV_NOMBRE: {type: 'string'}
+                    LIPV_NOMBRE: {type: 'string'},
+                    StockCaja: {type: 'number'},
+                    PrecioContadoIVAcDtosM2: {type: 'number'},
                 }
              }
       },
@@ -143,7 +145,7 @@
               // console.log(store.state.token)
               var token = store.state.token
               var urlApi = this.UrlApiBase
-              kendo.jQuery.ajax({
+              var data = kendo.jQuery.ajax({
                 url: urlApi,
                 beforeSend: function (xhr) {
                   xhr.setRequestHeader('Authorization', 'Bearer ' + token)
@@ -153,6 +155,20 @@
                   e.success(data)
                 },
                 type: 'GET'
+              })
+              
+              kendo.jQuery.when(data).then(function (data) {
+                const getData = data.map((item) => {
+                  return {
+                    ...item,
+                    StockCaja: kendo.toString((item.M2_Disp_Habil_Vta / item.RAC_M2), 'n0'),
+                    PrecioContadoIVAcDtosM2: kendo.toString((item.Pre_Cdo_con_IVA_L1 / item.RAC_M2), 'c2'),
+                  }
+                })
+                e.success(getData)
+              }).fail(function (e) {
+                console.log(e)
+                e.error(e)
               })
           },
           excelExport: function(e){
@@ -206,24 +222,24 @@
               }
             }
           },
-          StockCaja: function(item){
+          /* StockCaja: function(item){
             var StockM2 = item.M2_Disp_Habil_Vta
             var RACM2 = item.RAC_M2
             var cal = StockM2 / RACM2
-            return kendo.toString(cal, '#')
-          },
+            return kendo.toString(cal, 'n0')
+          }, */
           /* PrecioContadoIVAcDtos: function(item){
             var idPrecioContadoIVA = item.Pre_Cdo_con_IVA_L1
             var iDCA1_POR_DESCUENTO = item.DCA1_POR_DESCUENTO
             var cal = idPrecioContadoIVA * (1-iDCA1_POR_DESCUENTO/100)
             return kendo.toString(cal, 'c2')
           }, */
-          PrecioContadoIVAcDtosM2: function(item){
+         /*  PrecioContadoIVAcDtosM2: function(item){
             var idPrecioContadoIVAM2 = item.Pre_Cdo_con_IVA_L1
             var RACM2 = item.RAC_M2
             var cal = idPrecioContadoIVAM2 / RACM2
             return kendo.toString(cal, 'c2')
-          },
+          }, */
           toolbarTemplate: function() {
             var templateHtml =
             '<div class="container-fluid">' +
