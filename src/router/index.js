@@ -59,6 +59,9 @@ import EquivalCodFactorCant from "../views/TEquivalCodFactorCant.vue"
 import ConsultaQR from "../views/ConsultaQR.vue"
 import artsclasif5stockmanual from "../views/TArtsClasif5StockManual.vue"
 import ConsultaOrdenesCompra from "../views/ConsultaOrdenesCompra.vue"
+import GestionDeCompras from "../views/GestionCompras.vue"
+import ParametrosDeCompras from "../views/ParametrosdeCompras.vue"
+import InfoArticulosCompranCorrientemente from "../views/InfoArticulosCompranCorrientemente.vue"
 
 const routes = [
   {
@@ -167,6 +170,45 @@ const routes = [
           name: 'Consulta Ordenes Compra'
         }
       ]
+    }
+  },
+  {
+    path: '/gestiondecompras',
+    name: 'Gestión de Compras',
+    component: GestionDeCompras,
+    props: true,
+    meta: {
+      title: 'Gestión de Compras',
+      metaTags: [
+        {
+          name: 'Gestión de Compras'
+        }      ]
+    }
+  },
+  {
+    path: '/gestiondecompras/parametrosdecompras',
+    name: 'Parametros de Compras',
+    component: ParametrosDeCompras,
+    props: true,
+    meta: {
+      title: 'Parametros de Compras',
+      metaTags: [
+        {
+          name: 'Parametros de Compras'
+        }      ]
+    }
+  },
+  {
+    path: '/gestiondecompras/infodearticulosquesecomprancorrientemente',
+    name: 'Info de Artículos que se compran corrientemente',
+    component: InfoArticulosCompranCorrientemente,
+    props: true,
+    meta: {
+      title: 'Info de Artículos que se compran corrientemente',
+      metaTags: [
+        {
+          name: 'Info de Artículos que se compran corrientemente',
+        }      ]
     }
   },
   {
