@@ -62,6 +62,7 @@ import ConsultaOrdenesCompra from "../views/ConsultaOrdenesCompra.vue"
 import GestionDeCompras from "../views/GestionCompras.vue"
 import ParametrosDeCompras from "../views/ParametrosdeCompras.vue"
 import InfoArticulosCompranCorrientemente from "../views/InfoArticulosCompranCorrientemente.vue"
+import ChatBotAI from "../views/ChatBot.vue"
 
 const routes = [
   {
@@ -74,6 +75,18 @@ const routes = [
       metaTags: [
         {
           name: 'Login'
+        }      ]
+    }
+  },
+  {
+    path: '/chatbot',
+    name: 'ChatBot',
+    component: ChatBotAI,
+    props: true,
+    meta: {
+      title: 'Chat Bot AI',
+      metaTags: [
+        {          name: 'Chat Bot AI'
         }      ]
     }
   },

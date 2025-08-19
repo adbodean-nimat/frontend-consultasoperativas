@@ -21,7 +21,7 @@
                             </svg>
                         </router-link>
                     </div>
-                    <div style="margin-right: 15px;">
+                    <!-- <div style="margin-right: 15px;">
                         <kbutton v-fullscreen="options">
                             <svg v-show="!fullscreen" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                 fill="currentColor" class="bi bi-arrows-fullscreen" viewBox="0 0 16 16">
@@ -34,7 +34,7 @@
                                     d="M5.5 0a.5.5 0 0 1 .5.5v4A1.5 1.5 0 0 1 4.5 6h-4a.5.5 0 0 1 0-1h4a.5.5 0 0 0 .5-.5v-4a.5.5 0 0 1 .5-.5zm5 0a.5.5 0 0 1 .5.5v4a.5.5 0 0 0 .5.5h4a.5.5 0 0 1 0 1h-4A1.5 1.5 0 0 1 10 4.5v-4a.5.5 0 0 1 .5-.5zM0 10.5a.5.5 0 0 1 .5-.5h4A1.5 1.5 0 0 1 6 11.5v4a.5.5 0 0 1-1 0v-4a.5.5 0 0 0-.5-.5h-4a.5.5 0 0 1-.5-.5zm10 1a1.5 1.5 0 0 1 1.5-1.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 0-.5.5v4a.5.5 0 0 1-1 0v-4z" />
                             </svg>
                         </kbutton>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <div class="">
@@ -111,111 +111,106 @@
                         </template>
                     </Toolbar>
                 </div>
-                <div v-if="articulos.length > 0" class="container-fluid">
+                <div v-if="articulos.length > 0" class="container-fluid mb-4 h-1/6">
                     <div class="row gap-3">
-                        <Card class="col border-5 border-start border-danger h-1/2">
-                            <template #title>
-                                <template v-if="itemROJOS.total >= 0">
-                                    <span class="h4">{{ itemROJOS.total }} <small
-                                            class="text-body-secondary">Item(s)</small></span>
-                                </template>
-                                <template v-else-if="cargando == true">
-                                    <ProgressSpinner style="width: 24px; height: 24px; color: red;" strokeWidth="4"
-                                        fill="transparent" />
-                                </template>
-                            </template>
-                            <template #subtitle>
-                                <span style="font-size: small;">
-                                    {{ itemROJOS.descripcion }}
-                                </span>
-                            </template>
+                        <Card class="col border-5 border-start border-danger">
                             <template #content>
-                                <div v-if="itemROJOS.total > 0">
-                                    <ToggleButton onLabel="Sacar items" offLabel="Ver items"
-                                        class="text-danger link-danger" onIcon="pi pi-eye-slash" offIcon="pi pi-eye"
-                                        size="small" v-model="itemROJOS.verMas"
-                                        @update:model-value="
-                                            itemROJOS.verMas ? filters['1_Stock-NP_más_bajo_que_SM_Sin_OC'].value = 1 : !itemROJOS.verMas ? filters['1_Stock-NP_más_bajo_que_SM_Sin_OC'].value = null : '',
-                                            itemAMARILLOS.verMas ? (itemAMARILLOS.verMas = false, filters['2_Stock-NP_más_bajo_que SM_Con_OC_sigue_abajo'].value = null) : '',
-                                            itemAZULES.verMas ? (itemAZULES.verMas = false, filters['3_Stock-NP_más_bajo_que_SM_Con_OC_queda_arriba'].value = null) : ''" />
+                                <div class="m-0 d-flex flex-row justify-content-between align-items-center">
+                                    <span v-if="itemROJOS.total >= 0">
+                                        <span class="h4">{{ itemROJOS.total }} <small
+                                                class="text-body-secondary">Item(s)</small></span>
+                                        <span class="ms-2" style="font-size: small;">
+                                            {{ itemROJOS.descripcion }}
+                                        </span>
+                                    </span>
+
+                                    <span v-if="itemROJOS.total > 0">
+                                        <ToggleButton onLabel="Sacar items" offLabel="Ver items"
+                                            class="text-danger link-danger" onIcon="pi pi-eye-slash" offIcon="pi pi-eye"
+                                            size="small" v-model="itemROJOS.verMas"
+                                            @update:model-value="
+                                                itemROJOS.verMas ? filters['1_Stock-NP_más_bajo_que_SM_Sin_OC'].value = 1 : !itemROJOS.verMas ? filters['1_Stock-NP_más_bajo_que_SM_Sin_OC'].value = null : '',
+                                                itemAMARILLOS.verMas ? (itemAMARILLOS.verMas = false, filters['2_Stock-NP_más_bajo_que SM_Con_OC_sigue_abajo'].value = null) : '',
+                                                itemAZULES.verMas ? (itemAZULES.verMas = false, filters['3_Stock-NP_más_bajo_que_SM_Con_OC_queda_arriba'].value = null) : ''" />
+
+                                    </span>
                                 </div>
                             </template>
                         </Card>
-                        <Card class="col border-5 border-start border-warning h-1/2">
-                            <template #title>
-                                <span>
-                                    <template v-if="itemAMARILLOS.total >= 0">
+                        <Card class="col border-5 border-start border-warning">
+                            <template #content>
+                                <div class="m-0 d-flex flex-row justify-content-between align-items-center">
+                                    <span v-if="itemAMARILLOS.total >= 0">
                                         <span class="h4">{{ itemAMARILLOS.total }} <small
                                                 class="text-body-secondary">Item(s)</small></span>
-                                    </template>
-                                    <template v-else-if="cargando == true">
-                                        <ProgressSpinner style="width: 24px; height: 24px; color: yellow;"
-                                            strokeWidth="4" fill="transparent" />
-                                    </template>
-                                </span>
+                                        <span class="ms-2" style="font-size: small;">
+                                            {{ itemAMARILLOS.descripcion }}
+                                        </span>
+                                    </span>
+
+                                    <span v-if="itemAMARILLOS.total > 0">
+                                        <ToggleButton onLabel="Sacar items" offLabel="Ver items"
+                                            class="text-warning link-warning" label="Ver items" variant="text"
+                                            onIcon="pi pi-eye-slash" offIcon="pi pi-eye" size="small"
+                                            name="itemAMARILLOS" v-model="itemAMARILLOS.verMas"
+                                            @update:model-value="itemAMARILLOS.verMas ? filters['2_Stock-NP_más_bajo_que SM_Con_OC_sigue_abajo'].value = 1 : !itemAMARILLOS.verMas ? filters['2_Stock-NP_más_bajo_que SM_Con_OC_sigue_abajo'].value = null : '',
+                                                itemROJOS.verMas ? (itemROJOS.verMas = false, filters['1_Stock-NP_más_bajo_que_SM_Sin_OC'].value = null) : '',
+                                                itemAZULES.verMas ? (itemAZULES.verMas = false, filters['3_Stock-NP_más_bajo_que_SM_Con_OC_queda_arriba'].value = null) : ''" />
+
+                                    </span>
+                                </div>
+
                             </template>
-                            <template #subtitle>
-                                <span style="font-size: small;">
-                                    {{ itemAMARILLOS.descripcion }}
-                                </span>
-                            </template>
+                        </Card>
+                        <Card class="col border-5 border-start border-primary">
                             <template #content>
-                                <div v-if="itemAMARILLOS.total > 0">
-                                    <ToggleButton onLabel="Sacar items" offLabel="Ver items"
-                                        class="text-warning link-warning" label="Ver items" variant="text"
-                                        onIcon="pi pi-eye-slash" offIcon="pi pi-eye" size="small" name="itemAMARILLOS"
-                                        v-model="itemAMARILLOS.verMas"
-                                        @update:model-value="itemAMARILLOS.verMas ? filters['2_Stock-NP_más_bajo_que SM_Con_OC_sigue_abajo'].value = 1 : !itemAMARILLOS.verMas ? filters['2_Stock-NP_más_bajo_que SM_Con_OC_sigue_abajo'].value = null : '',
-                                            itemROJOS.verMas ? (itemROJOS.verMas = false, filters['1_Stock-NP_más_bajo_que_SM_Sin_OC'].value = null) : '',
-                                            itemAZULES.verMas ? (itemAZULES.verMas = false, filters['3_Stock-NP_más_bajo_que_SM_Con_OC_queda_arriba'].value = null) : ''" />
+                                <div class="m-0 d-flex flex-row justify-content-between align-items-center">
+                                    <span v-if="itemAZULES.total >= 0">
+                                        <span class="h4">{{ itemAZULES.total }} <small
+                                                class="text-body-secondary">Item(s)</small></span>
+                                        <span class="ms-2" style="font-size: small;">
+                                            <small>{{ itemAZULES.descripcion }}</small>
+                                        </span>
+                                    </span>
+
+                                    <span v-if="itemAZULES.total > 0">
+
+                                        <ToggleButton onLabel="Sacar items" offLabel="Ver items"
+                                            class="text-primary link-primary" label="Ver items" variant="text"
+                                            onIcon="pi pi-eye-slash" offIcon="pi pi-eye" size="small"
+                                            v-model="itemAZULES.verMas"
+                                            @update:model-value="itemAZULES.verMas ? filters['3_Stock-NP_más_bajo_que_SM_Con_OC_queda_arriba'].value = 1 :
+                                                !itemAZULES.verMas ? filters['3_Stock-NP_más_bajo_que_SM_Con_OC_queda_arriba'].value = null : '',
+                                                itemAMARILLOS.verMas ? (itemAMARILLOS.verMas = false, filters['2_Stock-NP_más_bajo_que SM_Con_OC_sigue_abajo'].value = null) : '',
+                                                itemROJOS.verMas ? (itemROJOS.verMas = false, filters['1_Stock-NP_más_bajo_que_SM_Sin_OC'].value = null) : ''" />
+
+                                    </span>
                                 </div>
                             </template>
                         </Card>
-                        <Card class="col border-5 border-start border-primary h-1/2">
-                            <template #title>
-                                <template v-if="itemAZULES.total >= 0">
-                                    <span class="h4">{{ itemAZULES.total }} <small
-                                            class="text-body-secondary">Item(s)</small></span>
-                                </template>
-                                <template v-else-if="cargando == true">
-                                    <ProgressSpinner style="width: 24px; height: 24px; color: blue;" strokeWidth="4"
-                                        fill="transparent" />
-                                </template>
-                            </template>
-                            <template #subtitle>
-                                <span style="font-size: small;">
-                                    {{ itemAZULES.descripcion }}
-                                </span>
-                            </template>
-                            <template #content>
-                                <div v-if="itemAZULES.total > 0">
-                                    <ToggleButton onLabel="Sacar items" offLabel="Ver items"
-                                        class="text-primary link-primary" label="Ver items" variant="text"
-                                        onIcon="pi pi-eye-slash" offIcon="pi pi-eye" size="small"
-                                        v-model="itemAZULES.verMas"
-                                        @update:model-value="itemAZULES.verMas ? filters['3_Stock-NP_más_bajo_que_SM_Con_OC_queda_arriba'].value = 1 :
-                                            !itemAZULES.verMas ? filters['3_Stock-NP_más_bajo_que_SM_Con_OC_queda_arriba'].value = null : '',
-                                            itemAMARILLOS.verMas ? (itemAMARILLOS.verMas = false, filters['2_Stock-NP_más_bajo_que SM_Con_OC_sigue_abajo'].value = null) : '',
-                                            itemROJOS.verMas ? (itemROJOS.verMas = false, filters['1_Stock-NP_más_bajo_que_SM_Sin_OC'].value = null) : ''" />
-                                </div>
-                            </template>
-                        </Card>
+
                     </div>
                 </div>
-                <div class="card my-2" v-if="articulos.length > 0">
+                <div class="card my-0 directive-fullscreen-wrapper-grid h-screen" v-if="articulos.length > 0">
                     <DataTable v-model:filters="filters" filter-display="menu" :loading="cargando" :value="articulos"
-                        selection-mode="single" row-group-mode="subheader" group-rows-by="ARCO_RUBRO_COMPRA"
-                        sort-field="Comprador" :sort-order="1" resizableColumns columnResizeMode="fit" size="small"
-                        :row-class="rowClass" scrollable scrollHeight="calc(100vh - 300px)" paginator :rows="50"
-                        :rowsPerPageOptions="[50, 100, 200]"
+                        selection-mode="multiple" row-group-mode="subheader" group-rows-by="RUBC_NOMBRE"
+                        resizableColumns columnResizeMode="fit" size="small" :row-class="rowClass" scrollable
+                        scroll-height="flex" paginator :rows="50" :rowsPerPageOptions="[50, 100, 200, 500]"
                         :globalFilterFields="['Comprador', 'ARTS_ARTICULO_EMP', 'ARTS_NOMBRE', 'RUBC_NOMBRE', '1_Stock-NP_más_bajo_que_SM_Sin_OC', '2_Stock-NP_más_bajo_que SM_Con_OC_sigue_abajo', '3_Stock-NP_más_bajo_que_SM_Con_OC_queda_arriba']">
-                        <template #empty> No se han encontrado datos. </template>
-                        <template #loading> Cargando datos. Por favor, espere. </template>
+                        <template #empty>No se han encontrado datos. </template>
+                        <template #loading>Cargando datos. Por favor, espere. </template>
                         <template #header>
                             <div class="d-flex justify-content-between align-items-center">
                                 <ToggleButton v-model="Frozen" onIcon="pi pi-lock" offIcon="pi pi-lock-open"
-                                    onLabel="Inmovilizar" offLabel="Inmovilizar" />
+                                    onLabel="Inmovilizar" offLabel="Desinmovilizar" />
                                 <div class="d-flex justify-end flex-row-reverse align-items-center">
+                                    <Button type="button" v-fullscreen="FullScreenGrid" class="mr-2"
+                                        style="height: 45px;">
+                                        <span v-show="fullscreengrid"
+                                            class="pi pi-arrow-down-left-and-arrow-up-right-to-center"></span>
+                                        <span v-show="!fullscreengrid"
+                                            class="pi pi-arrow-up-right-and-arrow-down-left-from-center"></span>
+                                    </Button>
                                     <Button type="button" icon="pi pi-filter-slash" label="Limpiar filtros" class="mx-2"
                                         @click="clearFilter()" />
                                     <IconField>
@@ -224,6 +219,7 @@
                                         </InputIcon>
                                         <InputText v-model="filters['global'].value" />
                                     </IconField>
+
                                 </div>
                             </div>
 
@@ -231,7 +227,7 @@
                         <ColumnGroup type="header">
                             <Row>
                                 <Column header="#" :rowspan="2" />
-                                <Column header="Rubro compra" :rowspan="2" field="ARCO_RUBRO_COMPRA" />
+                                <Column header="Rubro compra" :rowspan="2" field="RUBC_NOMBRE" />
                                 <Column header="Código" :rowspan="2" field="ARTS_ARTICULO_EMP" />
                                 <Column header="Nombre" :rowspan="2" field="ARTS_NOMBRE" />
                                 <Column header="¿Bloq. Vtas?" :rowspan="2" field="¿BloqVtas?" />
@@ -281,8 +277,8 @@
                             </template>
                         </Column> -->
                         <template #groupheader="slotProps">
-                            <div class="gap-2">
-                                <span class="fw-bolder">{{ slotProps.data.ARCO_RUBRO_COMPRA }} - {{
+                            <div class="m-0 p-2" style="background: var(--p-emerald-100);">
+                                <span class="fs-6 fw-semibold fst-italic">{{ slotProps.data.ARCO_RUBRO_COMPRA }} - {{
                                     slotProps.data.RUBC_NOMBRE }} - {{ calculateTotal(slotProps.data.Nombre_RC) }}
                                     items</span>
                             </div>
@@ -315,158 +311,175 @@
                                 </div>
                             </template>
                         </Column>
-                        <Column field="ARCO_RUBRO_COMPRA" header="Rubro">
+                        <Column field="RUBC_NOMBRE" header="Rubro">
                             <template #body="slotProps">
-                                <span class="fw-medium">{{ slotProps.data['ARCO_RUBRO_COMPRA'] }}</span>
+                                <span style="font-size: small;">{{ slotProps.data['ARCO_RUBRO_COMPRA'] }}</span>
                             </template>
                         </Column>
                         <Column field="ARTS_ARTICULO_EMP" header="Código" :frozen="Frozen">
                             <template #body="slotProps">
-                                <span class="fw-medium">{{ slotProps.data['ARTS_ARTICULO_EMP'] }}</span>
+                                <span style="font-size: small;">{{ slotProps.data['ARTS_ARTICULO_EMP'] }}</span>
                             </template>
                         </Column>
                         <Column field="ARTS_NOMBRE" header="Nombre" :frozen="Frozen">
                             <template #body="slotProps">
-                                <span class="fw-medium">{{ slotProps.data['ARTS_NOMBRE'] }}</span>
+                                <span style="font-size: small;">{{ slotProps.data['ARTS_NOMBRE'] }}</span>
                             </template>
                         </Column>
-                        <Column field="¿BloqVtas?" header="¿Bloq. Vtas?">
+                        <Column field="¿BloqVtas?" header="¿Bloq. Vtas?" class="text-center">
                             <template #body="slotProps">
                                 <Badge :value="slotProps.data['¿BloqVtas?']"
                                     :severity="slotProps.data['¿BloqVtas?'] === 'Si' ? 'danger' : 'secondary'"
-                                    size="large" />
+                                    size="small" />
                             </template>
                         </Column>
-                        <Column field="Stock_mín_2y4" header="Stock Mín Uni.">
+                        <Column field="Stock_mín_2y4" header="Stock Mín Uni." class="text-end">
                             <template #body="slotProps">
-                                <span :class="slotProps.data['Stock_mín_2y4'] === 0 ? 'text-white' : null">{{
-                                    slotProps.data['Stock_mín_2y4'] }}</span>
+                                <span :class="slotProps.data['Stock_mín_2y4'] === 0 ? 'text-white' : null"
+                                    style="font-size: small;">{{
+                                        slotProps.data['Stock_mín_2y4'] }}</span>
                             </template>
                         </Column>
-                        <Column field="Días_stock_mínimo" header="Stock Mín Días">
+                        <Column field="Días_stock_mínimo" header="Stock Mín Días" class="text-end">
                             <template #body="slotProps">
-                                <span :class="slotProps.data['Días_stock_mínimo'] === 0 ? 'text-white' : null">{{
-                                    slotProps.data['Días_stock_mínimo'] }}</span>
+                                <span :class="slotProps.data['Días_stock_mínimo'] === 0 ? 'text-white' : null"
+                                    style="font-size: small;">{{
+                                        slotProps.data['Días_stock_mínimo'] }}</span>
                             </template>
                         </Column>
-                        <Column field="Pend_entrega_NP" header="Pend. en NP">
+                        <Column field="Pend_entrega_NP" header="Pend. en NP" class="text-end">
                             <template #body="slotProps">
-                                <span :class="slotProps.data['Pend_entrega_NP'] === 0 ? 'text-white' : null">{{
-                                    slotProps.data['Pend_entrega_NP'] }}</span>
+                                <span :class="slotProps.data['Pend_entrega_NP'] === 0 ? 'text-white' : null"
+                                    style="font-size: small;">{{
+                                        slotProps.data['Pend_entrega_NP'] }}</span>
                             </template>
                         </Column>
-                        <Column field="Cant_pend_entrega_OC" header="Pend. en OC">
+                        <Column field="Cant_pend_entrega_OC" header="Pend. en OC" class="text-end">
                             <template #body="slotProps">
-                                <span :class="slotProps.data['Cant_pend_entrega_OC'] === 0 ? 'text-white' : null">{{
-                                    slotProps.data['Cant_pend_entrega_OC'] }}</span>
+                                <span :class="slotProps.data['Cant_pend_entrega_OC'] === 0 ? 'text-white' : null"
+                                    style="font-size: small;">{{
+                                        slotProps.data['Cant_pend_entrega_OC'] }}</span>
                             </template>
                         </Column>
-                        <Column field="Stock_Uni_depós_940" header="Depós. 940">
+                        <Column field="Stock_Uni_depós_940" header="Depós. 940" class="text-end">
                             <template #body="slotProps">
-                                <span :class="slotProps.data['Stock_Uni_depós_940'] === 0 ? 'text-white' : null">{{
-                                    slotProps.data['Stock_Uni_depós_940'] }}</span>
+                                <span :class="slotProps.data['Stock_Uni_depós_940'] === 0 ? 'text-white' : null"
+                                    style="font-size: small;">{{
+                                        slotProps.data['Stock_Uni_depós_940'] }}</span>
                             </template>
                         </Column>
-                        <Column field="Stock_Uni_depós_950" header="Depós. 950">
+                        <Column field="Stock_Uni_depós_950" header="Depós. 950" class="text-end">
                             <template #body="slotProps">
-                                <span :class="slotProps.data['Stock_Uni_depós_940'] === 0 ? 'text-white' : null">{{
-                                    slotProps.data['Stock_Uni_depós_950'] }}</span>
+                                <span :class="slotProps.data['Stock_Uni_depós_940'] === 0 ? 'text-white' : null"
+                                    style="font-size: small;">{{
+                                        slotProps.data['Stock_Uni_depós_950'] }}</span>
                             </template>
                         </Column>
-                        <Column field="Stock_Uni_sin_940_y_sin_950" header="Otros depós.">
+                        <Column field="Stock_Uni_sin_940_y_sin_950" header="Otros depós." class="text-end">
                             <template #body="slotProps">
-                                <span>{{ slotProps.data['Stock_Uni_sin_940_y_sin_950'] }}</span>
+                                <span style="font-size: small;">{{ slotProps.data['Stock_Uni_sin_940_y_sin_950']
+                                }}</span>
                             </template>
                         </Column>
-                        <Column field="Stock_Unidades_todos_los_depós" header="Todos depós.">
+                        <Column field="Stock_Unidades_todos_los_depós" header="Todos depós." class="text-end">
                             <template #body="slotProps">
-                                <span>{{ slotProps.data['Stock_Unidades_todos_los_depós'] }}</span>
+                                <span style="font-size: small;">{{ slotProps.data['Stock_Unidades_todos_los_depós']
+                                }}</span>
                             </template>
                         </Column>
-                        <Column field="Stock-NP" header="Stock - NP">
+                        <Column field="Stock-NP" header="Stock - NP" class="text-end">
                             <template #body="slotProps">
-                                <span>{{ slotProps.data['Stock-NP'] }}</span>
+                                <span style="font-size: small;">{{ slotProps.data['Stock-NP'] }}</span>
                             </template>
                         </Column>
-                        <Column field="Stock-NP_días" header="Stock - NP días">
+                        <Column field="Stock-NP_días" header="Stock - NP días" class="text-end">
                             <template #body="slotProps">
-                                <span :class="slotProps.data['Stock-NP_días'] === 0 ? 'text-white' : null">{{
-                                    slotProps.data['Stock-NP_días'] }}</span>
+                                <span :class="slotProps.data['Stock-NP_días'] === 0 ? 'text-white' : null"
+                                    style="font-size: small;">{{
+                                        Number(slotProps.data['Stock-NP_días']).toFixed(0) }}</span>
                             </template>
                         </Column>
-                        <Column field="ARTS_CLASIF_8" header="Clas. 8">
+                        <Column field="ARTS_CLASIF_8" header="Clas. 8" class="text-center">
                             <template #body="slotProps">
-                                <span>{{ slotProps.data['ARTS_CLASIF_8'] }}</span>
+                                <span style="font-size: small;">{{ slotProps.data['ARTS_CLASIF_8'] }}</span>
                             </template>
                         </Column>
-                        <Column field="CA08_NOMBRE" header="Clasificador 8">
+                        <Column field="CA08_NOMBRE" header="Clasificador 8" class="text-center">
                             <template #body="slotProps">
-                                <span>{{ slotProps.data['CA08_NOMBRE'] }}</span>
+                                <span style="font-size: small;">{{ slotProps.data['CA08_NOMBRE'] }}</span>
                             </template>
                         </Column>
-                        <Column field="Consumo_diario" header="Cons. diario">
+                        <Column field="Consumo_diario" header="Cons. diario" class="text-center">
                             <template #body="slotProps">
-                                <span>{{ slotProps.data['Consumo_diario'] }}</span>
+                                <span style="font-size: small;">{{ slotProps.data['Consumo_diario'] }}</span>
                             </template>
                         </Column>
                         <Column field="Fecha_desde_TP1_y_2_y_MS4" header="Desde">
                             <template #body="slotProps">
-                                <span>{{
+                                <span style="font-size: small;">{{
                                     slotProps.data['Fecha_desde_TP1_y_2_y_MS4']
                                 }}</span>
                             </template>
                         </Column>
                         <Column field="Fecha_hasta_TP1_y_2_Y_MS4" header="Hasta">
                             <template #body="slotProps">
-                                <span>{{
+                                <span style="font-size: small;">{{
                                     slotProps.data['Fecha_hasta_TP1_y_2_Y_MS4']
                                 }}</span>
                             </template>
                         </Column>
-                        <Column field="Días_stock_Períodos_1_2_y_4" header="Días">
+                        <Column field="Días_stock_Períodos_1_2_y_4" header="Días" class="text-end">
                             <template #body="slotProps">
-                                <span>{{ slotProps.data['Días_stock_Períodos_1_2_y_4'] }}</span>
+                                <span style="font-size: small;">{{ slotProps.data['Días_stock_Períodos_1_2_y_4']
+                                }}</span>
                             </template>
                         </Column>
-                        <Column field="Cant_remito_MS2yMS4" header="Cant. rtos">
+                        <Column field="Cant_remito_MS2yMS4" header="Cant. rtos" class="text-end">
                             <template #body="slotProps">
-                                <span :class="slotProps.data['Cant_remito_MS2yMS4'] === 0 ? 'text-white' : null">{{
-                                    slotProps.data['Cant_remito_MS2yMS4'] }}</span>
+                                <span :class="slotProps.data['Cant_remito_MS2yMS4'] === 0 ? 'text-white' : null"
+                                    style="font-size: small;">{{
+                                        slotProps.data['Cant_remito_MS2yMS4'] }}</span>
                             </template>
                         </Column>
-                        <Column field="ARTS_MODO_STOC_MIN" header="Stock Mín">
+                        <Column field="ARTS_MODO_STOC_MIN" header="Stock Mín" class="text-center">
                             <template #body="slotProps">
-                                <span>{{ slotProps.data['ARTS_MODO_STOC_MIN'] }}</span>
+                                <span style="font-size: small;">{{ slotProps.data['ARTS_MODO_STOC_MIN'] }}</span>
                             </template>
                         </Column>
-                        <Column field="Nombre_modo_stock" header="Nombre modo stock mín.">
+                        <Column field="Nombre_modo_stock" header="Nombre modo stock mín." class="text-center">
                             <template #body="slotProps">
-                                <span>{{ slotProps.data['Nombre_modo_stock'] }}</span>
+                                <span style="font-size: small;">{{ slotProps.data['Nombre_modo_stock'] }}</span>
                             </template>
                         </Column>
-                        <Column field="Fecha_Ultimo_Remito_Venta" header="Fecha Último Rto. Vtas">
+                        <Column field="Fecha_Ultimo_Remito_Venta" header="Fecha Último Rto. Vtas" class="text-end">
                             <template #body="slotProps">
-                                <span>{{ slotProps.data['Fecha_Ultimo_Remito_Venta'] }}</span>
+                                <span style="font-size: small;">{{ slotProps.data['Fecha_Ultimo_Remito_Venta'] }}</span>
                             </template>
                         </Column>
-                        <Column field="Fecha_Ultima_Entrega_Proveedor" header="Fecha Última Ent. Proveedor">
+                        <Column field="Fecha_Ultima_Entrega_Proveedor" header="Fecha Última Ent. Proveedor"
+                            class="text-end">
                             <template #body="slotProps">
-                                <span>{{ slotProps.data['Fecha_Ultima_Entrega_Proveedor'] }}</span>
+                                <span style="font-size: small;">{{ slotProps.data['Fecha_Ultima_Entrega_Proveedor']
+                                }}</span>
                             </template>
                         </Column>
-                        <Column field="Cantidad_Ultima_Entrega_Proveedor" header="Cant. Última Ent. Proveedor">
+                        <Column field="Cantidad_Ultima_Entrega_Proveedor" header="Cant. Última Ent. Proveedor"
+                            class="text-end">
                             <template #body="slotProps">
-                                <span>{{ slotProps.data['Cantidad_Ultima_Entrega_Proveedor'] }}</span>
+                                <span style="font-size: small;">{{ slotProps.data['Cantidad_Ultima_Entrega_Proveedor']
+                                }}</span>
                             </template>
                         </Column>
-                        <Column field="Dias_sin_remitos_ventas" header="Días sin remitos ventas">
+                        <Column field="Dias_sin_remitos_ventas" header="Días sin remitos ventas" class="text-end">
                             <template #body="slotProps">
-                                <span>{{ slotProps.data['Dias_sin_remitos_ventas'] }}</span>
+                                <span style="font-size: small;">{{ slotProps.data['Dias_sin_remitos_ventas'] }}</span>
                             </template>
                         </Column>
-                        <Column field="Dias_ultima_entrega_proveedor" header="Días ult. Ent. Proveedor">
+                        <Column field="Dias_ultima_entrega_proveedor" header="Días ult. Ent. Proveedor"
+                            class="text-end">
                             <template #body="slotProps">
-                                <span>{{ slotProps.data['Dias_ultima_entrega_proveedor'] }}</span>
+                                <span style="font-size: small;">{{ slotProps.data['Dias_ultima_entrega_proveedor']
+                                }}</span>
                             </template>
                         </Column>
                     </DataTable>
@@ -506,7 +519,7 @@
                         </div>
                     </Dialog>
                     <Dialog v-model:visible="visibleDialogVinculados" modal header="Artículos vinculados a OC"
-                        :style="{ width: '50rem' }">
+                        :style="{ width: 'auto' }">
                         <div class="d-flex flex-column gap-2">
                             <DataTable :value="selectedItemVinculados" :scrollable="true" selectionMode="single"
                                 dataKey="RODC_ARTICULO">
@@ -517,14 +530,15 @@
                                         }}/{{ String(slotProps.data['RODC_REN_OC']).padStart(4, '0') }}
                                     </template>
                                 </Column>
-                                <Column header="Nota de pedio vinculado">
+                                <Column header="Nota de pedido vinculado">
                                     <template #body="slotProps">
-                                        {{ String(slotProps.data['OCNP_DIVISION_NPCA']).padStart(4, '0')
-                                        }}-{{ slotProps.data['OCNP_TIPO_NPCA'] }}-{{ slotProps.data['OCNP_NUMERO_NPCA']
-                                        }}/{{ String(slotProps.data['OCNP_RENGLON_RODC']).padStart(4, '0') }}
+                                        {{ String(slotProps.data['NPDE_DIVISION_NPCA']).padStart(4, '0')
+                                        }}-{{ slotProps.data['NPDE_TIPO_NPCA'] }}-{{ slotProps.data['NPDE_NUMERO_NPCA']
+                                        }}/{{ String(slotProps.data['NPDE_RENGLON']).padStart(4, '0') }}
                                     </template>
                                 </Column>
-                                <!-- <Column field="Cant_pend_ent" header="Cant. pendiente entrega"></Column> -->
+                                <Column field="Cantpend_ent" header="Cant. pendiente entrega"></Column>
+                                <Column field="CODC_OBSERVACION" header="Observación"></Column>
                             </DataTable>
                         </div>
                         <div class="d-flex justify-content-end my-2">
@@ -565,6 +579,10 @@ import Button from 'primevue/button';
 import MultiSelect from 'primevue/multiselect';
 import ContextMenu from 'primevue/contextmenu';
 import Dialog from 'primevue/dialog';
+import Accordion from 'primevue/accordion';
+import AccordionPanel from 'primevue/accordionpanel';
+import AccordionHeader from 'primevue/accordionheader';
+import AccordionContent from 'primevue/accordioncontent';
 import { useToast } from 'primevue/usetoast';
 import { FilterMatchMode, FilterOperator } from '@primevue/core/api';
 import { Button as KButton } from '@progress/kendo-buttons-vue-wrapper'
@@ -594,6 +612,10 @@ export default {
         MultiSelect,
         ContextMenu,
         Dialog,
+        Accordion,
+        AccordionPanel,
+        AccordionHeader,
+        AccordionContent,
         "kbutton": KButton
     },
     data() {
@@ -601,6 +623,7 @@ export default {
             dayjs,
             useToast,
             fullscreen: false,
+            fullscreengrid: false,
             teleport: true,
             pageOnly: true,
             cargando: false,
@@ -663,7 +686,7 @@ export default {
             itemROJOS: {
                 total: 0,
                 title: 'Item ROJO',
-                descripcion: 'Stock-NP más bajo que Stock Mínimo. Sin pendientes de OC.',
+                descripcion: 'Sin pendientes de OC.',
                 icon: 'pi pi-exclamation-triangle',
                 color: 'red',
                 iconColor: 'red',
@@ -672,7 +695,7 @@ export default {
             itemAMARILLOS: {
                 total: 0,
                 title: 'Item AMARILLO',
-                descripcion: 'Stock-NP más bajo que Stock Mínimo. Con pendientes de OC sigue abajo.',
+                descripcion: 'Con pendientes de OC sigue abajo.',
                 icon: 'pi pi-exclamation-triangle',
                 color: 'yellow',
                 iconColor: 'yellow',
@@ -681,7 +704,7 @@ export default {
             itemAZULES: {
                 total: 0,
                 title: 'Item AZUL',
-                descripcion: 'Stock-NP más bajo que Stock Mínimo. Con pendientes de OC queda arriba.',
+                descripcion: 'Con pendientes de OC queda arriba.',
                 icon: 'pi pi-exclamation-triangle',
                 color: 'blue',
                 iconColor: 'blue',
@@ -729,7 +752,7 @@ export default {
             return [
                 { 'text-bg-danger': data['1_Stock-NP_más_bajo_que_SM_Sin_OC'] === 1 },
                 { 'text-bg-warning': data['2_Stock-NP_más_bajo_que SM_Con_OC_sigue_abajo'] === 1 },
-                { 'text-bg-primary': data['3_Stock-NP_más_bajo_que_SM_Con_OC_queda_arriba'] === 1 },
+                { 'text-bg-primary': data['3_Stock-NP_más_bajo_que_SM_Con_OC_queda_arriba'] === 1 }
             ];
         },
         calculateTotal(name) {
@@ -859,11 +882,9 @@ export default {
                     this.itemROJOS.total = response.data.map(item => item['1_Stock-NP_más_bajo_que_SM_Sin_OC']).reduce((a, b) => a + b, 0);
                     this.itemAMARILLOS.total = response.data.map(item => item['2_Stock-NP_más_bajo_que SM_Con_OC_sigue_abajo']).reduce((a, b) => a + b, 0);
                     this.itemAZULES.total = response.data.map(item => item['3_Stock-NP_más_bajo_que_SM_Con_OC_queda_arriba']).reduce((a, b) => a + b, 0);
-                    this.articulos = response.data;
-                    /* this.articulosbygroup = response.data.reduce((result, item) => {
-                        (result[item.ARCO_RUBRO_COMPRA] || (result[item.ARCO_RUBRO_COMPRA] = [])).push(item);
-                        return result;
-                    }, {}); */
+                    this.articulos = response.data.sort((a, b) => (a['RUBC_NOMBRE'].localeCompare(b['RUBC_NOMBRE']) || a['ARTS_NOMBRE'].localeCompare(b['ARTS_NOMBRE'] || a['ARTS_ARTICULO_EMP'].localeCompare(b['ARTS_ARTICULO_EMP']))));
+                    /* this.articulosbygroup = Object.groupBy(this.articulos, ({ RUBC_NOMBRE }) => RUBC_NOMBRE);
+                    console.log(this.articulosbygroup); */
                     this.fecha_hasta_NP = dayjs.max(...response.data.map(item => dayjs(item.Fecha_hasta_para_incluir_NP)));
                     this.fecha_desde_NP = dayjs.min(...response.data.map(item => dayjs(item.Fecha_desde_para_incluir_NP)));
                     this.$toast.add({ severity: 'success', summary: 'Éxito', detail: 'Datos obtenidos correctamente.', life: 3000 });
@@ -872,7 +893,7 @@ export default {
                     this.itemROJOS.total = response.data.filter(item => item['Comprador'] === this.compradores[this.Comprador].Nombre).map(item => item['1_Stock-NP_más_bajo_que_SM_Sin_OC']).reduce((a, b) => a + b, 0);
                     this.itemAMARILLOS.total = response.data.filter(item => item['Comprador'] === this.compradores[this.Comprador].Nombre).map(item => item['2_Stock-NP_más_bajo_que SM_Con_OC_sigue_abajo']).reduce((a, b) => a + b, 0);
                     this.itemAZULES.total = response.data.filter(item => item['Comprador'] === this.compradores[this.Comprador].Nombre).map(item => item['3_Stock-NP_más_bajo_que_SM_Con_OC_queda_arriba']).reduce((a, b) => a + b, 0);
-                    this.articulos = response.data.filter(item => item['Comprador'] === this.compradores[this.Comprador].Nombre);
+                    this.articulos = response.data.filter(item => item['Comprador'] === this.compradores[this.Comprador].Nombre).sort((a, b) => (a['RUBC_NOMBRE'].localeCompare(b['RUBC_NOMBRE'])) || a['ARTS_NOMBRE'].localeCompare(b['ARTS_NOMBRE'] || a['ARTS_ARTICULO_EMP'].localeCompare(b['ARTS_ARTICULO_EMP'])));
                     this.fecha_hasta_NP = dayjs.max(...this.articulos.map(item => dayjs(item.Fecha_hasta_para_incluir_NP)));
                     this.fecha_desde_NP = dayjs.min(...this.articulos.map(item => dayjs(item.Fecha_desde_para_incluir_NP)));
                     this.$toast.add({ severity: 'success', summary: 'Éxito', detail: 'Datos obtenidos correctamente.', life: 3000 });
@@ -912,13 +933,31 @@ export default {
                 pageOnly: this.pageOnly,
                 teleport: this.teleport
             }
+        },
+        FullScreenGrid() {
+            return {
+                callback: (isFullscreen) => {
+                    this.fullscreengrid = isFullscreen
+                },
+                target: '.directive-fullscreen-wrapper-grid',
+                pageOnly: true,
+                teleport: true
+            }
         }
-    },
+    }
 }
 </script>
 
 <style>
 .p-datatable-scrollable .p-datatable-frozen-column {
     color: black
+}
+
+.p-card-body {
+    padding: 1rem;
+}
+
+.p-datatable.p-datatable-sm .p-datatable-tbody>tr>td {
+    padding: 0.1rem !important;
 }
 </style>
