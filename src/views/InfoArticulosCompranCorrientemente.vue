@@ -80,7 +80,8 @@
                         <template #end>
                             <div v-if="tiempoejecucion !== ''">
                                 <span>Tiempo de ejecución: </span>
-                                <Badge severity="info" size="large" class="text-white">{{ tiempoejecucion }}ms.</Badge>
+                                <Badge severity="info" size="large" class="text-white">{{ tiempoejecucion }}
+                                    ms.</Badge>
                             </div>
                         </template>
                     </Toolbar>
@@ -195,7 +196,8 @@
                     <DataTable v-model:filters="filters" filter-display="menu" :loading="cargando" :value="articulos"
                         selection-mode="multiple" row-group-mode="subheader" group-rows-by="RUBC_NOMBRE"
                         resizableColumns columnResizeMode="fit" size="small" :row-class="rowClass" scrollable
-                        scroll-height="flex" paginator :rows="50" :rowsPerPageOptions="[50, 100, 200, 500]"
+                        scroll-height="flex" paginator :rows="50"
+                        :rowsPerPageOptions="[50, 100, 200, articulos.length <= 500 ? 500 : articulos.length]"
                         :globalFilterFields="['Comprador', 'ARTS_ARTICULO_EMP', 'ARTS_NOMBRE', 'RUBC_NOMBRE', '1_Stock-NP_más_bajo_que_SM_Sin_OC', '2_Stock-NP_más_bajo_que SM_Con_OC_sigue_abajo', '3_Stock-NP_más_bajo_que_SM_Con_OC_queda_arriba']">
                         <template #empty>No se han encontrado datos. </template>
                         <template #loading>Cargando datos. Por favor, espere. </template>
@@ -378,13 +380,13 @@
                         <Column field="Stock_Uni_sin_940_y_sin_950" header="Otros depós." class="text-end">
                             <template #body="slotProps">
                                 <span style="font-size: small;">{{ slotProps.data['Stock_Uni_sin_940_y_sin_950']
-                                }}</span>
+                                    }}</span>
                             </template>
                         </Column>
                         <Column field="Stock_Unidades_todos_los_depós" header="Todos depós." class="text-end">
                             <template #body="slotProps">
                                 <span style="font-size: small;">{{ slotProps.data['Stock_Unidades_todos_los_depós']
-                                }}</span>
+                                    }}</span>
                             </template>
                         </Column>
                         <Column field="Stock-NP" header="Stock - NP" class="text-end">
@@ -418,20 +420,20 @@
                             <template #body="slotProps">
                                 <span style="font-size: small;">{{
                                     slotProps.data['Fecha_desde_TP1_y_2_y_MS4']
-                                }}</span>
+                                    }}</span>
                             </template>
                         </Column>
                         <Column field="Fecha_hasta_TP1_y_2_Y_MS4" header="Hasta">
                             <template #body="slotProps">
                                 <span style="font-size: small;">{{
                                     slotProps.data['Fecha_hasta_TP1_y_2_Y_MS4']
-                                }}</span>
+                                    }}</span>
                             </template>
                         </Column>
                         <Column field="Días_stock_Períodos_1_2_y_4" header="Días" class="text-end">
                             <template #body="slotProps">
                                 <span style="font-size: small;">{{ slotProps.data['Días_stock_Períodos_1_2_y_4']
-                                }}</span>
+                                    }}</span>
                             </template>
                         </Column>
                         <Column field="Cant_remito_MS2yMS4" header="Cant. rtos" class="text-end">
@@ -460,14 +462,14 @@
                             class="text-end">
                             <template #body="slotProps">
                                 <span style="font-size: small;">{{ slotProps.data['Fecha_Ultima_Entrega_Proveedor']
-                                }}</span>
+                                    }}</span>
                             </template>
                         </Column>
                         <Column field="Cantidad_Ultima_Entrega_Proveedor" header="Cant. Última Ent. Proveedor"
                             class="text-end">
                             <template #body="slotProps">
                                 <span style="font-size: small;">{{ slotProps.data['Cantidad_Ultima_Entrega_Proveedor']
-                                }}</span>
+                                    }}</span>
                             </template>
                         </Column>
                         <Column field="Dias_sin_remitos_ventas" header="Días sin remitos ventas" class="text-end">
@@ -479,7 +481,7 @@
                             class="text-end">
                             <template #body="slotProps">
                                 <span style="font-size: small;">{{ slotProps.data['Dias_ultima_entrega_proveedor']
-                                }}</span>
+                                    }}</span>
                             </template>
                         </Column>
                     </DataTable>
@@ -554,7 +556,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios, { all } from 'axios';
 import store from '../store';
 import dayjs from 'dayjs';
 import 'dayjs/locale/es-us';
@@ -670,7 +672,7 @@ export default {
             title: 'Información de artículos que compran corrientemente',
             articulos: [],
             articulosderivados: [],
-            articulosbygroup: [],
+            articulosbygroupcomprador: [],
             compradores: [
                 { Id: 0, Nombre: 'TODOS' },
                 { Id: 1, Nombre: 'EGE' },
@@ -855,8 +857,12 @@ export default {
             }
         },
         async getData() {
+            console.time('getItemReclamadosAlProveedor');
             this.getItemReclamadosAlProveedor();
+            console.timeEnd('getItemReclamadosAlProveedor');
+            console.time('getItemVinculadosAOC');
             this.getItemVinculadosAOC();
+            console.timeEnd('getItemVinculadosAOC');
             const start = new Date();
             console.time('getData');
             try {
@@ -870,8 +876,8 @@ export default {
                     params: {
                         cantdiasatrasparaevaluarsm4: this.Cant_días_atrás_para_evaluar_SM4,
                         diashaciaatrasfechadeNP: this.Dias_hacia_atrás_fecha_de_NP,
-                        comprador: this.compradores[this.Comprador].Nombre,
-                        rubros: this.rubrosseleccionados.length > 0 ? this.rubrosseleccionados.map(rubro => `'${rubro}'`).join(',') : ''
+                        comprador: this.compradores[this.Comprador]?.Nombre || '',
+                        rubros: this.rubrosseleccionados?.length > 0 ? this.rubrosseleccionados?.map(rubro => `'${rubro}'`).join(',') : ''
                     },
                     headers: {
                         Authorization: `Bearer ${token}`
@@ -883,8 +889,8 @@ export default {
                     this.itemAMARILLOS.total = response.data.map(item => item['2_Stock-NP_más_bajo_que SM_Con_OC_sigue_abajo']).reduce((a, b) => a + b, 0);
                     this.itemAZULES.total = response.data.map(item => item['3_Stock-NP_más_bajo_que_SM_Con_OC_queda_arriba']).reduce((a, b) => a + b, 0);
                     this.articulos = response.data.sort((a, b) => (a['RUBC_NOMBRE'].localeCompare(b['RUBC_NOMBRE']) || a['ARTS_NOMBRE'].localeCompare(b['ARTS_NOMBRE'] || a['ARTS_ARTICULO_EMP'].localeCompare(b['ARTS_ARTICULO_EMP']))));
-                    /* this.articulosbygroup = Object.groupBy(this.articulos, ({ RUBC_NOMBRE }) => RUBC_NOMBRE);
-                    console.log(this.articulosbygroup); */
+                    this.articulosbygroupcomprador = Object.groupBy(this.articulos, ({ Comprador }) => Comprador);
+                    console.log(this.articulosbygroupcomprador.length);
                     this.fecha_hasta_NP = dayjs.max(...response.data.map(item => dayjs(item.Fecha_hasta_para_incluir_NP)));
                     this.fecha_desde_NP = dayjs.min(...response.data.map(item => dayjs(item.Fecha_desde_para_incluir_NP)));
                     this.$toast.add({ severity: 'success', summary: 'Éxito', detail: 'Datos obtenidos correctamente.', life: 3000 });
@@ -948,7 +954,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .p-datatable-scrollable .p-datatable-frozen-column {
     color: black
 }

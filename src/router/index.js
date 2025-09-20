@@ -63,6 +63,10 @@ import GestionDeCompras from "../views/GestionCompras.vue"
 import ParametrosDeCompras from "../views/ParametrosdeCompras.vue"
 import InfoArticulosCompranCorrientemente from "../views/InfoArticulosCompranCorrientemente.vue"
 import ChatBotAI from "../views/ChatBot.vue"
+import GestionDeDistribucion from "../views/GestionDistribucion.vue"
+import ParametrosDeDistribucion from "../views/ParametrosdeDistribucion.vue"
+import ListadeClientesDistribucion from "../views/ListadeClientesDistribucion.vue"
+import TiempoEntregasInmediata from "../views/TiempoEntregasInmediata.vue"
 
 const routes = [
   {
@@ -172,6 +176,20 @@ const routes = [
     }
   },
   {
+    path: '/consultatiempoentregasinmediata',
+    name: 'Consulta - Tiempo Entregas Inmediata',
+    component: TiempoEntregasInmediata,
+    props: true,
+    meta: {
+      title: 'Consulta - Tiempo Entregas Inmediata',
+      metaTags: [
+        {
+          name: 'Consulta - Tiempo Entregas Inmediata'
+        }
+      ]
+    }
+  },
+  {
     path: '/consultaordenescompra',
     name: 'Consulta Orden Compra',
     component: ConsultaOrdenesCompra,
@@ -183,6 +201,45 @@ const routes = [
           name: 'Consulta Ordenes Compra'
         }
       ]
+    }
+  },
+  {
+    path: '/gestiondedistribucion',
+    name: 'Gestión de Distribución',
+    component: GestionDeDistribucion,
+    props: true,
+    meta: {
+      title: 'Gestión de Distribución',
+      metaTags: [
+        {
+          name: 'Gestión de Distribución',
+        }      ]
+    }
+  },
+  {
+    path: '/gestiondedistribucion/parametrosdedistribucion',
+    name: 'Parametros de Distribución',
+    component: ParametrosDeDistribucion, 
+    props: true,
+    meta: {
+      title: 'Parametros de Distribución',
+      metaTags: [
+        {
+          name: 'Parametros de Distribución',
+        }      ]
+    }
+  },
+  {
+    path: '/gestiondedistribucion/listadeclientesdistribucion',
+    name: 'Lista de Clientes de Distribución',
+    component: ListadeClientesDistribucion, 
+    props: true,
+    meta: {
+      title: 'Lista de Clientes de Distribución',
+      metaTags: [
+        {
+          name: 'Lista de Clientes de Distribución',
+        }      ]
     }
   },
   {
