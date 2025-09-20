@@ -396,8 +396,12 @@ export default {
                     'Authorization': `Bearer ${this.token}`
                 }
             })
-            //console.log(getClientbyCode.data[0].CLIE_NOMBRE);
+            console.log(getClientbyCode.data[0].CLIE_FAX);
             if (getClientbyCode.data) {
+                if (!getClientbyCode.data[0].CLIE_FAX) {
+                    this.$toast.add({ severity: 'error', summary: 'Error', detail: 'No se ha podido agregar el cliente, no se ha encontrado el número de WhatsApp.', life: 3000 });
+                    return;
+                }
                 await axios.post(`${process.env.VUE_APP_API_BASE}` + '/gdd/clientesdistribuciones', {
                     cod_cliente: this.clientes.cod_cliente,
                     nombre_cliente: getClientbyCode.data[0].CLIE_NOMBRE,
