@@ -81,12 +81,12 @@
         <grid-column field="ARTS_UNIMED_STOCK" title="&nbsp;" :column-menu="false" :width="40"
           :hidden="false"></grid-column>
         <grid-column field="PRECIO_LISTA_CON_IVA" title="Precio lista c/IVA" :template="this.precioLista"
-          :hidden="false" :width="100" :exportable="false"></grid-column>
+          :hidden="false" :width="100" :exportable="{ pdf: false, excel: true }"></grid-column>
         <grid-column field="DCA1_POR_DESCUENTO" title="Dto. Cliente"
           template="#=kendo.format('{0:p0}', DCA1_POR_DESCUENTO / 100)#" :width="80" :hidden="false"
-          :exportable="false"></grid-column>
+          :exportable="{ pdf: false, excel: true }"></grid-column>
         <grid-column field="dtoFinan" title="Dto. Financ." :template="this.dtoFinan" :width="80" :hidden="false"
-          :exportable="false"></grid-column>
+          :exportable="{ pdf: false, excel: true }"></grid-column>
         <grid-column field="precioContado" title="Precio contado c/IVA c/Dtos" :template="this.precioContado"
           :hidden="false" :width="100"></grid-column>
         <grid-column field="Modif" title="Modif" :template="this.Modif" :hidden="false" :width="50"></grid-column>

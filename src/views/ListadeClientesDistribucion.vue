@@ -40,12 +40,12 @@
                 <DataTable v-model:filters="filters" v-model:selection="selectedClientes" :value="clientes" paginator
                     :rows="50" :rowsPerPageOptions="[50, 100, 500]" dataKey="id" filterDisplay="menu"
                     :loading="cargando" resizableColumns columnResizeMode="fit"
-                    :globalFilterFields="['cod_cliente', 'nombre_cliente']"
+                    :globalFilterFields="['cod_cliente', 'nombre_cliente', 'perfilcomercial_cliente', 'zonas_distribucion_cliente']"
                     paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
                     currentPageReportTemplate="Mostrando de {first} a {last} de {totalRecords} clientes">
                     <template #header>
                         <div class="d-flex flex-wrap gap-2 align-items-center justify-content-between">
-                            <h4 class="m-0">Administrar los clientes</h4>
+                            <h5 class="m-0">Administrar los clientes</h5>
                             <IconField>
                                 <InputIcon>
                                     <i class="pi pi-search" />
@@ -88,8 +88,10 @@
                     </Column>
                     <Column field="perfilcomercial_cliente" header="Perfil comercial" sortable style="min-width: 10rem">
                         <template #filter="{ filterModel }">
-                            <InputText v-model="filterModel.value" type="text"
-                                placeholder="Buscar por perfil comercial" />
+                            <Select v-model="filterModel.value" optionLabel="CLC1_NOMBRE" optionValue="CLC1_CLASIF_1"
+                                :options="perfilcomercial" placeholder="Buscar por perfil comercial" />
+                            <!--  <InputText v-model="filterModel.value" type="text"
+                                placeholder="Buscar por perfil comercial" /> -->
                         </template>
                     </Column>
                     <Column field="domicilio_cliente" header="Domicilio" sortable style="min-width: 14rem">
@@ -315,7 +317,7 @@ export default {
                 'global': { value: null, matchMode: 'contains' },
                 'cod_cliente': { value: null, matchMode: 'contains' },
                 'nombre_cliente': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
-                'perfilcomercial_cliente': { value: null, matchMode: 'contains' },
+                'perfilcomercial_cliente': { operator: FilterOperator.OR, constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }] },
                 'domicilio_cliente': { value: null, matchMode: 'contains' },
                 'localidad_cliente': { value: null, matchMode: 'contains' },
                 'provincia_cliente': { value: null, matchMode: 'contains' },
