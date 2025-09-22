@@ -196,7 +196,7 @@
                     <DataTable v-model:filters="filters" filter-display="menu" :loading="cargando" :value="articulos"
                         selection-mode="multiple" row-group-mode="subheader" group-rows-by="RUBC_NOMBRE"
                         resizableColumns columnResizeMode="fit" size="small" :row-class="rowClass" scrollable
-                        scroll-height="flex" paginator :rows="50"
+                        scroll-height="flex" paginator :rows="50" showGridlines
                         :rowsPerPageOptions="[50, 100, 200, articulos.length <= 500 ? 500 : articulos.length]"
                         :globalFilterFields="['Comprador', 'ARTS_ARTICULO_EMP', 'ARTS_NOMBRE', 'RUBC_NOMBRE', '1_Stock-NP_más_bajo_que_SM_Sin_OC', '2_Stock-NP_más_bajo_que SM_Con_OC_sigue_abajo', '3_Stock-NP_más_bajo_que_SM_Con_OC_queda_arriba']">
                         <template #empty>No se han encontrado datos. </template>
@@ -204,7 +204,7 @@
                         <template #header>
                             <div class="d-flex justify-content-between align-items-center">
                                 <ToggleButton v-model="Frozen" onIcon="pi pi-lock" offIcon="pi pi-lock-open"
-                                    onLabel="Inmovilizar" offLabel="Desinmovilizar" />
+                                    onLabel="Inmovilizar" offLabel="Movilizar" />
                                 <div class="d-flex justify-end flex-row-reverse align-items-center">
                                     <Button type="button" v-fullscreen="FullScreenGrid" class="mr-2"
                                         style="height: 45px;">
@@ -233,10 +233,10 @@
                                 <Column header="Código" :rowspan="2" field="ARTS_ARTICULO_EMP" />
                                 <Column header="Nombre" :rowspan="2" field="ARTS_NOMBRE" />
                                 <Column header="¿Bloq. Vtas?" :rowspan="2" field="¿BloqVtas?" />
-                                <Column header="Stock Mín Uni." :rowspan="2" field="Stock_mín_2y4" />
-                                <Column header="Stock Mín Días" :rowspan="2" field="Días_stock_mínimo" />
-                                <Column header="Pend. en NP" :rowspan="2" field="Pend_entrega_NP" />
-                                <Column header="Pend. en OC" :rowspan="2" field="Cant_pend_entrega_OC" />
+                                <Column header="S.M. Uni." :rowspan="2" field="Stock_mín_2y4" />
+                                <Column header="S.M. Días" :rowspan="2" field="Días_stock_mínimo" />
+                                <Column header="Pte. en NP" :rowspan="2" field="Pend_entrega_NP" />
+                                <Column header="Pte. en OC" :rowspan="2" field="Cant_pend_entrega_OC" />
                                 <Column header="Stock físico" :colspan="6" />
                                 <Column header="Clasif. 8" :rowspan="2" field="ARTS_CLASIF_8" />
                                 <Column header="Clasificador 8" :rowspan="2" field="CA08_NOMBRE" />
@@ -245,19 +245,16 @@
                                 <Column header="Cant. rtos" :rowspan="2" field="Cant_remito_MS2yMS4" />
                                 <Column header="Stock Mín" :rowspan="2" field="ARTS_MODO_STOC_MIN" />
                                 <Column header="Nombre modo stock mín." :rowspan="2" field="Nombre_modo_stock" />
-                                <Column header="Fecha Último Rto. Vtas" :rowspan="2"
-                                    field="Fecha_Ultimo_Remito_Venta" />
-                                <Column header="Fecha Última Ent. Proveedor" :rowspan="2"
-                                    field="Fecha_Ultima_Entrega_Proveedor" />
-                                <Column header="Cant. Última Ent. Proveedor" :rowspan="2"
+                                <Column header="F.U. Rto. Vtas" :rowspan="2" field="Fecha_Ultimo_Remito_Venta" />
+                                <Column header="F.U. Ent. Prov." :rowspan="2" field="Fecha_Ultima_Entrega_Proveedor" />
+                                <Column header="Cant. U. E. Prov." :rowspan="2"
                                     field="Cantidad_Ultima_Entrega_Proveedor" />
-                                <Column header="Días sin remitos ventas" :rowspan="2" field="Dias_sin_remitos_ventas" />
-                                <Column header="Días ult. Ent. Proveedor" :rowspan="2"
-                                    field="Dias_ultima_entrega_proveedor" />
+                                <Column header="Días S/Rto. Vtas." :rowspan="2" field="Dias_sin_remitos_ventas" />
+                                <Column header="Días U. E. Prov." :rowspan="2" field="Dias_ultima_entrega_proveedor" />
                             </Row>
                             <Row>
-                                <Column header="Depós. 940" field="Stock_Uni_depós_940" />
-                                <Column header="Depós. 950" field="Stock_Uni_depós_950" />
+                                <Column header="Dep. 940" field="Stock_Uni_depós_940" />
+                                <Column header="Dep. 950" field="Stock_Uni_depós_950" />
                                 <Column header="Otros dep." field="Stock_Uni_sin_940_y_sin_950" />
                                 <Column header="Todos dep." field="Stock_Unidades_todos_los_depós" />
                                 <Column header="Stock - NP" field="Stock-NP" />
@@ -416,14 +413,14 @@
                                 <span style="font-size: small;">{{ slotProps.data['Consumo_diario'] }}</span>
                             </template>
                         </Column>
-                        <Column field="Fecha_desde_TP1_y_2_y_MS4" header="Desde">
+                        <Column field="Fecha_desde_TP1_y_2_y_MS4" header="Desde" class="text-end">
                             <template #body="slotProps">
                                 <span style="font-size: small;">{{
                                     slotProps.data['Fecha_desde_TP1_y_2_y_MS4']
                                     }}</span>
                             </template>
                         </Column>
-                        <Column field="Fecha_hasta_TP1_y_2_Y_MS4" header="Hasta">
+                        <Column field="Fecha_hasta_TP1_y_2_Y_MS4" header="Hasta" class="text-end">
                             <template #body="slotProps">
                                 <span style="font-size: small;">{{
                                     slotProps.data['Fecha_hasta_TP1_y_2_Y_MS4']
@@ -443,7 +440,7 @@
                                         slotProps.data['Cant_remito_MS2yMS4'] }}</span>
                             </template>
                         </Column>
-                        <Column field="ARTS_MODO_STOC_MIN" header="Stock Mín" class="text-center">
+                        <Column field="ARTS_MODO_STOC_MIN" header="Stock Mín" class="text-end">
                             <template #body="slotProps">
                                 <span style="font-size: small;">{{ slotProps.data['ARTS_MODO_STOC_MIN'] }}</span>
                             </template>
@@ -556,7 +553,7 @@
 </template>
 
 <script>
-import axios, { all } from 'axios';
+import axios from 'axios';
 import store from '../store';
 import dayjs from 'dayjs';
 import 'dayjs/locale/es-us';
@@ -954,9 +951,9 @@ export default {
 }
 </script>
 
-<style scoped>
-.p-datatable-scrollable .p-datatable-frozen-column {
-    color: black
+<style>
+.p-datatable-frozen-column {
+    color: #000;
 }
 
 .p-card-body {
