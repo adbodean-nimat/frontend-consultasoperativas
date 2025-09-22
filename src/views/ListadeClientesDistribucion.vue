@@ -396,8 +396,13 @@ export default {
                     'Authorization': `Bearer ${this.token}`
                 }
             })
-            console.log(getClientbyCode.data[0].CLIE_FAX);
+            if (!getClientbyCode.data[0]) {
+                console.log(getClientbyCode.data[0]);
+                this.$toast.add({ severity: 'error', summary: 'Error', detail: 'No se ha podido agregar el cliente, no se ha encontrado el dato.', life: 3000 });
+                return;
+            }
             if (getClientbyCode.data) {
+                //console.log(getClientbyCode.data[0]);
                 if (!getClientbyCode.data[0].CLIE_FAX) {
                     this.$toast.add({ severity: 'error', summary: 'Error', detail: 'No se ha podido agregar el cliente, no se ha encontrado el número de WhatsApp.', life: 3000 });
                     return;
