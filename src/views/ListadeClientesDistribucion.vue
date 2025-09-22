@@ -38,8 +38,9 @@
                     </template>
                 </Toolbar>
                 <DataTable v-model:filters="filters" v-model:selection="selectedClientes" :value="clientes" paginator
-                    :rows="100" dataKey="id" filterDisplay="menu" :loading="cargando" resizableColumns
-                    columnResizeMode="fit" :globalFilterFields="['cod_cliente', 'nombre_cliente']"
+                    :rows="50" :rowsPerPageOptions="[50, 100, 500]" dataKey="id" filterDisplay="menu"
+                    :loading="cargando" resizableColumns columnResizeMode="fit"
+                    :globalFilterFields="['cod_cliente', 'nombre_cliente']"
                     paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
                     currentPageReportTemplate="Mostrando de {first} a {last} de {totalRecords} clientes">
                     <template #header>
