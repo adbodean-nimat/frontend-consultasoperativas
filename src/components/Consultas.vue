@@ -1027,7 +1027,7 @@ a {
 
 .icon {
     width: 30%;
-    background: #008645;
+    background: #007c3b;
 }
 
 .icon svg {

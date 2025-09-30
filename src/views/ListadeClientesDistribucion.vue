@@ -39,35 +39,52 @@
                 </Toolbar>
                 <DataTable v-model:filters="filters" v-model:selection="selectedClientes" :value="clientes" paginator
                     :rows="50" :rowsPerPageOptions="[50, 100, 500]" dataKey="id" filterDisplay="menu"
-                    :loading="cargando" resizableColumns columnResizeMode="fit"
+                    :loading="cargando" resizableColumns columnResizeMode="fit" size="medium"
                     :globalFilterFields="['cod_cliente', 'nombre_cliente', 'perfilcomercial_cliente', 'zonas_distribucion_cliente']"
                     paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
                     currentPageReportTemplate="Mostrando de {first} a {last} de {totalRecords} clientes">
                     <template #header>
                         <div class="d-flex flex-wrap gap-2 align-items-center justify-content-between">
                             <h5 class="m-0">Administrar los clientes</h5>
-                            <IconField>
-                                <InputIcon>
-                                    <i class="pi pi-search" />
-                                </InputIcon>
-                                <InputText v-model="filters['global'].value" placeholder="Buscar..." />
-                            </IconField>
+                            <div class="d-flex flex-wrap gap-2 align-items-center">
+                                <IconField>
+                                    <InputIcon>
+                                        <i class="pi pi-search" />
+                                    </InputIcon>
+                                    <InputText v-model="filters['global'].value" placeholder="Buscar..." />
+
+                                </IconField>
+                                <Button type="button" icon="pi pi-filter-slash" label="Limpiar filtros" class="mx-2"
+                                    @click="clearFilter()" />
+                            </div>
                         </div>
                     </template>
                     <template #empty>No se han encontrado datos. </template>
                     <template #loading>Cargando datos. Por favor, espere. </template>
                     <Column selectionMode="multiple" headerStyle="width: 5rem"></Column>
-                    <Column field="habilitado" header="Estado" style="text-align: center"
+                    <Column :exportable="false">
+                        <template #body="slotProps">
+                            <!-- <Button icon="pi pi-eye" variant="outlined" rounded class="me-2" /> -->
+                            <Button icon="pi pi-pencil" variant="outlined" rounded class="me-2"
+                                @click="editCliente(slotProps.data)" />
+                            <!-- <Button icon="pi pi-trash" variant="outlined" rounded severity="danger"
+                                @click="confirmDelete(slotProps.data)" /> -->
+                        </template>
+                    </Column>
+                    <Column field="habilitado" header="Estado" style="text-align: center" sortable
                         bodyStyle="text-align: center">
                         <template #body="{ data }">
                             <i v-if="data.habilitado" class="pi pi-check" style="color: green;"></i>
                             <i v-else class="pi pi-times" style="color: red;"></i>
                         </template>
-                        <!-- <template #filter="{ filterModel }">
-                            <InputText v-model="filterModel.value" type="text" placeholder="Buscar por habilitado" />
-                        </template> -->
+                        <template #filter="{ filterModel }">
+                            <Select v-model="filterModel.value"
+                                :options="[{ label: 'Habilitado', value: true }, { label: 'Deshabilitado', value: false }]"
+                                placeholder="Filtrar por estado" option-label="label" option-value="value" />
+                        </template>
                     </Column>
-                    <Column field="cod_cliente" header="Nro. de cliente" sortable style="min-width: 2rem">
+
+                    <Column field="cod_cliente" header="Nro. de cliente" sortable>
                         <template #body="{ data }">
                             {{ data.cod_cliente }}
                         </template>
@@ -76,194 +93,196 @@
                                 placeholder="Buscar por código de cliente" />
                         </template>
                     </Column>
-                    <Column field="nombre_cliente" header="Nombre" sortable style="min-width: 14rem">
+                    <Column field="nombre_cliente" header="Nombre" sortable ">
                         <template #filter="{ filterModel }">
-                            <InputText v-model="filterModel.value" type="text"
-                                placeholder="Buscar por nombre de cliente" />
-                        </template>
-                        <template #filterclear="{ filterCallback }">
-                            <Button type="button" icon="pi pi-times" @click="filterCallback()"
-                                severity="secondary"></Button>
-                        </template>
-                    </Column>
-                    <Column field="perfilcomercial_cliente" header="Perfil comercial" sortable style="min-width: 10rem">
-                        <template #filter="{ filterModel }">
-                            <Select v-model="filterModel.value" optionLabel="CLC1_NOMBRE" optionValue="CLC1_CLASIF_1"
-                                :options="perfilcomercial" placeholder="Buscar por perfil comercial" />
-                            <!--  <InputText v-model="filterModel.value" type="text"
+                        <InputText v-model="filterModel.value" type="text" placeholder="Buscar por nombre de cliente" />
+</template>
+<template #filterclear="{ filterCallback }">
+    <Button type="button" icon="pi pi-times" @click="filterCallback()" severity="secondary"></Button>
+</template>
+</Column>
+<Column field="perfilcomercial_cliente" header="Perfil comercial" sortable>
+    <template #filter="{ filterModel }">
+        <Select v-model="filterModel.value" optionLabel="CLC1_NOMBRE" optionValue="CLC1_CLASIF_1"
+            :options="perfilcomercial" placeholder="Buscar por perfil comercial" />
+        <!--  <InputText v-model="filterModel.value" type="text"
                                 placeholder="Buscar por perfil comercial" /> -->
-                        </template>
-                    </Column>
-                    <Column field="domicilio_cliente" header="Domicilio" sortable style="min-width: 14rem">
-                        <template #filter="{ filterModel }">
-                            <InputText v-model="filterModel.value" type="text" placeholder="Buscar por domicilio" />
-                        </template>
-                    </Column>
-                    <Column field="localidad_cliente" header="Localidad" sortable style="min-width: 10rem">
-                        <template #filter="{ filterModel }">
-                            <InputText v-model="filterModel.value" type="text" placeholder="Buscar por localidad" />
-                        </template>
-                    </Column>
-                    <Column field="provincia_cliente" header="Provincia" sortable style="min-width: 10rem">
-                        <template #filter="{ filterModel }">
-                            <InputText v-model="filterModel.value" type="text" placeholder="Buscar por provincia" />
-                        </template>
-                    </Column>
-                    <Column field="zonas_distribucion_cliente" header="Zonas de distribución" sortable
-                        style="min-width: 10rem">
-                        <template #filter="{ filterModel }">
-                            <InputText v-model="filterModel.value" type="text"
-                                placeholder="Buscar por zonas de distribución" />
-                        </template>
-                    </Column>
-                    <Column field="nombre_zonas_distribucion_cliente" header="Nombre zona distribución" sortable
-                        style="min-width: 10rem">
-                        <template #filter="{ filterModel }">
-                            <InputText v-model="filterModel.value" type="text"
-                                placeholder="Buscar por nombre zona distribución" />
-                        </template>
-                    </Column>
-                    <Column field="nro_whatsapp_cliente" header="Nro. WhatsApp" sortable style="min-width: 10rem">
-                        <template #filter="{ filterModel }">
-                            <InputText v-model="filterModel.value" type="text" placeholder="Buscar por nro. WhatsApp" />
-                        </template>
-                    </Column>
+    </template>
+</Column>
+<!-- <Column field="domicilio_cliente" header="Domicilio" sortable>
+    <template #filter="{ filterModel }">
+        <InputText v-model="filterModel.value" type="text" placeholder="Buscar por domicilio" />
+    </template>
+</Column> -->
+<Column field="localidad_cliente" header="Localidad" sortable>
+    <template #filter="{ filterModel }">
+        <InputText v-model="filterModel.value" type="text" placeholder="Buscar por localidad" />
+    </template>
+</Column>
+<!-- <Column field="provincia_cliente" header="Provincia" sortable>
+    <template #filter="{ filterModel }">
+        <InputText v-model="filterModel.value" type="text" placeholder="Buscar por provincia" />
+    </template>
+</Column> -->
+<Column field="zonas_distribucion_cliente" header="Zonas de distribución" sortable>
+    <template #filter="{ filterModel }">
+        <InputText v-model="filterModel.value" type="text" placeholder="Buscar por zonas de distribución" />
+    </template>
+</Column>
+<!-- <Column field="nombre_zonas_distribucion_cliente" header="Nombre zona distribución" sortable>
+    <template #filter="{ filterModel }">
+        <InputText v-model="filterModel.value" type="text" placeholder="Buscar por nombre zona distribución" />
+    </template>
+</Column> -->
+<Column field="contacto" header="Contacto" sortable>
+    <template #filter="{ filterModel }">
+        <InputText v-model="filterModel.value" type="text" placeholder="Buscar por Contacto" />
+    </template>
+</Column>
+<Column field="nro_whatsapp_cliente" header="Nro. WhatsApp" sortable>
+    <template #filter="{ filterModel }">
+        <InputText v-model="filterModel.value" type="text" placeholder="Buscar por nro. WhatsApp" />
+    </template>
+</Column>
+<Column field="rubros_ventas" header="Rubros de ventas" sortable>
+    <template #body="{ data }">
+        <div v-if="data.rubros_ventas && data.rubros_ventas.length">
+            <span class="me-1" v-for="(rubro, index) in data.rubros_ventas" :key="index">
+                <Tag rounded>{{ rubro.rubros_nombres }}</Tag>
+            </span>
+        </div>
+        <div v-else>
+            -
+        </div>
+    </template>
+    <template #filter="{ filterModel }">
+        <InputText v-model="filterModel.value.rubros_nombres" type="text" placeholder="Buscar por rubros de ventas" />
+    </template>
+</Column>
 
-                    <Column field="rubros_ventas" header="Rubros de ventas" sortable style="min-width: 10rem">
-                        <template #body="{ data }">
-                            <div v-if="data.rubros_ventas && data.rubros_ventas.length">
-                                <span class="me-1" v-for="(rubro, index) in data.rubros_ventas" :key="index">
-                                    <Tag rounded>{{ rubro.rubros_nombres }}</Tag>
-                                </span>
-                            </div>
-                            <div v-else>
-                                -
-                            </div>
-                        </template>
-                        <template #filter="{ filterModel }">
-                            <InputText v-model="filterModel.value.rubros_nombres" type="text"
-                                placeholder="Buscar por rubros de ventas" />
-                        </template>
-                    </Column>
-                    <Column :exportable="false" style="min-width: 12rem">
-                        <template #body="slotProps">
-                            <!-- <Button icon="pi pi-eye" variant="outlined" rounded class="me-2" /> -->
-                            <Button icon="pi pi-pencil" variant="outlined" rounded class="me-2"
-                                @click="editCliente(slotProps.data)" />
-                            <Button icon="pi pi-trash" variant="outlined" rounded severity="danger"
-                                @click="confirmDelete(slotProps.data)" />
-                        </template>
-                    </Column>
+<!-- <Column :exportable="false">
+    <template #body="slotProps">
+        <Button icon="pi pi-eye" variant="outlined" rounded class="me-2" />
+        <Button icon="pi pi-pencil" variant="outlined" rounded class="me-2" @click="editCliente(slotProps.data)" />
+        <Button icon="pi pi-trash" variant="outlined" rounded severity="danger"
+            @click="confirmDelete(slotProps.data)" />
+    </template>
+</Column> -->
 
-                    <!-- <Column headerStyle="width: 4rem; text-align: center"
+<!-- <Column headerStyle="width: 4rem; text-align: center"
                         bodyStyle="text-align: center; overflow: visible">
                         <template #body>
                             <Button type="button" icon="pi pi-cog" rounded />
                         </template>
                     </Column> -->
-                </DataTable>
-            </div>
-            <Dialog v-model:visible="clientesDialog" :style="{ width: '450px' }" header="Agregar cliente" modal
-                class="p-fluid" :draggable="true" :closable="true">
-                <div>
-                    <label for="cod_cliente" class="block font-bold mb-3">Código de cliente</label>
-                    <InputText id="cod_cliente" v-model.trim="clientes.cod_cliente" required="true" autofocus
-                        :invalid="submitted && !clientes.cod_cliente" fluid />
-                    <small v-if="submitted && !clientes.cod_cliente" class="text-red-500">Se requiere el código de
-                        cliente</small>
-                </div>
-                <!-- <div class="mt-3">
+</DataTable>
+</div>
+<Dialog v-model:visible="clientesDialog" :style="{ width: '450px' }" header="Agregar cliente" modal class="p-fluid"
+    :draggable="true" :closable="true">
+    <div>
+        <label for="cod_cliente" class="block font-bold mb-3">Código de cliente</label>
+        <InputText id="cod_cliente" v-model.trim="clientes.cod_cliente" required="true" autofocus
+            :invalid="submitted && !clientes.cod_cliente" fluid />
+        <small v-if="submitted && !clientes.cod_cliente" class="text-red-500">Se requiere el código de
+            cliente</small>
+    </div>
+    <!-- <div class="mt-3">
                     <label for="nro_whatsapp_cliente" class="block font-bold mb-3">Número de WhatsApp</label>
                     <InputMask id="nro_whatsapp_cliente" v-model.trim="clientes.nro_whatsapp_cliente"
                         mask="+54 999 999-9999" placeholder="+54 999 999-9999" fluid />
                 </div> -->
-                <!-- <div class="mt-3 d-flex flex-column">
+    <!-- <div class="mt-3 d-flex flex-column">
                     <label for="rubrosventas" class="block font-bold mb-3">Rubros de ventas</label>
                     <MultiSelect v-model="selectedRubros" display="chip" :options="rubrosdeventas"
                         optionLabel="rubros_nombres" filter :maxSelectedLabels="3" class="w-full md:w-80" />
                 </div> -->
-                <div class="d-flex justify-content-end mt-5 gap-2">
-                    <Button label="Cancelar" icon="pi pi-times" text @click="hideDialog" />
-                    <Button label="Guardar" icon="pi pi-check" class="p-button-sm" @click="agregarClientes" />
-                </div>
-
-            </Dialog>
-            <Dialog v-model:visible="deleteclientesDialog" :style="{ width: '450px' }" header="Eliminar clientes" modal
-                class="p-fluid" :draggable="true" :closable="true" :modal="true">
-                <div class="flex items-center gap-4">
-                    <span v-if="selectedClientes && selectedClientes.length">¿Estás seguro de que quieres borrar los
-                        clientes
-                        seleccionados?</span>
-                </div>
-                <template #footer>
-                    <Button label="No" icon="pi pi-times" text @click="deleteclientesDialog = false"
-                        severity="secondary" variant="text" />
-                    <Button label="Si" icon="pi pi-check" text @click="deleteSelected" severity="danger" />
-                </template>
-            </Dialog>
-            <Dialog v-model:visible="clientesEditDialog" :style="{ width: '650px' }" header="Editar cliente" modal
-                class="p-fluid" :draggable="true" :closable="true">
-                <div class="d-flex flex-column">
-                    <label for="habilitado" class="block font-bold mb-3">Estado</label>
-                    <ToggleSwitch id="habilitado" v-model="editarClientes.habilitado" aria-label="Habilitado" />
-                </div>
-                <div class="mt-3 row">
-                    <div class="col">
-                        <label for="nombre" class="block font-bold mb-3">Nombre</label>
-                        <InputText id="nombre" v-model.trim="editarClientes.nombre_cliente" fluid />
-                    </div>
-                    <div class="col">
-                        <label for="perfilcomercial_cliente" class="block font-bold mb-3">Perfil comercial</label>
-                        <Select id="perfilcomercial_cliente" :options="perfilcomercial" option-label="CLC1_NOMBRE"
-                            option-value="CLC1_CLASIF_1" v-model.trim="editarClientes.perfilcomercial_cliente" fluid />
-                    </div>
-                </div>
-                <div class="mt-3 row">
-                    <div class="col">
-                        <label for="domicilio_cliente" class="block font-bold mb-3">Domicilio</label>
-                        <InputText id="domicilio_cliente" v-model.trim="editarClientes.domicilio_cliente" fluid />
-                    </div>
-                    <div class="col">
-                        <label for="localidad_cliente" class="block font-bold mb-3">Localidad</label>
-                        <InputText id="localidad_cliente" v-model.trim="editarClientes.localidad_cliente" fluid />
-                    </div>
-                </div>
-                <div class="mt-3">
-                    <label for="provincia_cliente" class="block font-bold mb-3">Provincia</label>
-                    <InputText id="provincia_cliente" v-model.trim="editarClientes.provincia_cliente" fluid />
-                </div>
-                <div class="row mt-3">
-                    <div class="col">
-                        <label for="zonas_distribucion_cliente" class="block font-bold mb-3">Zonas de
-                            distribución</label>
-                        <InputText id="zonas_distribucion_cliente"
-                            v-model.trim="editarClientes.zonas_distribucion_cliente" fluid />
-                    </div>
-                    <div class="col">
-                        <label for="nombre_zonas_distribucion_cliente" class="block font-bold mb-3">Nombre zona
-                            distribución</label>
-                        <InputText id="nombre_zonas_distribucion_cliente"
-                            v-model.trim="editarClientes.nombre_zonas_distribucion_cliente" fluid />
-                    </div>
-                </div>
-                <div class="mt-3">
-                    <label for="nro_whatsapp_cliente" class="block font-bold mb-3">Número de WhatsApp</label>
-                    <InputMask id="nro_whatsapp_cliente" v-model.trim="editarClientes.nro_whatsapp_cliente"
-                        mask="+549999999999" placeholder="+549999999999" fluid />
-                </div>
-                <div class="mt-3 d-flex flex-column">
-                    <label for="rubrosventas" class="block font-bold mb-3">Rubros de ventas</label>
-                    <MultiSelect v-model="editarClientes.rubros_ventas" display="chip" :options="rubrosdeventas"
-                        optionLabel="rubros_nombres" filter :maxSelectedLabels="3" class="w-full md:w-80" />
-                </div>
-                <div class="d-flex justify-content-end mt-5 gap-2">
-                    <Button label="Cancelar" icon="pi pi-times" text @click="hideEditDialog" />
-                    <Button label="Guardar" icon="pi pi-check" class="p-button-sm" @click="guardarClientes" />
-                </div>
-            </Dialog>
-        </div>
-        <Toast />
+    <div class="d-flex justify-content-end mt-5 gap-2">
+        <Button label="Cancelar" icon="pi pi-times" text @click="hideDialog" />
+        <Button label="Guardar" icon="pi pi-check" class="p-button-sm" @click="agregarClientes" />
     </div>
+
+</Dialog>
+<Dialog v-model:visible="deleteclientesDialog" :style="{ width: '450px' }" header="Eliminar clientes" modal
+    class="p-fluid" :draggable="true" :closable="true" :modal="true">
+    <div class="flex items-center gap-4">
+        <span v-if="selectedClientes && selectedClientes.length">¿Estás seguro de que quieres borrar los
+            clientes
+            seleccionados?</span>
+    </div>
+    <template #footer>
+        <Button label="No" icon="pi pi-times" text @click="deleteclientesDialog = false" severity="secondary"
+            variant="text" />
+        <Button label="Si" icon="pi pi-check" text @click="deleteSelected" severity="danger" />
+    </template>
+</Dialog>
+<Dialog v-model:visible="clientesEditDialog" :style="{ width: '650px' }" header="Editar cliente" modal class="p-fluid"
+    :draggable="true" :closable="true">
+    <div class="d-flex flex-column">
+        <label for="habilitado" class="block font-bold mb-3">Estado</label>
+        <ToggleSwitch id="habilitado" v-model="editarClientes.habilitado" aria-label="Habilitado" />
+    </div>
+    <div class="mt-3 row">
+        <div class="col">
+            <label for="nombre" class="block font-bold mb-3">Nombre</label>
+            <InputText id="nombre" v-model.trim="editarClientes.nombre_cliente" fluid />
+        </div>
+        <div class="col">
+            <label for="perfilcomercial_cliente" class="block font-bold mb-3">Perfil comercial</label>
+            <Select id="perfilcomercial_cliente" :options="perfilcomercial" option-label="CLC1_NOMBRE"
+                option-value="CLC1_CLASIF_1" v-model.trim="editarClientes.perfilcomercial_cliente" fluid />
+        </div>
+    </div>
+    <div class="mt-3 row">
+        <div class="col">
+            <label for="domicilio_cliente" class="block font-bold mb-3">Domicilio</label>
+            <InputText id="domicilio_cliente" v-model.trim="editarClientes.domicilio_cliente" fluid />
+        </div>
+        <div class="col">
+            <label for="localidad_cliente" class="block font-bold mb-3">Localidad</label>
+            <InputText id="localidad_cliente" v-model.trim="editarClientes.localidad_cliente" fluid />
+        </div>
+    </div>
+    <div class="mt-3">
+        <label for="provincia_cliente" class="block font-bold mb-3">Provincia</label>
+        <InputText id="provincia_cliente" v-model.trim="editarClientes.provincia_cliente" fluid />
+    </div>
+    <div class="row mt-3">
+        <div class="col">
+            <label for="zonas_distribucion_cliente" class="block font-bold mb-3">Zonas de
+                distribución</label>
+            <InputText id="zonas_distribucion_cliente" v-model.trim="editarClientes.zonas_distribucion_cliente" fluid />
+        </div>
+        <div class="col">
+            <label for="nombre_zonas_distribucion_cliente" class="block font-bold mb-3">Nombre zona
+                distribución</label>
+            <InputText id="nombre_zonas_distribucion_cliente"
+                v-model.trim="editarClientes.nombre_zonas_distribucion_cliente" fluid />
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col">
+            <label for="nro_whatsapp_cliente" class="block font-bold mb-3">Número de WhatsApp</label>
+            <InputMask id="nro_whatsapp_cliente" v-model.trim="editarClientes.nro_whatsapp_cliente" mask="+549999999999"
+                placeholder="+549999999999" fluid />
+        </div>
+        <div class="col">
+            <label for="contacto" class="block font-bold mb-3">Contacto</label>
+            <InputText id="contacto" v-model.trim="editarClientes.contacto" fluid />
+        </div>
+    </div>
+    <div class="mt-3 d-flex flex-column">
+        <label for="rubrosventas" class="block font-bold mb-3">Rubros de ventas</label>
+        <MultiSelect v-model="editarClientes.rubros_ventas" display="chip" :options="rubrosdeventas"
+            optionLabel="rubros_nombres" filter :maxSelectedLabels="3" class="w-full md:w-80" />
+    </div>
+    <div class="d-flex justify-content-end mt-5 gap-2">
+        <Button label="Cancelar" icon="pi pi-times" text @click="hideEditDialog" />
+        <Button label="Guardar" icon="pi pi-check" class="p-button-sm" @click="guardarClientes" />
+    </div>
+</Dialog>
+</div>
+<Toast />
+</div>
 </template>
 
 <script>
@@ -315,6 +334,7 @@ export default {
             clientes: [],
             filters: {
                 'global': { value: null, matchMode: 'contains' },
+                'habilitado': { value: null, matchMode: 'equals' },
                 'cod_cliente': { value: null, matchMode: 'contains' },
                 'nombre_cliente': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
                 'perfilcomercial_cliente': { operator: FilterOperator.OR, constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }] },
@@ -325,6 +345,7 @@ export default {
                 'nombre_zonas_distribucion_cliente': { value: null, matchMode: 'contains' },
                 'nro_whatsapp_cliente': { value: null, matchMode: 'contains' },
                 'rubros_ventas': { value: null, matchMode: 'contains' },
+                'contacto': { value: null, matchMode: 'contains' }
             },
             selectedClientes: null,
             cargando: false,
@@ -344,6 +365,26 @@ export default {
         }
     },
     methods: {
+        initFilters() {
+            this.filters = {
+                'global': { value: null, matchMode: 'contains' },
+                'habilitado': { value: null, matchMode: 'equals' },
+                'cod_cliente': { value: null, matchMode: 'contains' },
+                'nombre_cliente': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
+                'perfilcomercial_cliente': { operator: FilterOperator.OR, constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }] },
+                'domicilio_cliente': { value: null, matchMode: 'contains' },
+                'localidad_cliente': { value: null, matchMode: 'contains' },
+                'provincia_cliente': { value: null, matchMode: 'contains' },
+                'zonas_distribucion_cliente': { value: null, matchMode: 'contains' },
+                'nombre_zonas_distribucion_cliente': { value: null, matchMode: 'contains' },
+                'nro_whatsapp_cliente': { value: null, matchMode: 'contains' },
+                'rubros_ventas': { value: null, matchMode: 'contains' },
+                'contacto': { value: null, matchMode: 'contains' }
+            };
+        },
+        clearFilter() {
+            this.initFilters();
+        },
         openNew() {
             this.clientesDialog = true;
         },
@@ -422,7 +463,8 @@ export default {
                     nombre_zonas_distribucion_cliente: getClientbyCode.data[0].ZDIS_NOMBRE,
                     nro_whatsapp_cliente: parsePhoneNumber(getClientbyCode.data[0].CLIE_FAX, 'AR').number,
                     rubros_ventas: this.selectedRubros || [],
-                    habilitado: false
+                    habilitado: false,
+                    contacto: ''
                 }, {
                     headers: {
                         'Authorization': `Bearer ${this.token}`
@@ -489,7 +531,8 @@ export default {
                 nombre_zonas_distribucion_cliente: this.editarClientes.nombre_zonas_distribucion_cliente,
                 nro_whatsapp_cliente: this.editarClientes.nro_whatsapp_cliente,
                 rubros_ventas: this.editarClientes.rubros_ventas,
-                habilitado: this.editarClientes.habilitado
+                habilitado: this.editarClientes.habilitado,
+                contacto: this.editarClientes.contacto
             }, {
                 headers: {
                     'Authorization': `Bearer ${this.token}`

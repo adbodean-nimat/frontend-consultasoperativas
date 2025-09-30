@@ -393,15 +393,4 @@ export default {
   height: auto;
   margin-left: 5px;
 }
-
-.encabezado-titulo {
-  background-color: #008645;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-  margin-top: 10px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.5rem 0.5rem;
-}
 </style>

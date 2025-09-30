@@ -195,9 +195,8 @@
                 <div class="card my-0 directive-fullscreen-wrapper-grid h-screen" v-if="articulos.length > 0">
                     <DataTable v-model:filters="filters" filter-display="menu" :loading="cargando" :value="articulos"
                         selection-mode="multiple" row-group-mode="subheader" group-rows-by="RUBC_NOMBRE"
-                        resizableColumns columnResizeMode="fit" size="small" :row-class="rowClass" scrollable
-                        scroll-height="flex" paginator :rows="50" showGridlines
-                        :rowsPerPageOptions="[50, 100, 200, articulos.length <= 500 ? 500 : articulos.length]"
+                        resizableColumns columnResizeMode="fit" size="small" :row-class="rowClass" scrollable paginator
+                        :rows="articulos.length" scroll-height="flex" showGridlines
                         :globalFilterFields="['Comprador', 'ARTS_ARTICULO_EMP', 'ARTS_NOMBRE', 'RUBC_NOMBRE', '1_Stock-NP_más_bajo_que_SM_Sin_OC', '2_Stock-NP_más_bajo_que SM_Con_OC_sigue_abajo', '3_Stock-NP_más_bajo_que_SM_Con_OC_queda_arriba']">
                         <template #empty>No se han encontrado datos. </template>
                         <template #loading>Cargando datos. Por favor, espere. </template>
@@ -276,7 +275,7 @@
                             </template>
                         </Column> -->
                         <template #groupheader="slotProps">
-                            <div class="m-0 p-2" style="background: var(--p-emerald-100);">
+                            <div class="m-0 p-2 text-white" style="background: #007c3b;">
                                 <span class="fs-6 fw-semibold fst-italic">{{ slotProps.data.ARCO_RUBRO_COMPRA }} - {{
                                     slotProps.data.RUBC_NOMBRE }} - {{ calculateTotal(slotProps.data.Nombre_RC) }}
                                     items</span>
@@ -335,8 +334,8 @@
                         <Column field="Stock_mín_2y4" header="Stock Mín Uni." class="text-end">
                             <template #body="slotProps">
                                 <span :class="slotProps.data['Stock_mín_2y4'] === 0 ? 'text-white' : null"
-                                    style="font-size: small;">{{
-                                        slotProps.data['Stock_mín_2y4'] }}</span>
+                                    style="font-size: small;">{{ Number(slotProps.data['Stock_mín_2y4']).toFixed(2)
+                                    }}</span>
                             </template>
                         </Column>
                         <Column field="Días_stock_mínimo" header="Stock Mín Días" class="text-end">
@@ -387,8 +386,14 @@
                             </template>
                         </Column>
                         <Column field="Stock-NP" header="Stock - NP" class="text-end">
-                            <template #body="slotProps">
-                                <span style="font-size: small;">{{ slotProps.data['Stock-NP'] }}</span>
+                            <template #body="{ data, field }">
+                                <div
+                                    :class="data['1_Stock-NP_más_bajo_que_SM_Sin_OC'] === 1 ? 'text-white bg-danger' :
+                                        data['2_Stock-NP_más_bajo_que SM_Con_OC_sigue_abajo'] === 1 ? 'text-white bg-warning' :
+                                            data['3_Stock-NP_más_bajo_que_SM_Con_OC_queda_arriba'] === 1 ? 'text-white bg-primary' : 'bg-success-subtle'">
+                                    <span style="font-size: small;">{{ data[field] }}</span>
+                                </div>
+
                             </template>
                         </Column>
                         <Column field="Stock-NP_días" header="Stock - NP días" class="text-end">
@@ -410,7 +415,8 @@
                         </Column>
                         <Column field="Consumo_diario" header="Cons. diario" class="text-center">
                             <template #body="slotProps">
-                                <span style="font-size: small;">{{ slotProps.data['Consumo_diario'] }}</span>
+                                <span style="font-size: small;">{{ Number(slotProps.data['Consumo_diario']).toFixed(4)
+                                }}</span>
                             </template>
                         </Column>
                         <Column field="Fecha_desde_TP1_y_2_y_MS4" header="Desde" class="text-end">
