@@ -173,134 +173,128 @@
                             </router-link>
                         </div>
                     </div>
-                    <div class="col col-h">
-                        <div v-if="IsAllow === 'abodean' || IsAllow === 'dvazquez' || IsAllow === 'ejescobar' || IsAllow === 'gescobar'"
-                            class="col col-h">
-                            <router-link to="/consultainformesacindarentrefechas">
-                                <div class="d-flex flex-column justify-content-between rounded-top bg-white">
+                    <div class="col col-h"
+                        v-if="IsAllow === 'abodean' || IsAllow === 'dvazquez' || IsAllow === 'ejescobar' || IsAllow === 'gescobar'">
+                        <router-link to="/consultainformesacindarentrefechas">
+                            <div class="d-flex flex-column justify-content-between rounded-top bg-white">
+                                <div
+                                    class="column d-flex flex-row justify-content-between p-3 text-secondary link-success">
                                     <div
-                                        class="column d-flex flex-row justify-content-between p-3 text-secondary link-success">
-                                        <div
-                                            class="d-flex justify-content-center align-items-center flex-shrink-0 icon rounded">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="#fff"
-                                                class="bi bi-table" viewBox="0 0 16 16">
-                                                <path
-                                                    d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm15 2h-4v3h4V4zm0 4h-4v3h4V8zm0 4h-4v3h3a1 1 0 0 0 1-1v-2zm-5 3v-3H6v3h4zm-5 0v-3H1v2a1 1 0 0 0 1 1h3zm-4-4h4V8H1v3zm0-4h4V4H1v3zm5-3v3h4V4H6zm4 4H6v3h4V8z" />
-                                            </svg>
-                                        </div>
-                                        <div class="title-column" style="text-align: right;">
-                                            <p>Informes Acindar</p>
-                                        </div>
+                                        class="d-flex justify-content-center align-items-center flex-shrink-0 icon rounded">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="#fff"
+                                            class="bi bi-table" viewBox="0 0 16 16">
+                                            <path
+                                                d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm15 2h-4v3h4V4zm0 4h-4v3h4V8zm0 4h-4v3h3a1 1 0 0 0 1-1v-2zm-5 3v-3H6v3h4zm-5 0v-3H1v2a1 1 0 0 0 1 1h3zm-4-4h4V8H1v3zm0-4h4V4H1v3zm5-3v3h4V4H6zm4 4H6v3h4V8z" />
+                                        </svg>
+                                    </div>
+                                    <div class="title-column" style="text-align: right;">
+                                        <p>Informes Acindar</p>
                                     </div>
                                 </div>
-                                <div
-                                    class="column-question text-center h-10 d-flex justify-content-between align-items-center px-4 bg-white">
-                                    <span class="fs-6"></span>
-                                    <span class="fs-6">
-                                        <div id="tooltip" data-toggle="tooltip" data-placement="right"
-                                            title="Consulta informes de Acindar">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-                                                fill="currentColor" class="bi bi-question-circle-fill text-secondary"
-                                                viewBox="0 0 16 16">
-                                                <path
-                                                    d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.496 6.033h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286a.237.237 0 0 0 .241.247zm2.325 6.443c.61 0 1.029-.394 1.029-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94 0 .533.425.927 1.01.927z" />
-                                            </svg>
-                                        </div>
-                                    </span>
-                                </div>
-                                <div
-                                    class="column-bottom text-center h-10 d-flex justify-content-between align-items-center rounded-bottom px-4 bg-light">
-                                    <span class="fs-6 text-secondary">1.3.0</span>
-                                    <span class="fs-6 text-secondary">CIA</span>
-                                </div>
-                            </router-link>
-                        </div>
+                            </div>
+                            <div
+                                class="column-question text-center h-10 d-flex justify-content-between align-items-center px-4 bg-white">
+                                <span class="fs-6"></span>
+                                <span class="fs-6">
+                                    <div id="tooltip" data-toggle="tooltip" data-placement="right"
+                                        title="Consulta informes de Acindar">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                            fill="currentColor" class="bi bi-question-circle-fill text-secondary"
+                                            viewBox="0 0 16 16">
+                                            <path
+                                                d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.496 6.033h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286a.237.237 0 0 0 .241.247zm2.325 6.443c.61 0 1.029-.394 1.029-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94 0 .533.425.927 1.01.927z" />
+                                        </svg>
+                                    </div>
+                                </span>
+                            </div>
+                            <div
+                                class="column-bottom text-center h-10 d-flex justify-content-between align-items-center rounded-bottom px-4 bg-light">
+                                <span class="fs-6 text-secondary">1.3.0</span>
+                                <span class="fs-6 text-secondary">CIA</span>
+                            </div>
+                        </router-link>
                     </div>
-                    <div class="col col-h">
-                        <div v-if="IsAllow === 'abodean' || IsAllow === 'dvazquez' || IsAllow === 'ejescobar' || IsAllow === 'gescobar' || IsAllow === 'cchalliol' || IsAllow === 'saraujo'"
-                            class="col col-h">
-                            <router-link to="/gestiondecompras">
-                                <div class="d-flex flex-column justify-content-between rounded-top bg-white">
+                    <div class="col col-h"
+                        v-if="IsAllow === 'abodean' || IsAllow === 'dvazquez' || IsAllow === 'ejescobar' || IsAllow === 'gescobar' || IsAllow === 'cchalliol' || IsAllow === 'saraujo'">
+                        <router-link to="/gestiondecompras">
+                            <div class="d-flex flex-column justify-content-between rounded-top bg-white">
+                                <div
+                                    class="column d-flex flex-row justify-content-between p-3 text-secondary link-success">
                                     <div
-                                        class="column d-flex flex-row justify-content-between p-3 text-secondary link-success">
-                                        <div
-                                            class="d-flex justify-content-center align-items-center flex-shrink-0 icon rounded">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="#fff"
-                                                class="bi bi-cart4" viewBox="0 0 16 16">
-                                                <path
-                                                    d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5M3.14 5l.5 2H5V5zM6 5v2h2V5zm3 0v2h2V5zm3 0v2h1.36l.5-2zm1.11 3H12v2h.61zM11 8H9v2h2zM8 8H6v2h2zM5 8H3.89l.5 2H5zm0 5a1 1 0 1 0 0 2 1 1 0 0 0 0-2m-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0m9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2m-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0" />
-                                            </svg>
-                                        </div>
-                                        <div class="title-column" style="text-align: right;">
-                                            <p>Gestión de Compras</p>
-                                        </div>
+                                        class="d-flex justify-content-center align-items-center flex-shrink-0 icon rounded">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="#fff"
+                                            class="bi bi-cart4" viewBox="0 0 16 16">
+                                            <path
+                                                d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5M3.14 5l.5 2H5V5zM6 5v2h2V5zm3 0v2h2V5zm3 0v2h1.36l.5-2zm1.11 3H12v2h.61zM11 8H9v2h2zM8 8H6v2h2zM5 8H3.89l.5 2H5zm0 5a1 1 0 1 0 0 2 1 1 0 0 0 0-2m-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0m9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2m-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0" />
+                                        </svg>
+                                    </div>
+                                    <div class="title-column" style="text-align: right;">
+                                        <p>Gestión de Compras</p>
                                     </div>
                                 </div>
-                                <div
-                                    class="column-question text-center h-10 d-flex justify-content-between align-items-center px-4 bg-white">
-                                    <span class="fs-6"></span>
-                                    <span class="fs-6">
-                                        <div id="tooltip" data-toggle="tooltip" data-placement="right"
-                                            title="Ingresar a la gestión de compras.">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-                                                fill="currentColor" class="bi bi-question-circle-fill text-secondary"
-                                                viewBox="0 0 16 16">
-                                                <path
-                                                    d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.496 6.033h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286a.237.237 0 0 0 .241.247zm2.325 6.443c.61 0 1.029-.394 1.029-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94 0 .533.425.927 1.01.927z" />
-                                            </svg>
-                                        </div>
-                                    </span>
-                                </div>
-                                <div
-                                    class="column-bottom text-center h-10 d-flex justify-content-between align-items-center rounded-bottom px-4 bg-light">
-                                    <span class="fs-6 text-secondary">1.0.0</span>
-                                    <span class="fs-6 text-secondary">GDC</span>
-                                </div>
-                            </router-link>
-                        </div>
+                            </div>
+                            <div
+                                class="column-question text-center h-10 d-flex justify-content-between align-items-center px-4 bg-white">
+                                <span class="fs-6"></span>
+                                <span class="fs-6">
+                                    <div id="tooltip" data-toggle="tooltip" data-placement="right"
+                                        title="Ingresar a la gestión de compras.">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                            fill="currentColor" class="bi bi-question-circle-fill text-secondary"
+                                            viewBox="0 0 16 16">
+                                            <path
+                                                d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.496 6.033h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286a.237.237 0 0 0 .241.247zm2.325 6.443c.61 0 1.029-.394 1.029-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94 0 .533.425.927 1.01.927z" />
+                                        </svg>
+                                    </div>
+                                </span>
+                            </div>
+                            <div
+                                class="column-bottom text-center h-10 d-flex justify-content-between align-items-center rounded-bottom px-4 bg-light">
+                                <span class="fs-6 text-secondary">1.0.0</span>
+                                <span class="fs-6 text-secondary">GDC</span>
+                            </div>
+                        </router-link>
                     </div>
-                    <div class="col col-h">
-                        <div v-if="IsAllow === 'abodean' || IsAllow === 'dvazquez' || IsAllow === 'ejescobar' || IsAllow === 'iniez' || IsAllow === 'vsevero'"
-                            class="col col-h">
-                            <router-link to="/gestiondedistribucion">
-                                <div class="d-flex flex-column justify-content-between rounded-top bg-white">
+                    <div class="col col-h"
+                        v-if="IsAllow === 'abodean' || IsAllow === 'dvazquez' || IsAllow === 'ejescobar' || IsAllow === 'iniez' || IsAllow === 'vsevero'">
+                        <router-link to="/gestiondedistribucion">
+                            <div class="d-flex flex-column justify-content-between rounded-top bg-white">
+                                <div
+                                    class="column d-flex flex-row justify-content-between p-3 text-secondary link-success">
                                     <div
-                                        class="column d-flex flex-row justify-content-between p-3 text-secondary link-success">
-                                        <div
-                                            class="d-flex justify-content-center align-items-center flex-shrink-0 icon rounded">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="#fff"
-                                                class="bi bi-truck" viewBox="0 0 16 16">
-                                                <path
-                                                    d="M0 3.5A1.5 1.5 0 0 1 1.5 2h9A1.5 1.5 0 0 1 12 3.5V5h1.02a1.5 1.5 0 0 1 1.17.563l1.481 1.85a1.5 1.5 0 0 1 .329.938V10.5a1.5 1.5 0 0 1-1.5 1.5H14a2 2 0 1 1-4 0H5a2 2 0 1 1-3.998-.085A1.5 1.5 0 0 1 0 10.5zm1.294 7.456A2 2 0 0 1 4.732 11h5.536a2 2 0 0 1 .732-.732V3.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5v7a.5.5 0 0 0 .294.456M12 10a2 2 0 0 1 1.732 1h.768a.5.5 0 0 0 .5-.5V8.35a.5.5 0 0 0-.11-.312l-1.48-1.85A.5.5 0 0 0 13.02 6H12zm-9 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2m9 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2" />
-                                            </svg>
-                                        </div>
-                                        <div class="title-column" style="text-align: right;">
-                                            <p>Gestión de Distribución</p>
-                                        </div>
+                                        class="d-flex justify-content-center align-items-center flex-shrink-0 icon rounded">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="#fff"
+                                            class="bi bi-truck" viewBox="0 0 16 16">
+                                            <path
+                                                d="M0 3.5A1.5 1.5 0 0 1 1.5 2h9A1.5 1.5 0 0 1 12 3.5V5h1.02a1.5 1.5 0 0 1 1.17.563l1.481 1.85a1.5 1.5 0 0 1 .329.938V10.5a1.5 1.5 0 0 1-1.5 1.5H14a2 2 0 1 1-4 0H5a2 2 0 1 1-3.998-.085A1.5 1.5 0 0 1 0 10.5zm1.294 7.456A2 2 0 0 1 4.732 11h5.536a2 2 0 0 1 .732-.732V3.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5v7a.5.5 0 0 0 .294.456M12 10a2 2 0 0 1 1.732 1h.768a.5.5 0 0 0 .5-.5V8.35a.5.5 0 0 0-.11-.312l-1.48-1.85A.5.5 0 0 0 13.02 6H12zm-9 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2m9 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2" />
+                                        </svg>
+                                    </div>
+                                    <div class="title-column" style="text-align: right;">
+                                        <p>Gestión de Distribución</p>
                                     </div>
                                 </div>
-                                <div
-                                    class="column-question text-center h-10 d-flex justify-content-between align-items-center px-4 bg-white">
-                                    <span class="fs-6"></span>
-                                    <span class="fs-6">
-                                        <div id="tooltip" data-toggle="tooltip" data-placement="right"
-                                            title="Ingresar a la gestión de Distribución.">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-                                                fill="currentColor" class="bi bi-question-circle-fill text-secondary"
-                                                viewBox="0 0 16 16">
-                                                <path
-                                                    d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.496 6.033h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286a.237.237 0 0 0 .241.247zm2.325 6.443c.61 0 1.029-.394 1.029-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94 0 .533.425.927 1.01.927z" />
-                                            </svg>
-                                        </div>
-                                    </span>
-                                </div>
-                                <div
-                                    class="column-bottom text-center h-10 d-flex justify-content-between align-items-center rounded-bottom px-4 bg-light">
-                                    <span class="fs-6 text-secondary">1.0.0</span>
-                                    <span class="fs-6 text-secondary">GDD</span>
-                                </div>
-                            </router-link>
-                        </div>
+                            </div>
+                            <div
+                                class="column-question text-center h-10 d-flex justify-content-between align-items-center px-4 bg-white">
+                                <span class="fs-6"></span>
+                                <span class="fs-6">
+                                    <div id="tooltip" data-toggle="tooltip" data-placement="right"
+                                        title="Ingresar a la gestión de Distribución.">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                            fill="currentColor" class="bi bi-question-circle-fill text-secondary"
+                                            viewBox="0 0 16 16">
+                                            <path
+                                                d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.496 6.033h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286a.237.237 0 0 0 .241.247zm2.325 6.443c.61 0 1.029-.394 1.029-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94 0 .533.425.927 1.01.927z" />
+                                        </svg>
+                                    </div>
+                                </span>
+                            </div>
+                            <div
+                                class="column-bottom text-center h-10 d-flex justify-content-between align-items-center rounded-bottom px-4 bg-light">
+                                <span class="fs-6 text-secondary">1.0.0</span>
+                                <span class="fs-6 text-secondary">GDD</span>
+                            </div>
+                        </router-link>
                     </div>
                 </div>
             </div>

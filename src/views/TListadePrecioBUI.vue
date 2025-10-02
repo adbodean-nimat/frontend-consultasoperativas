@@ -153,8 +153,8 @@ export default {
     updateData: function (e) {
       var tkn = this.token
       var urlApi = this.UrlApiBase
-      console.log(JSON.stringify(e.data.models[0].id))
-      console.log(JSON.parse(JSON.stringify(e.data.models[0], ["arts_articulo_emp", "arts_nombre", "grupo_del_art", "comentario", "nro_orden_art"])),)
+      // console.log(JSON.stringify(e.data.models[0].id))
+      // console.log(JSON.parse(JSON.stringify(e.data.models[0], ["arts_articulo_emp", "arts_nombre", "grupo_del_art", "comentario", "nro_orden_art"])),)
       kendo.jQuery.ajax({
         method: 'PUT',
         url: urlApi + JSON.stringify(e.data.models[0].id),
@@ -216,13 +216,13 @@ export default {
     onError: function (e) {
       console.log(e.status);
       // displays "error"
-      console.log(e.error);
+      console.error(e.error);
     },
     requestEnd: function (e) {
       var response = e.response;
       var type = e.type;
       /* The result can be observed in the DevTools(F12) console of the browser. */
-      console.log("type => " + type);
+      // console.log("type => " + type);
       // console.log(response)
       /* The result can be observed in the DevTools(F12) console of the browser. */
       // console.log(response.length);

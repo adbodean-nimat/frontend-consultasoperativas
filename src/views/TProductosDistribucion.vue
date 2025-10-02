@@ -379,7 +379,6 @@ export default {
       var tkn = this.token
       var urlApi = this.UrlApiBase
       var data = kendo.stringify(e.data.models[0]);
-      console.log(data)
       kendo.jQuery.ajax({
         type: 'POST',
         url: urlApi,
@@ -520,12 +519,12 @@ export default {
     },
     onError: function (e) {
       console.log(e.status);
-      console.log(e.error);
+      console.error(e.error);
     },
     requestEnd: function (e) {
       var response = e.response;
       var type = e.type;
-      console.log(type + " => type");
+      // console.log(type + " => type");
       if (type == "create") {
         e.sender.read();
       }
@@ -535,11 +534,11 @@ export default {
     },
     onError2: function (e) {
       console.log(e.status);
-      console.log(e.error);
+      console.error(e.error);
     },
     requestEnd2: function (e) {
       var type = e.type;
-      console.log(type + " => type 2");
+      // console.log(type + " => type 2");
       if (type == "create") {
         e.sender.read();
       }
@@ -549,11 +548,11 @@ export default {
     },
     onError3: function (e) {
       console.log(e.status);
-      console.log(e.error);
+      console.error(e.error);
     },
     requestEnd3: function (e) {
       var type = e.type;
-      console.log(type + " => type 3");
+      // console.log(type + " => type 3");
       if (type == "create") {
         e.sender.read();
       }

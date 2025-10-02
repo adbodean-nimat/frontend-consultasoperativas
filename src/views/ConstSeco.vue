@@ -52,7 +52,8 @@
             </div>
             <div class="col-sm-3"></div>
             <div class="col-sm bg-secondary text-white d-flex align-items-center">Presupuesto aproximado para
-              <strong><span id="cuadro2"></span>m<sup>2</sup></strong></div>
+              <strong><span id="cuadro2"></span>m<sup>2</sup></strong>
+            </div>
             <div class="col-sm-4"><small>Los precios incluyen dto. financiero del <span
                   id="descuentofinanciero"></span>%<br>Los precios incluyen dto. por volumen del <span
                   id="descuentopormonto"></span>%</small></div>

@@ -132,15 +132,15 @@ export default {
   methods: {
     onError: function (e) {
       console.log(e.status); // displays "error"
-      console.log(e.error);
+      console.error(e.error);
     },
     requestEnd: function (e) {
       var response = e.response;
       var type = e.type;
       /* The result can be observed in the DevTools(F12) console of the browser. */
-      console.log(type + " => type");
+      //console.log(type + " => type");
       /* The result can be observed in the DevTools(F12) console of the browser. */
-      console.log(response.length);
+      //console.log(response.length);
       if (type == "create") {
         e.sender.read();
       } else

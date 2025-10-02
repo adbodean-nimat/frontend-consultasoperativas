@@ -441,6 +441,7 @@ export default {
                     'Authorization': `Bearer ${this.token}`
                 }
             })
+            console.log(getClientbyCode.data[0]);
             if (!getClientbyCode.data[0]) {
                 console.log(getClientbyCode.data[0]);
                 this.$toast.add({ severity: 'error', summary: 'Error', detail: 'No se ha podido agregar el cliente, no se ha encontrado el dato.', life: 3000 });
@@ -459,8 +460,8 @@ export default {
                     domicilio_cliente: getClientbyCode.data[0].CLIE_DOMICILIO,
                     localidad_cliente: getClientbyCode.data[0].CLIE_LOCALIDAD,
                     provincia_cliente: getClientbyCode.data[0].PCIA_NOMBRE,
-                    zonas_distribucion_cliente: getClientbyCode.data[0].CLIE_ZONA_DISTRIB,
-                    nombre_zonas_distribucion_cliente: getClientbyCode.data[0].ZDIS_NOMBRE,
+                    zonas_distribucion_cliente: getClientbyCode.data[0].CLIE_ZONA_DISTRIB || '',
+                    nombre_zonas_distribucion_cliente: getClientbyCode.data[0].ZDIS_NOMBRE || '',
                     nro_whatsapp_cliente: parsePhoneNumber(getClientbyCode.data[0].CLIE_FAX, 'AR').number,
                     rubros_ventas: this.selectedRubros || [],
                     habilitado: false,

@@ -203,7 +203,7 @@
                         <template #header>
                             <div class="d-flex justify-content-between align-items-center">
                                 <ToggleButton v-model="Frozen" onIcon="pi pi-lock" offIcon="pi pi-lock-open"
-                                    onLabel="Inmovilizar" offLabel="Movilizar" />
+                                    onLabel="Inmovilizar" offLabel="Inmovilizar" />
                                 <div class="d-flex justify-end flex-row-reverse align-items-center">
                                     <Button type="button" v-fullscreen="FullScreenGrid" class="mr-2"
                                         style="height: 45px;">
@@ -275,7 +275,7 @@
                             </template>
                         </Column> -->
                         <template #groupheader="slotProps">
-                            <div class="m-0 p-2 text-white" style="background: #007c3b;">
+                            <div class="my-1 p-2 text-white" style="background: #007c3b;">
                                 <span class="fs-6 fw-semibold fst-italic">{{ slotProps.data.ARCO_RUBRO_COMPRA }} - {{
                                     slotProps.data.RUBC_NOMBRE }} - {{ calculateTotal(slotProps.data.Nombre_RC) }}
                                     items</span>
@@ -376,13 +376,13 @@
                         <Column field="Stock_Uni_sin_940_y_sin_950" header="Otros depós." class="text-end">
                             <template #body="slotProps">
                                 <span style="font-size: small;">{{ slotProps.data['Stock_Uni_sin_940_y_sin_950']
-                                    }}</span>
+                                }}</span>
                             </template>
                         </Column>
                         <Column field="Stock_Unidades_todos_los_depós" header="Todos depós." class="text-end">
                             <template #body="slotProps">
                                 <span style="font-size: small;">{{ slotProps.data['Stock_Unidades_todos_los_depós']
-                                    }}</span>
+                                }}</span>
                             </template>
                         </Column>
                         <Column field="Stock-NP" header="Stock - NP" class="text-end">
@@ -416,27 +416,27 @@
                         <Column field="Consumo_diario" header="Cons. diario" class="text-center">
                             <template #body="slotProps">
                                 <span style="font-size: small;">{{ Number(slotProps.data['Consumo_diario']).toFixed(4)
-                                }}</span>
+                                    }}</span>
                             </template>
                         </Column>
                         <Column field="Fecha_desde_TP1_y_2_y_MS4" header="Desde" class="text-end">
                             <template #body="slotProps">
                                 <span style="font-size: small;">{{
                                     slotProps.data['Fecha_desde_TP1_y_2_y_MS4']
-                                    }}</span>
+                                }}</span>
                             </template>
                         </Column>
                         <Column field="Fecha_hasta_TP1_y_2_Y_MS4" header="Hasta" class="text-end">
                             <template #body="slotProps">
                                 <span style="font-size: small;">{{
                                     slotProps.data['Fecha_hasta_TP1_y_2_Y_MS4']
-                                    }}</span>
+                                }}</span>
                             </template>
                         </Column>
                         <Column field="Días_stock_Períodos_1_2_y_4" header="Días" class="text-end">
                             <template #body="slotProps">
                                 <span style="font-size: small;">{{ slotProps.data['Días_stock_Períodos_1_2_y_4']
-                                    }}</span>
+                                }}</span>
                             </template>
                         </Column>
                         <Column field="Cant_remito_MS2yMS4" header="Cant. rtos" class="text-end">
@@ -465,14 +465,14 @@
                             class="text-end">
                             <template #body="slotProps">
                                 <span style="font-size: small;">{{ slotProps.data['Fecha_Ultima_Entrega_Proveedor']
-                                    }}</span>
+                                }}</span>
                             </template>
                         </Column>
                         <Column field="Cantidad_Ultima_Entrega_Proveedor" header="Cant. Última Ent. Proveedor"
                             class="text-end">
                             <template #body="slotProps">
                                 <span style="font-size: small;">{{ slotProps.data['Cantidad_Ultima_Entrega_Proveedor']
-                                    }}</span>
+                                }}</span>
                             </template>
                         </Column>
                         <Column field="Dias_sin_remitos_ventas" header="Días sin remitos ventas" class="text-end">
@@ -484,7 +484,7 @@
                             class="text-end">
                             <template #body="slotProps">
                                 <span style="font-size: small;">{{ slotProps.data['Dias_ultima_entrega_proveedor']
-                                    }}</span>
+                                }}</span>
                             </template>
                         </Column>
                     </DataTable>
@@ -860,14 +860,14 @@ export default {
             }
         },
         async getData() {
-            console.time('getItemReclamadosAlProveedor');
+            //console.time('getItemReclamadosAlProveedor');
             this.getItemReclamadosAlProveedor();
-            console.timeEnd('getItemReclamadosAlProveedor');
-            console.time('getItemVinculadosAOC');
+            //console.timeEnd('getItemReclamadosAlProveedor');
+            //console.time('getItemVinculadosAOC');
             this.getItemVinculadosAOC();
-            console.timeEnd('getItemVinculadosAOC');
+            //console.timeEnd('getItemVinculadosAOC');
             const start = new Date();
-            console.time('getData');
+            //console.time('getData');
             try {
                 dayjs.locale('es-us');
                 dayjs.extend(minMax);
@@ -914,7 +914,7 @@ export default {
                 console.error('Error fetching data:', error);
                 this.$toast.add({ severity: 'error', summary: 'Error', detail: 'No se pudo obtener la información de artículos.', life: 3000 });
             }
-            console.timeEnd('getData');
+            //console.timeEnd('getData');
             const end = new Date();
             this.tiempoejecucion = end.getTime() - start.getTime();
         },

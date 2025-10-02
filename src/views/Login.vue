@@ -80,7 +80,7 @@ export default {
             }
             catch (error) {
                 //console.log(error)
-                console.log(error.toJSON());
+                console.error(error.toJSON());
                 if (error.response.status) {
                     if (error.response.status == 400) {
                         if (error.response.data == "Invalid username/password") {
@@ -93,19 +93,19 @@ export default {
                     if (error.response.status == 500) {
                         this.msg = "Error interno del servidor"
                     }
-                    console.log(error.response.data);
-                    console.log(error.response.status);
-                    console.log(error.response.headers);
+                    console.error(error.response.data);
+                    console.error(error.response.status);
+                    console.error(error.response.headers);
                 } else if (error.request) {
                     // La petición fue hecha pero no se recibió respuesta
                     // `error.request` es una instancia de XMLHttpRequest en el navegador y una instancia de
                     // http.ClientRequest en node.js
-                    console.log(error.request);
+                    console.error(error.request);
                 } else {
                     // Algo paso al preparar la petición que lanzo un Error
-                    console.log('Error', error.message);
+                    console.error('Error', error.message);
                 }
-                console.log(error.config);
+                console.error(error.config);
             }
         }
     },

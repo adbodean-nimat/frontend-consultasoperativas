@@ -358,7 +358,7 @@ export default {
 
                     if (data[i].items[j].items[d].items[e].items.length) {
                       for (var f = 0; f < data[i].items[j].items[d].items[e].items.length; f++) {
-                        console.log((data[i].items[j].items[d].items[e].items[f].nombre_familia_art))
+                        //console.log((data[i].items[j].items[d].items[e].items[f].nombre_familia_art))
                         dataItems.push(data[i].items[j].items[d].items[e].items[f])
                       }
                     }
@@ -419,7 +419,7 @@ export default {
           //rows.splice(ri, 1);
 
           //if (rows[ri].type !== "data") {
-          console.log(rows[ri])
+          // console.log(rows[ri])
           for (var i = 0; i < rows[ri].cells.length; i++) {
             var colspan = rows[ri].cells[i].colSpan
             rows[ri].cells[0].background = '';
@@ -555,7 +555,7 @@ export default {
     },
     onError: function (e) {
       console.log(e.status);
-      console.log(e.error);
+      console.error(e.error);
     },
     requestEnd: function (e) {
       var response = e.response;
