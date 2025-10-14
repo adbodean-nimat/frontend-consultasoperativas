@@ -275,7 +275,7 @@
                             </template>
                         </Column> -->
                         <template #groupheader="slotProps">
-                            <div class="my-1 p-2 text-white" style="background: #007c3b;">
+                            <div class="mt-4 mb-1 p-2 text-white" style="background: #007c3b;">
                                 <span class="fs-6 fw-semibold fst-italic">{{ slotProps.data.ARCO_RUBRO_COMPRA }} - {{
                                     slotProps.data.RUBC_NOMBRE }} - {{ calculateTotal(slotProps.data.Nombre_RC) }}
                                     items</span>
@@ -632,7 +632,7 @@ export default {
             teleport: true,
             pageOnly: true,
             cargando: false,
-            Frozen: false,
+            Frozen: true,
             items: [
                 {
                     label: 'Ver el nro. de Orden de compra',
