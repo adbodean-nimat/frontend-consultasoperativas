@@ -67,6 +67,7 @@ import GestionDeDistribucion from "../views/GestionDistribucion.vue"
 import ParametrosDeDistribucion from "../views/ParametrosdeDistribucion.vue"
 import ListadeClientesDistribucion from "../views/ListadeClientesDistribucion.vue"
 import TiempoEntregasInmediata from "../views/TiempoEntregasInmediata.vue"
+import RatioCompras from "../views/RatioCompras.vue"
 
 const routes = [
   {
@@ -265,6 +266,19 @@ const routes = [
       metaTags: [
         {
           name: 'Parametros de Compras'
+        }      ]
+    }
+  },
+  {
+    path: '/gestiondecompras/ratiocompras',
+    name: 'Ratio de Compras',
+    component: RatioCompras,
+    props: true,
+    meta: {
+      title: 'Ratio de Compras',
+      metaTags: [
+        {
+          name: 'Ratio de Compras'
         }      ]
     }
   },
