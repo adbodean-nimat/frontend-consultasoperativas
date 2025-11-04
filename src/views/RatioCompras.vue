@@ -48,9 +48,8 @@
                         <InputNumber class="w-auto" name="cant_dias_atras" v-model="Cant_días_atrás_para_evaluar_SM4"
                             :min="1" :max="90" fluid>
                         </InputNumber>
-                        <Button icon="pi pi-play" outlined class="!border-2" @click="getData"></Button>
-                        <Button v-if="resultados.data" icon="pi pi-replay" outlined class="!border-2"
-                            @click="resetData"></Button>
+                        <Button icon="pi pi-play" outlined @click="getData"></Button>
+                        <Button v-if="resultados.data" icon="pi pi-replay" outlined @click="resetData"></Button>
                         <template v-if="cargando == true">
                             <ProgressSpinner style="width: 24px; height: 24px; color: var(--primary-color);"
                                 strokeWidth="4" fill="transparent" />
@@ -87,8 +86,8 @@
                 </template>
             </Toolbar>
             <div class="card my-0 h-screen" v-if="resultados.data">
-                <DataTable v-model:filters="filters" :value="resultados.data" scrollable :scrollHeight="400"
-                    responsiveLayout="scroll" :loading="cargando">
+                <DataTable v-model:filters="filters" :value="resultados.data" scrollable responsiveLayout="scroll"
+                    :loading="cargando">
                     <Column field="comprador" header="Comprador">
                         <template #body="slotProps">
                             <span>{{ slotProps.data.comprador }}</span>
@@ -200,7 +199,6 @@ export default {
                     }
                 });
                 if (response.data) {
-                    console.log(response.data);
                     this.cargando = false;
                     this.resultados = response.data;
                 }

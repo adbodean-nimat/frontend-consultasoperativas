@@ -11,8 +11,7 @@
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 text-secondary link-success">
-                                    <div
-                                        class="d-flex justify-content-center align-items-center flex-shrink-0 icon rounded">
+                                    <div class="d-flex justify-content-center align-items-center shrink-0 icon rounded">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="#fff"
                                             class="bi bi-person-lines-fill" viewBox="0 0 16 16">
                                             <path
@@ -53,8 +52,7 @@
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 rounded text-secondary link-success">
-                                    <div
-                                        class="d-flex justify-content-center align-items-center flex-shrink-0 icon rounded">
+                                    <div class="d-flex justify-content-center align-items-center shrink-0 icon rounded">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="#fff"
                                             class="bi bi-person-lines-fill" viewBox="0 0 16 16">
                                             <path
@@ -94,8 +92,7 @@
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 rounded text-secondary link-success">
-                                    <div
-                                        class="d-flex justify-content-center align-items-center flex-shrink-0 icon rounded">
+                                    <div class="d-flex justify-content-center align-items-center shrink-0 icon rounded">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="#fff"
                                             class="bi bi-list-columns-reverse" viewBox="0 0 16 16">
                                             <path fill-rule="evenodd"
@@ -135,8 +132,7 @@
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 rounded text-secondary link-success">
-                                    <div
-                                        class="d-flex justify-content-center align-items-center flex-shrink-0 icon rounded">
+                                    <div class="d-flex justify-content-center align-items-center shrink-0 icon rounded">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="#fff"
                                             class="bi bi-list-columns-reverse" viewBox="0 0 16 16">
                                             <path fill-rule="evenodd"
@@ -176,8 +172,7 @@
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 rounded text-secondary link-success">
-                                    <div
-                                        class="d-flex justify-content-center align-items-center flex-shrink-0 icon rounded">
+                                    <div class="d-flex justify-content-center align-items-center shrink-0 icon rounded">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="#fff"
                                             class="bi bi-list-columns-reverse" viewBox="0 0 16 16">
                                             <path fill-rule="evenodd"
@@ -218,8 +213,7 @@
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 rounded text-secondary link-success">
-                                    <div
-                                        class="d-flex justify-content-center align-items-center flex-shrink-0 icon rounded">
+                                    <div class="d-flex justify-content-center align-items-center shrink-0 icon rounded">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="#fff"
                                             class="bi bi-list-columns-reverse" viewBox="0 0 16 16">
                                             <path fill-rule="evenodd"
@@ -259,8 +253,7 @@
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 rounded text-secondary link-success">
-                                    <div
-                                        class="d-flex justify-content-center align-items-center flex-shrink-0 icon rounded">
+                                    <div class="d-flex justify-content-center align-items-center shrink-0 icon rounded">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="#fff"
                                             class="bi bi-list-columns-reverse" viewBox="0 0 16 16">
                                             <path fill-rule="evenodd"
@@ -300,8 +293,7 @@
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 rounded text-secondary link-success">
-                                    <div
-                                        class="d-flex justify-content-center align-items-center flex-shrink-0 icon rounded">
+                                    <div class="d-flex justify-content-center align-items-center shrink-0 icon rounded">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="#fff"
                                             class="bi bi-list-columns-reverse" viewBox="0 0 16 16">
                                             <path fill-rule="evenodd"
@@ -341,8 +333,7 @@
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 rounded text-secondary link-success">
-                                    <div
-                                        class="d-flex justify-content-center align-items-center flex-shrink-0 icon rounded">
+                                    <div class="d-flex justify-content-center align-items-center shrink-0 icon rounded">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="#fff"
                                             class="bi bi-list-columns-reverse" viewBox="0 0 16 16">
                                             <path fill-rule="evenodd"
@@ -382,8 +373,7 @@
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 rounded text-secondary link-success">
-                                    <div
-                                        class="d-flex justify-content-center align-items-center flex-shrink-0 icon rounded">
+                                    <div class="d-flex justify-content-center align-items-center shrink-0 icon rounded">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="#fff"
                                             class="bi bi-list-columns-reverse" viewBox="0 0 16 16">
                                             <path fill-rule="evenodd"
@@ -423,8 +413,7 @@
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 rounded text-secondary link-success">
-                                    <div
-                                        class="d-flex justify-content-center align-items-center flex-shrink-0 icon rounded">
+                                    <div class="d-flex justify-content-center align-items-center shrink-0 icon rounded">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="#fff"
                                             class="bi bi-list-columns-reverse" viewBox="0 0 16 16">
                                             <path fill-rule="evenodd"
@@ -464,8 +453,7 @@
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 rounded text-secondary link-success">
-                                    <div
-                                        class="d-flex justify-content-center align-items-center flex-shrink-0 icon rounded">
+                                    <div class="d-flex justify-content-center align-items-center shrink-0 icon rounded">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="#fff"
                                             class="bi bi-list-columns-reverse" viewBox="0 0 16 16">
                                             <path fill-rule="evenodd"
@@ -505,8 +493,7 @@
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 rounded text-secondary link-success">
-                                    <div
-                                        class="d-flex justify-content-center align-items-center flex-shrink-0 icon rounded">
+                                    <div class="d-flex justify-content-center align-items-center shrink-0 icon rounded">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="#fff"
                                             class="bi bi-list-columns-reverse" viewBox="0 0 16 16">
                                             <path fill-rule="evenodd"
@@ -546,8 +533,7 @@
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 rounded text-secondary link-success">
-                                    <div
-                                        class="d-flex justify-content-center align-items-center flex-shrink-0 icon rounded">
+                                    <div class="d-flex justify-content-center align-items-center shrink-0 icon rounded">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="#fff"
                                             class="bi bi-list-columns-reverse" viewBox="0 0 16 16">
                                             <path fill-rule="evenodd"
@@ -587,8 +573,7 @@
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 rounded text-secondary link-success">
-                                    <div
-                                        class="d-flex justify-content-center align-items-center flex-shrink-0 icon rounded">
+                                    <div class="d-flex justify-content-center align-items-center shrink-0 icon rounded">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="#fff"
                                             class="bi bi-list-columns-reverse" viewBox="0 0 16 16">
                                             <path fill-rule="evenodd"
@@ -628,8 +613,7 @@
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 rounded text-secondary link-success">
-                                    <div
-                                        class="d-flex justify-content-center align-items-center flex-shrink-0 icon rounded">
+                                    <div class="d-flex justify-content-center align-items-center shrink-0 icon rounded">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="#fff"
                                             class="bi bi-list-columns-reverse" viewBox="0 0 16 16">
                                             <path fill-rule="evenodd"
@@ -669,8 +653,7 @@
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 rounded text-secondary link-success">
-                                    <div
-                                        class="d-flex justify-content-center align-items-center flex-shrink-0 icon rounded">
+                                    <div class="d-flex justify-content-center align-items-center shrink-0 icon rounded">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="#fff"
                                             class="bi bi-list-columns-reverse" viewBox="0 0 16 16">
                                             <path fill-rule="evenodd"
@@ -710,8 +693,7 @@
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 rounded text-secondary link-success">
-                                    <div
-                                        class="d-flex justify-content-center align-items-center flex-shrink-0 icon rounded">
+                                    <div class="d-flex justify-content-center align-items-center shrink-0 icon rounded">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="#fff"
                                             class="bi bi-list-columns-reverse" viewBox="0 0 16 16">
                                             <path fill-rule="evenodd"
@@ -751,8 +733,7 @@
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 rounded text-secondary link-success">
-                                    <div
-                                        class="d-flex justify-content-center align-items-center flex-shrink-0 icon rounded">
+                                    <div class="d-flex justify-content-center align-items-center shrink-0 icon rounded">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="#fff"
                                             class="bi bi-list-columns-reverse" viewBox="0 0 16 16">
                                             <path fill-rule="evenodd"
@@ -792,8 +773,7 @@
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 rounded text-secondary link-success">
-                                    <div
-                                        class="d-flex justify-content-center align-items-center flex-shrink-0 icon rounded">
+                                    <div class="d-flex justify-content-center align-items-center shrink-0 icon rounded">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="#fff"
                                             class="bi bi-list-columns-reverse" viewBox="0 0 16 16">
                                             <path fill-rule="evenodd"
@@ -834,8 +814,7 @@
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 rounded text-secondary link-success">
-                                    <div
-                                        class="d-flex justify-content-center align-items-center flex-shrink-0 icon rounded">
+                                    <div class="d-flex justify-content-center align-items-center shrink-0 icon rounded">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="#fff"
                                             class="bi bi-list-columns-reverse" viewBox="0 0 16 16">
                                             <path fill-rule="evenodd"
@@ -876,8 +855,7 @@
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 rounded text-secondary link-success">
-                                    <div
-                                        class="d-flex justify-content-center align-items-center flex-shrink-0 icon rounded">
+                                    <div class="d-flex justify-content-center align-items-center shrink-0 icon rounded">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="#fff"
                                             class="bi bi-list-columns-reverse" viewBox="0 0 16 16">
                                             <path fill-rule="evenodd"
@@ -918,8 +896,7 @@
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 rounded text-secondary link-success">
-                                    <div
-                                        class="d-flex justify-content-center align-items-center flex-shrink-0 icon rounded">
+                                    <div class="d-flex justify-content-center align-items-center shrink-0 icon rounded">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="#fff" class="bi bi-stopwatch"
                                             viewBox="0 0 16 16">
                                             <path
