@@ -68,8 +68,8 @@
                                 <InputNumber class="w-auto" name="cant_dias_atras"
                                     v-model="Cant_días_atrás_para_evaluar_SM4" :min="1" :max="90" fluid>
                                 </InputNumber>
-                                <Button icon="pi pi-play" outlined class="!border-2" @click="getData"></Button>
-                                <Button v-if="this.articulos.length > 0" icon="pi pi-replay" outlined class="!border-2"
+                                <Button icon="pi pi-play" outlined class="border-2" @click="getData"></Button>
+                                <Button v-if="this.articulos.length > 0" icon="pi pi-replay" outlined class="border-2"
                                     @click="resetData"></Button>
                                 <template v-if="cargando == true">
                                     <ProgressSpinner style="width: 24px; height: 24px; color: var(--primary-color);"
@@ -195,8 +195,8 @@
                 <div class="card my-0 directive-fullscreen-wrapper-grid h-screen" v-if="articulos.length > 0">
                     <DataTable v-model:filters="filters" filter-display="menu" :loading="cargando" :value="articulos"
                         selection-mode="multiple" row-group-mode="subheader" group-rows-by="RUBC_NOMBRE"
-                        resizableColumns columnResizeMode="fit" size="small" :row-class="rowClass" scrollable paginator
-                        :rows="articulos.length" scroll-height="flex" showGridlines
+                        resizableColumns columnResizeMode="fit" size="small" :row-class="rowClass" scrollable
+                        scroll-height="flex" showGridlines
                         :globalFilterFields="['Comprador', 'ARTS_ARTICULO_EMP', 'ARTS_NOMBRE', 'RUBC_NOMBRE', '1_Stock-NP_más_bajo_que_SM_Sin_OC', '2_Stock-NP_más_bajo_que SM_Con_OC_sigue_abajo', '3_Stock-NP_más_bajo_que_SM_Con_OC_queda_arriba']">
                         <template #empty>No se han encontrado datos. </template>
                         <template #loading>Cargando datos. Por favor, espere. </template>

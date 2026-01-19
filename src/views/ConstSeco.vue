@@ -134,7 +134,7 @@
       </grid>
       <div id="idpdftemplate">
         <div class="page-template">
-          <div class="footer" style="margin-top:50px;margin-right: 15px;text-align:right;color:white;font-size: 14px;">
+          <div class="footer" style="margin-top:50px;margin-right: 30px;text-align:right;color:white;font-size: 14px;">
             <p>(1) Se adiciona un 10% a 30% para refuerzos seg&#250;n proyecto.</p>
             <p>(2) Se adiciona % seg&#250;n proyecto.</p>
             <p>(3) Valor aproximado, se recomienda computar sobre plano.</p>

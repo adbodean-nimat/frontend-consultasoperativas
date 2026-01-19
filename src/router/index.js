@@ -68,6 +68,7 @@ import ParametrosDeDistribucion from "../views/ParametrosdeDistribucion.vue"
 import ListadeClientesDistribucion from "../views/ListadeClientesDistribucion.vue"
 import TiempoEntregasInmediata from "../views/TiempoEntregasInmediata.vue"
 import RatioCompras from "../views/RatioCompras.vue"
+import InfoArticulosCompranCorrientemente2 from '../views/InfoArticulosCompranCorrientemente2.vue'
 
 const routes = [
   {
@@ -292,6 +293,19 @@ const routes = [
       metaTags: [
         {
           name: 'Info de Artículos que se compran corrientemente',
+        }      ]
+    }
+  },
+  {
+    path: '/gestiondecompras/infodearticulosquesecomprancorrientemente2',
+    name: 'Info de Artículos que se compran corrientemente 2',
+    component: InfoArticulosCompranCorrientemente2,
+    props: true,
+    meta: {
+      title: 'Info de Artículos que se compran corrientemente 2',
+      metaTags: [
+        {
+          name: 'Info de Artículos que se compran corrientemente 2',
         }      ]
     }
   },
