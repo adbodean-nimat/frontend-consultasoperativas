@@ -390,9 +390,9 @@ export default {
             // Registramos el componente de cabecera verde
             fullWidthCellRenderer: 'RubroHeaderRenderer',
             rowClassRules: {
-                'text-bg-danger': params => params.data['1_Stock-NP_más_bajo_que_SM_Sin_OC'] === 1,
-                'text-bg-warning': params => params.data['2_Stock-NP_más_bajo_que SM_Con_OC_sigue_abajo'] === 1,
-                'text-bg-primary': params => params.data['3_Stock-NP_más_bajo_que_SM_Con_OC_queda_arriba'] === 1
+                'text-bg-danger': params => params.data['1_Stock-NP_más_bajo_que_SM_Sin_OC'] == 1,
+                'text-bg-warning': params => params.data['2_Stock-NP_más_bajo_que SM_Con_OC_sigue_abajo'] == 1,
+                'text-bg-primary': params => params.data['3_Stock-NP_más_bajo_que_SM_Con_OC_queda_arriba'] == 1
             },
             // Lógica de Context Menu (Mantenida de tu código anterior)
             items: [{ label: 'Ver Orden de Compra', icon: 'pi pi-search', command: () => { /* tu logica */ } }],
@@ -580,7 +580,9 @@ export default {
                             'bg-danger text-white': params => params.data['1_Stock-NP_más_bajo_que_SM_Sin_OC'] == 1,
                             'bg-warning text-dark': params => params.data['2_Stock-NP_más_bajo_que SM_Con_OC_sigue_abajo'] == 1,
                             'bg-primary text-white': params => params.data['3_Stock-NP_más_bajo_que_SM_Con_OC_queda_arriba'] == 1,
-                            'bg-success-subtle text-dark': params => !params.data['1_Stock-NP_más_bajo_que_SM_Sin_OC'] && !params.data['2_Stock-NP_más_bajo_que SM_Con_OC_sigue_abajo'] && !params.data['3_Stock-NP_más_bajo_que_SM_Con_OC_queda_arriba']
+                            'bg-success-subtle text-dark': params => !params.data['1_Stock-NP_más_bajo_que_SM_Sin_OC']
+                                && !params.data['2_Stock-NP_más_bajo_que SM_Con_OC_sigue_abajo']
+                                && !params.data['3_Stock-NP_más_bajo_que_SM_Con_OC_queda_arriba']
                         },
                         cellClass: 'text-end',
                     },
