@@ -69,6 +69,9 @@ import ListadeClientesDistribucion from "../views/ListadeClientesDistribucion.vu
 import TiempoEntregasInmediata from "../views/TiempoEntregasInmediata.vue"
 import RatioCompras from "../views/RatioCompras.vue"
 import InfoArticulosCompranCorrientemente2 from '../views/InfoArticulosCompranCorrientemente2.vue'
+import GestionDeFinanzas from '../views/GestionFinanzas.vue'
+import ImportarMasivoFinanzas from '../views/ImportarMasivoFinanzas.vue'
+import FinanzasView from '../views/FinanzasView.vue'
 
 const routes = [
   {
@@ -203,6 +206,45 @@ const routes = [
           name: 'Consulta Ordenes Compra'
         }
       ]
+    }
+  },
+  {
+    path: '/gestiondefinanzas',
+    name: 'Gestión de Finanzas',
+    component: GestionDeFinanzas,
+    props: true,
+    meta: {
+      title: 'Gestión de Finanzas',
+      metaTags: [
+        {
+          name: 'Gestión de Finanzas',
+        }      ]
+    }
+  },
+  {
+    path: '/gestiondefinanzas/panelfinanzas',
+    name: 'Panel Finanzas',
+    component: FinanzasView,
+    props: true,
+    meta: {
+      title: 'Panel Finanzas',
+      metaTags: [
+        {
+          name: 'Panel Finanzas',
+        }      ]
+    }
+  },
+  {
+    path: '/gestiondefinanzas/importarmasivofinanzas',
+    name: 'Importar masivo de finanzas',
+    component: ImportarMasivoFinanzas,
+    props: true,
+    meta: {
+      title: 'Importar masivo de finanzas',
+      metaTags: [
+        {
+          name: 'Importar masivo de finanzas',
+        }      ]
     }
   },
   {

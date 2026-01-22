@@ -10,6 +10,7 @@ import Lara from '@primeuix/themes/lara'
 /* import Aura from '@primeuix/themes/aura'  */
 import ToastService from 'primevue/toastservice';
 import Tooltip from 'primevue/tooltip'
+import ConfirmationService from 'primevue/confirmationservice';
 import "./style.css";
 import 'primeicons/primeicons.css'
 import 'bootstrap'
@@ -21,6 +22,7 @@ Axios.defaults.headers.common['Authorization'] = `Bearer ${store.state.token}`;
 
 const app = createApp(App);
 app.directive('tooltip', Tooltip);
+app.use(ConfirmationService);
 app.use(router);
 app.use(store); 
 app.use(ToastService);
@@ -55,6 +57,16 @@ app.use(PrimeVue, {
         selectionMessage: '{0} elementos seleccionados',
         emptySelectionMessage: 'No se encontraron resultados',
         emptySearchMessage: 'No se han encontrado resultados',
+        dayNames: ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
+        dayNamesShort: ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"],
+        dayNamesMin: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"],
+        monthNames: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+        monthNamesShort: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
+        today: 'Hoy',
+        clear: 'Limpiar',
+        dateFormat: 'dd/mm/yy',
+        weekHeader: 'Sem',
+        firstDayOfWeek: 1, // 1 para que la semana empiece en Lunes
     },
     theme: {
         preset: Lara, // Change to Lara, Nora, or Aura as needed

@@ -288,7 +288,7 @@ export default {
         '</div>' +
 
         '<div class="row mb-4">' +
-        '<div class="col text-center"><span><small>* Pago en efectivo, tarjeta de crédito en una cuota, tarjeta de débito o medios electónicos. <br> Consúltanos por pagos en cuotas con tarjetas créditos.</small></span></div>' +
+        '<div class="col text-center"><span><small>* Pago en efectivo, tarjeta de débito o medios electónicos. <br> Consúltanos por pagos en cuotas con tarjetas créditos.</small></span></div>' +
         '</div>' +
         '</div>';
 
@@ -336,7 +336,7 @@ export default {
         '</div>' +
 
         '<div class="row mb-4">' +
-        '<div class="col text-center"><span><small>* Pago en efectivo, tarjeta de crédito en una cuota, tarjeta de débito o medios electónicos. <br> Consúltanos por pagos en cuotas con tarjetas créditos.</small></span></div>' +
+        '<div class="col text-center"><span><small>* Pago en efectivo, tarjeta de débito o medios electónicos. <br> Consúltanos por pagos en cuotas con tarjetas créditos.</small></span></div>' +
         '</div>' +
 
         '<div class="row">' +
