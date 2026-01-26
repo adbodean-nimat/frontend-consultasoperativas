@@ -190,8 +190,7 @@
                         :getRowHeight="getRowHeight" :animateRows="true" @grid-ready="onGridReady"
                         :row-class-rules="rowClassRules" :suppress-row-hover-highlight="true"
                         :auto-size-strategy="autoSizeStrategy" :context="{ componentParent: this }"
-                        :is-external-filter-present="isExternalFilterPresent"
-                        :does-external-filter-pass="doesExternalFilterPass" :localeText="localeText">
+                        :localeText="localeText">
                     </ag-grid-vue>
                 </div>
             </div>
@@ -377,6 +376,7 @@ export default {
             cargando: false,
             tiempoejecucion: '',
             rowData: [],
+            datosOriginales: [],
             // Configuración por defecto para todas las columnas
             defaultColDef: {
                 sortable: false,
@@ -650,10 +650,8 @@ export default {
                 this.ageType = 'everyone';
             }
 
-            // 3. Avisar a la grilla que recalcule
-            if (this.gridApi) {
-                this.gridApi.onFilterChanged();
-            }
+            // 3. CAMBIO CLAVE: Recalcular la grilla manualmente
+            this.procesarDatosParaGrid();
         },
         isExternalFilterPresent() {
             return this.ageType !== "everyone";
@@ -821,11 +819,12 @@ export default {
                     }
                 );
 
-                // SIMULACIÓN DE DATOS (Para que pruebes ya mismo)
-                // Reemplaza esto con tu response.data real
-                const datosCrudos = response.data;
+                // 1. Guardamos los datos puros en la variable nueva
+                this.datosOriginales = Object.freeze(response.data);
 
-                this.procesarDatosParaGrid(datosCrudos);
+                // 2. Llamamos a procesar sin pasar datos (usará this.datosOriginales internamente)
+                this.procesarDatosParaGrid();
+
                 this.$toast.add({
                     severity: 'success',
                     summary: 'Éxito',
@@ -846,70 +845,88 @@ export default {
                 this.tiempoejecucion = end.getTime() - start.getTime();
             }
         },
-        // TRANSFORMACIÓN DE DATOS: Insertar filas de cabecera manualmente
-        procesarDatosParaGrid(datos) {
-            if (!datos || datos.length === 0) return;
+        procesarDatosParaGrid() {
+            // Usamos siempre la copia original
+            const datosCompletos = this.datosOriginales;
+            if (!datosCompletos || datosCompletos.length === 0) return;
 
+            // --- PARTE A: CALCULAR CONTADORES (Badges de arriba) ---
+            // Recorremos TODOS los datos para que los botones de colores sigan mostrando el total real
             let countRojos = 0;
             let countAmarillos = 0;
             let countAzules = 0;
             let minDate = null;
             let maxDate = null;
 
-            // 1. Ordenar por Rubro (Crucial)
-            const ordenados = [...datos].sort((a, b) =>
-                (a.RUBC_NOMBRE || '').localeCompare(b.RUBC_NOMBRE || '')
-            );
+            datosCompletos.forEach(item => {
+                if (item['1_Stock-NP_más_bajo_que_SM_Sin_OC'] == 1) countRojos++;
+                if (item['2_Stock-NP_más_bajo_que SM_Con_OC_sigue_abajo'] == 1) countAmarillos++;
+                if (item['3_Stock-NP_más_bajo_que_SM_Con_OC_queda_arriba'] == 1) countAzules++;
 
-            const filasGrid = [];
-            let ultimoRubro = null;
-            let contadorGrupo = 0;
-
-            // 2. Insertar cabeceras
-            ordenados.forEach(item => {
-                if (item['1_Stock-NP_más_bajo_que_SM_Sin_OC'] === 1) countRojos++;
-                if (item['2_Stock-NP_más_bajo_que SM_Con_OC_sigue_abajo'] === 1) countAmarillos++;
-                if (item['3_Stock-NP_más_bajo_que_SM_Con_OC_queda_arriba'] === 1) countAzules++;
-
+                // Lógica de fechas (mantenida de tu código)
                 if (item.Fecha_desde_para_incluir_NP) {
-                    const dDesde = dayjs(item.Fecha_desde_para_incluir_NP);
+                    const dDesde = this.dayjs(item.Fecha_desde_para_incluir_NP); // Usar this.dayjs
                     if (!minDate || dDesde.isBefore(minDate)) minDate = dDesde;
                 }
                 if (item.Fecha_hasta_para_incluir_NP) {
-                    const dHasta = dayjs(item.Fecha_hasta_para_incluir_NP);
+                    const dHasta = this.dayjs(item.Fecha_hasta_para_incluir_NP);
                     if (!maxDate || dHasta.isAfter(maxDate)) maxDate = dHasta;
                 }
-
-                if (item.RUBC_NOMBRE !== ultimoRubro) {
-                    ultimoRubro = item.RUBC_NOMBRE;
-
-                    // Calculamos cantidad (truco rápido)
-                    const totalItems = datos.filter(x => x.RUBC_NOMBRE === ultimoRubro).length;
-
-                    filasGrid.push({
-                        type: 'HEADER',
-                        nombre: item.ARCO_RUBRO_COMPRA + ' - ' + ultimoRubro,
-                        total: totalItems
-                    });
-                }
-
-                // Agregamos flags para los badges
-                item.type = 'ITEM';
-                // item.reclamado = this.checkItemReclamado(item.ARTS_ARTICULO_EMP); // Tu lógica
-
-                item.hasVinculados = this.itemvinculados.some(v => v.ARTS_ARTICULO_EMP === item.ARTS_ARTICULO_EMP);
-                item.hasReclamados = this.itemreclamados.some(r => r.ARTS_ARTICULO_EMP === item.ARTS_ARTICULO_EMP);
-
-                filasGrid.push(item);
             });
 
+            // Actualizamos las tarjetas
             this.itemROJOS.total = countRojos;
             this.itemAMARILLOS.total = countAmarillos;
             this.itemAZULES.total = countAzules;
             this.fecha_desde_NP = minDate;
             this.fecha_hasta_NP = maxDate;
 
-            // 3. Asignar y Congelar (Rendimiento máximo)
+
+            // --- PARTE B: FILTRAR Y CREAR GRILLA ---
+
+            // 1. Filtramos los datos que vamos a mostrar según el botón activo (ageType)
+            let datosAProcesar = [...datosCompletos];
+
+            if (this.ageType === 'ROJOS') {
+                datosAProcesar = datosAProcesar.filter(item => item['1_Stock-NP_más_bajo_que_SM_Sin_OC'] == 1);
+            } else if (this.ageType === 'AMARILLOS') {
+                datosAProcesar = datosAProcesar.filter(item => item['2_Stock-NP_más_bajo_que SM_Con_OC_sigue_abajo'] == 1);
+            } else if (this.ageType === 'AZULES') {
+                datosAProcesar = datosAProcesar.filter(item => item['3_Stock-NP_más_bajo_que_SM_Con_OC_queda_arriba'] == 1);
+            }
+            // Si es 'everyone', no filtramos nada
+
+            // 2. Ordenar por Rubro
+            datosAProcesar.sort((a, b) => (a.RUBC_NOMBRE || '').localeCompare(b.RUBC_NOMBRE || ''));
+
+            const filasGrid = [];
+            let ultimoRubro = null;
+
+            // 3. Insertar filas y cabeceras dinámicas
+            datosAProcesar.forEach(item => {
+                // Detectar cambio de rubro para insertar cabecera verde
+                if (item.RUBC_NOMBRE !== ultimoRubro) {
+                    ultimoRubro = item.RUBC_NOMBRE;
+
+                    // Calculamos cuántos items de ESTE rubro hay en la vista FILTRADA
+                    const totalItemsEnGrupo = datosAProcesar.filter(x => x.RUBC_NOMBRE === ultimoRubro).length;
+
+                    filasGrid.push({
+                        type: 'HEADER',
+                        nombre: item.ARCO_RUBRO_COMPRA + ' - ' + ultimoRubro,
+                        total: totalItemsEnGrupo // Ahora mostrará el total correcto según el filtro
+                    });
+                }
+
+                // Agregamos flags (mantenido de tu código)
+                item.type = 'ITEM';
+                item.hasVinculados = this.itemvinculados.some(v => v.ARTS_ARTICULO_EMP === item.ARTS_ARTICULO_EMP);
+                item.hasReclamados = this.itemreclamados.some(r => r.ARTS_ARTICULO_EMP === item.ARTS_ARTICULO_EMP);
+
+                filasGrid.push(item);
+            });
+
+            // 4. Asignar a la grilla
             this.rowData = Object.freeze(filasGrid);
         }
     },

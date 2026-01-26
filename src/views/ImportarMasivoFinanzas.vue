@@ -205,20 +205,52 @@ const cargarDatos = async () => {
     }
 };
 
-const subirArchivo = async (event) => {
+const subirArchivo = (event) => {
+    // 1. Preparamos el archivo pero NO lo enviamos todavía
     const file = event.files[0];
-    const formData = new FormData();
-    formData.append('archivo', file);
-    try {
-        loading.value = true;
-        const res = await FinanzasService.uploadExcel(formData);
-        toast.add({ severity: 'success', summary: 'Carga Exitosa', detail: `${res.data.registros} registros procesados`, life: 4000 });
-        cargarDatos();
-    } catch (error) {
-        toast.add({ severity: 'error', summary: 'Error', detail: 'Fallo al procesar archivo', life: 3000 });
-    } finally {
-        loading.value = false;
-    }
+
+    // 2. Preguntamos al usuario
+    confirm.require({
+        message: '¡ATENCIÓN! Esta acción BORRARÁ TODOS los datos actuales de la base de datos y cargará los del Excel. ¿Estás seguro de continuar?',
+        header: 'Confirmar Reemplazo Masivo',
+        icon: 'pi pi-exclamation-triangle',
+        acceptClass: 'p-button-danger', // Botón rojo para alertar
+        rejectClass: 'p-button-secondary', // Botón gris para cancelar
+        rejectLabel: 'Cancelar',
+        acceptLabel: 'Sí, Borrar e Importar',
+
+        // 3. Si dice que SÍ, procedemos
+        accept: async () => {
+            const formData = new FormData();
+            formData.append('archivo', file);
+
+            try {
+                loading.value = true;
+                const res = await FinanzasService.uploadExcel(formData);
+
+                toast.add({
+                    severity: 'success',
+                    summary: 'Importación Exitosa',
+                    detail: `Base de datos renovada. ${res.data.detalle.dia} registros financieros cargados.`,
+                    life: 5000
+                });
+
+                cargarDatos(); // Refrescamos la tabla
+            } catch (error) {
+                console.error(error);
+                toast.add({ severity: 'error', summary: 'Error', detail: 'Falló la importación', life: 3000 });
+            } finally {
+                loading.value = false;
+                // Limpiamos el componente FileUpload visualmente (opcional, depende de la versión)
+                if (event.options && event.options.clear) event.options.clear();
+            }
+        },
+
+        // 4. Si dice que NO, no hacemos nada
+        reject: () => {
+            toast.add({ severity: 'info', summary: 'Cancelado', detail: 'No se realizaron cambios', life: 3000 });
+        }
+    });
 };
 
 const guardarEdicion = async (event) => {
