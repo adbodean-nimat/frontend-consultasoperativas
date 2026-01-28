@@ -39,7 +39,7 @@
             </div>
             <div class="">
                 <div class="">
-                    <Toolbar class="mb-2">
+                    <Toolbar class="mb-2" style="border-top-left-radius: 0px; border-top-right-radius: 0px;">
                         <template #start>
                             <div class="d-flex flex-row align-items-center gap-2 w-full">
                                 <label class="w-auto">Comprador:</label>
@@ -376,13 +376,13 @@
                         <Column field="Stock_Uni_sin_940_y_sin_950" header="Otros depós." class="text-end">
                             <template #body="slotProps">
                                 <span style="font-size: small;">{{ slotProps.data['Stock_Uni_sin_940_y_sin_950']
-                                }}</span>
+                                    }}</span>
                             </template>
                         </Column>
                         <Column field="Stock_Unidades_todos_los_depós" header="Todos depós." class="text-end">
                             <template #body="slotProps">
                                 <span style="font-size: small;">{{ slotProps.data['Stock_Unidades_todos_los_depós']
-                                }}</span>
+                                    }}</span>
                             </template>
                         </Column>
                         <Column field="Stock-NP" header="Stock - NP" class="text-end">
@@ -416,27 +416,27 @@
                         <Column field="Consumo_diario" header="Cons. diario" class="text-center">
                             <template #body="slotProps">
                                 <span style="font-size: small;">{{ Number(slotProps.data['Consumo_diario']).toFixed(4)
-                                    }}</span>
+                                }}</span>
                             </template>
                         </Column>
                         <Column field="Fecha_desde_TP1_y_2_y_MS4" header="Desde" class="text-end">
                             <template #body="slotProps">
                                 <span style="font-size: small;">{{
                                     slotProps.data['Fecha_desde_TP1_y_2_y_MS4']
-                                }}</span>
+                                    }}</span>
                             </template>
                         </Column>
                         <Column field="Fecha_hasta_TP1_y_2_Y_MS4" header="Hasta" class="text-end">
                             <template #body="slotProps">
                                 <span style="font-size: small;">{{
                                     slotProps.data['Fecha_hasta_TP1_y_2_Y_MS4']
-                                }}</span>
+                                    }}</span>
                             </template>
                         </Column>
                         <Column field="Días_stock_Períodos_1_2_y_4" header="Días" class="text-end">
                             <template #body="slotProps">
                                 <span style="font-size: small;">{{ slotProps.data['Días_stock_Períodos_1_2_y_4']
-                                }}</span>
+                                    }}</span>
                             </template>
                         </Column>
                         <Column field="Cant_remito_MS2yMS4" header="Cant. rtos" class="text-end">
@@ -465,14 +465,14 @@
                             class="text-end">
                             <template #body="slotProps">
                                 <span style="font-size: small;">{{ slotProps.data['Fecha_Ultima_Entrega_Proveedor']
-                                }}</span>
+                                    }}</span>
                             </template>
                         </Column>
                         <Column field="Cantidad_Ultima_Entrega_Proveedor" header="Cant. Última Ent. Proveedor"
                             class="text-end">
                             <template #body="slotProps">
                                 <span style="font-size: small;">{{ slotProps.data['Cantidad_Ultima_Entrega_Proveedor']
-                                }}</span>
+                                    }}</span>
                             </template>
                         </Column>
                         <Column field="Dias_sin_remitos_ventas" header="Días sin remitos ventas" class="text-end">
@@ -484,7 +484,7 @@
                             class="text-end">
                             <template #body="slotProps">
                                 <span style="font-size: small;">{{ slotProps.data['Dias_ultima_entrega_proveedor']
-                                }}</span>
+                                    }}</span>
                             </template>
                         </Column>
                     </DataTable>

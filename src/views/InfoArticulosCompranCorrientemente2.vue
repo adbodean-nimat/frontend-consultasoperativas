@@ -24,7 +24,7 @@
                 </div>
             </div>
             <div class="">
-                <Toolbar class="mb-2">
+                <Toolbar class="mb-2" style="border-top-left-radius: 0px; border-top-right-radius: 0px;">
                     <template #start>
                         <div class="d-flex flex-row align-items-center gap-2 w-full">
                             <label class="w-auto">Comprador:</label>
@@ -160,15 +160,16 @@
                         </Card>
                     </div>
                 </div>
-                <!-- <div class="d-flex gap-2 align-items-center">
-                    <span class="text-white fw-bold">Gestión de Compras (AG Grid)</span>
-                    <Button label="Recargar Datos" icon="pi pi-replay" @click="getData" />
-                </div> -->
             </div>
-            <Toolbar v-if="rowData.length > 0">
+            <Toolbar v-if="rowData.length > 0" style="border-bottom-left-radius: 0px; border-bottom-right-radius: 0px;">
                 <template #start>
-                    <div class="d-flex flex-row align-items-center gap-2">
-                        <span class="text-white fw-bold">Gestión de Compras (AG Grid)</span>
+                    <div class="d-flex gap-2">
+                        <Button label="Copiar Datos" icon="pi pi-copy" severity="secondary" outlined size="small"
+                            @click="copiarFilas(false)" v-tooltip="'Copia solo los datos de las filas seleccionadas'" />
+
+                        <Button label="Copiar con Títulos" icon="pi pi-table" severity="info" outlined size="small"
+                            @click="copiarFilas(true)"
+                            v-tooltip="'Copia los datos incluyendo los nombres de las columnas'" />
                     </div>
                 </template>
                 <template #end>
@@ -182,7 +183,8 @@
                     </Button>
                 </template>
             </Toolbar>
-            <div class="card my-0 directive-fullscreen-wrapper-grid h-screen" v-if="rowData.length > 0">
+            <div class="card my-0 directive-fullscreen-wrapper-grid h-screen" v-if="rowData.length > 0"
+                style="border-top-left-radius: 0px; border-top-right-radius: 0px;">
                 <div v-if="rowData.length > 0" class="grow" style="height: 100vh;">
                     <ag-grid-vue style="width: 100%; height: 100%;" class="ag-theme-balham" :theme="theme"
                         :columnDefs="columnDefs" :rowData="rowData" :defaultColDef="defaultColDef"
@@ -190,7 +192,8 @@
                         :getRowHeight="getRowHeight" :animateRows="true" @grid-ready="onGridReady"
                         :row-class-rules="rowClassRules" :suppress-row-hover-highlight="true"
                         :auto-size-strategy="autoSizeStrategy" :context="{ componentParent: this }"
-                        :localeText="localeText">
+                        :localeText="localeText" @cell-double-clicked="onCellDoubleClicked"
+                        :cell-enable-cell-text-selection="true" :row-selection="rowSelection">
                     </ag-grid-vue>
                 </div>
             </div>
@@ -358,8 +361,23 @@ export default {
         return {
             title: 'Información de Artículos que se Compran Corrientemente v2',
             ageType: 'everyone',
+            rowSelection: {
+                mode: 'multiRow',
+                checkboxes: false,
+                headerCheckbox: false,
+                enableClickSelection: true,
+                copySelectedRows: true,
+            },
             theme: themeBalham.withParams({
-                columnBorder: true
+                wrapperBorderRadius: '0px',
+                wrapperBorder: false,
+                headerRowBorder: true,
+                columnBorder: true,
+                rangeSelectionBorderColor: 'rgb(193, 0, 97)',
+                rangeSelectionBorderStyle: 'solid',
+                rangeSelectionBackgroundColor: 'rgb(255, 0, 128, 0.1)',
+                rangeSelectionHighlightColor: 'rgb(60, 188, 0, 0.3)',
+                oddRowBackgroundColor: '#8881',
             }),
             autoSizeStrategy: {
                 type: 'fitCellContents',
@@ -670,6 +688,179 @@ export default {
                 }
             }
             return true;
+        },
+        async copiarFilas(incluirCabecera) {
+            const filasSeleccionadas = this.gridApi.getSelectedRows();
+
+            if (filasSeleccionadas.length === 0) {
+                this.$toast.add({ severity: 'warn', summary: 'Atención', detail: 'Selecciona filas primero (Ctrl + Clic).', life: 3000 });
+                return;
+            }
+
+            // 1. HELPER: Obtener columnas "planas" (recursivo para grupos)
+            // Devuelve lista de objetos: { campo: 'ARTS_NOMBRE', titulo: 'Nombre' }
+            const obtenerColumnas = (defs) => {
+                let cols = [];
+                defs.forEach(col => {
+                    if (col.children) {
+                        // Si es grupo, entramos recursivamente
+                        cols = cols.concat(obtenerColumnas(col.children));
+                    } else if (col.field && col.field !== 'actions') {
+                        // Guardamos campo y título
+                        cols.push({
+                            campo: col.field,
+                            titulo: col.headerName || col.field
+                        });
+                    }
+                });
+                return cols;
+            };
+
+            const columnasInfo = obtenerColumnas(this.columnDefs);
+
+            // 2. CONSTRUIR EL TEXTO
+            let textoFinal = '';
+
+            // A) Si pidió cabecera, la agregamos primero
+            if (incluirCabecera) {
+                const lineaTitulos = columnasInfo.map(c => c.titulo).join('\t');
+                textoFinal += lineaTitulos + '\n';
+            }
+
+            // B) Agregamos los datos
+            const textoDatos = filasSeleccionadas.map(fila => {
+                return columnasInfo.map(c => {
+                    const valor = fila[c.campo];
+                    // Validamos que no sea null/undefined para que no escriba "null"
+                    return (valor !== null && valor !== undefined) ? valor : '';
+                }).join('\t');
+            }).join('\n');
+
+            textoFinal += textoDatos;
+
+            // 3. COPIAR AL PORTAPAPELES (Método robusto)
+            try {
+                if (navigator.clipboard && window.isSecureContext) {
+                    await navigator.clipboard.writeText(textoFinal);
+                } else {
+                    const textArea = document.createElement("textarea");
+                    textArea.value = textoFinal;
+                    textArea.style.position = "fixed";
+                    textArea.style.left = "-9999px";
+                    document.body.appendChild(textArea);
+                    textArea.focus();
+                    textArea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textArea);
+                }
+
+                this.$toast.add({
+                    severity: 'success',
+                    summary: incluirCabecera ? 'Tabla Copiada' : 'Datos Copiados',
+                    detail: `${filasSeleccionadas.length} filas listas para pegar en Excel.`,
+                    life: 3000
+                });
+
+            } catch (err) {
+                console.error('Error al copiar:', err);
+                this.$toast.add({ severity: 'error', summary: 'Error', detail: 'No se pudo copiar.', life: 3000 });
+            }
+        },
+        async copiarCodigosSeleccionados() {
+            const filasSeleccionadas = this.gridApi.getSelectedRows();
+
+            if (filasSeleccionadas.length === 0) {
+                this.$toast.add({ severity: 'warn', summary: 'Atención', detail: 'Selecciona al menos una fila (usa Ctrl + Clic).', life: 3000 });
+                return;
+            }
+
+            // 1. OBTENER LAS COLUMNAS REALES (Aplanamos la estructura por si hay grupos)
+            // Definimos qué campos queremos copiar basándonos en tu columnDefs
+            // Filtramos la columna 'actions' (botones) y las que no tienen campo (grupos)
+            const obtenerCampos = (defs) => {
+                let campos = [];
+                defs.forEach(col => {
+                    if (col.children) {
+                        // Si es un grupo (ej: Stock físico), buscamos dentro recursivamente
+                        campos = campos.concat(obtenerCampos(col.children));
+                    } else if (col.field && col.field !== 'actions') {
+                        // Si es una columna normal y no es la de acciones, la agregamos
+                        campos.push(col.field);
+                    }
+                });
+                return campos;
+            };
+
+            const camposACopiar = obtenerCampos(this.columnDefs);
+
+            // 2. CONSTRUIR EL TEXTO
+            // Mapeamos cada fila: creamos un string con los valores separados por Tab (\t)
+            const textoACopiar = filasSeleccionadas.map(fila => {
+                return camposACopiar.map(campo => {
+                    // Obtenemos el valor. Si es null o undefined, ponemos un string vacío
+                    const valor = fila[campo];
+                    return (valor !== null && valor !== undefined) ? valor : '';
+                }).join('\t'); // Separador de columnas (Excel)
+            }).join('\n');     // Separador de filas
+
+            // 3. Copiar al portapapeles (Usando la técnica robusta que te pasé antes)
+            try {
+                if (navigator.clipboard && window.isSecureContext) {
+                    await navigator.clipboard.writeText(textoACopiar);
+                } else {
+                    const textArea = document.createElement("textarea");
+                    textArea.value = textoACopiar;
+                    textArea.style.position = "fixed";
+                    textArea.style.left = "-9999px";
+                    document.body.appendChild(textArea);
+                    textArea.focus();
+                    textArea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textArea);
+                }
+
+                // 4. Confirmación
+                this.$toast.add({
+                    severity: 'success',
+                    summary: 'Copiado',
+                    detail: `${filasSeleccionadas.length} códigos copiados al portapapeles.`,
+                    life: 3000
+                });
+
+            } catch (err) {
+                console.error('Error al copiar:', err);
+                this.$toast.add({ severity: 'error', summary: 'Error', detail: 'No se pudo copiar.', life: 3000 });
+            }
+        },
+        async onCellDoubleClicked(params) {
+            console.log('Celda doble clickeada:', params.value);
+            // 1. Verificamos que haya un valor para copiar
+            if (!params.value) return;
+
+            // 2. Evitamos copiar si es una fila de cabecera verde (Header)
+            if (params.data && params.data.type === 'HEADER') return;
+
+            try {
+                // 3. Copiamos al portapapeles
+                await navigator.clipboard.writeText(params.value);
+
+                // 4. Feedback visual (Usando tu sistema de Toast actual)
+                this.$toast.add({
+                    severity: 'info',
+                    summary: 'Copiado',
+                    detail: `Valor "${params.value}" copiado al portapapeles.`,
+                    life: 2000 // Dura 2 segundos
+                });
+
+            } catch (err) {
+                console.error('Error al copiar: ', err);
+                this.$toast.add({
+                    severity: 'error',
+                    summary: 'Error',
+                    detail: 'No se pudo copiar el texto.',
+                    life: 3000
+                });
+            }
         },
         async getItemVinculadosAOC() {
             try {
