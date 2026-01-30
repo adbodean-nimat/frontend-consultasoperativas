@@ -1,240 +1,152 @@
 <template>
-    <div class="directive-fullscreen-wrapper">
-        <div class="container-fluid page-grid min-vh-100">
-            <div class="encabezado-titulo">
-                <div style="margin-left: 5px; color: white;" class="icon-title">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#fff" class="bi bi-sliders2"
-                        viewBox="0 0 16 16">
-                        <path fill-rule="evenodd"
-                            d="M10.5 1a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0V4H1.5a.5.5 0 0 1 0-1H10V1.5a.5.5 0 0 1 .5-.5M12 3.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5m-6.5 2A.5.5 0 0 1 6 6v1.5h8.5a.5.5 0 0 1 0 1H6V10a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5M1 8a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2A.5.5 0 0 1 1 8m9.5 2a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0V13H1.5a.5.5 0 0 1 0-1H10v-1.5a.5.5 0 0 1 .5-.5m1.5 2.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5" />
-                    </svg>
-                    <!-- <span style="margin-left: 5px; color: white;" class="k-icon k-i-grid-layout"></span> -->
-                    <span style="color: white; margin-left: 5px;">{{ title }}</span>
-                </div>
-                <div class="button-fullscreen">
-                    <div style="margin-right: 15px;">
-                        <kbutton v-fullscreen="options">
-                            <svg v-show="!fullscreen" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                fill="currentColor" class="bi bi-arrows-fullscreen" viewBox="0 0 16 16">
-                                <path fill-rule="evenodd"
-                                    d="M5.828 10.172a.5.5 0 0 0-.707 0l-4.096 4.096V11.5a.5.5 0 0 0-1 0v3.975a.5.5 0 0 0 .5.5H4.5a.5.5 0 0 0 0-1H1.732l4.096-4.096a.5.5 0 0 0 0-.707zm4.344 0a.5.5 0 0 1 .707 0l4.096 4.096V11.5a.5.5 0 1 1 1 0v3.975a.5.5 0 0 1-.5.5H11.5a.5.5 0 0 1 0-1h2.768l-4.096-4.096a.5.5 0 0 1 0-.707zm0-4.344a.5.5 0 0 0 .707 0l4.096-4.096V4.5a.5.5 0 1 0 1 0V.525a.5.5 0 0 0-.5-.5H11.5a.5.5 0 0 0 0 1h2.768l-4.096 4.096a.5.5 0 0 0 0 .707zm-4.344 0a.5.5 0 0 1-.707 0L1.025 1.732V4.5a.5.5 0 0 1-1 0V.525a.5.5 0 0 1 .5-.5H4.5a.5.5 0 0 1 0 1H1.732l4.096 4.096a.5.5 0 0 1 0 .707z" />
-                            </svg>
-                            <svg v-show="fullscreen" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                fill="currentColor" class="bi bi-fullscreen-exit" viewBox="0 0 16 16">
-                                <path
-                                    d="M5.5 0a.5.5 0 0 1 .5.5v4A1.5 1.5 0 0 1 4.5 6h-4a.5.5 0 0 1 0-1h4a.5.5 0 0 0 .5-.5v-4a.5.5 0 0 1 .5-.5zm5 0a.5.5 0 0 1 .5.5v4a.5.5 0 0 0 .5.5h4a.5.5 0 0 1 0 1h-4A1.5 1.5 0 0 1 10 4.5v-4a.5.5 0 0 1 .5-.5zM0 10.5a.5.5 0 0 1 .5-.5h4A1.5 1.5 0 0 1 6 11.5v4a.5.5 0 0 1-1 0v-4a.5.5 0 0 0-.5-.5h-4a.5.5 0 0 1-.5-.5zm10 1a1.5 1.5 0 0 1 1.5-1.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 0-.5.5v4a.5.5 0 0 1-1 0v-4z" />
-                            </svg>
-                        </kbutton>
-                    </div>
-                </div>
-            </div>
+    <div>
+        <div class="card">
+            <Toolbar class="mb-0" style="border-top-left-radius: 0px; border-top-right-radius: 0px;">
+                <template #start>
+                    <span>Parametros: <strong><i> Control CEMENTOS Y CALES</i></strong></span>
+                </template>
+                <template #end>
 
-            <div class="card">
-                <Toolbar class="mb-0" style="border-top-left-radius: 0px; border-top-right-radius: 0px;">
-                    <template #start>
-                        <span>Parametros: <strong><i>Información de Artículos que se Compran
-                                    Corrientemente</i></strong></span>
-                    </template>
-                    <template #end>
-
-                    </template>
-                </Toolbar>
-                <Accordion multiple>
-                    <AccordionPanel value="0">
-                        <AccordionHeader>1 - Chapas TIPOS que la definen</AccordionHeader>
-                        <AccordionContent>
-                            <PickList v-model="tiposdearticulos" :source="source" :target="target"
-                                @move-to-source="onMoveToSource" @move-to-target="onMoveToTarget"
-                                @move-all-to-source="onMoveAllToSource" @move-all-to-target="onMoveAllToTarget"
-                                dataKey="id" breakpoint="1400px">
-                                <template #option="{ option }">
-                                    {{ option.Cod_tipo + ' - ' + option.Nombre_tipo }}
-                                </template>
-                                <template #targetheader>
-                                    <div class="flex justify-content-between align-items-center">
-                                        <span class="font-bold">Tipos de artículos definidos</span>
-                                        <span class="text-muted"> ({{ target.length }})</span>
-                                    </div>
-                                </template>
-                                <template #sourceheader>
-                                    <div class="flex justify-content-between align-items-center">
-                                        <span class="font-bold">Tipos de artículos disponibles</span>
-                                        <span class="text-muted"> ({{ source.length }})</span>
-                                    </div>
-                                </template>
-                            </PickList>
-                        </AccordionContent>
-                    </AccordionPanel>
-                    <AccordionPanel value="1">
-                        <AccordionHeader>2 - Clasif 8 art que se compran (excepto PYR, chapas metal y mubas)
-                        </AccordionHeader>
-                        <AccordionContent>
-                            <PickList v-model="clasificacion8" :source="source_clasificacion8"
-                                :target="target_clasificacion8" @move-to-source="onMoveToSource_clasificacion8"
-                                @move-to-target="onMoveToTarget_clasificacion8"
-                                @move-all-to-source="onMoveAllToSource_clasificacion8"
-                                @move-all-to-target="onMoveAllToTarget_clasificacion8" dataKey="id" breakpoint="1400px">
-                                <template #option="{ option }">
-                                    {{ option.Cod_clasif8 + ' - ' + option.Nombre_clasif8 }}
-                                </template>
-                                <template #targetheader>
-                                    <div class="flex justify-content-between align-items-center">
-                                        <span class="font-bold">Clasificación 8 definida</span>
-                                        <span class="text-muted"> ({{ target_clasificacion8.length }})</span>
-                                    </div>
-                                </template>
-                                <template #sourceheader>
-                                    <div class="flex justify-content-between align-items-center">
-                                        <span class="font-bold">Clasificación 8 disponible</span>
-                                        <span class="text-muted"> ({{ source_clasificacion8.length }})</span>
-                                    </div>
-                                </template>
-                            </PickList>
-                        </AccordionContent>
-                    </AccordionPanel>
-                    <AccordionPanel value="2">
-                        <AccordionHeader>3 - Depos. A No considerar para stock</AccordionHeader>
-                        <AccordionContent>
-                            <PickList v-model="stockdeposito" :source="source_stockdeposito"
-                                :target="target_stockdeposito" @move-to-source="onMoveToSource_stockdeposito"
-                                @move-to-target="onMoveToTarget_stockdeposito"
-                                @move-all-to-source="onMoveAllToSource_stockdeposito"
-                                @move-all-to-target="onMoveAllToTarget_stockdeposito" dataKey="id" breakpoint="1400px">
-                                <template #option="{ option }">
-                                    {{ option.Cod_Depos + ' - ' + option.Nombre_Depos }}
-                                </template>
-                                <template #targetheader>
-                                    <div class="flex justify-content-between align-items-center">
-                                        <span class="font-bold">Depósitos definida</span>
-                                        <span class="text-muted"> ({{ target_stockdeposito.length }})</span>
-                                    </div>
-                                </template>
-                                <template #sourceheader>
-                                    <div class="flex justify-content-between align-items-center">
-                                        <span class="font-bold">Depósitos disponible</span>
-                                        <span class="text-muted"> ({{ source_stockdeposito.length }})</span>
-                                    </div>
-                                </template>
-                            </PickList>
-                        </AccordionContent>
-                    </AccordionPanel>
-                    <AccordionPanel value="3">
-                        <AccordionHeader>4 - Modos de stock mínimo</AccordionHeader>
-                        <AccordionContent>
-                            <Toolbar class="mb-3">
-                                <template #start>
-                                    <Button label="Agregar" icon="pi pi-plus" class="m-2"
-                                        @click="productDialog = true"></Button>
-                                    <Button label="Eliminar" icon="pi pi-trash" severity="danger" outlined
-                                        @click="DeleteSelected"
-                                        :disabled="!selectedmodosdestockminimo || !selectedmodosdestockminimo.length" />
-                                </template>
-                            </Toolbar>
-                            <Dialog v-model:visible="productDialog" :style="{ width: '450px' }"
-                                header="Agregar modo stock" :modal="true">
-                                <div class="flex flex-col gap-6">
-                                    <div class="mb-4">
-                                        <label for="codigo" class="block font-bold mb-3">Código modo stock</label>
-                                        <InputText id="codigomodostock" v-model="inputmodosstockminimo.codigo" fluid />
-                                    </div>
-                                    <div>
-                                        <label for="nombre" class="block font-bold mb-3">Nombre modo stock</label>
-                                        <InputText id="nombremodostock" v-model="inputmodosstockminimo.nombre" fluid />
-                                    </div>
+                </template>
+            </Toolbar>
+            <Accordion multiple>
+                <AccordionPanel value="0">
+                    <AccordionHeader>1 - Articulos</AccordionHeader>
+                    <AccordionContent>
+                        <Toolbar class="mb-3">
+                            <template #start>
+                                <Button label="Agregar" icon="pi pi-plus" class="m-2"
+                                    @click="productDialog = true"></Button>
+                                <Button label="Eliminar" icon="pi pi-trash" severity="danger" outlined
+                                    @click="DeleteSelected"
+                                    :disabled="!selectedarticulos || !selectedarticulos.length" />
+                            </template>
+                        </Toolbar>
+                        <Dialog v-model:visible="productDialog" :style="{ width: '450px' }" header="Agregar modo stock"
+                            :modal="true">
+                            <div class="flex flex-col gap-6">
+                                <div class="mb-4">
+                                    <label for="codigo" class="block font-bold mb-3">Código artículo</label>
+                                    <InputText id="codigoarticulo" v-model="inputarticulos.codigo" fluid />
                                 </div>
+                                <div>
+                                    <label for="nombre" class="block font-bold mb-3">Nombre artículo</label>
+                                    <InputText id="nombrearticulo" v-model="inputarticulos.nombre" fluid />
+                                </div>
+                            </div>
 
-                                <template #footer>
-                                    <Button label="Cancelar" icon="pi pi-times" text @click="productDialog = false" />
-                                    <Button label="Guardar" icon="pi pi-check" @click="guardarModoStock" />
+                            <template #footer>
+                                <Button label="Cancelar" icon="pi pi-times" text @click="productDialog = false" />
+                                <Button label="Guardar" icon="pi pi-check" @click="guardarArticulos" />
+                            </template>
+                        </Dialog>
+                        <DataTable v-model:selection="selectedarticulos" :value="articulos" editMode="cell"
+                            @cell-edit-complete="onCellEditComplete" sortField="cod_art" :sortOrder="1" :pt="{
+                                table: { style: 'min-width: 50rem' },
+                                column: {
+                                    bodycell: ({ state }) => ({
+                                        class: [{ '!py-0': state['d_editing'] }]
+                                    })
+                                }
+                            }">
+                            <Column selectionMode="multiple" style="width: 10%"></Column>
+                            <Column v-for="col of columns" :key="col.field" :field="col.field" :header="col.header"
+                                sortable style="width: 25%">
+                                <template #body="{ data, field }">
+                                    {{ data[field] }}
                                 </template>
-                            </Dialog>
-                            <DataTable v-model:selection="selectedmodosdestockminimo" :value="modosdestockminimo"
-                                editMode="cell" @cell-edit-complete="onCellEditComplete" sortField="Cod_modo_stock"
-                                :sortOrder="1" :pt="{
-                                    table: { style: 'min-width: 50rem' },
-                                    column: {
-                                        bodycell: ({ state }) => ({
-                                            class: [{ '!py-0': state['d_editing'] }]
-                                        })
-                                    }
-                                }">
-                                <Column selectionMode="multiple" style="width: 10%"></Column>
-                                <Column v-for="col of columns" :key="col.field" :field="col.field" :header="col.header"
-                                    sortable style="width: 25%">
-                                    <template #body="{ data, field }">
-                                        {{ data[field] }}
-                                    </template>
-                                    <template #editor="{ data, field }">
-                                        <InputText v-model="data[field]" autofocus fluid />
-                                    </template>
-                                </Column>
-                            </DataTable>
-                        </AccordionContent>
-                    </AccordionPanel>
-                    <AccordionPanel value="4">
-                        <AccordionHeader>5 - NP Stock comprom. - Vtas especiales - Pendiente entrega a clientes
-                        </AccordionHeader>
-                        <AccordionContent>
-                            <PickList v-model="npstockcomprom" :source="source_npstockcomprom"
-                                :target="target_npstockcomprom" @move-to-source="onMoveToSource_npstockcomprom"
-                                @move-to-target="onMoveToTarget_npstockcomprom"
-                                @move-all-to-source="onMoveAllToSource_npstockcomprom"
-                                @move-all-to-target="onMoveAllToTarget_npstockcomprom" dataKey="id" breakpoint="1400px">
-                                <template #option="{ option }">
-                                    {{ option.Cod_NP + ' - ' + option.Nombre_NP }}
+                                <template #editor="{ data, field }">
+                                    <InputText v-model="data[field]" autofocus fluid />
                                 </template>
-                                <template #targetheader>
-                                    <div class="flex justify-content-between align-items-center">
-                                        <span class="font-bold">Tipos de comprobantes de ventas definida</span>
-                                        <span class="text-muted"> ({{ target_npstockcomprom.length }})</span>
-                                    </div>
-                                </template>
-                                <template #sourceheader>
-                                    <div class="flex justify-content-between align-items-center">
-                                        <span class="font-bold">Tipos de comprobantes de ventas disponible</span>
-                                        <span class="text-muted"> ({{ source_npstockcomprom.length }})</span>
-                                    </div>
-                                </template>
-                            </PickList>
-                        </AccordionContent>
-                    </AccordionPanel>
-                    <AccordionPanel value="5">
-                        <AccordionHeader>6 - Remitos de ventas</AccordionHeader>
-                        <AccordionContent>
-                            <PickList v-model="remitosdeventas" :source="source_remitosdeventas"
-                                :target="target_remitosdeventas" @move-to-source="onMoveToSource_remitosdeventas"
-                                @move-to-target="onMoveToTarget_remitosdeventas"
-                                @move-all-to-source="onMoveAllToSource_remitosdeventas"
-                                @move-all-to-target="onMoveAllToTarget_remitosdeventas" dataKey="id"
-                                breakpoint="1400px">
-                                <template #option="{ option }">
-                                    {{ option.Cod_Comp + ' - ' + option.Nombre_Comp }}
-                                </template>
-                                <template #targetheader>
-                                    <div class="flex justify-content-between align-items-center">
-                                        <span class="font-bold">Tipos de comprobantes stock definida</span>
-                                        <span class="text-muted"> ({{ target_remitosdeventas.length }})</span>
-                                    </div>
-                                </template>
-                                <template #sourceheader>
-                                    <div class="flex justify-content-between align-items-center">
-                                        <span class="font-bold">Tipos de comprobantes stock disponible</span>
-                                        <span class="text-muted"> ({{ source_remitosdeventas.length }})</span>
-                                    </div>
-                                </template>
-                            </PickList>
-                        </AccordionContent>
-                    </AccordionPanel>
-                </Accordion>
-            </div>
-            <Divider type="dotted" />
-            <div class="mt-0">
-                <ParametrosControlCementos />
-            </div>
+                            </Column>
+                        </DataTable>
+                    </AccordionContent>
+                </AccordionPanel>
+                <AccordionPanel value="1">
+                    <AccordionHeader>2 - Tipo de comprobantes de ventas a considerar</AccordionHeader>
+                    <AccordionContent>
+                        <PickList v-model="tipocompaconsiderar" :source="source_tipocompaconsiderar"
+                            :target="target_tipocompaconsiderar" @move-to-source="onMoveToSource_tipocompaconsiderar"
+                            @move-to-target="onMoveToTarget_tipocompaconsiderar"
+                            @move-all-to-source="onMoveAllToSource_tipocompaconsiderar"
+                            @move-all-to-target="onMoveAllToTarget_tipocompaconsiderar" dataKey="id"
+                            breakpoint="1400px">
+                            <template #option="{ option }">
+                                {{ option.cod_comp + ' - ' + option.nomb_comp }}
+                            </template>
+                            <template #targetheader>
+                                <div class="flex justify-content-between align-items-center">
+                                    <span class="font-bold">Tipo de comprobantes de ventas definida</span>
+                                    <span class="text-muted"> ({{ target_tipocompaconsiderar.length }})</span>
+                                </div>
+                            </template>
+                            <template #sourceheader>
+                                <div class="flex justify-content-between align-items-center">
+                                    <span class="font-bold">Tipo de comprobantes de ventas disponible</span>
+                                    <span class="text-muted"> ({{ source_tipocompaconsiderar.length }})</span>
+                                </div>
+                            </template>
+                        </PickList>
+                    </AccordionContent>
+                </AccordionPanel>
+                <AccordionPanel value="2">
+                    <AccordionHeader>3 - Depos. A No considerar para stock fisico</AccordionHeader>
+                    <AccordionContent>
+                        <PickList v-model="stockdeposito" :source="source_stockdeposito" :target="target_stockdeposito"
+                            @move-to-source="onMoveToSource_stockdeposito"
+                            @move-to-target="onMoveToTarget_stockdeposito"
+                            @move-all-to-source="onMoveAllToSource_stockdeposito"
+                            @move-all-to-target="onMoveAllToTarget_stockdeposito" dataKey="id" breakpoint="1400px">
+                            <template #option="{ option }">
+                                {{ option.Cod_Depos + ' - ' + option.Nombre_Depos }}
+                            </template>
+                            <template #targetheader>
+                                <div class="flex justify-content-between align-items-center">
+                                    <span class="font-bold">Depósitos definida</span>
+                                    <span class="text-muted"> ({{ target_stockdeposito.length }})</span>
+                                </div>
+                            </template>
+                            <template #sourceheader>
+                                <div class="flex justify-content-between align-items-center">
+                                    <span class="font-bold">Depósitos disponible</span>
+                                    <span class="text-muted"> ({{ source_stockdeposito.length }})</span>
+                                </div>
+                            </template>
+                        </PickList>
+                    </AccordionContent>
+                </AccordionPanel>
+                <AccordionPanel value="3">
+                    <AccordionHeader>4 - Remitos de ventas</AccordionHeader>
+                    <AccordionContent>
+                        <PickList v-model="remitosdeventas" :source="source_remitosdeventas"
+                            :target="target_remitosdeventas" @move-to-source="onMoveToSource_remitosdeventas"
+                            @move-to-target="onMoveToTarget_remitosdeventas"
+                            @move-all-to-source="onMoveAllToSource_remitosdeventas"
+                            @move-all-to-target="onMoveAllToTarget_remitosdeventas" dataKey="id" breakpoint="1400px">
+                            <template #option="{ option }">
+                                {{ option.Cod_Comp + ' - ' + option.Nombre_Comp }}
+                            </template>
+                            <template #targetheader>
+                                <div class="flex justify-content-between align-items-center">
+                                    <span class="font-bold">Tipos de comprobantes stock definida</span>
+                                    <span class="text-muted"> ({{ target_remitosdeventas.length }})</span>
+                                </div>
+                            </template>
+                            <template #sourceheader>
+                                <div class="flex justify-content-between align-items-center">
+                                    <span class="font-bold">Tipos de comprobantes stock disponible</span>
+                                    <span class="text-muted"> ({{ source_remitosdeventas.length }})</span>
+                                </div>
+                            </template>
+                        </PickList>
+                    </AccordionContent>
+                </AccordionPanel>
+            </Accordion>
         </div>
         <Toast />
     </div>
 </template>
+
 <script>
 import axios from 'axios';
 import store from '../store';
@@ -250,13 +162,12 @@ import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import Toast from 'primevue/toast';
-import Divider from 'primevue/divider';
+
 import { useToast } from 'primevue/usetoast';
 import { Button as KButton } from '@progress/kendo-buttons-vue-wrapper'
 import { directive as fullscreen } from 'vue-fullscreen'
-import ParametrosControlCementos from '../components/ParametrosControlCementos.vue';
 export default {
-    name: 'ParametrosdeCompras',
+    name: 'ParametrosControlCementos',
     directives: {
         fullscreen,
     },
@@ -274,8 +185,6 @@ export default {
         Dialog,
         Toast,
         "kbutton": KButton,
-        Divider,
-        ParametrosControlCementos
     },
     data() {
         return {
@@ -294,22 +203,25 @@ export default {
             stockdeposito: [],
             source_stockdeposito: [],
             target_stockdeposito: [],
-            modosdestockminimo: [],
-            columns: [
-                { field: 'Cod_modo_stock', header: 'Código modo stock', type: 'text', class: 'w-1/4' },
-                { field: 'Nombre_modo_stock', header: 'Nombre modo stock', type: 'text', class: 'w-3/4' }
-            ],
-            selectedmodosdestockminimo: [],
-            inputmodosstockminimo: {
+            articulos: [],
+            selectedarticulos: [],
+            inputarticulos: {
                 codigo: '',
                 nombre: ''
             },
+            columns: [
+                { field: 'cod_art', header: 'Código artículo', type: 'number', class: 'w-1/4' },
+                { field: 'nomb_art', header: 'Nombre artículo', type: 'text', class: 'w-3/4' }
+            ],
             npstockcomprom: [],
             source_npstockcomprom: [],
             target_npstockcomprom: [],
             remitosdeventas: [],
             source_remitosdeventas: [],
-            target_remitosdeventas: []
+            target_remitosdeventas: [],
+            tipocompaconsiderar: [],
+            source_tipocompaconsiderar: [],
+            target_tipocompaconsiderar: [],
         }
     },
     mounted() {
@@ -319,6 +231,8 @@ export default {
         this.getModosDeStockMinimo();
         this.getNPStockComprom();
         this.getRemitosDeVentas();
+        this.getArticulos();
+        this.getTiposDeComprobantes();
     },
     methods: {
         async onMoveAllToTarget(event) {
@@ -430,6 +344,102 @@ export default {
                 console.error('Error fetching data:', error);
             }
         },
+        async getTiposDeComprobantes() {
+            const response = await axios.get(`${process.env.VUE_APP_API_BASE}` + '/venttcve', {
+                headers: { Authorization: `Bearer ${this.token}` }
+            });
+
+            const response2 = await axios.get(`${process.env.VUE_APP_API_BASE}` + '/gdc/npaconsiderar', {
+                headers: { Authorization: `Bearer ${this.token}` }
+            });
+            const dataAll = response.data.map((data, index) => {
+                return {
+                    id: index + 1,
+                    cod_comp: data.TCVE_TIPO_COM,
+                    nomb_comp: data.TCVE_NOMBRE
+                }
+            });
+            this.target_tipocompaconsiderar = response2.data.map((data) => {
+                return {
+                    id: data.id,
+                    cod_comp: data.cod_comp,
+                    nomb_comp: data.nomb_comp
+                }
+            });
+            const filterData = dataAll.filter(item => !response2.data.map(data => data.cod_comp).includes(item.cod_comp));
+            this.source_tipocompaconsiderar = filterData;
+            this.tipocompaconsiderar = [this.source_tipocompaconsiderar, this.target_tipocompaconsiderar];
+
+        },
+        async onMoveAllToTarget_tipocompaconsiderar(event) {
+            const token = this.token;
+            event.items.forEach(async (item) => {
+                await axios.post(`${process.env.VUE_APP_API_BASE}` + '/gdc/npaconsiderarupdate/', {
+                    id: item.id,
+                    cod_comp: item.cod_comp,
+                    nomb_comp: item.nomb_comp
+                }, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                }).then(response => {
+                    console.log('Update successful:', response.data);
+                }).catch(error => {
+                    console.error('Error updating data:', error);
+                });
+            });
+        },
+        async onMoveAllToSource_tipocompaconsiderar(event) {
+            const token = this.token;
+            event.items.forEach(async (item) => {
+                await axios.delete(`${process.env.VUE_APP_API_BASE}` + '/gdc/npaconsiderardelete/' + item.id, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }).then(response => {
+                    console.log('Delete successful:', response.data);
+                }).catch(error => {
+                    console.error('Error deleting data:', error);
+                });
+            });
+        },
+        async onMoveToSource_tipocompaconsiderar(event) {
+            const token = this.token;
+            await axios.delete(`${process.env.VUE_APP_API_BASE}` + '/gdc/npaconsiderardelete/' + event.items[0].id, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }).then(response => {
+                console.log('Delete successful:', response.data);
+            }).catch(error => {
+                console.error('Error deleting data:', error);
+            });
+        },
+        async onMoveToTarget_tipocompaconsiderar(event) {
+            const token = this.token;
+            const response2 = await axios.get(`${process.env.VUE_APP_API_BASE}` + '/gdc/npaconsiderar', {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            const filterData = event.items.filter(item => !response2.data.map(data => data.cod_comp).includes(item.cod_comp));
+            //console.log('Filtered data:', filterData);
+            event.items.forEach(async (item) => {
+                await axios.post(`${process.env.VUE_APP_API_BASE}` + '/gdc/npaconsiderarupdate/', {
+                    id: item.id,
+                    cod_comp: item.cod_comp,
+                    nomb_comp: item.nomb_comp
+                }, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                }).then(response => {
+                    console.log('Update successful:', response.data);
+                }).catch(error => {
+                    console.error('Error updating data:', error);
+                });
+            });
+        },
         async getClasificacion8() {
             const response = await axios.get(`${process.env.VUE_APP_API_BASE}` + '/clasificacion8', {
                 headers: { Authorization: `Bearer ${this.token}` }
@@ -540,7 +550,7 @@ export default {
             const response = await axios.get(`${process.env.VUE_APP_API_BASE}` + '/stocdpos', {
                 headers: { Authorization: `Bearer ${this.token}` }
             });
-            const response2 = await axios.get(`${process.env.VUE_APP_API_BASE}` + '/gdc/deposanoconsiderarparastock', {
+            const response2 = await axios.get(`${process.env.VUE_APP_API_BASE}` + '/gdc/deposanoconsiderarpstockfisico', {
                 headers: { Authorization: `Bearer ${this.token}` }
             });
             const dataAll = response.data.map((data, index) => {
@@ -565,7 +575,7 @@ export default {
             //console.log('Moved all to target:', event.items);
             const token = this.token;
             event.items.forEach(async (item) => {
-                await axios.post(`${process.env.VUE_APP_API_BASE}` + '/gdc/deposanoconsiderarparastockupdate', {
+                await axios.post(`${process.env.VUE_APP_API_BASE}` + '/gdc/deposanoconsiderarpstockfisicoupdate', {
                     id: item.id,
                     Cod_Depos: item.Cod_Depos,
                     Nombre_Depos: item.Nombre_Depos
@@ -585,7 +595,7 @@ export default {
             //console.log('Moved all to source:', event.items);
             const token = this.token;
             event.items.forEach(async (item) => {
-                await axios.delete(`${process.env.VUE_APP_API_BASE}` + '/gdc/deposanoconsiderarparastockdelete/' + item.id, {
+                await axios.delete(`${process.env.VUE_APP_API_BASE}` + '/gdc/deposanoconsiderarpstockfisicodelete/' + item.id, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
@@ -599,7 +609,7 @@ export default {
         async onMoveToSource_stockdeposito(event) {
             //console.log('Moved to source:', event.items[0].id);
             const token = this.token;
-            await axios.delete(`${process.env.VUE_APP_API_BASE}` + '/gdc/deposanoconsiderarparastockdelete/' + event.items[0].id, {
+            await axios.delete(`${process.env.VUE_APP_API_BASE}` + '/gdc/deposanoconsiderarpstockfisicodelete/' + event.items[0].id, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -621,7 +631,7 @@ export default {
             const filterData = event.items.filter(item => !response2.data.map(data => data.Cod_Depos).includes(item.Cod_Depos));
             //console.log('Filtered data:', filterData);
             event.items.forEach(async (item) => {
-                await axios.post(`${process.env.VUE_APP_API_BASE}` + '/gdc/deposanoconsiderarparastockupdate', {
+                await axios.post(`${process.env.VUE_APP_API_BASE}` + '/gdc/deposanoconsiderarpstockfisicoupdate', {
                     id: item.id,
                     Cod_Depos: item.Cod_Depos,
                     Nombre_Depos: item.Nombre_Depos
@@ -634,6 +644,46 @@ export default {
                     console.log('Update successful:', response.data);
                 }).catch(error => {
                     console.error('Error updating data:', error);
+                });
+            });
+        },
+        async getArticulos() {
+            const response = await axios.get(`${process.env.VUE_APP_API_BASE}` + '/gdc/articuloscontrol', {
+                headers: { Authorization: `Bearer ${this.token}` }
+            });
+            this.articulos = response.data;
+        },
+        async guardarArticulos() {
+            if (this.inputarticulos.codigo && this.inputarticulos.nombre) {
+                await axios.post(`${process.env.VUE_APP_API_BASE}` + '/gdc/articuloscontrol', {
+                    cod_art: this.inputarticulos.codigo,
+                    nomb_art: this.inputarticulos.nombre
+                }, {
+                    headers: { Authorization: `Bearer ${this.token}` }
+                }).then(response => {
+                    // console.log(response.data);
+                    this.productDialog = false;
+                    this.getArticulos();
+                    this.inputarticulos.codigo = '';
+                    this.inputarticulos.nombre = '';
+                    this.$toast.add({ severity: 'success', summary: 'Éxito', detail: 'Articulo agregado', life: 3000 });
+                }).catch(error => {
+                    console.error(error);
+                });
+            } else {
+                this.$toast.add({ severity: 'error', summary: 'Error', detail: 'Complete todos los campos', life: 3000 });
+            }
+        },
+        async DeleteSelected() {
+            this.selectedarticulos.forEach(async (item) => {
+                await axios.delete(`${process.env.VUE_APP_API_BASE}` + '/gdc/articulosdelete/' + item.id, {
+                    headers: { Authorization: `Bearer ${this.token}` }
+                }).then(response => {
+                    // console.log(response.data);
+                    this.getArticulos();
+                    this.$toast.add({ severity: 'success', summary: 'Éxito', detail: 'Eliminado correctamente', life: 3000 });
+                }).catch(error => {
+                    console.error(error);
                 });
             });
         },
@@ -680,13 +730,11 @@ export default {
         },
         async onCellEditComplete(e) {
             let { data, newValue, field } = e;
-            //console.log('Data:', data);
-            //console.log('New Value:', newValue);
-            //console.log('Field:', field);
             const token = this.token;
-            await axios.put(`${process.env.VUE_APP_API_BASE}` + '/gdc/modosdestockminimoupdate/' + data.id, {
-                Cod_modo_stock: field === 'Cod_modo_stock' ? newValue : data.Cod_modo_stock,
-                Nombre_modo_stock: field === 'Nombre_modo_stock' ? newValue : data.Nombre_modo_stock
+            await axios.put(`${process.env.VUE_APP_API_BASE}` + '/gdc/articuloscontrolupdate/' + data.id, {
+                id: data.id,
+                cod_art: field === 'cod_art' ? newValue : data.cod_art,
+                nomb_art: field === 'nomb_art' ? newValue : data.nomb_art
             }, {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -694,11 +742,11 @@ export default {
                 }
             }).then(response => {
                 // console.log('Update successful:', response.data);
-                this.getModosDeStockMinimo();
-                this.$toast.add({ severity: 'success', summary: 'Éxito', detail: 'Modo de stock actualizado', life: 3000 });
+                this.getArticulos();
+                this.$toast.add({ severity: 'success', summary: 'Éxito', detail: 'Artículo actualizado', life: 3000 });
             }).catch(error => {
                 console.error('Error updating data:', error);
-                this.$toast.add({ severity: 'error', summary: 'Error', detail: 'Error al actualizar modo de stock', life: 3000 });
+                this.$toast.add({ severity: 'error', summary: 'Error', detail: 'Error al actualizar artículo', life: 3000 });
             });
         },
         async getNPStockComprom() {
@@ -806,7 +854,7 @@ export default {
             const response = await axios.get(`${process.env.VUE_APP_API_BASE}` + '/stoctcst', {
                 headers: { Authorization: `Bearer ${this.token}` }
             });
-            const response2 = await axios.get(`${process.env.VUE_APP_API_BASE}` + '/gdc/remitosdeventas', {
+            const response2 = await axios.get(`${process.env.VUE_APP_API_BASE}` + '/gdc/tiposremitosvtas', {
                 headers: { Authorization: `Bearer ${this.token}` }
             });
             const dataAll = response.data.map((data, index) => {
@@ -828,9 +876,8 @@ export default {
             this.remitosdeventas = [this.source_remitosdeventas, this.target_remitosdeventas];
         },
         async onMoveToSource_remitosdeventas(event) {
-            //console.log('Moved to source:', event.items[0].id);
             const token = this.token;
-            await axios.delete(`${process.env.VUE_APP_API_BASE}` + '/gdc/remitosdeventasdelete/' + event.items[0].id, {
+            await axios.delete(`${process.env.VUE_APP_API_BASE}` + '/gdc/tiposremitosvtasdelete/' + event.items[0].id, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -841,21 +888,16 @@ export default {
             });
         },
         async onMoveToTarget_remitosdeventas(event) {
-            //console.log('Moved to target:', event.items[0].id);
-            //console.log('Updated items:', this.tiposdearticulos);
-            //console.log('Source items:', this.source);
-            //console.log('Target items:', this.target);
             const token = this.token;
             const response2 = await axios.get(`${process.env.VUE_APP_API_BASE}` + '/stoctcst', {
                 headers: { Authorization: `Bearer ${token}` }
             });
             const filterData = event.items.filter(item => !response2.data.map(data => data.Cod_Comp).includes(item.Cod_Comp));
-            //console.log('Filtered data:', filterData);
             event.items.forEach(async (item) => {
-                await axios.post(`${process.env.VUE_APP_API_BASE}` + '/gdc/remitosdeventasupdate', {
+                await axios.post(`${process.env.VUE_APP_API_BASE}` + '/gdc/tiposremitosvtasupdate', {
                     id: item.id,
-                    Cod_Comp: item.Cod_Comp,
-                    Nombre_Comp: item.Nombre_Comp
+                    cod_comp: item.Cod_Comp,
+                    nombre_comp: item.Nombre_Comp
                 }, {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -872,10 +914,10 @@ export default {
             //console.log('Moved all to target:', event.items);
             const token = this.token;
             event.items.forEach(async (item) => {
-                await axios.post(`${process.env.VUE_APP_API_BASE}` + '/gdc/remitosdeventasupdate', {
+                await axios.post(`${process.env.VUE_APP_API_BASE}` + '/gdc/tiposremitosvtasupdate', {
                     id: item.id,
-                    Cod_Comp: item.Cod_Comp,
-                    Nombre_Comp: item.Nombre_Comp
+                    cod_comp: item.Cod_Comp,
+                    nombre_comp: item.Nombre_Comp
                 }, {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -892,7 +934,7 @@ export default {
             //console.log('Moved all to source:', event.items);
             const token = this.token;
             event.items.forEach(async (item) => {
-                await axios.delete(`${process.env.VUE_APP_API_BASE}` + '/gdc/remitosdeventasdelete/' + item.id, {
+                await axios.delete(`${process.env.VUE_APP_API_BASE}` + '/gdc/tiposremitosvtasdelete/' + item.id, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
@@ -920,6 +962,7 @@ export default {
         }
     },
 }
+
 </script>
 
 <style></style>

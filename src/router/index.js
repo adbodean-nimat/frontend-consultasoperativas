@@ -72,6 +72,7 @@ import InfoArticulosCompranCorrientemente2 from '../views/InfoArticulosCompranCo
 import GestionDeFinanzas from '../views/GestionFinanzas.vue'
 import ImportarMasivoFinanzas from '../views/ImportarMasivoFinanzas.vue'
 import FinanzasView from '../views/FinanzasView.vue'
+import ControlStockNPOC from '../views/ControlStockNPOC.vue'
 
 const routes = [
   {
@@ -296,6 +297,19 @@ const routes = [
       metaTags: [
         {
           name: 'Gestión de Compras'
+        }      ]
+    }
+  },
+  {
+    path: '/gestiondecompras/controlstocknpoc',
+    name: 'Control Stock NP OC',
+    component: ControlStockNPOC,
+    props: true,
+    meta: {
+      title: 'Control Stock NP OC',
+      metaTags: [
+        {
+          name: 'Control Stock NP OC'
         }      ]
     }
   },

@@ -1087,8 +1087,25 @@ export default {
             }
             // Si es 'everyone', no filtramos nada
 
-            // 2. Ordenar por Rubro
-            datosAProcesar.sort((a, b) => (a.RUBC_NOMBRE || '').localeCompare(b.RUBC_NOMBRE || ''));
+            // 2. ORDENAMIENTO DOBLE (Rubro + Nombre)
+            datosAProcesar.sort((a, b) => {
+                // A) Primero comparamos el Rubro
+                const rubroA = (a.RUBC_NOMBRE || '');
+                const rubroB = (b.RUBC_NOMBRE || '');
+
+                const comparacionRubro = rubroA.localeCompare(rubroB);
+
+                // Si los rubros son diferentes, respetamos ese orden (para que funcione la agrupación)
+                if (comparacionRubro !== 0) {
+                    return comparacionRubro;
+                }
+
+                // B) Si es el MISMO rubro, desempatamos ordenando por Nombre del Artículo
+                const nombreA = (a.ARTS_NOMBRE || '');
+                const nombreB = (b.ARTS_NOMBRE || '');
+
+                return nombreA.localeCompare(nombreB);
+            });
 
             const filasGrid = [];
             let ultimoRubro = null;
