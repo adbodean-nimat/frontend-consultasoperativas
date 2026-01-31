@@ -3,7 +3,7 @@
         <div class="card">
             <Toolbar class="mb-0" style="border-top-left-radius: 0px; border-top-right-radius: 0px;">
                 <template #start>
-                    <span>Parametros: <strong><i> Control CEMENTOS Y CALES</i></strong></span>
+                    <span>Parametros: <strong><i> Control Stock NP OC</i></strong></span>
                 </template>
                 <template #end>
 
