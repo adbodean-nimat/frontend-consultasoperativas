@@ -2,6 +2,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+import { getToken } from "@/services/auth";
 import Axios from 'axios'
 import PrimeVue from 'primevue/config'
 import Lara from '@primeuix/themes/lara'
@@ -18,7 +19,8 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import '@popperjs/core'
 
 // set auth header
-Axios.defaults.headers.common['Authorization'] = `Bearer ${store.state.token}`;
+//const token = getToken();
+//Axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
 const app = createApp(App);
 app.directive('tooltip', Tooltip);
