@@ -51,13 +51,27 @@
             <div class="setting">
                 <router-link to="/tablas" class="link">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                        class="bi bi-pencil-square" viewBox="0 0 16 16">
+                        <path
+                            d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                        <path fill-rule="evenodd"
+                            d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+                    </svg>
+                    <!-- 
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
                         class="bi bi-table" viewBox="0 0 16 16">
                         <path
                             d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm15 2h-4v3h4V4zm0 4h-4v3h4V8zm0 4h-4v3h3a1 1 0 0 0 1-1v-2zm-5 3v-3H6v3h4zm-5 0v-3H1v2a1 1 0 0 0 1 1h3zm-4-4h4V8H1v3zm0-4h4V4H1v3zm5-3v3h4V4H6zm4 4H6v3h4V8z" />
-                    </svg>
+                    </svg> -->
                 </router-link>
                 <div class="separate"><span>|</span></div>
-                <a type="button" @click="logout" title="Salir">
+
+                <Avatar v-if="this.avatar" :image="this.avatar" size="small" shape="circle"
+                    v-tooltip.bottom="'Inició sesión como ' + this.fullname" />
+                <Avatar v-else icon="pi pi-user" size="small" shape="circle"
+                    v-tooltip.bottom="'Inició sesión como ' + this.fullname" />
+                <div class="separate"><span>|</span></div>
+                <a type="button" @click="salir" title="Salir">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
                         class="bi bi-box-arrow-right" viewBox="0 0 16 16">
                         <path fill-rule="evenodd"
@@ -69,43 +83,73 @@
             </div>
         </div>
         <nav class="navbar navbar-expand-lg navbar-light">
-            <li>
-                <router-link to="/tablero">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#fff" class="bi bi-house"
-                        viewBox="0 0 16 16">
-                        <path fill-rule="evenodd"
-                            d="M2 13.5V7h1v6.5a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5V7h1v6.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5zm11-11V6l-2-2V2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5z" />
-                        <path fill-rule="evenodd"
-                            d="M7.293 1.5a1 1 0 0 1 1.414 0l6.647 6.646a.5.5 0 0 1-.708.708L8 2.207 1.354 8.854a.5.5 0 1 1-.708-.708L7.293 1.5z" />
-                    </svg>
-                </router-link>
-            </li>
-
+            <router-link to="/tablero" class="ms-4 text-white d-flex align-items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#fff" class="bi bi-house"
+                    viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                        d="M2 13.5V7h1v6.5a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5V7h1v6.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5zm11-11V6l-2-2V2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5z" />
+                    <path fill-rule="evenodd"
+                        d="M7.293 1.5a1 1 0 0 1 1.414 0l6.647 6.646a.5.5 0 0 1-.708.708L8 2.207 1.354 8.854a.5.5 0 1 1-.708-.708L7.293 1.5z" />
+                </svg>
+            </router-link>
         </nav>
     </header>
 </template>
 
 <script>
-import store from "../store";
+import Avatar from 'primevue/avatar';
+import Tooltip from 'primevue/tooltip';
+import { getToken } from "@/services/auth";
+import { decodeJwt } from "@/services/jwt";
+import { logout } from "@/services/logout";
 export default {
     name: 'HeaderVue',
+    components: {
+        Avatar
+    },
+    directives: {
+        tooltip: Tooltip
+    },
     data: function () {
         return {
             titulo: 'Consultas Operativas',
-            fullname: ''
+            fullname: '',
+            avatar: ''
+        }
+    },
+    watch: {
+        $route: {
+            immediate: true,
+            handler() {
+                const token = getToken();
+                if (!token) {
+                    this.fullname = "";
+                    this.avatar = "";
+                    return;
+                }
+                const payload = decodeJwt(token);
+                this.fullname = payload?.user?.cn || "";
+
+                // SOLO seteo avatar si existe:
+                this.avatar = payload?.avatar ? `data:image/png;base64,${payload.avatar}` : "";
+            }
         }
     },
     async created() {
-        if (!store.getters.isLoggedIn) {
-            this.$router.push('/');
+        const token = await getToken();
+        if (!token) {
+            this.$router.push({ name: "Login", query: { redirect: this.$route.fullPath } });
+            return;
+        } else {
+            //const payload = decodeJwt(token);
+            //this.fullname = payload.user.cn;
+            //this.avatar = `data:image/png;base64,${payload.avatar}`;
         }
-        this.fullname = store.state.user.cn;
-        //this.secretMessage = await AuthService.getSecretContent();
     },
     methods: {
-        logout() {
-            store.dispatch('logout');
-            this.$router.push('/');
+        salir() {
+            logout();
+            this.$router.replace({ name: "Login" });
         },
         back() {
             this.$router.go(-1);
@@ -183,6 +227,7 @@ nav {
 
 nav li {
     list-style: none;
+    text-decoration: none;
     margin-left: 25px;
 }
 

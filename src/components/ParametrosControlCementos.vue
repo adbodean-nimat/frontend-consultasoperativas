@@ -124,7 +124,7 @@
                             @move-all-to-source="onMoveAllToSource_remitosdeventas"
                             @move-all-to-target="onMoveAllToTarget_remitosdeventas" dataKey="id" breakpoint="1400px">
                             <template #option="{ option }">
-                                {{ option.Cod_Comp + ' - ' + option.Nombre_Comp }}
+                                {{ option.cod_comp + ' - ' + option.nombre_comp }}
                             </template>
                             <template #targetheader>
                                 <div class="flex justify-content-between align-items-center">
@@ -149,7 +149,8 @@
 
 <script>
 import axios from 'axios';
-import store from '../store';
+import { getToken } from "@/services/auth";
+import { decodeJwt } from "@/services/jwt";
 import Accordion from 'primevue/accordion';
 import AccordionPanel from 'primevue/accordionpanel';
 import AccordionHeader from 'primevue/accordionheader';
@@ -189,6 +190,7 @@ export default {
     data() {
         return {
             toast: useToast(),
+            token: decodeJwt(getToken()).token,
             fullscreen: false,
             teleport: true,
             pageOnly: true,
@@ -237,7 +239,6 @@ export default {
     methods: {
         async onMoveAllToTarget(event) {
             //console.log('Moved all to target:', event.items);
-            const token = this.token;
             event.items.forEach(async (item) => {
                 await axios.post(`${process.env.VUE_APP_API_BASE}` + '/gdc/chapastiposqueladefinenupdate', {
                     id: item.id,
@@ -245,7 +246,7 @@ export default {
                     Nombre_tipo: item.Nombre_tipo
                 }, {
                     headers: {
-                        Authorization: `Bearer ${token}`,
+                        Authorization: `Bearer ${this.token}`,
                         'Content-Type': 'application/json'
                     }
                 }).then(response => {
@@ -257,11 +258,10 @@ export default {
         },
         async onMoveAllToSource(event) {
             //console.log('Moved all to source:', event.items);
-            const token = this.token;
             event.items.forEach(async (item) => {
                 await axios.delete(`${process.env.VUE_APP_API_BASE}` + '/gdc/chapastiposqueladefinendelete/' + item.id, {
                     headers: {
-                        Authorization: `Bearer ${token}`
+                        Authorization: `Bearer ${this.token}`
                     }
                 }).then(response => {
                     console.log('Delete successful:', response.data);
@@ -272,10 +272,9 @@ export default {
         },
         async onMoveToSource(event) {
             //console.log('Moved to source:', event.items[0].id);
-            const token = this.token;
             await axios.delete(`${process.env.VUE_APP_API_BASE}` + '/gdc/chapastiposqueladefinendelete/' + event.items[0].id, {
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${this.token}`
                 }
             }).then(response => {
                 console.log('Delete successful:', response.data);
@@ -288,9 +287,8 @@ export default {
             //console.log('Updated items:', this.tiposdearticulos);
             //console.log('Source items:', this.source);
             //console.log('Target items:', this.target);
-            const token = this.token;
             const response2 = await axios.get(`${process.env.VUE_APP_API_BASE}` + '/gdc/chapastiposqueladefinen', {
-                headers: { Authorization: `Bearer ${token}` }
+                headers: { Authorization: `Bearer ${this.token}` }
             });
             const filterData = event.items.filter(item => !response2.data.map(data => data.Cod_tipo).includes(item.Cod_tipo));
             //console.log('Filtered data:', filterData);
@@ -301,7 +299,7 @@ export default {
                     Nombre_tipo: item.Nombre_tipo
                 }, {
                     headers: {
-                        Authorization: `Bearer ${token}`,
+                        Authorization: `Bearer ${this.token}`,
                         'Content-Type': 'application/json'
                     }
                 }).then(response => {
@@ -313,12 +311,11 @@ export default {
         },
         async getData() {
             try {
-                const token = this.token;
                 const response = await axios.get(`${process.env.VUE_APP_API_BASE}` + '/stoctiar', {
-                    headers: { Authorization: `Bearer ${token}` }
+                    headers: { Authorization: `Bearer ${this.token}` }
                 });
                 const response2 = await axios.get(`${process.env.VUE_APP_API_BASE}` + '/gdc/chapastiposqueladefinen', {
-                    headers: { Authorization: `Bearer ${token}` }
+                    headers: { Authorization: `Bearer ${this.token}` }
                 });
 
                 const dataAll = response.data.map((data, index) => {
@@ -372,7 +369,7 @@ export default {
 
         },
         async onMoveAllToTarget_tipocompaconsiderar(event) {
-            const token = this.token;
+
             event.items.forEach(async (item) => {
                 await axios.post(`${process.env.VUE_APP_API_BASE}` + '/gdc/npaconsiderarupdate/', {
                     id: item.id,
@@ -380,7 +377,7 @@ export default {
                     nomb_comp: item.nomb_comp
                 }, {
                     headers: {
-                        Authorization: `Bearer ${token}`,
+                        Authorization: `Bearer ${this.token}`,
                         'Content-Type': 'application/json'
                     }
                 }).then(response => {
@@ -391,11 +388,11 @@ export default {
             });
         },
         async onMoveAllToSource_tipocompaconsiderar(event) {
-            const token = this.token;
+
             event.items.forEach(async (item) => {
                 await axios.delete(`${process.env.VUE_APP_API_BASE}` + '/gdc/npaconsiderardelete/' + item.id, {
                     headers: {
-                        Authorization: `Bearer ${token}`
+                        Authorization: `Bearer ${this.token}`
                     }
                 }).then(response => {
                     console.log('Delete successful:', response.data);
@@ -405,10 +402,10 @@ export default {
             });
         },
         async onMoveToSource_tipocompaconsiderar(event) {
-            const token = this.token;
+
             await axios.delete(`${process.env.VUE_APP_API_BASE}` + '/gdc/npaconsiderardelete/' + event.items[0].id, {
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${this.token}`
                 }
             }).then(response => {
                 console.log('Delete successful:', response.data);
@@ -417,9 +414,9 @@ export default {
             });
         },
         async onMoveToTarget_tipocompaconsiderar(event) {
-            const token = this.token;
+
             const response2 = await axios.get(`${process.env.VUE_APP_API_BASE}` + '/gdc/npaconsiderar', {
-                headers: { Authorization: `Bearer ${token}` }
+                headers: { Authorization: `Bearer ${this.token}` }
             });
             const filterData = event.items.filter(item => !response2.data.map(data => data.cod_comp).includes(item.cod_comp));
             //console.log('Filtered data:', filterData);
@@ -430,7 +427,7 @@ export default {
                     nomb_comp: item.nomb_comp
                 }, {
                     headers: {
-                        Authorization: `Bearer ${token}`,
+                        Authorization: `Bearer ${this.token}`,
                         'Content-Type': 'application/json'
                     }
                 }).then(response => {
@@ -470,7 +467,7 @@ export default {
         },
         async onMoveAllToTarget_clasificacion8(event) {
             //console.log('Moved all to target:', event.items);
-            const token = this.token;
+
             event.items.forEach(async (item) => {
                 await axios.post(`${process.env.VUE_APP_API_BASE}` + '/gdc/clasif8artquesecompranupdate', {
                     id: item.id,
@@ -479,7 +476,7 @@ export default {
                     Observacion: "Se debe combinar con rubro de compras que aparece marcado con «(1)»"
                 }, {
                     headers: {
-                        Authorization: `Bearer ${token}`,
+                        Authorization: `Bearer ${this.token}`,
                         'Content-Type': 'application/json'
                     }
                 }).then(response => {
@@ -491,11 +488,11 @@ export default {
         },
         async onMoveAllToSource_clasificacion8(event) {
             //console.log('Moved all to source:', event.items);
-            const token = this.token;
+
             event.items.forEach(async (item) => {
                 await axios.delete(`${process.env.VUE_APP_API_BASE}` + '/gdc/clasif8artquesecomprandelete/' + item.id, {
                     headers: {
-                        Authorization: `Bearer ${token}`
+                        Authorization: `Bearer ${this.token}`
                     }
                 }).then(response => {
                     console.log('Delete successful:', response.data);
@@ -506,10 +503,10 @@ export default {
         },
         async onMoveToSource_clasificacion8(event) {
             //console.log('Moved to source:', event.items[0].id);
-            const token = this.token;
+
             await axios.delete(`${process.env.VUE_APP_API_BASE}` + '/gdc/clasif8artquesecomprandelete/' + event.items[0].id, {
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${this.token}`
                 }
             }).then(response => {
                 console.log('Delete successful:', response.data);
@@ -522,9 +519,9 @@ export default {
             //console.log('Updated items:', this.tiposdearticulos);
             //console.log('Source items:', this.source);
             //console.log('Target items:', this.target);
-            const token = this.token;
+
             const response2 = await axios.get(`${process.env.VUE_APP_API_BASE}` + '/gdc/clasif8artquesecompran', {
-                headers: { Authorization: `Bearer ${token}` }
+                headers: { Authorization: `Bearer ${this.token}` }
             });
             const filterData = event.items.filter(item => !response2.data.map(data => data.Cod_tipo).includes(item.Cod_tipo));
             //console.log('Filtered data:', filterData);
@@ -536,7 +533,7 @@ export default {
                     Observacion: "Se debe combinar con rubro de compras que aparece marcado con «(1)»"
                 }, {
                     headers: {
-                        Authorization: `Bearer ${token}`,
+                        Authorization: `Bearer ${this.token}`,
                         'Content-Type': 'application/json'
                     }
                 }).then(response => {
@@ -573,7 +570,7 @@ export default {
         },
         async onMoveAllToTarget_stockdeposito(event) {
             //console.log('Moved all to target:', event.items);
-            const token = this.token;
+
             event.items.forEach(async (item) => {
                 await axios.post(`${process.env.VUE_APP_API_BASE}` + '/gdc/deposanoconsiderarpstockfisicoupdate', {
                     id: item.id,
@@ -581,7 +578,7 @@ export default {
                     Nombre_Depos: item.Nombre_Depos
                 }, {
                     headers: {
-                        Authorization: `Bearer ${token}`,
+                        Authorization: `Bearer ${this.token}`,
                         'Content-Type': 'application/json'
                     }
                 }).then(response => {
@@ -593,11 +590,11 @@ export default {
         },
         async onMoveAllToSource_stockdeposito(event) {
             //console.log('Moved all to source:', event.items);
-            const token = this.token;
+
             event.items.forEach(async (item) => {
                 await axios.delete(`${process.env.VUE_APP_API_BASE}` + '/gdc/deposanoconsiderarpstockfisicodelete/' + item.id, {
                     headers: {
-                        Authorization: `Bearer ${token}`
+                        Authorization: `Bearer ${this.token}`
                     }
                 }).then(response => {
                     console.log('Delete successful:', response.data);
@@ -608,10 +605,10 @@ export default {
         },
         async onMoveToSource_stockdeposito(event) {
             //console.log('Moved to source:', event.items[0].id);
-            const token = this.token;
+
             await axios.delete(`${process.env.VUE_APP_API_BASE}` + '/gdc/deposanoconsiderarpstockfisicodelete/' + event.items[0].id, {
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${this.token}`
                 }
             }).then(response => {
                 console.log('Delete successful:', response.data);
@@ -624,9 +621,9 @@ export default {
             //console.log('Updated items:', this.tiposdearticulos);
             //console.log('Source items:', this.source);
             //console.log('Target items:', this.target);
-            const token = this.token;
+
             const response2 = await axios.get(`${process.env.VUE_APP_API_BASE}` + '/stocdpos', {
-                headers: { Authorization: `Bearer ${token}` }
+                headers: { Authorization: `Bearer ${this.token}` }
             });
             const filterData = event.items.filter(item => !response2.data.map(data => data.Cod_Depos).includes(item.Cod_Depos));
             //console.log('Filtered data:', filterData);
@@ -637,7 +634,7 @@ export default {
                     Nombre_Depos: item.Nombre_Depos
                 }, {
                     headers: {
-                        Authorization: `Bearer ${token}`,
+                        Authorization: `Bearer ${this.token}`,
                         'Content-Type': 'application/json'
                     }
                 }).then(response => {
@@ -730,14 +727,14 @@ export default {
         },
         async onCellEditComplete(e) {
             let { data, newValue, field } = e;
-            const token = this.token;
+
             await axios.put(`${process.env.VUE_APP_API_BASE}` + '/gdc/articuloscontrolupdate/' + data.id, {
                 id: data.id,
                 cod_art: field === 'cod_art' ? newValue : data.cod_art,
                 nomb_art: field === 'nomb_art' ? newValue : data.nomb_art
             }, {
                 headers: {
-                    Authorization: `Bearer ${token}`,
+                    Authorization: `Bearer ${this.token}`,
                     'Content-Type': 'application/json'
                 }
             }).then(response => {
@@ -776,7 +773,7 @@ export default {
         },
         async onMoveAllToTarget_npstockcomprom(event) {
             //console.log('Moved all to target:', event.items);
-            const token = this.token;
+
             event.items.forEach(async (item) => {
                 await axios.post(`${process.env.VUE_APP_API_BASE}` + '/gdc/npstockcomprometidoupdate', {
                     id: item.id,
@@ -784,7 +781,7 @@ export default {
                     Nombre_NP: item.Nombre_NP
                 }, {
                     headers: {
-                        Authorization: `Bearer ${token}`,
+                        Authorization: `Bearer ${this.token}`,
                         'Content-Type': 'application/json'
                     }
                 }).then(response => {
@@ -796,11 +793,11 @@ export default {
         },
         async onMoveAllToSource_npstockcomprom(event) {
             //console.log('Moved all to source:', event.items);
-            const token = this.token;
+
             event.items.forEach(async (item) => {
                 await axios.delete(`${process.env.VUE_APP_API_BASE}` + '/gdc/npstockcomprometidodelete/' + item.id, {
                     headers: {
-                        Authorization: `Bearer ${token}`
+                        Authorization: `Bearer ${this.token}`
                     }
                 }).then(response => {
                     console.log('Delete successful:', response.data);
@@ -811,10 +808,10 @@ export default {
         },
         async onMoveToSource_npstockcomprom(event) {
             //console.log('Moved to source:', event.items[0].id);
-            const token = this.token;
+
             await axios.delete(`${process.env.VUE_APP_API_BASE}` + '/gdc/npstockcomprometidodelete/' + event.items[0].id, {
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${this.token}`
                 }
             }).then(response => {
                 console.log('Delete successful:', response.data);
@@ -827,9 +824,9 @@ export default {
             //console.log('Updated items:', this.tiposdearticulos);
             //console.log('Source items:', this.source);
             //console.log('Target items:', this.target);
-            const token = this.token;
+
             const response2 = await axios.get(`${process.env.VUE_APP_API_BASE}` + '/gdc/npstockcomprometido', {
-                headers: { Authorization: `Bearer ${token}` }
+                headers: { Authorization: `Bearer ${this.token}` }
             });
             const filterData = event.items.filter(item => !response2.data.map(data => data.Cod_NP).includes(item.Cod_NP));
             //console.log('Filtered data:', filterData);
@@ -840,7 +837,7 @@ export default {
                     Nombre_NP: item.Nombre_NP
                 }, {
                     headers: {
-                        Authorization: `Bearer ${token}`,
+                        Authorization: `Bearer ${this.token}`,
                         'Content-Type': 'application/json'
                     }
                 }).then(response => {
@@ -860,26 +857,27 @@ export default {
             const dataAll = response.data.map((data, index) => {
                 return {
                     id: index + 1,
-                    Cod_Comp: data.TCST_TIPO_COM,
-                    Nombre_Comp: data.TCST_NOMBRE
+                    cod_comp: data.TCST_TIPO_COM,
+                    nombre_comp: data.TCST_NOMBRE
                 }
             });
+            console.log(response2.data);
             this.target_remitosdeventas = response2.data.map((data) => {
                 return {
                     id: data.id,
-                    Cod_Comp: data.Cod_Comp,
-                    Nombre_Comp: data.Nombre_Comp
+                    cod_comp: data.cod_comp,
+                    nombre_comp: data.nombre_comp
                 }
             });
-            const filterData = dataAll.filter(item => !response2.data.map(data => data.Cod_Comp).includes(item.Cod_Comp));
+            const filterData = dataAll.filter(item => !response2.data.map(data => data.cod_comp).includes(item.cod_comp));
             this.source_remitosdeventas = filterData;
             this.remitosdeventas = [this.source_remitosdeventas, this.target_remitosdeventas];
         },
         async onMoveToSource_remitosdeventas(event) {
-            const token = this.token;
+
             await axios.delete(`${process.env.VUE_APP_API_BASE}` + '/gdc/tiposremitosvtasdelete/' + event.items[0].id, {
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${this.token}`
                 }
             }).then(response => {
                 console.log('Delete successful:', response.data);
@@ -888,9 +886,9 @@ export default {
             });
         },
         async onMoveToTarget_remitosdeventas(event) {
-            const token = this.token;
+
             const response2 = await axios.get(`${process.env.VUE_APP_API_BASE}` + '/stoctcst', {
-                headers: { Authorization: `Bearer ${token}` }
+                headers: { Authorization: `Bearer ${this.token}` }
             });
             const filterData = event.items.filter(item => !response2.data.map(data => data.Cod_Comp).includes(item.Cod_Comp));
             event.items.forEach(async (item) => {
@@ -900,7 +898,7 @@ export default {
                     nombre_comp: item.Nombre_Comp
                 }, {
                     headers: {
-                        Authorization: `Bearer ${token}`,
+                        Authorization: `Bearer ${this.token}`,
                         'Content-Type': 'application/json'
                     }
                 }).then(response => {
@@ -912,7 +910,7 @@ export default {
         },
         async onMoveAllToTarget_remitosdeventas(event) {
             //console.log('Moved all to target:', event.items);
-            const token = this.token;
+
             event.items.forEach(async (item) => {
                 await axios.post(`${process.env.VUE_APP_API_BASE}` + '/gdc/tiposremitosvtasupdate', {
                     id: item.id,
@@ -920,7 +918,7 @@ export default {
                     nombre_comp: item.Nombre_Comp
                 }, {
                     headers: {
-                        Authorization: `Bearer ${token}`,
+                        Authorization: `Bearer ${this.token}`,
                         'Content-Type': 'application/json'
                     }
                 }).then(response => {
@@ -932,11 +930,11 @@ export default {
         },
         async onMoveAllToSource_remitosdeventas(event) {
             //console.log('Moved all to source:', event.items);
-            const token = this.token;
+
             event.items.forEach(async (item) => {
                 await axios.delete(`${process.env.VUE_APP_API_BASE}` + '/gdc/tiposremitosvtasdelete/' + item.id, {
                     headers: {
-                        Authorization: `Bearer ${token}`
+                        Authorization: `Bearer ${this.token}`
                     }
                 }).then(response => {
                     console.log('Delete successful:', response.data);
@@ -947,9 +945,6 @@ export default {
         }
     },
     computed: {
-        token() {
-            return store.state.token
-        },
         options() {
             return {
                 callback: (isFullscreen) => {

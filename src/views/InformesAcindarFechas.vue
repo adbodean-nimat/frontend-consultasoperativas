@@ -130,7 +130,8 @@
 </template>
 
 <script>
-import store from "../store";
+import { getToken } from "@/services/auth";
+import { decodeJwt } from "@/services/jwt";
 import JSZip from 'jszip'
 import axios from 'axios'
 import '@progress/kendo-ui'
@@ -215,7 +216,7 @@ export default {
       return `${process.env.VUE_APP_API_BASE}/jsontosheet3/`
     },
     token() {
-      return store.state.token
+      return decodeJwt(getToken()).token
     },
     options() {
       return {

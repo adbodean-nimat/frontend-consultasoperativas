@@ -137,7 +137,8 @@
 
 <script>
 import $ from 'jquery'
-import store from "../store";
+import { getToken } from "@/services/auth";
+import { decodeJwt } from "@/services/jwt";
 import JSZip from 'jszip'
 import '@progress/kendo-ui'
 import '@progress/kendo-ui/js/messages/kendo.messages.es-AR'
@@ -194,6 +195,9 @@ export default {
     window.JSZip = JSZip;
   },
   computed: {
+    token() {
+      return decodeJwt(getToken()).token
+    },
     UrlApiBase() {
       return `${process.env.VUE_APP_API_BASE}/lpvndistribucion`
     },
@@ -222,8 +226,8 @@ export default {
       return groupTemplate(e)
     },
     readData: function (e) {
-      // console.log(store.state.token)
-      var token = store.state.token
+      // console.log(this.token)
+      var token = this.token
       var urlApi = this.UrlApiBase
       kendo.jQuery.ajax({
         url: urlApi,
@@ -580,7 +584,7 @@ export default {
             type: 'GET',
             url: `${process.env.VUE_APP_API_BASE}/rubrovta`,
             headers: {
-              'Authorization': 'Bearer ' + store.state.token
+              'Authorization': 'Bearer ' + this.token
             }
           }
         }
@@ -600,7 +604,7 @@ export default {
             type: 'GET',
             url: `${process.env.VUE_APP_API_BASE}/clasificadorclientes`,
             headers: {
-              'Authorization': 'Bearer ' + store.state.token
+              'Authorization': 'Bearer ' + this.token
             }
           }
         }

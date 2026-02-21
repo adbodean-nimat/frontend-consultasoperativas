@@ -37,7 +37,8 @@
 
 <script setup>
 import axios from 'axios';
-import store from '../store';
+import { getToken } from "@/services/auth";
+import { decodeJwt } from "@/services/jwt";
 import { ref } from "vue";
 import Toolbar from 'primevue/toolbar';
 import Button from 'primevue/button';
@@ -58,7 +59,7 @@ const rowData = ref([]);
 const columnDefs = ref([]);
 const rango = ref(null)
 const semanasAtras = ref(1);
-const token = store.state.token;
+const token = decodeJwt(getToken()).token;
 const autoSizeStrategy = {
     type: 'fitCellContents',
     skipHeader: false

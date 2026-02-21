@@ -14,12 +14,12 @@
                                 </div>
                                 <div class="wrap-input100 validate-input m-b-16">
                                     <input v-model="password" class="input100" type="password" name="pass"
-                                        placeholder="Contraseña" @keyup.enter="login">
+                                        placeholder="Contraseña" @keyup.enter="onSubmit">
                                     <span class="focus-input100"></span>
                                 </div>
 
                                 <div class="container-login100-form-btn m-t-17">
-                                    <input class="login100-form-btn" type="button" @click="login" value="Ingresar">
+                                    <input class="login100-form-btn" type="button" @click="onSubmit" value="Ingresar">
                                 </div>
 
                                 <div v-if="msg" class="container-login100-error text-bg-danger p-3 m-t-17">
@@ -52,8 +52,8 @@
 </template>
 
 <script>
-import store from "../store";
-import axios from 'axios';
+import { login } from "@/services/login";
+import { getToken } from "@/services/auth";
 export default {
     name: 'Consultas Operativas - Login',
     data: () => {
@@ -63,8 +63,51 @@ export default {
             msg: "",
         };
     },
+    created() {
+        if (getToken()) {
+            this.$router.replace({ name: "tablero" });
+        }
+    },
     methods: {
-        async login() {
+        async onSubmit() {
+            try {
+                await login(this.username, this.password);
+                if (this.$route.query.redirect) {
+                    this.$router.replace(this.$route.query.redirect);
+                } else {
+                    this.$router.push('/tablero');
+                }
+            } catch (error) {
+                //error.value = "Credenciales inválidas o error de servidor";
+                //console.error(error.toJSON());
+                if (error.response.status) {
+                    if (error.response.status == 400) {
+                        if (error.response.data == "Invalid username/password") {
+                            this.msg = "Nombre de usuario o contraseña inválidos"
+                        }
+                        if (error.response.data === "Missing credentials") {
+                            this.msg = "Faltan credenciales"
+                        }
+                    }
+                    if (error.response.status == 500) {
+                        this.msg = "Error interno del servidor"
+                    }
+                    //console.error(error.response.data);
+                    //console.error(error.response.status);
+                    //console.error(error.response.headers);
+                } else if (error.request) {
+                    // La petición fue hecha pero no se recibió respuesta
+                    // `error.request` es una instancia de XMLHttpRequest en el navegador y una instancia de
+                    // http.ClientRequest en node.js
+                    // console.error(error.request);
+                } else {
+                    // Algo paso al preparar la petición que lanzo un Error
+                    console.error('Error', error.message);
+                }
+                //console.error(error.config);
+            }
+        },
+        /* async iniciarsesion() {
             try {
                 const credentials = {
                     "username": this.username,
@@ -107,7 +150,7 @@ export default {
                 }
                 console.error(error.config);
             }
-        }
+        } */
     },
 }
 </script>

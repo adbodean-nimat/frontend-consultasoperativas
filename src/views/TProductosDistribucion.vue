@@ -118,7 +118,8 @@
 </template>
 
 <script>
-import store from "../store";
+import { getToken } from "@/services/auth";
+import { decodeJwt } from "@/services/jwt";
 import '@progress/kendo-ui'
 import '@progress/kendo-ui/js/messages/kendo.messages.es-AR'
 import '@progress/kendo-ui/js/cultures/kendo.culture.es-AR'
@@ -185,7 +186,7 @@ export default {
       return `${process.env.VUE_APP_API_BASE}/rubrosventas/`
     },
     token() {
-      return store.state.token
+      return decodeJwt(getToken()).token
     },
     options() {
       return {
@@ -618,7 +619,7 @@ export default {
               type: 'GET',
               url: this.UrlApiFamiliaDistribuciones,
               headers: {
-                'Authorization': 'Bearer ' + store.state.token
+                'Authorization': 'Bearer ' + this.token
               }
             }
           },
@@ -653,7 +654,7 @@ export default {
               type: 'GET',
               url: this.UrlApiFamiliaDistribuciones,
               headers: {
-                'Authorization': 'Bearer ' + store.state.token
+                'Authorization': 'Bearer ' + this.token
               }
             }
           },

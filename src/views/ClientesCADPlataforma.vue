@@ -85,7 +85,8 @@
 </template>
 
 <script>
-import store from "../store";
+import { getToken } from "@/services/auth";
+import { decodeJwt } from "@/services/jwt";
 import '@progress/kendo-ui'
 import '@progress/kendo-ui/js/messages/kendo.messages.es-AR'
 import '@progress/kendo-ui/js/cultures/kendo.culture.es-AR'
@@ -127,7 +128,6 @@ export default {
         }
     },
     computed: {
-
         UrlApiBaseClientesPlataforma() {
             return `${process.env.VUE_APP_API_BASE}/listaclientesplataforma`
         },
@@ -150,7 +150,7 @@ export default {
             return `${process.env.VUE_APP_API_BASE}/filtroclientesplataforma/`
         },
         token() {
-            return store.state.token
+            return decodeJwt(getToken()).token
         },
         options() {
             return {
@@ -373,7 +373,7 @@ export default {
                 var input2 = kendo.jQuery('#input2').data("kendoMultiSelect").value();
                 var data = { "tipo_de_cliente": { "tc": input1 }, "perfil_crediticio": { "pc": input2 } }
                 //console.log(kendo.stringify(data))
-                var token = store.state.token
+                var token = this.token
                 kendo.jQuery.ajax({
                     url: this.UrlApiBaseFiltroClientesCtaCtePlataforma + 1,
                     beforeSend: function (xhr) {

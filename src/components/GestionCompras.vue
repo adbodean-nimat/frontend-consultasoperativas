@@ -211,7 +211,8 @@
 </template>
 
 <script>
-import store from "../store";
+import { getToken } from "@/services/auth";
+import { decodeJwt } from "@/services/jwt";
 export default {
     name: 'Gestión de Compras',
     data: () => {
@@ -221,12 +222,15 @@ export default {
         }
     },
     async created() {
-        if (!store.getters.isLoggedIn) {
-            this.$router.push('/');
+        const token = getToken();
+        if (!token) {
+            this.$router.push({ name: "Login", query: { redirect: this.$route.fullPath } });
+            return;
+        } else {
+            const payload = decodeJwt(token);
+            this.giveName = payload.user.givenName;
+            this.IsAllow = payload.user.sAMAccountName;
         }
-        this.giveName = store.getters.getUser.givenName;
-        this.IsAllow = store.getters.getUser.sAMAccountName;
-        //this.secretMessage = await AuthService.getSecretContent();
     }
 }
 

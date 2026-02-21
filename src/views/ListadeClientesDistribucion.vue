@@ -287,7 +287,8 @@
 
 <script>
 import axios from 'axios';
-import store from '../store';
+import { getToken } from "@/services/auth";
+import { decodeJwt } from "@/services/jwt";
 import Card from 'primevue/card';
 import Toast from 'primevue/toast';
 import Toolbar from 'primevue/toolbar';
@@ -330,6 +331,7 @@ export default {
     },
     data() {
         return {
+            token: decodeJwt(getToken()).token,
             title: "Lista de Clientes Distribución",
             clientes: [],
             filters: {
@@ -357,11 +359,6 @@ export default {
             clientesEditDialog: false,
             editarClientes: null,
             perfilcomercial: [],
-        }
-    },
-    computed: {
-        token() {
-            return store.state.token;
         }
     },
     methods: {

@@ -149,7 +149,8 @@
 </template>
 
 <script>
-import store from "../store";
+import { getToken } from "@/services/auth";
+import { decodeJwt } from "@/services/jwt";
 import '@progress/kendo-ui'
 import '@progress/kendo-ui/js/messages/kendo.messages.es-ES'
 import '@progress/kendo-ui/js/cultures/kendo.culture.es-ES'
@@ -205,6 +206,9 @@ export default {
     }
   },
   computed: {
+    token() {
+      return decodeJwt(getToken()).token
+    },
     UrlApiBase() {
       return `${process.env.VUE_APP_API_BASE}/listaconstseco`
     },
@@ -221,8 +225,7 @@ export default {
   },
   methods: {
     readData: function (e) {
-      // console.log(store.state.token)
-      var token = store.state.token
+      var token = this.token
       var urlApi = this.UrlApiBase
       kendo.jQuery.ajax({
         url: urlApi,
@@ -626,7 +629,7 @@ export default {
             type: 'GET',
             url: `${process.env.VUE_APP_API_BASE}/constseconombresconfig`,
             headers: {
-              'Authorization': 'Bearer ' + store.state.token
+              'Authorization': 'Bearer ' + this.token
             }
           }
         }
@@ -646,7 +649,7 @@ export default {
             type: 'GET',
             url: `${process.env.VUE_APP_API_BASE}/clasificadorclientes`,
             headers: {
-              'Authorization': 'Bearer ' + store.state.token
+              'Authorization': 'Bearer ' + this.token
             }
           }
         }

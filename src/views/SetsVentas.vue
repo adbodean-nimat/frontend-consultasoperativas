@@ -36,22 +36,39 @@
           </div>
           <div class="row">
             <div class="col-sm">Fecha de impresión #=kendo.toString(theDate, "dd-MM-yyyy", "es-AR")#</div>
-            <div class="col-sm"><small><span id="cod_cte"></span> <span id="dvc1listaprecvta"></span></small></div>
+            <div class="col-sm"><small><span>{{ this.idemCodCte }}</span> <span>{{ this.idemDvc1 }}</span></small></div>
             <div class="col-sm text-end" style="margin-right: 50px;"><strong>VN SETS</strong></div>
           </div>
           <div class="row">
             <div class="col-sm d-flex justify-content-end" style="margin-right:50px;"><u><strong>
-                  <h2><span id="set_nombre"></span></h2>
+                  <h2><span id="set_nombre">{{ this.idemCodSet }}</span></h2>
                 </strong></u></div>
           </div>
           <div class="row">
             <div class="col">
               <p>
-                <span id="modificados"></span><br>
-                El descuento financiero del <span id="descuentofinanciero"></span>%, corresponde a pago con <span
-                  id="comentariocontadoefectivo"></span><span id="comentariofinanciero"></span>.<br>
-                Precios, IVA incluido, sujetos a variación sin previo aviso.<br>
-                Este listado No coincide con el listado de ACOPIO.
+                <template v-if="this.idemCodCte == 'REA' || this.idemCodCte == 'REB' || this.idemCodCte == 'REC'">
+                  <span id="modificados"></span>
+                  <br>
+                  Precios, IVA incluido, sujetos a variación sin previo aviso.<br>
+                </template>
+                <template v-else-if="this.idemCodCte == 'CFC' || this.idemCodCte == 'MET'">
+                  <span id="modificados"></span>
+                  <br>
+                  Precios, IVA incluido, sujetos a variación sin previo aviso.
+                  <br>
+                  Este listado No coincide con el listado de ACOPIO.<br>
+                </template>
+                <template v-else>
+                  <span id="modificados"></span>
+                  <br>
+                  El descuento financiero del <span>{{ this.descuentofinanciero }}</span>%, corresponde a pago con
+                  <span>{{ this.comentariocontadoefectivo }}</span><span>{{ this.comentariofinanciero }}</span>.
+                  <br>
+                  Precios, IVA incluido, sujetos a variación sin previo aviso.
+                  <br>
+                  Este listado No coincide con el listado de ACOPIO.
+                </template>
               </p>
             </div>
           </div>
@@ -77,9 +94,9 @@
         <grid-column field="ARTS_NOMBRE" title="Articulo" :column-menu="false" :width="400"></grid-column>
         <grid-column field="ARTS_UNIMED_STOCK" title="&nbsp;" :column-menu="false" :width="40"></grid-column>
         <grid-column field="PRECIO_LISTA_CON_IVA" title="Precio lista c/IVA" :template="this.precioLista"
-          :hidden="false" :width="100"></grid-column>
-        <grid-column field="dtoFinan" title="Dto. Financ." :template="this.dtoFinan" :width="80"
-          :hidden="false"></grid-column>
+          :hidden="false" :width="100" :exportable="{ pdf: false, excel: true }"></grid-column>
+        <grid-column field="dtoFinan" title="Dto. Financ." :template="this.dtoFinan" :width="80" :hidden="false"
+          :exportable="{ pdf: false, excel: true }"></grid-column>
         <grid-column field="precioContado" title="Precio contado c/IVA c/Dtos" :template="this.precioContado"
           :hidden="false" :width="100"></grid-column>
         <grid-column field="Modif" title="Modif" :template="this.Modif" :hidden="false" :width="50"></grid-column>
@@ -128,7 +145,8 @@
 </template>
 
 <script>
-import store from "../store";
+import { getToken } from "@/services/auth";
+import { decodeJwt } from "@/services/jwt";
 import JSZip from 'jszip'
 import '@progress/kendo-ui'
 import '@progress/kendo-ui/js/messages/kendo.messages.es-AR'
@@ -157,6 +175,12 @@ export default {
       pageOnly: true,
       title: 'Lista de precios - Sets Ventas',
       dataSource: ['remoteDataSourceSetsVtas'],
+      idemCodSet: '',
+      idemCodCte: '',
+      idemDvc1: '',
+      descuentofinanciero: '',
+      comentariocontadoefectivo: '',
+      comentariofinanciero: '',
       schemaModelFields: {
         orden_art_familia: { type: 'number' },
         set_ventas: { type: 'string' },
@@ -180,6 +204,9 @@ export default {
     window.JSZip = JSZip;
   },
   computed: {
+    token() {
+      return decodeJwt(getToken()).token
+    },
     UrlApiBase() {
       return `${process.env.VUE_APP_API_BASE}/lpvnrubrosvtas`
     },
@@ -204,7 +231,7 @@ export default {
       return groupTemplate(e)
     },
     readData: function (e) {
-      var token = store.state.token
+      var token = this.token
       var urlApi = `${process.env.VUE_APP_API_BASE}/lpvnrubrosvtas`
       kendo.jQuery.ajax({
         url: urlApi,
@@ -454,10 +481,18 @@ export default {
       }
     },
     pdfExport: function () {
-      const idemDtoFinan = document.getElementById("dtofinan").ariaValueNow
+      /* const idemDtoFinan = document.getElementById("dtofinan").ariaValueNow
       var comentarioContadoEfectivo = document.getElementById("comentariocontadoefectivo");
-      var comentarioFinanciero = document.getElementById("comentariofinanciero");
-      if (idemDtoFinan === null) {
+      var comentarioFinanciero = document.getElementById("comentariofinanciero"); */
+
+      if (this.descuentofinanciero == 20) {
+        let ContadoEfectivo = 'contado efectivo'
+        this.comentariocontadoefectivo = kendo.toString(ContadoEfectivo, 'p')
+      } else if (this.descuentofinanciero < 20 && this.idemCodCte !== 'REA' && this.idemCodCte !== 'REB' && this.idemCodCte !== 'REC' && this.idemCodCte !== 'CFC' && this.idemCodCte !== 'MET') {
+        this.comentariofinanciero = prompt("El dto financiero NO es 20%, ingresar comentario COMPRENSIBLE para el cliente sobre este dto Ej. -VISA 6 Cuotas-")
+      }
+
+      /* if (idemDtoFinan === null) {
         alert("Falta completa campo Dto. Finan.")
         window.location.reload()
       } else
@@ -466,7 +501,7 @@ export default {
         } else
           if (idemDtoFinan < 20) {
             comentarioFinanciero.innerText = prompt("El dto financiero NO es 20%, ingresar comentario COMPRENSIBLE para el cliente sobre este dto Ej. -VISA 6 Cuotas-")
-          }
+          } */
 
       var idemArtsArticuloEmp = document.querySelectorAll("span#idArtsArticuloEmp")
 
@@ -515,7 +550,7 @@ export default {
       var type = e.type;
     },
     dataBound: function () {
-      var idemCodCte = document.querySelector(".k-input-value-text:nth-child(1)").innerText
+      /* var idemCodCte = document.querySelector(".k-input-value-text:nth-child(1)").innerText
       var idCodCte = document.getElementById("cod_cte")
       var valCodCte = idCodCte.innerText = kendo.toString(idemCodCte)
 
@@ -523,13 +558,32 @@ export default {
       var dvc1listaprecvta = document.getElementById("dvc1listaprecvta")
       var idemdvc1listaprecvta = dvc1listaprecvta.innerText = kendo.toString(idemDvc1)
 
-      var idemCodSet = document.querySelector("#form > div:nth-child(2) > .k-dropdownlist > .k-input-inner > .k-input-value-text").innerText
-      var idCodSet = document.getElementById("set_nombre")
-      var valCodCte = idCodSet.innerText = kendo.toString(idemCodSet)
-
       var idemDtoFinan = document.getElementById("dtofinan").ariaValueNow
       var descuentofinanciero = document.getElementById("descuentofinanciero")
-      var idemDescuentoFinanciero = descuentofinanciero.innerText = kendo.toString(idemDtoFinan, "p")
+      var idemDescuentoFinanciero = descuentofinanciero.innerText = kendo.toString(idemDtoFinan, "p") */
+
+      /* var idemRubVNombre = document.querySelector("span#rubvnombre").innerText
+      var idRubVNombre = document.getElementById("rubrovnombre")
+      var ValRubVNombre = idRubVNombre.innerText = kendo.toString(idemRubVNombre) */
+
+      var idemCodSet = document.querySelector("#form > div:nth-child(2) > .k-dropdownlist > .k-input-inner > .k-input-value-text").innerText
+      this.idemCodSet = kendo.toString(idemCodSet)
+      //var idCodSet = document.getElementById("set_nombre")
+      //var valCodCte = idCodSet.innerText = kendo.toString(idemCodSet)
+
+      var idemCodCte = document.querySelector(".k-input-value-text:nth-child(1)").innerText
+      this.idemCodCte = kendo.toString(idemCodCte)
+
+      var idemDvc1 = document.querySelector("#dvc1listaprevcta").innerText
+      this.idemDvc1 = kendo.toString(idemDvc1)
+
+      var idemDtoFinan = document.getElementById("dtofinan").ariaValueNow
+      this.descuentofinanciero = kendo.toString(idemDtoFinan, "p")
+
+      if (this.descuentofinanciero == 20) {
+
+        this.comentariocontadoefectivo = kendo.toString('contado efectivo')
+      }
 
       var idemArtsArticuloEmp = document.querySelectorAll("span#idArtsArticuloEmp")
 
@@ -726,7 +780,7 @@ export default {
             type: 'GET',
             url: `${process.env.VUE_APP_API_BASE}/setsdeventas`,
             headers: {
-              'Authorization': 'Bearer ' + store.state.token
+              'Authorization': 'Bearer ' + this.token
             }
           }
         }
@@ -746,7 +800,7 @@ export default {
             type: 'GET',
             url: `${process.env.VUE_APP_API_BASE}/clasificadorclientes`,
             headers: {
-              'Authorization': 'Bearer ' + store.state.token
+              'Authorization': 'Bearer ' + this.token
             }
           }
         }

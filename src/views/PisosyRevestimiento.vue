@@ -65,7 +65,8 @@
 </template>
 
 <script>
-import store from "../store";
+import { getToken } from "@/services/auth";
+import { decodeJwt } from "@/services/jwt";
 import JSZip from 'jszip'
 import '@progress/kendo-ui'
 import '@progress/kendo-ui/js/messages/kendo.messages.es-AR'
@@ -89,6 +90,7 @@ export default {
   },
   data: function () {
     return {
+      token: decodeJwt(getToken()).token,
       fullscreen: false,
       teleport: true,
       pageOnly: true,
@@ -135,8 +137,8 @@ export default {
   },
   methods: {
     readData: function (e) {
-      // console.log(store.state.token)
-      var token = store.state.token
+      // console.log(this.token)
+      var token = this.token
       var urlApi = this.UrlApiBase
       var data = kendo.jQuery.ajax({
         url: urlApi,
@@ -328,7 +330,7 @@ export default {
             type: 'GET',
             url: `${process.env.VUE_APP_API_BASE}/clasificadorclientes`,
             headers: {
-              'Authorization': 'Bearer ' + store.state.token
+              'Authorization': 'Bearer ' + this.token
             }
           }  
         }

@@ -237,7 +237,8 @@
 </template>
 <script>
 import axios from 'axios';
-import store from '../store';
+import { getToken } from "@/services/auth";
+import { decodeJwt } from "@/services/jwt";
 import Accordion from 'primevue/accordion';
 import AccordionPanel from 'primevue/accordionpanel';
 import AccordionHeader from 'primevue/accordionheader';
@@ -277,8 +278,9 @@ export default {
         Divider,
         ParametrosControlCementos
     },
-    data() {
+    data: () => {
         return {
+            token: decodeJwt(getToken()).token,
             toast: useToast(),
             fullscreen: false,
             teleport: true,
@@ -431,12 +433,13 @@ export default {
             }
         },
         async getClasificacion8() {
+            const token = this.token;
             const response = await axios.get(`${process.env.VUE_APP_API_BASE}` + '/clasificacion8', {
-                headers: { Authorization: `Bearer ${this.token}` }
+                headers: { Authorization: `Bearer ${token}` }
             });
 
             const response2 = await axios.get(`${process.env.VUE_APP_API_BASE}` + '/gdc/clasif8artquesecompran', {
-                headers: { Authorization: `Bearer ${this.token}` }
+                headers: { Authorization: `Bearer ${token}` }
             });
             const dataAll = response.data.map((data, index) => {
                 return {
@@ -537,11 +540,12 @@ export default {
             });
         },
         async getStockDeposito() {
+            const token = this.token;
             const response = await axios.get(`${process.env.VUE_APP_API_BASE}` + '/stocdpos', {
-                headers: { Authorization: `Bearer ${this.token}` }
+                headers: { Authorization: `Bearer ${token}` }
             });
             const response2 = await axios.get(`${process.env.VUE_APP_API_BASE}` + '/gdc/deposanoconsiderarparastock', {
-                headers: { Authorization: `Bearer ${this.token}` }
+                headers: { Authorization: `Bearer ${token}` }
             });
             const dataAll = response.data.map((data, index) => {
                 return {
@@ -638,19 +642,21 @@ export default {
             });
         },
         async getModosDeStockMinimo() {
+            const token = this.token;
             const response = await axios.get(`${process.env.VUE_APP_API_BASE}` + '/gdc/modosdestockminimo', {
-                headers: { Authorization: `Bearer ${this.token}` }
+                headers: { Authorization: `Bearer ${token}` }
             });
             // console.log('Modos de stock mínimo:', response.data);
             this.modosdestockminimo = response.data;
         },
         async guardarModoStock() {
+            const token = this.token;
             if (this.inputmodosstockminimo.codigo && this.inputmodosstockminimo.nombre) {
                 await axios.post(`${process.env.VUE_APP_API_BASE}` + '/gdc/modosdestockminimo', {
                     Cod_modo_stock: this.inputmodosstockminimo.codigo,
                     Nombre_modo_stock: this.inputmodosstockminimo.nombre
                 }, {
-                    headers: { Authorization: `Bearer ${this.token}` }
+                    headers: { Authorization: `Bearer ${token}` }
                 }).then(response => {
                     // console.log(response.data);
                     this.productDialog = false;
@@ -666,9 +672,10 @@ export default {
             }
         },
         async DeleteSelected() {
+            const token = this.token;
             this.selectedmodosdestockminimo.forEach(async (item) => {
                 await axios.delete(`${process.env.VUE_APP_API_BASE}` + '/gdc/modosdestockminimodelete/' + item.id, {
-                    headers: { Authorization: `Bearer ${this.token}` }
+                    headers: { Authorization: `Bearer ${token}` }
                 }).then(response => {
                     // console.log(response.data);
                     this.getModosDeStockMinimo();
@@ -702,11 +709,12 @@ export default {
             });
         },
         async getNPStockComprom() {
+            const token = this.token;
             const response = await axios.get(`${process.env.VUE_APP_API_BASE}` + '/venttcve', {
-                headers: { Authorization: `Bearer ${this.token}` }
+                headers: { Authorization: `Bearer ${token}` }
             });
             const response2 = await axios.get(`${process.env.VUE_APP_API_BASE}` + '/gdc/npstockcomprometido', {
-                headers: { Authorization: `Bearer ${this.token}` }
+                headers: { Authorization: `Bearer ${token}` }
             });
             const dataAll = response.data.map((data, index) => {
                 return {
@@ -803,11 +811,12 @@ export default {
             });
         },
         async getRemitosDeVentas() {
+            const token = this.token;
             const response = await axios.get(`${process.env.VUE_APP_API_BASE}` + '/stoctcst', {
-                headers: { Authorization: `Bearer ${this.token}` }
+                headers: { Authorization: `Bearer ${token}` }
             });
             const response2 = await axios.get(`${process.env.VUE_APP_API_BASE}` + '/gdc/remitosdeventas', {
-                headers: { Authorization: `Bearer ${this.token}` }
+                headers: { Authorization: `Bearer ${token}` }
             });
             const dataAll = response.data.map((data, index) => {
                 return {
@@ -905,9 +914,6 @@ export default {
         }
     },
     computed: {
-        token() {
-            return store.state.token
-        },
         options() {
             return {
                 callback: (isFullscreen) => {

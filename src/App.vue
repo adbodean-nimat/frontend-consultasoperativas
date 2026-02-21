@@ -12,7 +12,7 @@ export default {
   components: {
     HeaderVue,
     FooterVue
-  }
+  },
 }
 </script>
 <style>

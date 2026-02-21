@@ -103,7 +103,8 @@
 </template>
 
 <script>
-import store from "../store";
+import { getToken } from "@/services/auth";
+import { decodeJwt } from "@/services/jwt";
 import JSZip from 'jszip'
 import '@progress/kendo-ui'
 import '@progress/kendo-ui/js/messages/kendo.messages.es-AR'
@@ -150,6 +151,9 @@ export default {
     window.JSZip = JSZip;
   },
   computed: {
+    token() {
+      return decodeJwt(getToken()).token
+    },
     UrlApiBase() {
       return `${process.env.VUE_APP_API_BASE}/vblesentrnp/`
     },
@@ -166,7 +170,7 @@ export default {
   },
   methods: {
     readData: function (e) {
-      var token = store.state.token
+      var token = this.token
       var urlApi = this.UrlApiBase
       var grid = this.$refs.grid.kendoWidget();
       var gridElement = grid.element;

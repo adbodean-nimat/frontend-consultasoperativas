@@ -117,7 +117,8 @@
 
 <script>
 import axios from 'axios';
-import store from "../store";
+import { getToken } from "@/services/auth";
+import { decodeJwt } from "@/services/jwt";
 import Card from 'primevue/card';
 import DataTable from 'primevue/datatable';
 import Toolbar from 'primevue/toolbar';
@@ -164,6 +165,7 @@ export default {
     },
     data: () => {
         return {
+            token: decodeJwt(getToken()).token,
             useToast,
             title: "Grilla de Ratio de Compras",
             fullscreen: false,
@@ -217,9 +219,6 @@ export default {
         },
     },
     computed: {
-        token() {
-            return store.state.token
-        },
         options() {
             return {
                 callback: (isFullscreen) => {
@@ -230,9 +229,6 @@ export default {
                 teleport: this.teleport
             }
         }
-    },
-    async created() {
-
     }
 }
 

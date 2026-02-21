@@ -1,4 +1,5 @@
-import store from '../store';
+import { getToken } from "@/services/auth";
+import { decodeJwt } from "@/services/jwt";
 import axios from 'axios';
 
 // Ajusta la URL base según tu configuración (ej. localhost:3000 o tu IP)
@@ -14,7 +15,7 @@ const apiClient = axios.create({
 // INTERCEPTOR: Se ejecuta antes de cada petición
 apiClient.interceptors.request.use(config => {
     // Obtenemos el token actual del store
-    const token = store.state.token; 
+    const token = decodeJwt(getToken()).token;
     
     // Si existe, lo agregamos al header
     if (token) {

@@ -164,7 +164,8 @@
 </template>
 
 <script>
-import store from '../store'
+import { getToken } from "@/services/auth";
+import { decodeJwt } from "@/services/jwt";
 import axios from 'axios'
 import '@progress/kendo-ui'
 import '@progress/kendo-ui/js/messages/kendo.messages.es-AR'
@@ -236,15 +237,16 @@ export default {
     this.getActualizacionWeb();
     this.getArtsClasif5Form();
     this.timer = setInterval(this.getActualizacionWeb, 60 * 1000 * 5);
-    if (!store.getters.isLoggedIn) {
-      this.$router.push('/');
+    if (!getToken()) {
+      this.$router.push({ name: "Login", query: { redirect: this.$route.fullPath } });
+      return;
+    } else {
+      this.IsAllow = decodeJwt(getToken()).user.sAMAccountName;
     }
-    //this.giveName = store.getters.getUser.givenName;
-    this.IsAllow = store.getters.getUser.sAMAccountName;
   },
   methods: {
     async getArtsClasif5Form() {
-      var token = this.token;
+      const token = this.token;
       const res = await fetch(this.UrlApiArtsClasif5StockManual, { method: 'GET', headers: { Authorization: `Basic ${token}` } });
       const data = await res.json();
       const res2 = await fetch(this.UrlApiArtsClasif5AlConsultar, { method: 'GET', headers: { Authorization: `Basic ${token}` } });
@@ -260,8 +262,8 @@ export default {
       return cronregex.test(freq);
     },
     async getActualizacionWeb() {
-      var token = this.token;
-      var urlApi2 = this.UrlApiActualizacionWeb;
+      const token = this.token;
+      const urlApi2 = this.UrlApiActualizacionWeb;
       const res = await fetch(urlApi2, { method: 'GET', headers: { Authorization: `Basic ${token}` } });
       const data = await res.json();
       var checkedUpdate = data[0].actualizacion_automatica
@@ -323,7 +325,7 @@ export default {
     },
     readData: function (e) {
       var tkn = this.token
-      var urlApi = this.UrlApiBase
+      const urlApi = this.UrlApiBase
       kendo.jQuery.ajax({
         url: urlApi,
         beforeSend: function (xhr) {
@@ -339,7 +341,7 @@ export default {
     },
     readDataCategorias: function (e) {
       var tkn = this.token
-      var urlApi = this.UrlApiCategoria
+      const urlApi = this.UrlApiCategoria
       kendo.jQuery.ajax({
         url: urlApi,
         beforeSend: function (xhr) {
@@ -355,7 +357,7 @@ export default {
     },
     readDataActualizacion: function (e) {
       var tkn = this.token
-      var urlApi = this.UrlApiActualizacionWeb
+      const urlApi = this.UrlApiActualizacionWeb
       kendo.jQuery.ajax({
         url: urlApi,
         beforeSend: function (xhr) {
@@ -372,7 +374,7 @@ export default {
     updateData: function (e) {
       var grid = this.$refs.grid.kendoWidget();
       var tkn = this.token
-      var urlApi = this.UrlApiBase
+      const urlApi = this.UrlApiBase
       var id = e.data.models[0].id
       var data = kendo.stringify(e.data.models[0], ["publicado", "codigo_art", "nombre_art", "orden_art", "marcar_nuevo", "mostrar_inicio", "outlet", "copete", "descripcion", "bloq_vtas", "min_para_web", "stock", "categorias1", "categorias2", "categorias3", "categorias4"])
       kendo.jQuery.ajax({
@@ -399,7 +401,7 @@ export default {
     },
     destroyData: function (e) {
       var tkn = this.token
-      var urlApi = this.UrlApiBase
+      const urlApi = this.UrlApiBase
       kendo.jQuery.ajax({
         method: 'DELETE',
         type: 'DELETE',
@@ -419,7 +421,7 @@ export default {
     createData: function (e) {
       var grid = this.$refs.grid.kendoWidget();
       var tkn = this.token
-      var urlApi = this.UrlApiBase
+      const urlApi = this.UrlApiBase
       kendo.jQuery.ajax({
         method: 'POST',
         type: 'POST',
@@ -483,7 +485,7 @@ export default {
               type: 'GET',
               url: this.UrlApiCategoria,
               headers: {
-                'Authorization': 'Bearer ' + store.state.token
+                'Authorization': 'Bearer ' + this.token
               }
             }
           },
@@ -519,7 +521,7 @@ export default {
               type: 'GET',
               url: this.UrlApiCategoria,
               headers: {
-                'Authorization': 'Bearer ' + store.state.token
+                'Authorization': 'Bearer ' + this.token
               }
             }
           },
@@ -639,7 +641,7 @@ export default {
       return `${process.env.VUE_APP_API_BASE}/stockfisicoydispon/`
     },
     token() {
-      return store.state.token
+      return decodeJwt(getToken()).token
     },
     options() {
       return {
@@ -761,12 +763,11 @@ export default {
     })
 
     toolbarElement.on('click', '.k-grid-download', (e) => {
-      var token = store.state.token
-      var urlApi = this.UrlApiDownload
+      const urlApi = this.UrlApiDownload
       axios.get(urlApi, {
         responseType: 'blob',
         headers: {
-          Authorization: "Bearer " + token,
+          Authorization: "Bearer " + this.token,
           "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         }
       }).then((response) => {
@@ -789,8 +790,8 @@ export default {
         var cron1 = kendo.jQuery('#cron1').val();
         var cron2 = kendo.jQuery('#cron2').val();
         var data = { actualizacion_cron_lunesaviernes: cron1, actualizacion_cron_sabados: cron2 }
-        var token = store.state.token
-        var urlApiCron = this.UrlApiActualizacionWebCron
+        const token = this.token
+        const urlApiCron = this.UrlApiActualizacionWebCron
         var validCron1 = isValidCron(cron1, { seconds: true })
         var validCron2 = isValidCron(cron2, { seconds: true })
 
@@ -857,7 +858,7 @@ export default {
         var input2 = kendo.jQuery('#input2').val();
         var data = { "arts_clasif_5": [{ input: input1 }], "stock_manual": input2 }
         //console.log(kendo.stringify(data))
-        var token = this.token
+        const token = this.token
         kendo.jQuery.ajax({
           url: this.UrlApiArtsClasif5StockManual + 1,
           beforeSend: function (xhr) {
@@ -885,7 +886,7 @@ export default {
         var input3 = kendo.jQuery('#input3-2').val();
         var data = { "arts_clasif_5": [{ input: input1 }], "descripcion": input2, "whatsapp": input3.replace(/\s+/g, '') }
         //console.log(kendo.stringify(data))
-        var token = this.token
+        const token = this.token
         kendo.jQuery.ajax({
           url: this.UrlApiArtsClasif5AlConsultar + 1,
           beforeSend: function (xhr) {
@@ -911,8 +912,8 @@ export default {
     toolbarElement.on('click', '.k-grid-actualizar', (e) => {
       e.preventDefault();
       kendo.jQuery("#loading").show();
-      var token = store.state.token
-      var urlApi = this.UrlToUpdateWeb
+      const token = this.token
+      const urlApi = this.UrlToUpdateWeb
       kendo.jQuery.ajax({
         url: urlApi,
         beforeSend: function (xhr) {

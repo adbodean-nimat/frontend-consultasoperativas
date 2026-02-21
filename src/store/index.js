@@ -39,8 +39,10 @@ export default createStore({
       // set auth header
       Axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     },
-    logout: ({ commit }) => {
+    logout: ({ commit, dispatch }) => {
       commit('RESET', '');
+      // remove auth header
+      delete Axios.defaults.headers.common['Authorization'];
     }
   }
 });

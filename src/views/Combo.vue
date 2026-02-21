@@ -67,7 +67,8 @@
 </template>
 
 <script>
-import store from "../store";
+import { getToken } from "@/services/auth";
+import { decodeJwt } from "@/services/jwt";
 import '@progress/kendo-ui'
 import '@progress/kendo-ui/js/messages/kendo.messages.es-AR'
 import '@progress/kendo-ui/js/cultures/kendo.culture.es-AR'
@@ -90,6 +91,7 @@ export default {
   },
   data: function () {
     return {
+      token: decodeJwt(getToken()).token,
       fullscreen: false,
       teleport: true,
       pageOnly: true,
@@ -137,7 +139,7 @@ export default {
       }
     },
     readData: function (e) {
-      var token = store.state.token
+      var token = this.token
       var urlApi = this.UrlApiBase
       kendo.jQuery.ajax({
         url: urlApi,

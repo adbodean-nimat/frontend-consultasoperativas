@@ -131,7 +131,8 @@
 </template>
 
 <script>
-import store from "../store";
+import { getToken } from "@/services/auth";
+import { decodeJwt } from "@/services/jwt";
 import JSZip from 'jszip'
 import '@progress/kendo-ui'
 import '@progress/kendo-ui/js/messages/kendo.messages.es-AR'
@@ -195,6 +196,9 @@ export default {
     window.JSZip = JSZip;
   },
   computed: {
+    token() {
+      return decodeJwt(getToken()).token
+    },
     UrlApiBase() {
       return `${process.env.VUE_APP_API_BASE}/lpvnrubrosvtasacopio`
     },
@@ -211,7 +215,7 @@ export default {
   },
   methods: {
     readData: function (e) {
-      var token = store.state.token
+      var token = this.token
       var urlApi = this.UrlApiBase
       var perfilComercial = kendo.jQuery("#codcte").data("kendoDropDownList").value()
       var fechaDesde = kendo.jQuery("#fechaCambiosPrecio").data("kendoDatePicker").value()
@@ -569,7 +573,7 @@ export default {
             type: 'GET',
             url: `${process.env.VUE_APP_API_BASE}/clasificadorclientes`,
             headers: {
-              'Authorization': 'Bearer ' + store.state.token
+              'Authorization': 'Bearer ' + this.token
             }
           }
         }

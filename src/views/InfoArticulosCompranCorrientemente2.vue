@@ -271,7 +271,8 @@ import { AllCommunityModule, ModuleRegistry, themeBalham } from 'ag-grid-communi
 ModuleRegistry.registerModules([AllCommunityModule]);
 
 import axios from 'axios';
-import store from '../store';
+import { getToken } from "@/services/auth";
+import { decodeJwt } from "@/services/jwt";
 import Card from "primevue/card";
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
@@ -359,6 +360,7 @@ export default {
     },
     data() {
         return {
+            token: decodeJwt(getToken()).token,
             title: 'Información de Artículos que se Compran Corrientemente v2',
             ageType: 'everyone',
             rowSelection: {
@@ -1142,9 +1144,6 @@ export default {
         this.getRUBROS();
     },
     computed: {
-        token() {
-            return store.state.token
-        },
         options() {
             return {
                 callback: (isFullscreen) => {

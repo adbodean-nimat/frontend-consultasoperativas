@@ -55,6 +55,8 @@
 </template>
 
 <script>
+import { getToken } from "@/services/auth";
+import { decodeJwt } from "@/services/jwt";
 import $ from 'jquery'
 import '@progress/kendo-ui'
 import '@progress/kendo-ui/js/messages/kendo.messages.es-AR'
@@ -78,6 +80,7 @@ export default {
   },
   data() {
     return {
+      token: decodeJwt(getToken()).token,
       fullscreen: false,
       teleport: true,
       pageOnly: true,
@@ -172,6 +175,9 @@ export default {
         $.ajax({
           method: "DELETE",
           url: destroyUrl + Id,
+          beforeSend: function (xhr) {
+            xhr.setRequestHeader('Authorization', 'Bearer ' + this.token)
+          },
           dataType: "json",
           data: json
         });
@@ -186,6 +192,9 @@ export default {
         $.ajax({
           method: "POST",
           url: createUrl,
+          beforeSend: function (xhr) {
+            xhr.setRequestHeader('Authorization', 'Bearer ' + this.token)
+          },
           dataType: "json",
           data: json
         });
@@ -201,6 +210,9 @@ export default {
         $.ajax({
           method: "PUT",
           url: updateUrl + Id,
+          beforeSend: function (xhr) {
+            xhr.setRequestHeader('Authorization', 'Bearer ' + this.token)
+          },
           dataType: "json",
           data: json
         });

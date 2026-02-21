@@ -67,7 +67,7 @@
                             </template>
                             <template #body="slotProps">
                                 <span class="text-gray-700 font-medium">{{ formatearFecha(slotProps.data.fecha)
-                                }}</span>
+                                    }}</span>
                             </template>
                         </Column>
 

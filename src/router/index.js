@@ -1,4 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { getToken } from "@/services/auth";
+import { decodeJwt } from "@/services/jwt";
+
 import Tablero from '../views/Tablero.vue'
 import ConsultasOperativas from '../views/ConsultasOperativas.vue'
 import Cartelerias from '../views/Cartelerias.vue'
@@ -76,11 +79,12 @@ import ControlStockNPOC from '../views/ControlStockNPOC.vue'
 
 const routes = [
   {
-    path: '/',
+    path: '/login',
     name: 'Login',
     component: Login,
     props: true,
     meta: {
+      requiresAuth: false,
       title: 'Consultas Operativas - Login',
       metaTags: [
         {
@@ -94,6 +98,7 @@ const routes = [
     component: ChatBotAI,
     props: true,
     meta: {
+      requiresAuth: true,
       title: 'Chat Bot AI',
       metaTags: [
         {          name: 'Chat Bot AI'
@@ -101,11 +106,13 @@ const routes = [
     }
   },
   {
-    path: '/tablero',
+    path: '/',
     name: 'tablero',
+    alias: '/tablero',
     component: Tablero,
     props: true,
     meta: {
+      requiresAuth: true,
       title: 'Tablero',
       metaTags: [
         {
@@ -119,6 +126,7 @@ const routes = [
     component: ConsultasOperativas,
     props: true,
     meta: {
+      requiresAuth: true,
       title: 'Consultas Operativas',
       metaTags: [
         {
@@ -132,6 +140,8 @@ const routes = [
     component: ConsultasClientesCADPLATAFORMA,
     props: true,
     meta: {
+      requiresAuth: true,
+      roles: ["Administracion y Finanzas", "Sistemas"],
       title: 'Consultas Clientes entre CAD y Plataforma',
       metaTags: [
         {
@@ -145,6 +155,7 @@ const routes = [
     component: ConsultaInformesAcindar,
     props: true,
     meta: {
+      requiresAuth: true,
       title: 'Consulta informes de Acindar',
       metaTags: [
         {
@@ -159,6 +170,7 @@ const routes = [
     component: ConsultaInformesAcindarFechas,
     props: true,
     meta: {
+      requiresAuth: true,
       title: 'Consulta informes de Acindar',
       metaTags: [
         {
@@ -173,6 +185,7 @@ const routes = [
     component: ConsultaQR,
     props: true,
     meta: {
+      requiresAuth: true,
       title: 'Consulta por QR',
       metaTags: [
         {
@@ -187,6 +200,7 @@ const routes = [
     component: TiempoEntregasInmediata,
     props: true,
     meta: {
+      requiresAuth: true,
       title: 'Consulta - Tiempo Entregas Inmediata',
       metaTags: [
         {
@@ -201,6 +215,7 @@ const routes = [
     component: ConsultaOrdenesCompra,
     props: true,
     meta: {
+      requiresAuth: true,
       title: 'Consulta Ordenes Compra',
       metaTags: [
         {
@@ -215,6 +230,7 @@ const routes = [
     component: GestionDeFinanzas,
     props: true,
     meta: {
+      requiresAuth: true,
       title: 'Gestión de Finanzas',
       metaTags: [
         {
@@ -228,6 +244,7 @@ const routes = [
     component: FinanzasView,
     props: true,
     meta: {
+      requiresAuth: true,
       title: 'Panel Finanzas',
       metaTags: [
         {
@@ -241,6 +258,7 @@ const routes = [
     component: ImportarMasivoFinanzas,
     props: true,
     meta: {
+      requiresAuth: true,
       title: 'Importar masivo de finanzas',
       metaTags: [
         {
@@ -254,6 +272,7 @@ const routes = [
     component: GestionDeDistribucion,
     props: true,
     meta: {
+      requiresAuth: true,
       title: 'Gestión de Distribución',
       metaTags: [
         {
@@ -267,6 +286,7 @@ const routes = [
     component: ParametrosDeDistribucion, 
     props: true,
     meta: {
+      requiresAuth: true,
       title: 'Parametros de Distribución',
       metaTags: [
         {
@@ -280,6 +300,7 @@ const routes = [
     component: ListadeClientesDistribucion, 
     props: true,
     meta: {
+      requiresAuth: true,
       title: 'Lista de Clientes de Distribución',
       metaTags: [
         {
@@ -293,6 +314,8 @@ const routes = [
     component: GestionDeCompras,
     props: true,
     meta: {
+      requiresAuth: true,
+      roles: ["Sistemas", "Compras"],
       title: 'Gestión de Compras',
       metaTags: [
         {
@@ -306,7 +329,9 @@ const routes = [
     component: ControlStockNPOC,
     props: true,
     meta: {
+      requiresAuth: true,
       title: 'Control Stock NP OC',
+      roles: ["Sistemas", "Compras"],
       metaTags: [
         {
           name: 'Control Stock NP OC'
@@ -319,7 +344,9 @@ const routes = [
     component: ParametrosDeCompras,
     props: true,
     meta: {
+      requiresAuth: true,
       title: 'Parametros de Compras',
+      roles: ["Sistemas", "Compras"],
       metaTags: [
         {
           name: 'Parametros de Compras'
@@ -332,6 +359,8 @@ const routes = [
     component: RatioCompras,
     props: true,
     meta: {
+      requiresAuth: true,
+      roles: ["Sistemas", "Compras"],
       title: 'Ratio de Compras',
       metaTags: [
         {
@@ -345,6 +374,8 @@ const routes = [
     component: InfoArticulosCompranCorrientemente,
     props: true,
     meta: {
+      requiresAuth: true,
+      roles: ["Sistemas", "Compras"],
       title: 'Info de Artículos que se compran corrientemente',
       metaTags: [
         {
@@ -358,6 +389,8 @@ const routes = [
     component: InfoArticulosCompranCorrientemente2,
     props: true,
     meta: {
+      requiresAuth: true,
+      roles: ["Sistemas", "Compras"],
       title: 'Info de Artículos que se compran corrientemente 2',
       metaTags: [
         {
@@ -371,6 +404,8 @@ const routes = [
     component: Cartelerias,
     props: true,
     meta: {
+      requiresAuth: true,
+      roles: ["Sistemas", "Ventas"],
       title: 'Cartelería',
       metaTags: [
         {
@@ -384,6 +419,7 @@ const routes = [
     component: CartelCombo,
     props: true,
     meta: {
+      requiresAuth: true,
       title: 'Cartel Combo',
       metaTags: [
         {
@@ -397,6 +433,7 @@ const routes = [
     component: CartelM2,
     props: true,
     meta: {
+      requiresAuth: true,
       title: 'Cartel M2',
       metaTags: [
         {
@@ -410,6 +447,7 @@ const routes = [
     component: CartelM2Saldo,
     props: true,
     meta: {
+      requiresAuth: true,
       title: 'Cartel M2 Saldo',
       metaTags: [
         {
@@ -423,6 +461,7 @@ const routes = [
     component: CartelArticulo,
     props: true,
     meta: {
+      requiresAuth: true,
       title: 'Cartel Articulo',
       metaTags: [
         {
@@ -436,6 +475,7 @@ const routes = [
     component: CartelManual,
     props: true,
     meta: {
+      requiresAuth: true,
       title: 'Cartel Manual',
       metaTags: [
         {
@@ -449,6 +489,7 @@ const routes = [
     component: WebNimat,
     props: true,
     meta: {
+      requiresAuth: true,
       title: 'Web NIMAT',
       metaTags: [
         {
@@ -462,6 +503,7 @@ const routes = [
     component: CategoriasWeb,
     props: true,
     meta: {
+      requiresAuth: true,
       title: 'Web NIMAT - Categorias',
       metaTags: [
         {
@@ -475,6 +517,7 @@ const routes = [
     component: ArticulosWeb,
     props: true,
     meta: {
+      requiresAuth: true,
       title: 'Web NIMAT - Articulos',
       metaTags: [
         {
@@ -488,6 +531,7 @@ const routes = [
     component: npconproblemaei,
     props: true,
     meta: {
+      requiresAuth: true,
       title: 'Nota de pedido con problema - Entrega inmediata',
       metaTags: [
         {
@@ -501,6 +545,7 @@ const routes = [
     component: ControlAltaClientes,
     props: true,
     meta: {
+      requiresAuth: true,
       title: 'Control Alta Clientes',
       metaTags: [
         {
@@ -514,6 +559,7 @@ const routes = [
     component: ListadeClientes,
     props: true,
     meta: {
+      requiresAuth: true,
       title: 'Lista de Clientes',
       metaTags: [
         {
@@ -527,6 +573,7 @@ const routes = [
     component: Tablas,
     props: true,
     meta: {
+      requiresAuth: true,
       title: 'Tablas',
       metaTags: [
         {
@@ -540,6 +587,7 @@ const routes = [
     component: DeposANoConsiderar,
     props: true,
     meta: {
+      requiresAuth: true,
       title: 'Deposito a No Considerar',
       metaTags: [
         {
@@ -553,6 +601,7 @@ const routes = [
     component: DeposANoConsiderarParaStockFisico,
     props: true,
     meta: {
+      requiresAuth: true,
       title: 'Deposito a No Considerar para Stock Físico',
       metaTags: [
         {
@@ -566,6 +615,7 @@ const routes = [
     component: NPAConsiderar,
     props: true,
     meta: {
+      requiresAuth: true,
       title: 'NP a Considerar',
       metaTags: [
         {
@@ -579,6 +629,7 @@ const routes = [
     component: DimensionesContenedores,
     props: true,
     meta: {
+      requiresAuth: true,
       title: 'Dimensiones aprox. de contenedores',
       metaTags: [
         {
@@ -592,6 +643,7 @@ const routes = [
     component: MovimientosContenedores,
     props: true,
     meta: {
+      requiresAuth: true,
       title: 'Movimientos de contenedores',
       metaTags: [
         {
@@ -605,6 +657,7 @@ const routes = [
     component: ListadePrecioBUI,
     props: true,
     meta: {
+      requiresAuth: true,
       title: 'Tabla: Lista de precio Breve Uso Interno',
       metaTags: [
         {
@@ -618,6 +671,7 @@ const routes = [
     component: SetsDeVentas,
     props: true,
     meta: {
+      requiresAuth: true,
       title: 'Tabla: #01 - Sets de Ventas',
       metaTags: [
         {
@@ -631,6 +685,7 @@ const routes = [
     component: FamiliaDeArticulos,
     props: true,
     meta: {
+      requiresAuth: true,
       title: 'Tabla: #02 - Familia de Articulos',
       metaTags: [
         {
@@ -644,6 +699,7 @@ const routes = [
     component: VincularArticuloAFamilia,
     props: true,
     meta: {
+      requiresAuth: true,
       title: 'Tabla: #03 - Vincular Articulo a Familia',
       metaTags: [
         {
@@ -657,6 +713,7 @@ const routes = [
     component: ConstSecoArmadoConfig1,
     props: true,
     meta: {
+      requiresAuth: true,
       title: 'Tabla: Armado Config. 1',
       metaTags: [
         {
@@ -670,6 +727,7 @@ const routes = [
     component: ConstSecoArmadoConfig2,
     props: true,
     meta: {
+      requiresAuth: true,
       title: 'Tabla: Armado Config. 2',
       metaTags: [
         {
@@ -683,6 +741,7 @@ const routes = [
     component: ConstSecoNombresConfiguraciones,
     props: true,
     meta: {
+      requiresAuth: true,
       title: 'Tabla: Nombres Configuraciones',
       metaTags: [
         {
@@ -696,6 +755,7 @@ const routes = [
     component: ProductosParaDistribucion,
     props: true,
     meta: {
+      requiresAuth: true,
       title: 'Tabla: Productos para Distribucion',
       metaTags: [
         {
@@ -709,6 +769,7 @@ const routes = [
     component: RubrosVentas,
     props: true,
     meta: {
+      requiresAuth: true,
       title: 'Tabla: Rubros Ventas',
       metaTags: [
         {
@@ -722,6 +783,7 @@ const routes = [
     component: FamiliaDeArticulosDistribucion,
     props: true,
     meta: {
+      requiresAuth: true,
       title: 'Tabla: Familia de articulos para Distribución',
       metaTags: [
         {
@@ -735,6 +797,7 @@ const routes = [
     component: ComprobantesAOmitir,
     props: true,
     meta: {
+      requiresAuth: true,
       title: 'Tabla Acopio: Comprobantes a Omitir',
       metaTags: [
         {
@@ -748,6 +811,7 @@ const routes = [
     component: RemitosVtas,
     props: true,
     meta: {
+      requiresAuth: true,
       title: 'Tabla Acopio: Remitos de Ventas',
       metaTags: [
         {
@@ -761,6 +825,7 @@ const routes = [
     component: ArtCalesCementosPlasticor,
     props: true,
     meta: {
+      requiresAuth: true,
       title: 'Tabla: Articulos - Cales, Cementos, Plasticor',
       metaTags: [
         {
@@ -774,6 +839,7 @@ const routes = [
     component: artsclasif5stockmanual,
     props: true,
     meta: {
+      requiresAuth: true,
       title: 'Tabla: Arts Clasif. 5 - Stock Manual para la WEB NIMAT',
       metaTags: [
         {
@@ -787,6 +853,7 @@ const routes = [
     component: ClasifClientes,
     props: true,
     meta: {
+      requiresAuth: true,
       title: 'Tabla: Clasif. Clientes',
       metaTags: [
         {
@@ -800,6 +867,7 @@ const routes = [
     component: AcindarComprobantes,
     props: true,
     meta: {
+      requiresAuth: true,
       title: 'Tabla: Comprobantes',
       metaTags: [
         {
@@ -813,6 +881,7 @@ const routes = [
     component: EquivalCodFactorCant,
     props: true,
     meta: {
+      requiresAuth: true,
       title: 'Tabla: Equival. Cod. y Factor Cant.',
       metaTags: [
         {
@@ -826,6 +895,7 @@ const routes = [
     component: ListaContenedores,
     props: true,
     meta: {
+      requiresAuth: true,
       title: 'Lista de precio - Containers',
       metaTags: [
         {
@@ -839,6 +909,7 @@ const routes = [
     component: ListaPyR,
     props: true,
     meta: {
+      requiresAuth: true,
       title: 'Lista de precio - Pisos y Revestimiento',
       metaTags: [
         {
@@ -852,6 +923,7 @@ const routes = [
     component: ListaPyRConStock,
     props: true,
     meta: {
+      requiresAuth: true,
       title: 'Lista de precio - Pisos y Revistimiento con Stock',
       metaTags: [
         {
@@ -865,6 +937,7 @@ const routes = [
     component: ListaBUI,
     props: true,
     meta: {
+      requiresAuth: true,
       title: 'Lista de precio - Breve Uso Interno',
       metaTags: [
         {
@@ -878,6 +951,7 @@ const routes = [
     component: ListaConstSeco,
     props: true,
     meta: {
+      requiresAuth: true,
       title: 'Lista de precio - Const. Seco',
       metaTags: [
         {
@@ -891,6 +965,7 @@ const routes = [
     component: ListaRubrosVtas,
     props: true,
     meta: {
+      requiresAuth: true,
       title: 'Lista de precio - Rubros Ventas',
       metaTags: [
         {
@@ -904,6 +979,7 @@ const routes = [
     component: ListaRubrosVtasAcopio,
     props: true,
     meta: {
+      requiresAuth: true,
       title: 'Lista de precio - Rubros Ventas Acopio',
       metaTags: [
         {
@@ -917,6 +993,7 @@ const routes = [
     component: ListaSetsVtas,
     props: true,
     meta: {
+      requiresAuth: true,
       title: 'Lista de precio - Sets Ventas',
       metaTags: [
         {
@@ -930,6 +1007,7 @@ const routes = [
     component: RowaPlanCanje,
     props: true,
     meta: {
+      requiresAuth: true,
       title: 'Rowa - Plan canje por siempre',
       metaTags: [
         {
@@ -943,6 +1021,7 @@ const routes = [
     component: VblesEntrNP,
     props: true,
     meta: {
+      requiresAuth: true,
       title: 'Variables Entregas NP - General',
       metaTags: [
         {
@@ -956,6 +1035,7 @@ const routes = [
     component: VblesEntrNPPR,
     props: true,
     meta: {
+      requiresAuth: true,
       title: 'Variables Entregas NP - Pisos y revistimiento',
       metaTags: [
         {
@@ -969,6 +1049,7 @@ const routes = [
     component: ListaPrecioCostoDeReposicion,
     props: true,
     meta: {
+      requiresAuth: true,
       title: 'Lista de precios - Costo de reposición',
       metaTags: [
         {
@@ -982,6 +1063,7 @@ const routes = [
     component: ListaPrecioVentaAlPublico,
     props: true,
     meta: {
+      requiresAuth: true,
       title: 'Lista de precios - Venta al público',
       metaTags: [
         {
@@ -995,6 +1077,7 @@ const routes = [
     component: ListaDistribucion,
     props: true,
     meta: {
+      requiresAuth: true,
       title: 'Lista de precios - Distribución',
       metaTags: [
         {
@@ -1008,6 +1091,7 @@ const routes = [
     component: ListaCombo,
     props: true,
     meta: {
+      requiresAuth: true,
       title: 'Lista de precios - Combo',
       metaTags: [
         {
@@ -1021,6 +1105,7 @@ const routes = [
     component: AcopioCementoLN,
     props: true,
     meta: {
+      requiresAuth: true,
       title: 'Acopio - Cemento Loma Negra',
       metaTags: [
         {
@@ -1034,6 +1119,7 @@ const routes = [
     component: STOCKNPOCCalesCementosPlasticor,
     props: true,
     meta: {
+      requiresAuth: true,
       title: 'Stock NP OC - Cales, Cementos, Plasticor',
       metaTags: [
         {
@@ -1048,52 +1134,62 @@ const router = createRouter({
   routes
 })
 
-// ... 
+function extractCN(dn) {
+  // dn ejemplo: "CN=Sistemas,OU=Sistemas,OU=Usuarios Prades,DC=prades,DC=local"
+  const m = /^CN=([^,]+)(,|$)/i.exec(String(dn));
+  return m ? m[1].trim() : null;
+}
 
-// This callback runs before every route change, including on page load.
-router.beforeEach((to, from, next) => {
-  // This goes through the matched routes from last to first, finding the closest route with a title.
-  // e.g., if we have `/some/deep/nested/route` and `/some`, `/deep`, and `/nested` have titles,
-  // `/nested`'s will be chosen.
-  const nearestWithTitle = to.matched.slice().reverse().find(r => r.meta && r.meta.title);
+router.beforeEach((to, from) => {
+  // --- AUTH / ROLES ---
+  if (to.meta.requiresAuth) {
+    const token = getToken();
 
-  // Find the nearest route element with meta tags.
-  const nearestWithMeta = to.matched.slice().reverse().find(r => r.meta && r.meta.metaTags);
+    if (!token) {
+      return { name: "Login", query: { redirect: to.fullPath } };
+    }
 
-  const previousNearestWithMeta = from.matched.slice().reverse().find(r => r.meta && r.meta.metaTags);
+    const payload = decodeJwt(token);
 
-  // If a route with a title was found, set the document (page) title to that value.
-  if(nearestWithTitle) {
-    document.title = nearestWithTitle.meta.title;
-  } else if(previousNearestWithMeta) {
-    document.title = previousNearestWithMeta.meta.title;
+    // Si la ruta pide roles, validamos contra memberOf -> CN
+    if (to.meta.roles?.length) {
+      const memberOf = payload?.user?.memberOf ?? [];
+
+      const groupCns = (Array.isArray(memberOf) ? memberOf : [memberOf])
+        .map(extractCN)
+        .filter(Boolean);
+
+      //console.log("AD groups (CN):", groupCns);
+
+      const ok = to.meta.roles.some(required => groupCns.includes(required));
+      if (!ok) return { path: to.fullPath };
+    }
   }
 
-  // Remove any stale meta tags from the document using the key attribute we set below.
-  Array.from(document.querySelectorAll('[data-vue-router-controlled]')).map(el => el.parentNode.removeChild(el));
+  // --- TITLE / METATAGS ---
+  const nearestWithTitle = [...to.matched].reverse().find(r => r.meta?.title);
+  const nearestWithMeta = [...to.matched].reverse().find(r => r.meta?.metaTags);
+  const previousNearestWithMeta = [...from.matched].reverse().find(r => r.meta?.metaTags);
 
-  // Skip rendering meta tags if there are none.
-  if(!nearestWithMeta) return next();
+  if (nearestWithTitle) document.title = nearestWithTitle.meta.title;
+  else if (previousNearestWithMeta?.meta?.title) document.title = previousNearestWithMeta.meta.title;
 
-  // Turn the meta tag definitions into actual elements in the head.
-  nearestWithMeta.meta.metaTags.map(tagDef => {
-    const tag = document.createElement('meta');
+  Array.from(document.querySelectorAll("[data-vue-router-controlled]"))
+    .forEach(el => el.parentNode?.removeChild(el));
 
-    Object.keys(tagDef).forEach(key => {
-      tag.setAttribute(key, tagDef[key]);
-    });
+  if (!nearestWithMeta) return true;
 
-    // We use this to track which meta tags we create so we don't interfere with other ones.
-    tag.setAttribute('data-vue-router-controlled', '');
+  nearestWithMeta.meta.metaTags
+    .map(tagDef => {
+      const tag = document.createElement("meta");
+      Object.keys(tagDef).forEach(k => tag.setAttribute(k, tagDef[k]));
+      tag.setAttribute("data-vue-router-controlled", "");
+      return tag;
+    })
+    .forEach(tag => document.head.appendChild(tag));
 
-    return tag;
-  })
-  // Add the meta tags to the document head.
-  .forEach(tag => document.head.appendChild(tag));
-
-  next();
+  return true;
 });
 
-// ...
 
 export default router

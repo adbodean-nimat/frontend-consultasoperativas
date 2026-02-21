@@ -217,22 +217,26 @@
 </template>
 
 <script>
-import store from "../store";
+import { getToken } from "@/services/auth";
+import { decodeJwt } from "@/services/jwt";
 export default {
     name: 'Carteleria',
     data: () => {
         return {
             giveName: '',
-            IsAllow: ''
+            IsAllow: '',
+            token: getToken(),
         }
     },
     async created() {
-        if (!store.getters.isLoggedIn) {
-            this.$router.push('/');
+        if (!this.token) {
+            this.$router.push({ name: "Login", query: { redirect: this.$route.fullPath } });
+            return;
+        } else {
+            const payload = decodeJwt(this.token);
+            this.giveName = payload.user.givenName;
+            this.IsAllow = payload.user.sAMAccountName;
         }
-        this.giveName = store.getters.getUser.givenName;
-        this.IsAllow = store.getters.getUser.sAMAccountName;
-        //this.secretMessage = await AuthService.getSecretContent();
     }
 }
 

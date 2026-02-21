@@ -50,6 +50,8 @@
 </template>
 
 <script>
+import { getToken } from "@/services/auth";
+import { decodeJwt } from "@/services/jwt";
 import $ from 'jquery'
 import '@progress/kendo-ui'
 import '@progress/kendo-ui/js/messages/kendo.messages.es-AR'
@@ -85,6 +87,9 @@ export default {
     }
   },
   computed: {
+    token() {
+      return decodeJwt(getToken()).token
+    },
     UrlApiBase() {
       return `${process.env.VUE_APP_API_BASE}/deposanoconsiderar/`
     },
@@ -138,6 +143,9 @@ export default {
         var destroyUrl = `${process.env.VUE_APP_API_BASE}/deposanoconsiderar/`
         $.ajax({
           method: "DELETE",
+          beforeSend: function (xhr) {
+            xhr.setRequestHeader('Authorization', 'Bearer ' + token)
+          },
           url: destroyUrl + Id,
           dataType: "json",
           data: json
@@ -152,6 +160,9 @@ export default {
         var createUrl = `${process.env.VUE_APP_API_BASE}/deposanoconsiderar/`
         $.ajax({
           method: "POST",
+          beforeSend: function (xhr) {
+            xhr.setRequestHeader('Authorization', 'Bearer ' + token)
+          },
           url: createUrl,
           dataType: "json",
           data: json
@@ -167,6 +178,9 @@ export default {
         var updateUrl = `${process.env.VUE_APP_API_BASE}/deposanoconsiderar/`
         $.ajax({
           method: "PUT",
+          beforeSend: function (xhr) {
+            xhr.setRequestHeader('Authorization', 'Bearer ' + token)
+          },
           url: updateUrl + Id,
           dataType: "json",
           data: json

@@ -50,7 +50,8 @@
 
 <script>
 import $ from 'jquery'
-import store from "../store";
+import { getToken } from "@/services/auth";
+import { decodeJwt } from "@/services/jwt";
 import '@progress/kendo-ui'
 import '@progress/kendo-ui/js/messages/kendo.messages.es-AR'
 import '@progress/kendo-ui/js/cultures/kendo.culture.es-AR'
@@ -73,6 +74,7 @@ export default {
   },
   data() {
     return {
+      token: decodeJwt(getToken()).token,
       fullscreen: false,
       teleport: true,
       pageOnly: true,
@@ -102,8 +104,8 @@ export default {
   },
   methods: {
     readData: function (e) {
-      // console.log(store.state.token)
-      var token = store.state.token
+      // console.log(this.token)
+      var token = this.token
       var urlApi = `${process.env.VUE_APP_API_BASE}/movimientosdecontenedores/`
       $.ajax({
         url: urlApi,
@@ -169,7 +171,7 @@ export default {
           dataType: "json",
           data: json,
           headers: {
-            'Authorization': 'Bearer ' + store.state.token
+            'Authorization': 'Bearer ' + this.token
           }
         });
       }
@@ -183,7 +185,7 @@ export default {
           dataType: "json",
           data: json,
           headers: {
-            'Authorization': 'Bearer ' + store.state.token
+            'Authorization': 'Bearer ' + this.token
           }
         });
       }
@@ -198,7 +200,7 @@ export default {
           dataType: "json",
           data: json,
           headers: {
-            'Authorization': 'Bearer ' + store.state.token
+            'Authorization': 'Bearer ' + this.token
           }
         });
       }
