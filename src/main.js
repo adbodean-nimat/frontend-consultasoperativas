@@ -2,13 +2,8 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import { getToken } from "@/services/auth";
-import Axios from 'axios'
 import PrimeVue from 'primevue/config'
 import Lara from '@primeuix/themes/lara'
-/* import Material from '@primeuix/themes/material' */
-/* import Nora from '@primeuix/themes/nora' */
-/* import Aura from '@primeuix/themes/aura'  */
 import ToastService from 'primevue/toastservice';
 import Tooltip from 'primevue/tooltip'
 import ConfirmationService from 'primevue/confirmationservice';
@@ -17,10 +12,6 @@ import 'primeicons/primeicons.css'
 import 'bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import '@popperjs/core'
-
-// set auth header
-//const token = getToken();
-//Axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
 const app = createApp(App);
 app.directive('tooltip', Tooltip);
