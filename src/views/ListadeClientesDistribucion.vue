@@ -547,34 +547,69 @@ export default {
                 });
         },
         async enviarListaPrecios() {
-            //console.log(this.selectedClientes)
-            this.selectedClientes.forEach(async (cliente) => {
-                //console.log(cliente)
-                //console.log('Cliente', cliente.habilitado)
-                //console.log('Cliente', cliente.nro_whatsapp_cliente)
-                //console.log('Cliente', cliente.perfilcomercial_cliente)
-                if (cliente.habilitado == true) {
-                    if (cliente.perfilcomercial_cliente == 'REA' || cliente.perfilcomercial_cliente == 'REB') {
-                        const data = {
-                            to: cliente.nro_whatsapp_cliente,
-                            perfil: cliente.perfilcomercial_cliente
-                        };
-                        await axios.post(`${process.env.VUE_APP_API_BASE}` + '/enviarxWhatsapp', data, {
-                            headers: {
-                                'Authorization': `Bearer ${this.token}`
+            const clientesValidos = this.selectedClientes.filter(c =>
+                c.habilitado &&
+                (c.perfilcomercial_cliente === 'REA' || c.perfilcomercial_cliente === 'REB')
+            );
+
+            if (!clientesValidos.length) {
+                this.$toast.add({
+                    severity: 'warn',
+                    summary: 'Sin clientes válidos',
+                    detail: 'No hay clientes habilitados con perfil REA o REB.',
+                    life: 3000
+                });
+                return;
+            }
+
+            try {
+                const requests = clientesValidos.map(async cliente => {
+                    try {
+                        const res = await axios.post(
+                            `${process.env.VUE_APP_API_BASE}/enviarxWhatsapp`,
+                            {
+                                to: cliente.nro_whatsapp_cliente,
+                                perfil: cliente.perfilcomercial_cliente
+                            },
+                            {
+                                headers: {
+                                    Authorization: `Bearer ${this.token}`
+                                }
                             }
-                        }).then(response => {
-                            console.log(response)
-                            this.$toast.add({ severity: 'success', summary: 'Éxito', detail: 'Lista de precios enviado exitosamente.', life: 3000 });
-                        }).catch(error => {
-                            console.error('Error:', error);
-                            this.$toast.add({ severity: 'error', summary: 'Error', detail: 'Error al enviar lista de precios.', life: 3000 });
-                        });
-                    } else {
-                        this.$toast.add({ severity: 'error', summary: 'Error', detail: 'Error al enviar lista de precios, no se puede enviar a clientes con clasificación de cliente no son REA o REB.', life: 3000 });
+                        );
+                        return ({ ok: true, cliente, data: res.data });
+                    } catch (err) {
+                        return ({ ok: false, cliente, error: err });
                     }
-                }
-            })
+                });
+
+                const resultados = await Promise.all(requests);
+
+                const enviados = resultados.filter(r => r.ok).length;
+                const fallidos = resultados.length - enviados;
+
+                this.$toast.add({
+                    severity: fallidos ? 'warn' : 'success',
+                    summary: 'Envío finalizado',
+                    detail: `Enviados: ${enviados} | Fallidos: ${fallidos}`,
+                    life: 4000
+                });
+
+                // Opcional: log detallado
+                resultados
+                    .filter(r => !r.ok)
+                    .forEach(r => console.error(`Error con ${r.cliente.nro_whatsapp_cliente}`, r.error));
+
+            } catch (err) {
+                // Esto solo pasa si Promise.all falla fuera del control (muy raro)
+                console.error(err);
+                this.$toast.add({
+                    severity: 'error',
+                    summary: 'Error general',
+                    detail: 'Ocurrió un error inesperado.',
+                    life: 4000
+                });
+            }
         },
     },
     mounted() {
