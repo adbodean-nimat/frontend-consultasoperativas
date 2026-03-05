@@ -34,7 +34,8 @@
                     </template>
                     <template #end>
                         <Button label="Enviar lista de precios x WhatsApp" icon="pi pi-send" class="me-2"
-                            :disabled="!selectedClientes || !selectedClientes.length" @click="enviarListaPrecios" />
+                            :disabled="!selectedClientes || !selectedClientes.length" @click="enviarListaPrecios"
+                            :loading="loading" />
                     </template>
                 </Toolbar>
                 <DataTable v-model:filters="filters" v-model:selection="selectedClientes" :value="clientes" paginator
@@ -350,6 +351,7 @@ export default {
                 'contacto': { value: null, matchMode: 'contains' }
             },
             selectedClientes: null,
+            loading: false,
             cargando: false,
             clientesDialog: false,
             deleteclientesDialog: false,
@@ -547,6 +549,7 @@ export default {
                 });
         },
         async enviarListaPrecios() {
+            this.loading = true;
             const clientesValidos = this.selectedClientes.filter(c =>
                 c.habilitado &&
                 (c.perfilcomercial_cliente === 'REA' || c.perfilcomercial_cliente === 'REB')
@@ -577,7 +580,9 @@ export default {
                                 }
                             }
                         );
+
                         return ({ ok: true, cliente, data: res.data });
+
                     } catch (err) {
                         return ({ ok: false, cliente, error: err });
                     }
@@ -594,7 +599,7 @@ export default {
                     detail: `Enviados: ${enviados} | Fallidos: ${fallidos}`,
                     life: 4000
                 });
-
+                this.loading = false;
                 // Opcional: log detallado
                 resultados
                     .filter(r => !r.ok)

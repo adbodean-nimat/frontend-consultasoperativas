@@ -31,10 +31,15 @@
 
       <datasource ref="remoteDataSourceCategoriasWeb" :transport-read="readData" :transport-update="updateData"
         :transport-destroy="destroyData" :transport-create="createData" :transport-parameter-map="parameterMap"
-        :schema-model-id="'id'" :schema-model-fields="fields" :batch="true" @error="onError" @requestend="requestEnd">
+        :schema-model-id="'id'" :schema-model-fields="fields" :batch="true" @error="onError" @requestend="requestEnd"
+        :page-size='100'>
       </datasource>
-      <grid ref="grid" :height="'100vh'" :data-source-ref="'remoteDataSourceCategoriasWeb'" :navigatable="true"
-        :filterable="true" :pageable='false' :sortable-mode="'multiple'" :editable="'inline'" :toolbar="['create']">
+
+      <datasource ref="remoteDataSourceCategoriasWeb2" :transport-read="readData" :batch="true"></datasource>
+
+      <grid ref="grid" :height="'95vh'" :data-source-ref="'remoteDataSourceCategoriasWeb'" :navigatable="true"
+        :filterable="true" :pageable='true' :sortable-mode="'single'" :editable="'inline'" :toolbar="['create']"
+        @save="onSaveVerify">
         <grid-column :field="'id'" :title="'Id'" :hidden="true" :width="100"></grid-column>
         <grid-column :field="'id_categorias'" :title="'Id Categoria'"></grid-column>
         <grid-column :field="'nombre_categorias'" :title="'Nombre Categoria'"></grid-column>
@@ -75,7 +80,12 @@ export default {
       title: 'Web Nimat - Categorias',
       fields: {
         id: { editable: false, nullable: true },
-        id_categorias: { type: 'string' },
+        id_categorias: {
+          type: 'number',
+          validation: {
+            required: true
+          }
+        },
         nombre_categorias: { type: 'string' },
       }
     }
@@ -102,7 +112,7 @@ export default {
     readData: function (e) {
       var tkn = this.token
       var urlApi = this.UrlApiBase
-      kendo.jQuery.ajax({
+      const data = kendo.jQuery.ajax({
         url: urlApi,
         beforeSend: function (xhr) {
           xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
@@ -113,12 +123,20 @@ export default {
         },
         method: 'GET',
         type: 'GET'
-      })
+      });
+      return data;
     },
     updateData: function (e) {
       var tkn = this.token
       var urlApi = this.UrlApiBase
+      var idCategoria = e.data.models[0].id_categorias;
       var id = e.data.models[0].id
+      var getData = this.$refs.remoteDataSourceCategoriasWeb2.kendoWidget().view().filter(item => item.id_categorias === idCategoria);
+      if (getData.length > 0 && getData[0].id !== id) {
+        e.preventDefault();
+        kendo.alert("No se puede actualizar el mismo categoria").element.getKendoAlert().title("Mensaje");
+        return;
+      }
       var data = kendo.stringify(e.data.models[0], ["id_categorias", "nombre_categorias"])
       kendo.jQuery.ajax({
         method: 'PUT',
@@ -202,6 +220,21 @@ export default {
         return kendo.stringify(options.models)
       }
     },
+    onSaveVerify: function (e) {
+      var currentId = e.model.id
+      var currentIdCategoria = e.model.id_categorias;
+      var dataSourceCategoria = this.$refs.remoteDataSourceCategoriasWeb2.kendoWidget();
+      const data = dataSourceCategoria.view().filter(item => item.id_categorias === currentIdCategoria);
+      if (data.length > 0 && data[0].id !== currentId) {
+        e.preventDefault();
+        kendo.alert("Este categoria ya existe").element.getKendoAlert().title("Mensaje");
+        return;
+      }
+      return true;
+    },
+  },
+  mounted() {
+    this.$refs.remoteDataSourceCategoriasWeb2.kendoDataSource.fetch();
   }
 }
 </script>
