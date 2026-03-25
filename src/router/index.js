@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { getToken } from "@/services/auth";
-import { decodeJwt } from "@/services/jwt";
+import { getToken, clearToken } from "@/services/auth";
+import { isTokenExpired, decodeJwt } from "@/services/jwt";
 
 import Tablero from '../views/Tablero.vue'
 import ConsultasOperativas from '../views/ConsultasOperativas.vue'
@@ -128,6 +128,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Consultas Operativas',
+      back: true,
       metaTags: [
         {
           name: 'Consultas Operativas'
@@ -143,6 +144,7 @@ const routes = [
       requiresAuth: true,
       roles: ["Administracion y Finanzas", "Sistemas"],
       title: 'Consultas Clientes entre CAD y Plataforma',
+      back: true,
       metaTags: [
         {
           name: 'Consultas Clientes entre CAD y Plataforma'
@@ -157,6 +159,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Consulta informes de Acindar',
+      back: true,
       metaTags: [
         {
           name: 'Consulta informes de Acindar'
@@ -172,6 +175,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Consulta informes de Acindar',
+      back: true,
       metaTags: [
         {
           name: 'Consulta informes de Acindar'
@@ -187,6 +191,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Consulta por QR',
+      back: true,
       metaTags: [
         {
           name: 'Consulta por QR'
@@ -202,6 +207,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Consulta - Tiempo Entregas Inmediata',
+      back: true,
       metaTags: [
         {
           name: 'Consulta - Tiempo Entregas Inmediata'
@@ -217,6 +223,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Consulta Ordenes Compra',
+      back: true,
       metaTags: [
         {
           name: 'Consulta Ordenes Compra'
@@ -232,6 +239,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Gestión de Finanzas',
+      back: true,
       metaTags: [
         {
           name: 'Gestión de Finanzas',
@@ -246,6 +254,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Panel Finanzas',
+      back: true,
       metaTags: [
         {
           name: 'Panel Finanzas',
@@ -260,6 +269,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Importar masivo de finanzas',
+      back: true,
       metaTags: [
         {
           name: 'Importar masivo de finanzas',
@@ -274,6 +284,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Gestión de Distribución',
+      back: true,
       metaTags: [
         {
           name: 'Gestión de Distribución',
@@ -288,6 +299,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Parametros de Distribución',
+      back: true,
       metaTags: [
         {
           name: 'Parametros de Distribución',
@@ -302,6 +314,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Lista de Clientes de Distribución',
+      back: true,
       metaTags: [
         {
           name: 'Lista de Clientes de Distribución',
@@ -317,6 +330,7 @@ const routes = [
       requiresAuth: true,
       roles: ["Sistemas", "Compras"],
       title: 'Gestión de Compras',
+      back: true,
       metaTags: [
         {
           name: 'Gestión de Compras'
@@ -331,6 +345,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Control Stock NP OC',
+      back: true,
       roles: ["Sistemas", "Compras"],
       metaTags: [
         {
@@ -346,6 +361,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Parametros de Compras',
+      back: true,
       roles: ["Sistemas", "Compras"],
       metaTags: [
         {
@@ -362,6 +378,7 @@ const routes = [
       requiresAuth: true,
       roles: ["Sistemas", "Compras"],
       title: 'Ratio de Compras',
+      back: true,
       metaTags: [
         {
           name: 'Ratio de Compras'
@@ -377,6 +394,7 @@ const routes = [
       requiresAuth: true,
       roles: ["Sistemas", "Compras"],
       title: 'Info de Artículos que se compran corrientemente',
+      back: true,
       metaTags: [
         {
           name: 'Info de Artículos que se compran corrientemente',
@@ -392,6 +410,7 @@ const routes = [
       requiresAuth: true,
       roles: ["Sistemas", "Compras"],
       title: 'Info de Artículos que se compran corrientemente 2',
+      back: true,
       metaTags: [
         {
           name: 'Info de Artículos que se compran corrientemente 2',
@@ -407,6 +426,7 @@ const routes = [
       requiresAuth: true,
       roles: ["Sistemas", "Ventas"],
       title: 'Cartelería',
+      back: true,
       metaTags: [
         {
           name: 'Cartelería'
@@ -421,6 +441,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Cartel Combo',
+      back: true,
       metaTags: [
         {
           name: 'Cartel Combo'
@@ -435,6 +456,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Cartel M2',
+      back: true,
       metaTags: [
         {
           name: 'Cartel M2'
@@ -449,6 +471,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Cartel M2 Saldo',
+      back: true,
       metaTags: [
         {
           name: 'Cartel M2 Saldo'
@@ -463,6 +486,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Cartel Articulo',
+      back: true,
       metaTags: [
         {
           name: 'Cartel Articulo'
@@ -477,6 +501,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Cartel Manual',
+      back: true,
       metaTags: [
         {
           name: 'Cartel Manual'
@@ -491,6 +516,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Web NIMAT',
+      back: true,
       metaTags: [
         {
           name: 'Web NIMAT'
@@ -505,6 +531,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Web NIMAT - Categorias',
+      back: true,
       metaTags: [
         {
           name: 'Web NIMAT - Categorias'
@@ -519,6 +546,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Web NIMAT - Articulos',
+      back: true,
       metaTags: [
         {
           name: 'Web NIMAT - Articulos'
@@ -533,6 +561,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Nota de pedido con problema - Entrega inmediata',
+      back: true,
       metaTags: [
         {
           name: 'Nota de pedido con problema - Entrega inmediata'
@@ -547,6 +576,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Control Alta Clientes',
+      back: true,
       metaTags: [
         {
           name: 'Control Alta Clientes'
@@ -561,6 +591,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Lista de Clientes',
+      back: true,
       metaTags: [
         {
           name: 'Lista de Clientes'
@@ -575,6 +606,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Tablas',
+      back: true,
       metaTags: [
         {
           name: 'Tablas'
@@ -589,6 +621,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Deposito a No Considerar',
+      back: true,
       metaTags: [
         {
           name: 'Deposito a No Considerar'
@@ -603,6 +636,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Deposito a No Considerar para Stock Físico',
+      back: true,
       metaTags: [
         {
           name: 'Deposito a No Considerar para Stock Físico'
@@ -617,6 +651,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'NP a Considerar',
+      back: true,
       metaTags: [
         {
           name: 'NP a Considerar'
@@ -631,6 +666,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Dimensiones aprox. de contenedores',
+      back: true,
       metaTags: [
         {
           name: 'Dimensiones aprox. de contenedores'
@@ -645,6 +681,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Movimientos de contenedores',
+      back: true,
       metaTags: [
         {
           name: 'Movimientos de contenedores'
@@ -659,6 +696,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Tabla: Lista de precio Breve Uso Interno',
+      back: true,
       metaTags: [
         {
           name: 'Tabla: Lista de precio Breve Uso Interno'
@@ -673,6 +711,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Tabla: #01 - Sets de Ventas',
+      back: true,
       metaTags: [
         {
           name: 'Tabla: #01 - Sets de Ventas'
@@ -687,6 +726,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Tabla: #02 - Familia de Articulos',
+      back: true,
       metaTags: [
         {
           name: 'Tabla: #02 - Familia de Articulos'
@@ -701,6 +741,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Tabla: #03 - Vincular Articulo a Familia',
+      back: true,
       metaTags: [
         {
           name: 'Tabla: #03 - Vincular Articulo a Familia'
@@ -715,6 +756,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Tabla: Armado Config. 1',
+      back: true,
       metaTags: [
         {
           name: 'Tabla: Armado Config. 1'
@@ -729,6 +771,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Tabla: Armado Config. 2',
+      back: true,
       metaTags: [
         {
           name: 'Tabla: Armado Config. 2'
@@ -743,6 +786,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Tabla: Nombres Configuraciones',
+      back: true,
       metaTags: [
         {
           name: 'Tabla: Nombres Configuraciones'
@@ -757,6 +801,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Tabla: Productos para Distribucion',
+      back: true,
       metaTags: [
         {
           name: 'Tabla: Productos para Distribucion'
@@ -771,6 +816,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Tabla: Rubros Ventas',
+      back: true,
       metaTags: [
         {
           name: 'Tabla: Rubros Ventas'
@@ -785,6 +831,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Tabla: Familia de articulos para Distribución',
+      back: true,
       metaTags: [
         {
           name: 'Tabla: Familia de articulos para Distribución'
@@ -799,6 +846,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Tabla Acopio: Comprobantes a Omitir',
+      back: true,
       metaTags: [
         {
           name: 'Tabla Acopio: Comprobantes a Omitir'
@@ -813,6 +861,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Tabla Acopio: Remitos de Ventas',
+      back: true,
       metaTags: [
         {
           name: 'Tabla Acopio: Remitos de Ventas'
@@ -827,6 +876,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Tabla: Articulos - Cales, Cementos, Plasticor',
+      back: true,
       metaTags: [
         {
           name: 'Tabla: Articulos - Cales, Cementos, Plasticor'
@@ -841,6 +891,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Tabla: Arts Clasif. 5 - Stock Manual para la WEB NIMAT',
+      back: true,
       metaTags: [
         {
           name: 'Tabla: Arts Clasif. 5 - Stock Manual para la WEB NIMAT'
@@ -855,6 +906,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Tabla: Clasif. Clientes',
+      back: true,
       metaTags: [
         {
           name: 'Tabla: Clasif. Clientes'
@@ -869,6 +921,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Tabla: Comprobantes',
+      back: true,
       metaTags: [
         {
           name: 'Tabla: Comprobantes'
@@ -883,6 +936,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Tabla: Equival. Cod. y Factor Cant.',
+      back: true,
       metaTags: [
         {
           name: 'Tabla: Equival. Cod. y Factor Cant.'
@@ -897,6 +951,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Lista de precio - Containers',
+      back: true,
       metaTags: [
         {
           name: 'Lista de precio - Containers'
@@ -911,6 +966,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Lista de precio - Pisos y Revestimiento',
+      back: true,
       metaTags: [
         {
           name: 'Lista de precio - Pisos y Revestimiento'
@@ -925,6 +981,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Lista de precio - Pisos y Revistimiento con Stock',
+      back: true,
       metaTags: [
         {
           name: 'Lista de precio - Pisos y Revistimiento con Stock'
@@ -939,6 +996,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Lista de precio - Breve Uso Interno',
+      back: true,
       metaTags: [
         {
           name: 'Lista de precio - Breve Uso Interno'
@@ -953,6 +1011,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Lista de precio - Const. Seco',
+      back: true,
       metaTags: [
         {
           name: 'Lista de precio - Const. Seco'
@@ -967,6 +1026,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Lista de precio - Rubros Ventas',
+      back: true,
       metaTags: [
         {
           name: 'Lista de precio - Rubros Ventas'
@@ -981,6 +1041,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Lista de precio - Rubros Ventas Acopio',
+      back: true,
       metaTags: [
         {
           name: 'Lista de precio - Rubros Ventas Acopio'
@@ -995,6 +1056,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Lista de precio - Sets Ventas',
+      back: true,
       metaTags: [
         {
           name: 'Lista de precio - Sets Ventas'
@@ -1009,6 +1071,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Rowa - Plan canje por siempre',
+      back: true,
       metaTags: [
         {
           name: 'Rowa - Plan canje por siempre'
@@ -1023,6 +1086,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Variables Entregas NP - General',
+      back: true,
       metaTags: [
         {
           name: 'Variables Entregas NP - General'
@@ -1037,6 +1101,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Variables Entregas NP - Pisos y revistimiento',
+      back: true,
       metaTags: [
         {
           name: 'Variables Entregas NP - Pisos y revistimiento'
@@ -1051,6 +1116,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Lista de precios - Costo de reposición',
+      back: true,
       metaTags: [
         {
           name: 'Lista de precios - Costo de reposición'
@@ -1065,6 +1131,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Lista de precios - Venta al público',
+      back: true,
       metaTags: [
         {
           name: 'Lista de precios - Venta al público'
@@ -1079,6 +1146,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Lista de precios - Distribución',
+      back: true,
       metaTags: [
         {
           name: 'Lista de precios - Distribución'
@@ -1093,6 +1161,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Lista de precios - Combo',
+      back: true,
       metaTags: [
         {
           name: 'Lista de precios - Combo'
@@ -1107,6 +1176,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Acopio - Cemento Loma Negra',
+      back: true,
       metaTags: [
         {
           name: 'Acopio - Cemento Loma Negra'
@@ -1121,12 +1191,27 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Stock NP OC - Cales, Cementos, Plasticor',
+      back: true,
       metaTags: [
         {
           name: 'Stock NP OC - Cales, Cementos, Plasticor'
         }      ]
     }
-  }
+  },
+  {
+    path: '/sessionexpired',
+    name: 'SessionExpired',
+    component: () => import("@/views/SessionExpired.vue"),
+    props: true,
+    meta: {
+      requiresAuth: false,
+      title: 'Sesión Expirada',
+      metaTags: [
+        {
+          name: 'Sesión Expirada'
+        }      ]
+    }
+  },
 ]
 
 const router = createRouter({
@@ -1147,6 +1232,11 @@ router.beforeEach((to, from) => {
 
     if (!token) {
       return { name: "Login", query: { redirect: to.fullPath } };
+    }
+
+    if (isTokenExpired(token)) {
+      clearToken("expired");
+      return { name: "SessionExpired" };
     }
 
     const payload = decodeJwt(token);

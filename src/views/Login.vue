@@ -1,5 +1,5 @@
 <template>
-    <section class="container-fluid" style="width: 100vw; height: 100vh; background:white ;position:absolute">
+    <section class="container-fluid vw-100 vh-100 bg-light position-absolute">
         <div class="container">
             <div class="row justify-content-sm-center">
                 <div class="col-xxl-4 col-xl-5 col-lg-5 col-md-7 col-sm-9">
@@ -9,7 +9,7 @@
                                 <span class="login100-form-title p-b-51">Inicio sesión</span>
                                 <div class="wrap-input100 validate-input m-b-16">
                                     <input v-model="username" class="input100" type="text" name="username"
-                                        placeholder="Ingrese tu inicio de sesión de Windows">
+                                        placeholder="Usuario de Windows">
                                     <span class="focus-input100"></span>
                                 </div>
                                 <div class="wrap-input100 validate-input m-b-16">
@@ -213,7 +213,6 @@ button {
 
 .wrap-login100 {
     width: 390px;
-    background: #fff;
     border-radius: 10px;
     position: relative;
 }

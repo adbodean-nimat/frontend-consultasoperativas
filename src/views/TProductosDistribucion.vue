@@ -111,6 +111,8 @@
           :filterable-search="true" :width="150" :hidden="false"></grid-column>
         <grid-column :field="'Set_Familia'" :title="'Rubros'" :filterable-multi="true"
           :filterable-search="true"></grid-column>
+        <grid-column :field="'Url_imagen'" :title="'Url Imagen'" :filterable-multi="true"
+          :filterable-search="true"></grid-column>
         <grid-column :command="['edit', 'destroy']" :title="'&nbsp;'"></grid-column>
       </grid>
     </div>
@@ -154,7 +156,8 @@ export default {
         Cod_Familia_producto: { editable: true, type: 'string' },
         Familia_producto: { editable: false, type: 'string', defaultValue: '' },
         Familia_orden: { editable: false, type: 'number' },
-        Set_Familia: { editable: false, type: 'string' }
+        Set_Familia: { editable: false, type: 'string' },
+        Url_imagen: { editable: true, type: 'string' }
       },
       fields2: {
         id: { editable: false, type: 'number', nullable: true },
@@ -271,6 +274,7 @@ export default {
                 ARTS_NOMBRE: threeResult[j].ARTS_NOMBRE,
                 Orden_producto: firstResult[i].Orden_producto,
                 Cod_Familia_producto: firstResult[i].Cod_Familia_producto,
+                Url_imagen: firstResult[i].Url_imagen,
               })
           }
         }
@@ -284,7 +288,8 @@ export default {
             Cod_Familia_producto: result[v].Cod_Familia_producto,
             Familia_producto: secondResult.filter(codigo => codigo.id == result[v].Cod_Familia_producto).map(data => data.nombre_familia),
             Familia_orden: secondResult.filter(codigo => codigo.id == result[v].Cod_Familia_producto).map(data => data.orden_familia),
-            Set_Familia: threeResult.filter(codigo => codigo.ARTS_ARTICULO_EMP == result[v].Codigo_producto).map(data => data.RUBV_NOMBRE)
+            Set_Familia: threeResult.filter(codigo => codigo.ARTS_ARTICULO_EMP == result[v].Codigo_producto).map(data => data.RUBV_NOMBRE),
+            Url_imagen: result[v].Url_imagen
           })
         }
         e.success(result2);

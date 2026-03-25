@@ -2,8 +2,8 @@
     <div class="container-page">
         <div class="page-content">
             <div class="container-fluid px-4 text-center">
-                <h3 style="color:#fff;">Gestión de Finanzas</h3>
-                <div class="row row-cols-lg-5 gy-5">
+                <h3 class="text-white">Gestión de Finanzas</h3>
+                <div class="row row-cols-lg-5 gy-5 mt-2">
                     <div class="col col-h">
                         <router-link to="/gestiondefinanzas/importarmasivofinanzas">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">

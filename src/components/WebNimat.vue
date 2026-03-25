@@ -2,15 +2,14 @@
     <div class="container-page">
         <div class="page-content">
             <div class="container-fluid px-4 text-center">
-                <h3 style="color:#fff;">Web NIMAT</h3>
-                <div class="row row-cols-lg-5 gy-5">
+                <h3 class="text-white">Web NIMAT</h3>
+                <div class="row row-cols-lg-5 gy-5 mt-2">
                     <div class="col col-h">
                         <router-link to="/webnimat/categorias">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 text-secondary link-success">
-                                    <div
-                                        class="d-flex justify-content-center align-items-center flex-shrink-0 icon rounded">
+                                    <div class="d-flex justify-content-center align-items-center shrink-0 icon rounded">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="#fff"
                                             class="bi bi-pencil-fill" viewBox="0 0 16 16">
                                             <path
@@ -27,7 +26,8 @@
                                 class="column-question text-center h-10 d-flex justify-content-between align-items-center px-4 bg-white">
                                 <span class="fs-6"></span>
                                 <span class="fs-6">
-                                    <div id="tooltip" data-toggle="tooltip" data-placement="right" title="">
+                                    <div id="tooltip" data-toggle="tooltip" data-placement="right"
+                                        title="Ver las categorias disponibles">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
                                             fill="currentColor" class="bi bi-question-circle-fill text-secondary"
                                             viewBox="0 0 16 16">
@@ -49,8 +49,7 @@
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 rounded text-secondary link-success">
-                                    <div
-                                        class="d-flex justify-content-center align-items-center flex-shrink-0 icon rounded">
+                                    <div class="d-flex justify-content-center align-items-center shrink-0 icon rounded">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="#fff"
                                             class="bi bi-pencil-fill" viewBox="0 0 16 16">
                                             <path
@@ -67,7 +66,8 @@
                                 class="column-question text-center h-10 d-flex justify-content-between align-items-center px-4 bg-white">
                                 <span class="fs-6"></span>
                                 <span class="fs-6">
-                                    <div id="tooltip" data-toggle="tooltip" data-placement="right" title=''>
+                                    <div id="tooltip" data-toggle="tooltip" data-placement="right"
+                                        title='Ver los articulos para la web NIMAT'>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
                                             fill="currentColor" class="bi bi-question-circle-fill text-secondary"
                                             viewBox="0 0 16 16">

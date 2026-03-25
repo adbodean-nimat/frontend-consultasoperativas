@@ -90,63 +90,70 @@
         :pdf-template="pdfTemplate" @excelexport="exportGridWithTemplatesContent" @pdfexport="pdfExport"
         @databound="dataBound">
 
-        <grid-column title="Código" :template="ArtsArticuloEmp" :column-menu="false" :hidden="true"></grid-column>
-        <grid-column field="ARTS_ARTICULO_EMP" title="Código" :column-menu="false" :width="80"
-          :hidden="false"></grid-column>
-        <grid-column field="ARTS_NOMBRE" title="Articulo" :column-menu="false" :width="400"
-          :hidden="false"></grid-column>
-        <grid-column field="ARTS_UNIMED_STOCK" title="&nbsp;" :column-menu="false" :width="40"
-          :hidden="false"></grid-column>
+        <grid-column title="Código" :template="ArtsArticuloEmp" :column-menu="false" :hidden="true"
+          :exportable="false"></grid-column>
+        <grid-column field="ARTS_ARTICULO_EMP" title="Código" :column-menu="false" :width="80" :hidden="false"
+          :exportable="true"></grid-column>
+        <grid-column field="ARTS_NOMBRE" title="Articulo" :column-menu="false" :width="400" :hidden="false"
+          :exportable="true"></grid-column>
+        <grid-column field="ARTS_UNIMED_STOCK" title="&nbsp;" :column-menu="false" :width="40" :hidden="false"
+          :exportable="true"></grid-column>
         <grid-column field="PRECIO_LISTA_CON_IVA" title="Precio lista c/IVA" :template="this.precioLista"
-          :hidden="false" :width="100" :exportable="{ pdf: false, excel: true }"></grid-column>
+          :hidden="false" :width="100" :exportable="false"></grid-column>
         <grid-column field="DCA1_POR_DESCUENTO" title="Dto. Cliente"
           template="#=kendo.format('{0:p0}', DCA1_POR_DESCUENTO / 100)#" :width="80" :hidden="false"
-          :exportable="{ pdf: false, excel: true }"></grid-column>
+          :exportable="false"></grid-column>
         <grid-column field="dtoFinan" title="Dto. Financ." :template="this.dtoFinan" :width="80" :hidden="false"
-          :exportable="{ pdf: false, excel: true }"></grid-column>
+          :exportable="false"></grid-column>
         <grid-column field="precioContado" title="Precio contado c/IVA c/Dtos" :template="this.precioContado"
-          :hidden="false" :width="100"></grid-column>
-        <grid-column field="Modif" title="Modif" :template="this.Modif" :hidden="false" :width="50"></grid-column>
+          :hidden="false" :width="100" :exportable="true"></grid-column>
+        <grid-column field="Modif" title="Modif" :template="this.Modif" :hidden="false" :width="50"
+          :exportable="true"></grid-column>
 
-        <grid-column title="Verfi Modif" :template="VeriModif" :hidden="true"></grid-column>
-        <grid-column title="Sin Modif" :template="SinModif" :hidden="true"></grid-column>
-        <grid-column title="Verfi sin Modif" :template="VeriSinModif" :hidden="true"></grid-column>
+        <grid-column field="Url_imagen" title="Url Imagen" :width="50" :exportable="{ pdf: false, excel: true }"
+          :hidden="true"></grid-column>
 
-        <grid-column field="ARVE_RUBRO_VENTA" :hidden="true" :width="50"></grid-column>
-        <grid-column field="RUBV_NOMBRE" :hidden="true" :width="50" :group-header-template="'#= value #'"></grid-column>
+        <grid-column title="Verfi Modif" :template="VeriModif" :hidden="true" :exportable="false"></grid-column>
+        <grid-column title="Sin Modif" :template="SinModif" :hidden="true" :exportable="false"></grid-column>
+        <grid-column title="Verfi sin Modif" :template="VeriSinModif" :hidden="true" :exportable="false"></grid-column>
+
+        <grid-column field="ARVE_RUBRO_VENTA" :hidden="true" :width="50" :exportable="false"></grid-column>
+        <grid-column field="RUBV_NOMBRE" :hidden="true" :width="50" :group-header-template="'#= value #'"
+          :exportable="false"></grid-column>
         <grid-column field="RUBV_ORDEN" :hidden="true" :group-header-template="groupHeaderTemplateRUBVNOMBRE"
-          :width="100"></grid-column>
-        <grid-column :template="templateRUBV_NOMBRE" :hidden="true"></grid-column>
-        <grid-column field="cod_set_art" :hidden="true"></grid-column>
-        <grid-column field="nombre_set_art" :hidden="true"></grid-column>
-        <grid-column field="cod_familia_art" :hidden="true"></grid-column>
+          :width="100" :exportable="false"></grid-column>
+        <grid-column :template="templateRUBV_NOMBRE" :hidden="true" :exportable="false"></grid-column>
+        <grid-column field="cod_set_art" :hidden="true" :exportable="false"></grid-column>
+        <grid-column field="nombre_set_art" :hidden="true" :exportable="false"></grid-column>
+        <grid-column field="cod_familia_art" :hidden="true" :exportable="false"></grid-column>
         <grid-column field="nombre_familia_art" title="Familia Art." :hidden="true"
-          :group-header-template="'#= value #'"></grid-column>
+          :group-header-template="'#= value #'" :exportable="false"></grid-column>
         <grid-column field="nro_orden_familia" title="Nro. Orden" :hidden="true"
-          :group-header-template="groupHeaderTemplateFamilia"></grid-column>
-        <grid-column field="ARTS_ARTICULO" :hidden="true"></grid-column>
-        <grid-column field="ARVE_BLOQUEO_VENTA" :hidden="true"></grid-column>
-        <grid-column field="ARTS_FACTOR_HOMSTO" :hidden="true"></grid-column>
-        <grid-column field="COD_CTE" :hidden="true"></grid-column>
-        <grid-column field="ARTS_CLASIF_1" :hidden="true"></grid-column>
-        <grid-column field="ARTS_CLASIF_8" :hidden="true"></grid-column>
-        <grid-column field="CIMP_TASA" :hidden="true"></grid-column>
-        <grid-column field="ARTS_PESO_EMB_UMS" :hidden="true"></grid-column>
-        <grid-column field="DVC1_LISTA_PRECVTA" :hidden="true"></grid-column>
-        <grid-column :template="dvc1listaprecvta" :hidden="true"></grid-column>
-        <grid-column field="ARPV_PRECIO_VTA" :hidden="true"></grid-column>
-        <grid-column field="ARPV_MONEDA" :hidden="true"></grid-column>
-        <grid-column field="ARPV_FECHA_ULT_ACT" :hidden="true"></grid-column>
-        <grid-column field="COTI_COTIZACION" :hidden="true"></grid-column>
-        <grid-column field="COTI_FECHA" :hidden="true"></grid-column>
+          :group-header-template="groupHeaderTemplateFamilia" :exportable="false"></grid-column>
+        <grid-column field="ARTS_ARTICULO" :hidden="true" :exportable="false"></grid-column>
+        <grid-column field="ARVE_BLOQUEO_VENTA" :hidden="true" :exportable="false"></grid-column>
+        <grid-column field="ARTS_FACTOR_HOMSTO" :hidden="true" :exportable="false"></grid-column>
+        <grid-column field="COD_CTE" :hidden="true" :exportable="false"></grid-column>
+
+        <grid-column field="ARTS_CLASIF_1" :hidden="true" :exportable="false"></grid-column>
+        <grid-column field="ARTS_CLASIF_8" :hidden="true" :exportable="false"></grid-column>
+        <grid-column field="CIMP_TASA" :hidden="true" :exportable="false"></grid-column>
+        <grid-column field="ARTS_PESO_EMB_UMS" :hidden="true" :exportable="false"></grid-column>
+        <grid-column field="DVC1_LISTA_PRECVTA" :hidden="true" :exportable="false"></grid-column>
+        <grid-column :template="dvc1listaprecvta" :hidden="true" :exportable="false"></grid-column>
+        <grid-column field="ARPV_PRECIO_VTA" :hidden="true" :exportable="false"></grid-column>
+        <grid-column field="ARPV_MONEDA" :hidden="true" :exportable="false"></grid-column>
+        <grid-column field="ARPV_FECHA_ULT_ACT" :hidden="true" :exportable="false"></grid-column>
+        <grid-column field="COTI_COTIZACION" :hidden="true" :exportable="false"></grid-column>
+        <grid-column field="COTI_FECHA" :hidden="true" :exportable="false"></grid-column>
         <grid-column field="Fecha_cambio_precios_hasta"
           template="#: kendo.toString(kendo.parseDate(Fecha_cambio_precios_hasta, 'yyyy-MM-dd'), 'dd/MM/yyyy') #"
-          :hidden="true" :width="50"></grid-column>
+          :hidden="true" :width="50" :exportable="false"></grid-column>
         <grid-column field="Fecha_Ult_Modif" title="Fecha Ult Modif"
           template="#: kendo.toString(kendo.parseDate(Fecha_Ult_Modif, 'yyyy-MM-dd'), 'dd/MM/yyyy') #" :hidden="true"
-          :width="50"></grid-column>
-        <grid-column :template="CambiosPrecioDesde" :hidden="true"></grid-column>
-        <grid-column field="Delay_cambio_precio" :hidden="true"></grid-column>
+          :width="50" :exportable="false"></grid-column>
+        <grid-column :template="CambiosPrecioDesde" :hidden="true" :exportable="false"></grid-column>
+        <grid-column field="Delay_cambio_precio" :hidden="true" :exportable="false"></grid-column>
       </grid>
     </div>
   </div>
@@ -226,7 +233,8 @@ export default {
         Fecha_cambio_precios_hasta: { type: 'datetime' },
         PRECIO_LISTA_CON_IVA: { type: 'number' },
         Fecha_Ult_Modif: { type: 'datetime' },
-        Delay_cambio_precio: { type: 'string' }
+        Delay_cambio_precio: { type: 'string' },
+        Url_imagen: { type: 'string' }
       }
     }
   },
@@ -270,7 +278,20 @@ export default {
         type: 'GET'
       })
     },
-    exportGridWithTemplatesContent: function (e) {
+    columnLetter(colIndex) {
+      let dividend = colIndex + 1;
+      let columnName = "";
+
+      while (dividend > 0) {
+        let modulo = (dividend - 1) % 26;
+        columnName = String.fromCharCode(65 + modulo) + columnName;
+        dividend = Math.floor((dividend - modulo) / 26);
+      }
+
+      return columnName;
+    },
+    exportGridWithTemplatesContent: async function (e) {
+
       var idemArtsArticuloEmp = document.querySelectorAll("span#idArtsArticuloEmp")
       var initialValue = 0;
       var VeriSinMod = document.querySelectorAll("span#idVeriSinMod");
@@ -285,6 +306,7 @@ export default {
         (accumulator, currentValue) => accumulator + currentValue,
         initialValue
       );
+
       var grid = this.$refs.grid.kendoWidget();
       var gridElement = grid.element;
       var fechaCambiosPrecios = gridElement.find('#fechaCambiosPrecio');
@@ -341,28 +363,52 @@ export default {
       rows2Cells.splice(2, 0, row2Cells);
       rows3Cells.splice(4, 0, row3Cells);
 
-      var data = e.data;
+      var data = e.data || [];
+      var sheet = e.workbook.sheets[0];
       var gridColumns = e.sender.columns;
-      var rows = e.workbook.sheets[0].rows;
-      var columns = e.workbook.sheets[0].columns
+      var rows = sheet.rows;
+      var columns = sheet.columns
       var visibleGridColumns = [];
       var columnTemplates = [];
       var dataItems = [];
       var newRows = [];
       var dataItem;
       var masItem = [];
+      var exportableColumns = [];
 
       // Crear elemento para generar plantillas
       var elem = document.createElement('span');
 
-      // Obtener una lista de columnas visibles
       for (var i = 0; i < gridColumns.length; i++) {
-        if (!gridColumns[i].hidden) {
-          if (gridColumns[i].field !== "PRECIO_LISTA_CON_IVA" && gridColumns[i].field !== "DCA1_POR_DESCUENTO" && gridColumns[i].field !== "dtoFinan") {
-            visibleGridColumns.push(gridColumns[i]);
-          }
+        if (gridColumns[i].exportable && gridColumns[i].exportable.excel !== false) {
+          visibleGridColumns.push(gridColumns[i]);
         }
       }
+
+      // Construir lista de columnas exportables
+      for (var i = 0; i < gridColumns.length; i++) {
+        if (gridColumns[i].exportable && gridColumns[i].exportable.excel !== false) {
+          exportableColumns.push(gridColumns[i]);
+        }
+      }
+
+      // Buscar índice de la columna Url_imagen dentro del Excel exportado
+      var urlColumnIndex = exportableColumns.findIndex(function (col) {
+        return col.field === "Url_imagen";
+      });
+
+      if (urlColumnIndex === -1) {
+        console.warn("No se encontró la columna Url_imagen en el export.");
+        return;
+      }
+
+      var colName = this.columnLetter(urlColumnIndex + 4);
+
+      var hyperlinks = [];
+      var images = {};
+      var drawings = [];
+      var id;
+      var dataIndex = 0;
 
       // Cree una colección de plantillas de columna, junto con el índice de columna actual
       for (var i = 0; i < visibleGridColumns.length; i++) {
@@ -370,7 +416,7 @@ export default {
           columnTemplates.push({ cellIndex: i, template: kendo.template(visibleGridColumns[i].template) });
         }
       }
-      //console.log(data)
+
       for (var i = 0; i < data.length; i++) {
 
         if (data[i].items.length) {
@@ -396,12 +442,13 @@ export default {
           }
         }
       }
-      //console.log(dataItems)
+
       for (var ri = 0; ri < rows.length; ri++) {
         var row = rows[ri];
 
         if (rows[ri].type == "header") {
           rows.splice(ri, 1)
+
           rows.unshift({
             height: 35.5,
             cells: [
@@ -427,7 +474,7 @@ export default {
             height: 35.5,
             cells: [
               { value: '' },
-              { value: modificados },
+              { value: modificados, colSpan: 9, vAlign: "center" },
               { value: '' }
             ]
           });
@@ -441,19 +488,23 @@ export default {
         }
 
         if (rows[ri].type == "group-header") {
-          //console.log(rows[ri])
-          //rows.splice(ri, 1);
 
-          //if (rows[ri].type !== "data") {
-          // console.log(rows[ri])
+          if (rows[ri].cells.length == 1) {
+            rows.splice(ri, 1);
+          }
+
           for (var i = 0; i < rows[ri].cells.length; i++) {
             var colspan = rows[ri].cells[i].colSpan
+
+            //console.log(colspan);
+
             rows[ri].cells[0].background = '';
+
             if (rows[ri].cells[1]) {
               rows[ri].cells[1].background = ''
             }
 
-            if (colspan == 9) {
+            if (colspan == 7) {
               rows[ri].height = 35.5;
               rows[ri].cells[i].fontSize = 16;
               rows[ri].cells[i].bold = true;
@@ -462,12 +513,8 @@ export default {
               rows[ri].cells[i].vAlign = "center";
             }
 
-            if (colspan == 10) {
-              rows[ri].height = 0;
-              rows[ri].cells[i].background = '';
-            }
-
-            if (colspan == 11) {
+            // POR GRUPO DE FAMILIA
+            if (colspan == 9) {
               rows[ri].height = 50;
               rows[ri].cells[i].fontSize = 30;
               rows[ri].cells[i].bold = true;
@@ -477,23 +524,46 @@ export default {
               rows[ri].cells[i].underline = true;
             }
 
-            if (colspan == 12) {
+            if (colspan == 8) {
               rows[ri].height = 0;
             }
           }
-          //}
         }
 
         if (rows[ri].type == "data") {
+
+          /* id = rows[ri].cells[4].value; */
+
+          if (rows[ri].cells[9].value) {
+            console.log(colName + (ri + 1) + " - " + rows[ri].cells[9].value)
+
+            /* images[id] = rows[ri].cells[9].value; */
+
+            hyperlinks.push({
+              ref: colName + (ri + 1),
+              target: rows[ri].cells[9].value
+            })
+
+            /* drawings.push({
+              topLeftCell: "L" + (ri + 1),
+              width: 100,
+              height: 90,
+              image: id,
+              offsetX: 0,
+              offsetY: 0,
+            }); */
+
+          }
+
           for (var di = 0; di < rows[ri].cells.length; di++) {
             rows[ri].cells[di].background = '';
             rows[ri].cells[7].textAlign = 'right';
             rows[ri].cells[8].textAlign = 'right';
+            rows[ri].cells[9].color = "#0000EE";
+            rows[ri].cells[9].underline = true;
           }
         }
-        /* if (row.type == "group-header") {
-          console.log(row)
-        } */
+
         if (row.type !== "group-header") {
           newRows.push(row)
         }
@@ -502,7 +572,7 @@ export default {
       //////////////////////////////////////////////////////////////////////////////////////////////////////
 
       dataItems.unshift(masItem);
-      //console.log(dataItems)
+
       // Recorra todas las filas exportadas.
       for (var i = 1; i < newRows.length; i++) {
         var row = newRows[i];
@@ -515,18 +585,49 @@ export default {
 
         // Obtenga el elemento de datos correspondiente a la fila actual.
         var dataItem = dataItems[i - 1];
-        //console.log(dataItem)
+
+        if (row.cells[urlColumnIndex + 4]?.value) {
+          row.cells[urlColumnIndex + 4].value = "Ver imagen";
+        }
+
         for (var j = 0; j < columnTemplates.length; j++) {
           var columnTemplate = columnTemplates[j];
 
           // Genere el contenido de la plantilla para la celda actual.
           elem.innerHTML = columnTemplate.template(dataItem);
+
           //var groupOffset = e.sender.dataSource.group().length;
           if (row.cells[columnTemplate.cellIndex + 4] != undefined)
             // Envíe el contenido de texto de la celda con plantilla a la celda exportada.
             row.cells[columnTemplate.cellIndex + 4].value = "" || elem.innerText || elem.textContent;
         }
       }
+
+      /* Object.keys(images).forEach(function (id) {
+        var url = images[id];
+
+        loadBinary(url, function (data, contentType) {
+          //console.log(data, contentType);
+          images[id] = { data: data, type: contentType, target: url };
+        });
+      }); */
+
+
+      sheet.hyperlinks = hyperlinks;
+
+      /* const workbook = new kendo.ooxml.Workbook({
+        sheets: [{
+          columns: columns,
+          rows: rows,
+          hyperlinks: hyperlinks
+        }]
+      });
+
+      const dataURI = workbook.toDataURLAsync();
+
+      kendo.saveAs({
+        dataURI: dataURI
+      }); */
     },
     pdfExport: function () {
       //const idemDtoFinan = document.getElementById("dtofinan").ariaValueNow

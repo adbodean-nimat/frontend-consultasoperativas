@@ -2,9 +2,8 @@
     <div class="container-page-consultas">
         <div class="page-content">
             <div class="container-fluid px-5 text-center">
-                <h3 style="color:#fff;" class="p-3">Consultas Operativas</h3>
-
-                <div class="row row-cols-lg-5 gy-5">
+                <h3 class="text-white">Consultas Operativas</h3>
+                <div class="row row-cols-lg-5 gy-5 mt-2">
                     <div v-if="IsAllow === 'cfernandez' || IsAllow === 'abodean' || IsAllow === 'avillasalte'"
                         class="col col-h">
                         <router-link to="/controlaltaclientes">

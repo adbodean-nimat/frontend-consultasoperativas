@@ -44,11 +44,11 @@
                                 </template>
                             </MultiSelect>
                             <label class="w-auto">Días hacia atrás fecha de NP:</label>
-                            <InputNumber class="w-auto" name="dias_hacia_atras" v-model="Dias_hacia_atrás_fecha_de_NP"
-                                :min="1" :max="365" fluid>
+                            <InputNumber class="w-auto" :inputStyle="{ width: '100px' }" name="dias_hacia_atras"
+                                v-model="Dias_hacia_atrás_fecha_de_NP" :min="1" :max="365" fluid>
                             </InputNumber>
                             <label class="w-auto">Días atrás para evaluar SM4:</label>
-                            <InputNumber class="w-auto" name="cant_dias_atras"
+                            <InputNumber class="w-auto" :inputStyle="{ width: '100px' }" name="cant_dias_atras"
                                 v-model="Cant_días_atrás_para_evaluar_SM4" :min="1" :max="90" fluid>
                             </InputNumber>
                             <Button icon="pi pi-play" outlined class="border-2!" @click="getData"></Button>
@@ -145,7 +145,7 @@
                                         <span class="h4">{{ itemAZULES.total }} <small
                                                 class="text-body-secondary">Item(s)</small></span>
                                         <span class="ms-2" style="font-size: small;">
-                                            <small>{{ itemAZULES.descripcion }}</small>
+                                            {{ itemAZULES.descripcion }}
                                         </span>
                                     </span>
 

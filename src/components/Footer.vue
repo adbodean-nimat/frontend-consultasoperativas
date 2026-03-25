@@ -1,11 +1,10 @@
 <template>
   <footer>
-    <div class="container-fluid">
-      <div class="row align-items-center">
-        <div class="col"></div>
+    <div class="container-fluid d-flex justify-content-center align-items-center h-100">
+      <div class="row">
         <div class="col">
           <div class="copyright">
-            <span>&#169 2022 By TIyC - Prades S.A.</span>
+            <span>&#169 2022 - {{ añoActual }} By TIyC - Prades S.A.</span>
           </div>
         </div>
       </div>
@@ -15,23 +14,13 @@
 
 <script>
 export default {
-  name: 'FooterVue'
+  name: 'FooterVue',
+  data: () => {
+    return {
+      añoActual: new Date().getFullYear()
+    }
+  }
 }
 </script>
 
-<style>
-footer {
-  width: 100%;
-  /* height: 25px; */
-  background: #007c3b;
-  bottom: 0;
-}
-
-.copyright {
-  width: auto;
-  height: 100%;
-  color: white;
-  font-size: 14px;
-  text-align: center;
-}
-</style>
+<style></style>

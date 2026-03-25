@@ -1,5 +1,6 @@
 import axios from "axios";
 import { getToken, clearToken } from "./auth";
+import { isTokenExpired } from "@/services/jwt";
 import router from "@/router";
 
 const api = axios.create({
@@ -10,7 +11,17 @@ const api = axios.create({
 // Request: adjunta token
 api.interceptors.request.use((config) => {
   const token = getToken();
-  if (token) config.headers.Authorization = `Bearer ${token}`;
+
+  if (token) {
+    if (isTokenExpired(token)) {
+      clearToken("expired");
+      router.replace({ name: "SessionExpired" });
+      return Promise.reject(new Error("Token expirado"));
+    }
+
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  
   return config;
 });
 
@@ -20,9 +31,8 @@ api.interceptors.response.use(
   (err) => {
     const status = err?.response?.status;
     if (status === 401 || status === 403) {
-      clearToken();
-      // opcional: guardar a dónde quiso ir
-      router.replace({ name: "Login", query: { redirect: router.currentRoute.value.fullPath } });
+      clearToken("expired");
+      router.replace({ name: "SessionExpired" });      
     }
     return Promise.reject(err);
   }

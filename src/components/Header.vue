@@ -49,7 +49,7 @@
                 </router-link>
             </div>
             <div class="setting">
-                <router-link to="/tablas" class="link">
+                <router-link to="/tablas" class="link" v-tooltip.bottom="'Editar los parámetros de las tablas'">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
                         class="bi bi-pencil-square" viewBox="0 0 16 16">
                         <path
@@ -71,7 +71,7 @@
                 <Avatar v-else icon="pi pi-user" size="small" shape="circle"
                     v-tooltip.bottom="'Inició sesión como ' + this.fullname" />
                 <div class="separate"><span>|</span></div>
-                <a type="button" @click="salir" title="Salir">
+                <a type="button" @click="salir" v-tooltip.bottom="'Cerrar sesión'">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
                         class="bi bi-box-arrow-right" viewBox="0 0 16 16">
                         <path fill-rule="evenodd"
@@ -83,7 +83,8 @@
             </div>
         </div>
         <nav class="navbar navbar-expand-lg navbar-light">
-            <router-link to="/tablero" class="ms-4 text-white d-flex align-items-center">
+            <router-link to="/tablero" class="ms-4 text-white d-flex align-items-center"
+                v-tooltip.bottom="'Ir al tablero'">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#fff" class="bi bi-house"
                     viewBox="0 0 16 16">
                     <path fill-rule="evenodd"
@@ -92,6 +93,14 @@
                         d="M7.293 1.5a1 1 0 0 1 1.414 0l6.647 6.646a.5.5 0 0 1-.708.708L8 2.207 1.354 8.854a.5.5 0 1 1-.708-.708L7.293 1.5z" />
                 </svg>
             </router-link>
+            <a v-if="showBackButton" @click="back" class="ms-4 text-white d-flex align-items-center"
+                style="cursor: pointer;" v-tooltip.bottom="'Volver'">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                    class="bi bi-arrow-left" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                        d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
+                </svg>
+            </a>
         </nav>
     </header>
 </template>
@@ -146,13 +155,24 @@ export default {
             //this.avatar = `data:image/png;base64,${payload.avatar}`;
         }
     },
+    computed: {
+
+        showBackButton() {
+            return this.$route.meta?.back === true
+        }
+
+    },
     methods: {
         salir() {
             logout();
             this.$router.replace({ name: "Login" });
         },
         back() {
-            this.$router.go(-1);
+            if (window.history.length > 1) {
+                this.$router.back()
+            } else {
+                this.$router.push({ name: "tablero" })
+            }
         }
     }
 }
@@ -163,9 +183,9 @@ header {
     width: 100%;
 }
 
-a:hover {
+/* a:hover {
     color: currentColor !important
-}
+} */
 
 #encabezado {
     width: 100%;
