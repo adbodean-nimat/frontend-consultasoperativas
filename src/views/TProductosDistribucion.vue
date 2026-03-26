@@ -148,16 +148,21 @@ export default {
       teleport: true,
       pageOnly: true,
       title: 'Tabla: Productos para Distribución',
+      currentGridPage: 1,
+      currentItemId: null,
+      currentScrollTop: 0,
+      currentAction: null,
+      currentRowIndex: null,
       fields: {
-        id: { editable: false, type: 'number', nullable: true },
-        Codigo_producto: { editable: true, type: 'string' },
-        ARTS_NOMBRE: { editable: false, type: 'string' },
-        Orden_producto: { editable: true, type: 'number' },
-        Cod_Familia_producto: { editable: true, type: 'string' },
-        Familia_producto: { editable: false, type: 'string', defaultValue: '' },
-        Familia_orden: { editable: false, type: 'number' },
-        Set_Familia: { editable: false, type: 'string' },
-        Url_imagen: { editable: true, type: 'string' }
+        id: { type: "number", editable: false, nullable: true },
+        Codigo_producto: { type: "string", validation: { required: true } },
+        ARTS_NOMBRE: { type: "string", editable: false },
+        Orden_producto: { type: "number", validation: { required: true, min: 0 } },
+        Cod_Familia_producto: { type: "number", validation: { required: true, min: 0 } },
+        Familia_producto: { type: "string", editable: false },
+        Familia_orden: { type: "number", editable: false },
+        Set_Familia: { type: "string", editable: false },
+        Url_imagen: { type: "string" }
       },
       fields2: {
         id: { editable: false, type: 'number', nullable: true },
@@ -226,9 +231,6 @@ export default {
           xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
         },
         contentType: "application/json; charset=utf-8",
-        success: function (data) {
-          e.success(data)
-        },
         method: 'GET',
         type: 'GET'
       });
@@ -239,9 +241,6 @@ export default {
           xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
         },
         dataType: 'json',
-        success: function (data) {
-          e.success(data)
-        },
         type: 'GET'
       });
 
@@ -251,9 +250,6 @@ export default {
           xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
         },
         dataType: 'json',
-        success: function (data) {
-          e.success(data)
-        },
         type: 'GET'
       });
 
@@ -267,7 +263,7 @@ export default {
 
         for (var i = 0; i < firstResult.length; i++) {
           for (var j = 0; j < threeResult.length; j++) {
-            if (firstResult[i].Codigo_producto === threeResult[j].ARTS_ARTICULO_EMP)
+            if (firstResult[i].Codigo_producto === threeResult[j].ARTS_ARTICULO_EMP) {
               result.push({
                 id: firstResult[i].id,
                 Codigo_producto: firstResult[i].Codigo_producto,
@@ -276,6 +272,7 @@ export default {
                 Cod_Familia_producto: firstResult[i].Cod_Familia_producto,
                 Url_imagen: firstResult[i].Url_imagen,
               })
+            }
           }
         }
 
@@ -286,13 +283,25 @@ export default {
             ARTS_NOMBRE: result[v].ARTS_NOMBRE,
             Orden_producto: result[v].Orden_producto,
             Cod_Familia_producto: result[v].Cod_Familia_producto,
-            Familia_producto: secondResult.filter(codigo => codigo.id == result[v].Cod_Familia_producto).map(data => data.nombre_familia),
-            Familia_orden: secondResult.filter(codigo => codigo.id == result[v].Cod_Familia_producto).map(data => data.orden_familia),
-            Set_Familia: threeResult.filter(codigo => codigo.ARTS_ARTICULO_EMP == result[v].Codigo_producto).map(data => data.RUBV_NOMBRE),
+            Familia_producto: secondResult
+              .filter(codigo => codigo.id == result[v].Cod_Familia_producto)
+              .map(data => data.nombre_familia)
+              .join(''),
+            Familia_orden: secondResult
+              .filter(codigo => codigo.id == result[v].Cod_Familia_producto)
+              .map(data => data.orden_familia)
+              .join(''),
+            Set_Familia: threeResult
+              .filter(codigo => codigo.ARTS_ARTICULO_EMP == result[v].Codigo_producto)
+              .map(data => data.RUBV_NOMBRE)
+              .join(''),
             Url_imagen: result[v].Url_imagen
           })
         }
+
         e.success(result2);
+      }).fail(function (err) {
+        e.error(err);
       });
     },
     readData2: function (e) {
@@ -343,16 +352,25 @@ export default {
     updateData: function (e) {
       var tkn = this.token
       var urlApi = this.UrlApiBase
+      var grid = this.$refs.grid.kendoWidget()
+
+      this.currentGridPage = grid.dataSource.page()
+      this.currentItemId = e.data.models[0].id
+      this.currentScrollTop = grid.content ? grid.content.scrollTop() : 0
+      this.currentAction = "update"
+      this.currentRowIndex = null
+
       var id = kendo.stringify(e.data.models[0].id);
       var data = kendo.stringify(e.data.models[0]);
+
       kendo.jQuery.ajax({
         type: 'PUT',
         url: urlApi + id,
         beforeSend: function (xhr) {
           xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
         },
-        success: function (data) {
-          e.success()
+        success: (data) => {
+          e.success(data)
         },
         error: function (data) {
           e.error(data)
@@ -364,21 +382,30 @@ export default {
     destroyData: function (e) {
       var tkn = this.token
       var urlApi = this.UrlApiBase
-      var id = kendo.stringify(e.data.models[0].id);
+      var grid = this.$refs.grid.kendoWidget()
+
+      this.currentGridPage = grid.dataSource.page()
+      this.currentScrollTop = grid.content ? grid.content.scrollTop() : 0
+      this.currentItemId = e.data.models[0].id
+      this.currentAction = "destroy"
+
+      var row = grid.select()
+      this.currentRowIndex = row && row.length ? row.index() : null
+
+      var id = kendo.stringify(e.data.models[0].id)
+
       kendo.jQuery.ajax({
-        method: 'DELETE',
         type: 'DELETE',
         url: urlApi + id,
         beforeSend: function (xhr) {
           xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
         },
-        success: function (data) {
+        success: (data) => {
           e.success(data)
         },
         error: function (data) {
           e.error(data)
-        },
-        contentType: 'application/json; charset=utf-8'
+        }
       })
     },
     createData: function (e) {
@@ -528,14 +555,78 @@ export default {
       console.error(e.error);
     },
     requestEnd: function (e) {
-      var response = e.response;
-      var type = e.type;
-      // console.log(type + " => type");
-      if (type == "create") {
-        e.sender.read();
+      if (e.type === "update" || e.type === "destroy") {
+        const ds = e.sender
+        const requestedPage = this.currentGridPage || 1
+        const itemId = this.currentItemId
+        const scrollTop = this.currentScrollTop || 0
+        const action = this.currentAction
+        const rowIndex = this.currentRowIndex
+        const grid = this.$refs.grid.kendoWidget()
+
+        grid.one("dataBound", () => {
+          this.$nextTick(() => {
+            const total = ds.total()
+            const pageSize = ds.pageSize()
+            const maxPage = Math.max(1, Math.ceil(total / pageSize))
+            const safePage = Math.min(requestedPage, maxPage)
+
+            const restoreAfterPage = () => {
+              this.$nextTick(() => {
+                if (action === "update") {
+                  const model = ds.get(itemId)
+
+                  if (model) {
+                    const row = grid.tbody.find("tr[data-uid='" + model.uid + "']")
+                    if (row.length) {
+                      grid.select(row)
+                    }
+                  }
+                }
+
+                if (action === "destroy") {
+                  const rows = grid.tbody.find("tr")
+
+                  if (rows.length) {
+                    let targetIndex = 0
+
+                    if (rowIndex != null) {
+                      if (rowIndex < rows.length) {
+                        targetIndex = rowIndex
+                      } else {
+                        targetIndex = rows.length - 1
+                      }
+                    }
+
+                    const targetRow = rows.eq(targetIndex)
+                    if (targetRow.length) {
+                      grid.select(targetRow)
+                    }
+                  }
+                }
+
+                if (grid.content) {
+                  grid.content.scrollTop(scrollTop)
+                }
+              })
+            }
+
+            if (ds.page() !== safePage) {
+              ds.one("change", () => {
+                restoreAfterPage()
+              })
+              ds.page(safePage)
+            } else {
+              restoreAfterPage()
+            }
+          })
+        })
+
+        ds.read()
       }
-      if (type == "update") {
-        e.sender.read();
+
+      if (e.type === "create") {
+        e.sender.read()
       }
     },
     onError2: function (e) {
@@ -548,9 +639,9 @@ export default {
       if (type == "create") {
         e.sender.read();
       }
-      if (type == "update") {
+      /* if (type == "update") {
         e.sender.read();
-      }
+      } */
     },
     onError3: function (e) {
       console.log(e.status);
@@ -562,9 +653,9 @@ export default {
       if (type == "create") {
         e.sender.read();
       }
-      if (type == "update") {
+      /* if (type == "update") {
         e.sender.read();
-      }
+      } */
     },
     filterMenuInitSort: function (e) {
       var grid = this.$refs.grid.kendoWidget();
