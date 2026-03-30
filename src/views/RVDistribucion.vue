@@ -535,7 +535,7 @@ export default {
           /* id = rows[ri].cells[4].value; */
 
           if (rows[ri].cells[9].value) {
-            console.log(colName + (ri + 1) + " - " + rows[ri].cells[9].value)
+            //console.log(colName + (ri + 1) + " - " + rows[ri].cells[9].value)
 
             /* images[id] = rows[ri].cells[9].value; */
 

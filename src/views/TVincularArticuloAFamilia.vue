@@ -95,6 +95,8 @@
         <grid-column :field="'nro_orden_de_la_fami'" :title="'Nro. Orden Familia'"></grid-column>
         <grid-column :field="'nombre_set'" :title="'Nombre Set'" :filterable-multi="true"
           :filterable-search="true"></grid-column>
+        <grid-column :field="'url_imagen'" :title="'Url Imagen'" :filterable-multi="true"
+          :filterable-search="true"></grid-column>
         <grid-column :command="['edit', 'destroy']" :title="'&nbsp;'"></grid-column>
       </grid>
     </div>
@@ -130,6 +132,11 @@ export default {
       teleport: true,
       pageOnly: true,
       title: 'Tabla: Vincular articulo a familia',
+      currentGridPage: 1,
+      currentItemId: null,
+      currentScrollTop: 0,
+      currentAction: null,
+      currentRowIndex: null,
       fields: {
         cod: { editable: false, type: 'number', nullable: true },
         cod_art: { editable: true, type: 'string' },
@@ -138,7 +145,8 @@ export default {
         cod_familia: { editable: true, type: 'string' },
         nombre_familia: { editable: false, type: 'string' },
         nro_orden_de_la_fami: { editable: false, type: 'number' },
-        nombre_set: { editable: false, type: 'string' }
+        nombre_set: { editable: false, type: 'string' },
+        url_imagen: { editable: true, type: 'string' }
       },
       fields2: {
         id: { editable: false, type: 'number', nullable: true },
@@ -203,45 +211,36 @@ export default {
           xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
         },
         contentType: "application/json; charset=utf-8",
-        success: function (data) {
-          e.success(data)
-        },
         method: 'GET',
         type: 'GET'
       });
+
       var data2 = kendo.jQuery.ajax({
         url: this.UrlApiBaseNombreFam,
         beforeSend: function (xhr) {
           xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
         },
         contentType: "application/json; charset=utf-8",
-        success: function (data) {
-          e.success(data)
-        },
         method: 'GET',
         type: 'GET'
       });
+
       var data3 = kendo.jQuery.ajax({
         url: this.UrlApiStocArts,
         beforeSend: function (xhr) {
           xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
         },
         contentType: "application/json; charset=utf-8",
-        success: function (data) {
-          e.success(data)
-        },
         method: 'GET',
         type: 'GET'
       });
+
       var data4 = kendo.jQuery.ajax({
         url: this.UrlApiBaseSetVentas,
         beforeSend: function (xhr) {
           xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
         },
         contentType: "application/json; charset=utf-8",
-        success: function (data) {
-          e.success(data)
-        },
         method: 'GET',
         type: 'GET'
       });
@@ -263,7 +262,8 @@ export default {
                 cod_art: firstResult[i].cod_art,
                 ARTS_NOMBRE: threeResult[j].ARTS_NOMBRE,
                 orden_art_familia: firstResult[i].orden_art_familia,
-                cod_familia: firstResult[i].cod_familia
+                cod_familia: firstResult[i].cod_familia,
+                url_imagen: firstResult[i].url_imagen
               })
           }
         }
@@ -275,20 +275,42 @@ export default {
             ARTS_NOMBRE: result[v].ARTS_NOMBRE,
             orden_art_familia: result[v].orden_art_familia,
             cod_familia: result[v].cod_familia,
-            nombre_familia: secondResult.filter(codigo => codigo.id == result[v].cod_familia).map(data => data.nombre_fami_art),
-            nro_orden_de_la_fami: secondResult.filter(codigo => codigo.id == result[v].cod_familia).map(data => data.nro_orden_de_la_fami),
-            nombre_set: fourResult.filter(codigo => codigo.id == (secondResult.filter(codigo => codigo.id == result[v].cod_familia).map(data => data.set_ventas))).map(data => data.nombre_set_art)
+            nombre_familia: secondResult
+              .filter(codigo => codigo.id == result[v].cod_familia)
+              .map(data => data.nombre_fami_art)
+              .join(''),
+
+            nro_orden_de_la_fami: secondResult
+              .filter(codigo => codigo.id == result[v].cod_familia)
+              .map(data => data.nro_orden_de_la_fami)
+              .join(''),
+
+            nombre_set: fourResult
+              .filter(codigo => codigo.id == (secondResult.filter(codigo => codigo.id == result[v].cod_familia).map(data => data.set_ventas)))
+              .map(data => data.nombre_set_art)
+              .join(''),
+            url_imagen: result[v].url_imagen
           })
         }
 
         e.success(result2);
+      }).fail(function (err) {
+        e.error(err);
       });
     },
     updateData: function (e) {
       var tkn = this.token
       var urlApi = this.UrlApiBase
+      var grid = this.$refs.grid.kendoWidget()
       var id = kendo.stringify(e.data.models[0].cod);
-      var data = kendo.stringify(e.data.models[0], ["cod_art", "orden_art_familia", "cod_familia", "cod_set_ventas"]);
+      var data = kendo.stringify(e.data.models[0], ["cod_art", "orden_art_familia", "cod_familia", "cod_set_ventas", "url_imagen"]);
+
+      this.currentGridPage = grid.dataSource.page()
+      this.currentItemId = e.data.models[0].cod
+      this.currentScrollTop = grid.content ? grid.content.scrollTop() : 0
+      this.currentAction = "update"
+      this.currentRowIndex = null
+
       kendo.jQuery.ajax({
         type: 'PUT',
         url: urlApi + id,
@@ -296,7 +318,7 @@ export default {
           xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
         },
         success: function (data) {
-          e.success()
+          e.success(data)
         },
         error: function (data) {
           e.error(data)
@@ -309,6 +331,14 @@ export default {
       var tkn = this.token
       var urlApi = this.UrlApiBase
       var id = kendo.stringify(e.data.models[0].cod);
+      var grid = this.$refs.grid.kendoWidget()
+      this.currentGridPage = grid.dataSource.page()
+      this.currentScrollTop = grid.content ? grid.content.scrollTop() : 0
+      this.currentItemId = e.data.models[0].cod
+      this.currentAction = "destroy"
+      var row = grid.select()
+      this.currentRowIndex = row && row.length ? row.index() : null
+
       kendo.jQuery.ajax({
         method: 'DELETE',
         type: 'DELETE',
@@ -354,9 +384,6 @@ export default {
           xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
         },
         contentType: "application/json; charset=utf-8",
-        success: function (data) {
-          e.success(data)
-        },
         method: 'GET',
         type: 'GET'
       })
@@ -366,9 +393,6 @@ export default {
           xhr.setRequestHeader('Authorization', 'Bearer ' + tkn)
         },
         contentType: "application/json; charset=utf-8",
-        success: function (data) {
-          e.success(data)
-        },
         method: 'GET',
         type: 'GET'
       });
@@ -530,13 +554,78 @@ export default {
       console.error(e.error);
     },
     requestEnd: function (e) {
-      var type = e.type;
-      //console.log(type + " => type");
-      if (type == "create") {
-        e.sender.read();
+      if (e.type === "update" || e.type === "destroy") {
+        const ds = e.sender
+        const requestedPage = this.currentGridPage || 1
+        const itemId = this.currentItemId
+        const scrollTop = this.currentScrollTop || 0
+        const action = this.currentAction
+        const rowIndex = this.currentRowIndex
+        const grid = this.$refs.grid.kendoWidget()
+
+        const restoreSelectionAndScroll = () => {
+          this.$nextTick(() => {
+            if (action === "update") {
+              const model = ds.get(itemId)
+
+              if (model) {
+                const row = grid.tbody.find("tr[data-uid='" + model.uid + "']")
+                if (row.length) {
+                  grid.select(row)
+                }
+              }
+            }
+
+            if (action === "destroy") {
+              const rows = grid.tbody.find("tr")
+
+              if (rows.length) {
+                let targetIndex = 0
+
+                if (rowIndex != null) {
+                  if (rowIndex < rows.length) {
+                    targetIndex = rowIndex
+                  } else {
+                    targetIndex = rows.length - 1
+                  }
+                }
+
+                const targetRow = rows.eq(targetIndex)
+                if (targetRow.length) {
+                  grid.select(targetRow)
+                }
+              }
+            }
+
+            setTimeout(() => {
+              if (grid.content) {
+                grid.content.scrollTop(scrollTop)
+              }
+            }, 0)
+          })
+        }
+
+        grid.one("dataBound", () => {
+          const total = ds.total()
+          const pageSize = ds.pageSize()
+          const maxPage = Math.max(1, Math.ceil(total / pageSize))
+          const safePage = Math.min(requestedPage, maxPage)
+
+          if (ds.page() !== safePage) {
+            grid.one("dataBound", () => {
+              restoreSelectionAndScroll()
+            })
+            ds.page(safePage)
+          } else {
+            restoreSelectionAndScroll()
+          }
+        })
+
+        ds.read()
       }
-      if (type == "update") {
-        e.sender.read();
+
+      if (e.type === "create") {
+        e.sender.read()
       }
     },
     onError2: function (e) {
