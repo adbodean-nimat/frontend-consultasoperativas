@@ -76,6 +76,7 @@ import GestionDeFinanzas from '../views/GestionFinanzas.vue'
 import ImportarMasivoFinanzas from '../views/ImportarMasivoFinanzas.vue'
 import FinanzasView from '../views/FinanzasView.vue'
 import ControlStockNPOC from '../views/ControlStockNPOC.vue'
+import RecepcionProveedoresGrid from '../views/RecepcionProveedores.vue'
 
 const routes = [
   {
@@ -414,6 +415,22 @@ const routes = [
       metaTags: [
         {
           name: 'Info de Artículos que se compran corrientemente 2',
+        }      ]
+    }
+  },
+  {
+    path: '/gestiondecompras/recepciondeproveedores',
+    name: 'Recepción de proveedores',
+    component: RecepcionProveedoresGrid,
+    props: true,
+    meta: {
+      requiresAuth: true,
+      roles: ["Sistemas", "Compras"],
+      title: 'Recepción de proveedores',
+      back: true,
+      metaTags: [
+        {
+          name: 'Recepción de proveedores',
         }      ]
     }
   },

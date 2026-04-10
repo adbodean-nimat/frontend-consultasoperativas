@@ -29,7 +29,8 @@
                         <div class="d-flex flex-row align-items-center gap-2 w-full">
                             <label class="w-auto">Comprador:</label>
                             <Select class="w-auto" name="comprador" v-model="Comprador" :options="compradores"
-                                optionLabel="Nombre" optionValue="Id" v-on:change="getRUBROSantes(this.Comprador)" />
+                                optionLabel="label" optionValue="value" v-on:change="getRUBROSantes(this.Comprador)"
+                                placeholder="Todos" showClear />
                             <label class="w-auto">Rubros de compras:</label>
                             <MultiSelect name="rubros" v-model="rubrosseleccionados" :options="rubros"
                                 optionLabel="RUBC_NOMBRE" optionValue="RUBC_RUBRO_COMPRA" filter
@@ -89,7 +90,7 @@
                     <template #end>
                         <div class="d-flex flex-row align-items-center gap-2">
                             <span>Total de artículos de esta vista: <Badge severity="secondary" size="large">{{
-                                rowData.length
+                                datosOriginales.length
                                     }}</Badge></span>
                         </div>
                     </template>
@@ -271,6 +272,7 @@ import { AllCommunityModule, ModuleRegistry, themeBalham } from 'ag-grid-communi
 ModuleRegistry.registerModules([AllCommunityModule]);
 
 import axios from 'axios';
+import { useStoreCompradores } from '@/stores/compradores';
 import { getToken } from "@/services/auth";
 import { decodeJwt } from "@/services/jwt";
 import Card from "primevue/card";
@@ -422,13 +424,7 @@ export default {
             Cant_días_atrás_para_evaluar_SM4: 90,
             Dias_hacia_atrás_fecha_de_NP: 365,
             rubrosseleccionados: [],
-            compradores: [
-                { Id: 0, Nombre: 'TODOS' },
-                { Id: 1, Nombre: 'EGE' },
-                { Id: 2, Nombre: 'SCC' },
-                { Id: 3, Nombre: 'SMA' },
-            ],
-            Comprador: 0,
+            Comprador: null,
             rubros: [],
             rubrosseleccionados: [],
             itemreclamados: [],
@@ -939,10 +935,10 @@ export default {
                         Authorization: `Bearer ${this.token}`
                     }
                 });
-                if (response.data && e == 0) {
+                if (response.data && e == null) {
                     this.rubros = response.data;
-                } else if (response.data && e != 0) {
-                    this.rubros = response.data.filter(rubro => rubro['RUBC_NOMBRE'].includes(this.compradores[e].Nombre));
+                } else if (response.data && e != null) {
+                    this.rubros = response.data.filter(rubro => rubro['RUBC_NOMBRE'].includes(e));
                 } else {
                     this.$toast.add({ severity: 'warn', summary: 'Advertencia', detail: 'No se encontraron rubros de compras.', life: 3000 });
                 }
@@ -989,7 +985,6 @@ export default {
             this.getItemVinculadosAOC();
             const start = new Date();
             try {
-
                 dayjs.locale('es-us');
                 dayjs.extend(minMax);
                 dayjs.extend(LocalizedFormat);
@@ -999,7 +994,7 @@ export default {
                 const params = {
                     cantdiasatrasparaevaluarsm4: this.Cant_días_atrás_para_evaluar_SM4,
                     diashaciaatrasfechadeNP: this.Dias_hacia_atrás_fecha_de_NP,
-                    comprador: this.compradores[this.Comprador]?.Nombre || '',
+                    comprador: this.Comprador ? this.Comprador : 'TODOS',
                     rubros: this.rubrosseleccionados?.length > 0 ?
                         this.rubrosseleccionados.map(rubro => `'${rubro}'`).join(',') : ''
                 };
@@ -1021,7 +1016,7 @@ export default {
                 this.$toast.add({
                     severity: 'success',
                     summary: 'Éxito',
-                    detail: `${this.rowData.length} artículos cargados.`,
+                    detail: `${this.datosOriginales.length} artículos cargados.`,
                     life: 3000
                 });
             } catch (error) {
@@ -1144,6 +1139,10 @@ export default {
         this.getRUBROS();
     },
     computed: {
+        compradores() {
+            const store = useStoreCompradores();
+            return store.compradores
+        },
         options() {
             return {
                 callback: (isFullscreen) => {

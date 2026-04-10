@@ -1,7 +1,7 @@
 <template>
     <div>
-        <div class="card">
-            <Toolbar class="mb-0" style="border-top-left-radius: 0px; border-top-right-radius: 0px;">
+        <div>
+            <Toolbar class="mb-0" style="border-bottom-left-radius: 0px; border-bottom-right-radius: 0px;">
                 <template #start>
                     <span>Parametros: <strong><i> Control Stock NP OC</i></strong></span>
                 </template>
@@ -861,7 +861,6 @@ export default {
                     nombre_comp: data.TCST_NOMBRE
                 }
             });
-            console.log(response2.data);
             this.target_remitosdeventas = response2.data.map((data) => {
                 return {
                     id: data.id,
@@ -960,4 +959,9 @@ export default {
 
 </script>
 
-<style></style>
+<style>
+.p-accordionpanel:first-child>.p-accordionheader {
+    border-top-left-radius: 0px !important;
+    border-top-right-radius: 0px !important;
+}
+</style>

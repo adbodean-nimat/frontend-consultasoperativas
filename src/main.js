@@ -1,23 +1,25 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
-import store from './store'
+import { pinia } from '@/stores'
 import PrimeVue from 'primevue/config'
 import Lara from '@primeuix/themes/lara'
 import ToastService from 'primevue/toastservice';
 import Tooltip from 'primevue/tooltip'
 import ConfirmationService from 'primevue/confirmationservice';
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import "./style.css";
 import 'primeicons/primeicons.css'
 import 'bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import '@popperjs/core'
-
 const app = createApp(App);
+
 app.directive('tooltip', Tooltip);
+pinia.use(piniaPluginPersistedstate)
+app.use(pinia);
 app.use(ConfirmationService);
 app.use(router);
-app.use(store); 
 app.use(ToastService);
 app.use(PrimeVue, { 
     locale: {

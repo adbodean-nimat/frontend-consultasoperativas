@@ -29,8 +29,8 @@
                 </div>
             </div>
 
-            <div class="card">
-                <Toolbar class="mb-0" style="border-top-left-radius: 0px; border-top-right-radius: 0px;">
+            <div>
+                <Toolbar class="mb-0" style="border-radius: 0px;">
                     <template #start>
                         <span>Parametros: <strong><i>Información de Artículos que se Compran
                                     Corrientemente</i></strong></span>
@@ -231,6 +231,14 @@
             <div class="mt-0">
                 <ParametrosControlCementos />
             </div>
+            <Divider type="dotted" />
+            <div class="mt-0">
+                <ParametrosRecepcionProveedores />
+            </div>
+            <Divider type="dotted" />
+            <div class="mt-0 mb-2">
+                <ParametrosCompradores />
+            </div>
         </div>
         <Toast />
     </div>
@@ -255,7 +263,9 @@ import Divider from 'primevue/divider';
 import { useToast } from 'primevue/usetoast';
 import { Button as KButton } from '@progress/kendo-buttons-vue-wrapper'
 import { directive as fullscreen } from 'vue-fullscreen'
+import ParametrosCompradores from '../components/ParametrosCompradores.vue';
 import ParametrosControlCementos from '../components/ParametrosControlCementos.vue';
+import ParametrosRecepcionProveedores from '../components/ParametrosRecepcionProveedores.vue';
 export default {
     name: 'ParametrosdeCompras',
     directives: {
@@ -276,7 +286,9 @@ export default {
         Toast,
         "kbutton": KButton,
         Divider,
-        ParametrosControlCementos
+        ParametrosCompradores,
+        ParametrosControlCementos,
+        ParametrosRecepcionProveedores
     },
     data: () => {
         return {
@@ -928,4 +940,9 @@ export default {
 }
 </script>
 
-<style></style>
+<style>
+.p-accordionpanel:first-child>.p-accordionheader {
+    border-top-left-radius: 0px !important;
+    border-top-right-radius: 0px !important;
+}
+</style>
