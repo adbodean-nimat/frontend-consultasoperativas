@@ -144,7 +144,7 @@ const routes = [
 		props: true,
 		meta: {
 			requiresAuth: true,
-			roles: ["Administracion y Finanzas", "Sistemas"],
+			roles: ["Administración y Finanzas", "Sistemas"],
 			title: "Consultas Clientes entre CAD y Plataforma",
 			back: true,
 			metaTags: [
@@ -241,7 +241,7 @@ const routes = [
 		props: true,
 		meta: {
 			requiresAuth: true,
-			roles: ["Sistemas", "Administracion y Finanzas"],
+			roles: ["Sistemas", "Administración y Finanzas"],
 			title: "Gestión de Finanzas",
 			back: true,
 			metaTags: [
@@ -258,7 +258,7 @@ const routes = [
 		props: true,
 		meta: {
 			requiresAuth: true,
-			roles: ["Sistemas", "Administracion y Finanzas"],
+			roles: ["Sistemas", "Administración y Finanzas"],
 			title: "Panel Finanzas",
 			back: true,
 			metaTags: [
@@ -275,7 +275,7 @@ const routes = [
 		props: true,
 		meta: {
 			requiresAuth: true,
-			roles: ["Sistemas", "Administracion y Finanzas"],
+			roles: ["Sistemas", "Administración y Finanzas"],
 			title: "Importar masivo de finanzas",
 			back: true,
 			metaTags: [
@@ -340,7 +340,7 @@ const routes = [
 		props: true,
 		meta: {
 			requiresAuth: true,
-			roles: ["Sistemas", "Compras", "Exhibicion"],
+			roles: ["Sistemas", "Compras", "Exhibición"],
 			title: "Gestión de Compras",
 			back: true,
 			metaTags: [
@@ -442,7 +442,7 @@ const routes = [
 		props: true,
 		meta: {
 			requiresAuth: true,
-			roles: ["Sistemas", "Compras", "Exhibicion"],
+			roles: ["Sistemas", "Compras", "Exhibición"],
 			title: "Recepción de proveedores",
 			back: true,
 			metaTags: [
