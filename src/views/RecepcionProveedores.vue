@@ -167,7 +167,7 @@
                     <div class="d-flex flex-row align-items-center gap-2">
                         <span>
                             Fecha de emisión: <Badge severity="secondary" size="large"> {{ totalRows > 0 ? fechaHoy : ''
-                                }}</Badge>
+                            }}</Badge>
                         </span>
                     </div>
                 </template>
@@ -727,7 +727,7 @@ export default {
                     field: 'fechaAuditoria',
                     valueGetter: (params) => this.detailValue(params, 'fechaAuditoria'),
                     valueFormatter: this.formatDate,
-                    hide: false,
+                    hide: true,
                     cellClass: 'ag-center-align'
                 },
                 {
@@ -876,6 +876,25 @@ export default {
                     headerName: 'Estado facturación',
                     field: 'estadoFacturacion',
                     valueGetter: (params) => this.detailValue(params, 'estadoFacturacion')
+                },
+                {
+                    headerName: 'Orden de compra',
+                    field: 'OrdenCompra',
+                    valueGetter: (params) => this.detailValue(params, 'OrdenCompra')
+                },
+                {
+                    headerName: 'Fecha de orden de compra',
+                    field: 'fechaOrdenCompra',
+                    valueGetter: (params) => this.detailValue(params, 'fechaOrdenCompra'),
+                    valueFormatter: this.formatDate,
+                    cellClass: 'ag-center-align'
+                },
+                {
+                    headerName: 'Delay (días) entre OC y Auditoria',
+                    field: 'diasOrdenCompra_Auditoria',
+                    valueGetter: (params) => this.detailValue(params, 'diasOrdenCompra_Auditoria'),
+                    valueFormatter: this.formatNumberOrBlank,
+                    cellClass: 'ag-center-align'
                 },
                 {
                     headerName: 'Devol / Recep',

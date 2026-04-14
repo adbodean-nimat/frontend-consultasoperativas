@@ -156,7 +156,6 @@ export default {
         }
     },
     computed: {
-
         showBackButton() {
             return this.$route.meta?.back === true
         }
