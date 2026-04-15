@@ -44,7 +44,7 @@
                             </div>
                         </router-link>
                     </div>
-                    <div class="col col-h">
+                    <div class="col col-h" v-if="hasRole(['Sistemas', 'Ventas', 'Exhibicion'])">
                         <router-link to="/cartelerias">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
@@ -86,7 +86,7 @@
                             </div>
                         </router-link>
                     </div>
-                    <div class="col col-h">
+                    <div class="col col-h" v-if="hasRole(['Sistemas', 'Ventas'])">
                         <router-link to="/webnimat">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
@@ -125,8 +125,7 @@
                             </div>
                         </router-link>
                     </div>
-                    <div class="col col-h"
-                        v-if="IsAllow === 'abodean' || IsAllow === 'dvazquez' || IsAllow === 'ejescobar'">
+                    <div class="col col-h" v-if="hasRole(['Sistemas', 'Administracion y Finanzas'])">
                         <router-link to="/consultascadplataforma">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
@@ -166,8 +165,7 @@
                             </div>
                         </router-link>
                     </div>
-                    <div class="col col-h"
-                        v-if="IsAllow === 'abodean' || IsAllow === 'dvazquez' || IsAllow === 'ejescobar' || IsAllow === 'gescobar'">
+                    <div class="col col-h" v-if="hasRole(['Sistemas', 'Compras'])">
                         <router-link to="/consultainformesacindarentrefechas">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
@@ -206,8 +204,7 @@
                             </div>
                         </router-link>
                     </div>
-                    <div class="col col-h"
-                        v-if="IsAllow === 'abodean' || IsAllow === 'dvazquez' || IsAllow === 'ejescobar' || IsAllow === 'gescobar' || IsAllow === 'cchalliol' || IsAllow === 'saraujo'">
+                    <div class="col col-h" v-if="hasRole(['Sistemas', 'Compras', 'Exhibicion'])">
                         <router-link to="/gestiondecompras">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
@@ -246,8 +243,7 @@
                             </div>
                         </router-link>
                     </div>
-                    <div class="col col-h"
-                        v-if="IsAllow === 'abodean' || IsAllow === 'dvazquez' || IsAllow === 'ejescobar' || IsAllow === 'iniez' || IsAllow === 'vsevero' || IsAllow === 'esantana'">
+                    <div class="col col-h" v-if="hasRole(['Sistemas', 'Ventas'])">
                         <router-link to="/gestiondedistribucion">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
@@ -286,8 +282,7 @@
                             </div>
                         </router-link>
                     </div>
-                    <div class="col col-h"
-                        v-if="IsAllow === 'abodean' || IsAllow === 'dvazquez' || IsAllow === 'ejescobar' || IsAllow === 'gorcellet'">
+                    <div class="col col-h" v-if="hasRole(['Sistemas', 'Administracion y Finanzas'])">
                         <router-link to="/gestiondefinanzas">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
@@ -333,6 +328,7 @@
 </template>
 
 <script>
+import { hasRole } from "@/services/roles";
 import { getToken } from "@/services/auth";
 import { decodeJwt } from "@/services/jwt";
 export default {
@@ -340,8 +336,11 @@ export default {
     data: () => {
         return {
             giveName: '',
-            IsAllow: ''
+            IsAllow: '',
         }
+    },
+    methods: {
+        hasRole
     },
     async created() {
         const token = getToken();

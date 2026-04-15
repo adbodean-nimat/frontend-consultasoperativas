@@ -144,7 +144,7 @@ const routes = [
 		props: true,
 		meta: {
 			requiresAuth: true,
-			roles: ["Administración y Finanzas", "Sistemas"],
+			roles: ["Administracion y Finanzas", "Sistemas"],
 			title: "Consultas Clientes entre CAD y Plataforma",
 			back: true,
 			metaTags: [
@@ -161,6 +161,7 @@ const routes = [
 		props: true,
 		meta: {
 			requiresAuth: true,
+			roles: ["Sistemas", "Compras"],
 			title: "Consulta informes de Acindar",
 			back: true,
 			metaTags: [
@@ -177,6 +178,7 @@ const routes = [
 		props: true,
 		meta: {
 			requiresAuth: true,
+			roles: ["Sistemas", "Compras"],
 			title: "Consulta informes de Acindar",
 			back: true,
 			metaTags: [
@@ -241,7 +243,7 @@ const routes = [
 		props: true,
 		meta: {
 			requiresAuth: true,
-			roles: ["Sistemas", "Administración y Finanzas"],
+			roles: ["Sistemas", "Administracion y Finanzas"],
 			title: "Gestión de Finanzas",
 			back: true,
 			metaTags: [
@@ -258,7 +260,7 @@ const routes = [
 		props: true,
 		meta: {
 			requiresAuth: true,
-			roles: ["Sistemas", "Administración y Finanzas"],
+			roles: ["Sistemas", "Administracion y Finanzas"],
 			title: "Panel Finanzas",
 			back: true,
 			metaTags: [
@@ -275,7 +277,7 @@ const routes = [
 		props: true,
 		meta: {
 			requiresAuth: true,
-			roles: ["Sistemas", "Administración y Finanzas"],
+			roles: ["Sistemas", "Administracion y Finanzas"],
 			title: "Importar masivo de finanzas",
 			back: true,
 			metaTags: [
@@ -292,6 +294,7 @@ const routes = [
 		props: true,
 		meta: {
 			requiresAuth: true,
+			roles: ["Sistemas", "Ventas"],
 			title: "Gestión de Distribución",
 			back: true,
 			metaTags: [
@@ -340,7 +343,7 @@ const routes = [
 		props: true,
 		meta: {
 			requiresAuth: true,
-			roles: ["Sistemas", "Compras", "Exhibición"],
+			roles: ["Compras", "Exhibicion", "Sistemas"],
 			title: "Gestión de Compras",
 			back: true,
 			metaTags: [
@@ -442,7 +445,7 @@ const routes = [
 		props: true,
 		meta: {
 			requiresAuth: true,
-			roles: ["Sistemas", "Compras", "Exhibición"],
+			roles: ["Sistemas", "Compras", "Exhibicion"],
 			title: "Recepción de proveedores",
 			back: true,
 			metaTags: [
@@ -459,7 +462,7 @@ const routes = [
 		props: true,
 		meta: {
 			requiresAuth: true,
-			roles: ["Sistemas", "Ventas"],
+			roles: ["Ventas", "Exhibicion"],
 			title: "Cartelería",
 			back: true,
 			metaTags: [
@@ -556,6 +559,7 @@ const routes = [
 		props: true,
 		meta: {
 			requiresAuth: true,
+			roles: ["Sistemas", "Ventas"],
 			title: "Web NIMAT",
 			back: true,
 			metaTags: [
@@ -1328,7 +1332,7 @@ router.beforeEach((to, from) => {
 		}
 
 		const payload = decodeJwt(token);
-
+		//console.log(payload.user);
 		// Si la ruta pide roles, validamos contra memberOf -> CN
 		if (to.meta.roles?.length) {
 			const memberOf = payload?.user?.memberOf ?? [];
@@ -1340,6 +1344,7 @@ router.beforeEach((to, from) => {
 			//console.log("AD groups (CN):", groupCns);
 
 			const ok = to.meta.roles.some((required) => groupCns.includes(required));
+			//console.log(ok);
 			if (!ok) return { path: to.fullPath };
 		}
 	}

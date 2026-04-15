@@ -4,7 +4,7 @@
             <div class="container-fluid px-4 text-center">
                 <h3 class="text-white">Gestión de Compras</h3>
                 <div class="row row-cols-lg-5 gy-5 mt-2">
-                    <div class="col col-h">
+                    <div class="col col-h" v-if="hasRole(['Sistemas', 'Compras'])">
                         <router-link to="/gestiondecompras/parametrosdecompras">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
@@ -44,7 +44,7 @@
                             </div>
                         </router-link>
                     </div>
-                    <div class="col col-h">
+                    <div class="col col-h" v-if="hasRole(['Sistemas', 'Compras'])">
                         <router-link to="/gestiondecompras/ratiocompras">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
@@ -84,7 +84,7 @@
                             </div>
                         </router-link>
                     </div>
-                    <div class="col col-h">
+                    <div class="col col-h" v-if="hasRole(['Sistemas', 'Compras'])">
                         <router-link to="/gestiondecompras/infodearticulosquesecomprancorrientemente">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
@@ -124,7 +124,7 @@
                             </div>
                         </router-link>
                     </div>
-                    <div class="col col-h">
+                    <div class="col col-h" v-if="hasRole(['Sistemas', 'Compras'])">
                         <router-link to="/gestiondecompras/infodearticulosquesecomprancorrientemente2">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
@@ -164,7 +164,7 @@
                             </div>
                         </router-link>
                     </div>
-                    <div class="col col-h">
+                    <div class="col col-h" v-if="hasRole(['Sistemas', 'Compras'])">
                         <router-link to="/gestiondecompras/controlstocknpoc">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
@@ -204,7 +204,7 @@
                             </div>
                         </router-link>
                     </div>
-                    <div class="col col-h">
+                    <div class="col col-h" v-if="hasRole(['Sistemas', 'Compras', 'Exhibicion'])">
                         <router-link to="/gestiondecompras/recepciondeproveedores">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
@@ -251,6 +251,7 @@
 </template>
 
 <script>
+import { hasRole } from "@/services/roles";
 import { getToken } from "@/services/auth";
 import { decodeJwt } from "@/services/jwt";
 export default {
@@ -260,6 +261,9 @@ export default {
             giveName: '',
             IsAllow: ''
         }
+    },
+    methods: {
+        hasRole
     },
     async created() {
         const token = getToken();
