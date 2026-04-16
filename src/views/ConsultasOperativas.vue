@@ -4,9 +4,9 @@
 
 <script>
 // @ is an alias to /src
-import ConsultasVue from '../components/Consultas.vue'
+import ConsultasVue from '@/components/Consultas.vue'
 export default {
-  name: 'Consultas',
+  name: 'consultasoperativas',
   components: {
     ConsultasVue
   }

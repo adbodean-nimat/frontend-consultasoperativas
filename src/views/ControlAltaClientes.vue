@@ -78,7 +78,7 @@ import { Button } from '@progress/kendo-buttons-vue-wrapper'
 import { directive as fullscreen } from 'vue-fullscreen'
 
 export default {
-  name: 'ControlAltaClientes',
+  name: 'controlaltaclientes',
   directives: {
     fullscreen,
   },

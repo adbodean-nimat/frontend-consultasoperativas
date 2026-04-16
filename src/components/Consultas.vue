@@ -4,9 +4,8 @@
             <div class="container-fluid px-5 text-center">
                 <h3 class="text-white">Consultas Operativas</h3>
                 <div class="row row-cols-lg-5 gy-5 mt-2">
-                    <div v-if="IsAllow === 'cfernandez' || IsAllow === 'abodean' || IsAllow === 'avillasalte'"
-                        class="col col-h">
-                        <router-link to="/controlaltaclientes">
+                    <div v-if="hasRole(['Gerencia', 'Sistemas', 'Ventas', 'Compras'])" class="col col-h">
+                        <router-link :to="{ name: 'control-alta-clientes' }">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 text-secondary link-success">
@@ -45,9 +44,8 @@
                             </div>
                         </router-link>
                     </div>
-                    <div v-if="IsAllow === 'cfernandez' || IsAllow === 'abodean' || IsAllow === 'avillasalte'"
-                        class="col col-h">
-                        <router-link to="/listadeclientes">
+                    <div v-if="hasRole(['Gerencia', 'Sistemas', 'Ventas', 'Compras'])" class="col col-h">
+                        <router-link :to="{ name: 'listadeclientes' }">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 rounded text-secondary link-success">
@@ -87,7 +85,7 @@
                         </router-link>
                     </div>
                     <div class="col col-h">
-                        <router-link to="/vblesentrnp">
+                        <router-link :to="{ name: 'vblesentrnpg' }">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 rounded text-secondary link-success">
@@ -127,7 +125,7 @@
                         </router-link>
                     </div>
                     <div class="col col-h">
-                        <router-link to="/vblesentrnppr">
+                        <router-link :to="{ name: 'vblesentrnppr' }">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 rounded text-secondary link-success">
@@ -167,7 +165,7 @@
                         </router-link>
                     </div>
                     <div class="col col-h">
-                        <router-link to="/listaprecioscostoreposicion">
+                        <router-link :to="{ name: 'listaprecioscostoreposicion' }">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 rounded text-secondary link-success">
@@ -206,9 +204,8 @@
                             </div>
                         </router-link>
                     </div>
-                    <div v-if="IsAllow === 'ggarin' || IsAllow === 'abodean' || IsAllow === 'avillasalte'"
-                        class="col col-h">
-                        <router-link to="/listapreciosventaalpublico">
+                    <div v-if="hasRole(['Gerencia', 'Sistemas', 'Ventas', 'Compras'])" class="col col-h">
+                        <router-link :to="{ name: 'listapreciosventaalpublico' }">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 rounded text-secondary link-success">
@@ -248,7 +245,7 @@
                         </router-link>
                     </div>
                     <div class="col col-h">
-                        <router-link to="/containers">
+                        <router-link :to="{ name: 'listapreciosventaalpublico' }">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 rounded text-secondary link-success">
@@ -288,7 +285,7 @@
                         </router-link>
                     </div>
                     <div class="col col-h">
-                        <router-link to="/pisosyrevestimientoconstock">
+                        <router-link :to="{ name: 'listapreciospisosyrevestimientoconstock' }">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 rounded text-secondary link-success">
@@ -328,7 +325,7 @@
                         </router-link>
                     </div>
                     <div class="col col-h">
-                        <router-link to="/pisosyrevestimiento">
+                        <router-link :to="{ name: 'listapreciospisosyrevestimiento' }">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 rounded text-secondary link-success">
@@ -368,7 +365,7 @@
                         </router-link>
                     </div>
                     <div class="col col-h">
-                        <router-link to="/breveusointerno">
+                        <router-link :to="{ name: 'listapreciosbreveusointerno' }">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 rounded text-secondary link-success">
@@ -408,7 +405,7 @@
                         </router-link>
                     </div>
                     <div class="col col-h">
-                        <router-link to="/listaconstseco">
+                        <router-link :to="{ name: 'preciosconsumosconstseco' }">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 rounded text-secondary link-success">
@@ -448,7 +445,7 @@
                         </router-link>
                     </div>
                     <div class="col col-h">
-                        <router-link to="/listarubrosvtas">
+                        <router-link :to="{ name: 'listapreciosrubrosvtas' }">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 rounded text-secondary link-success">
@@ -488,7 +485,7 @@
                         </router-link>
                     </div>
                     <div class="col col-h">
-                        <router-link to="/listarubrosvtasacopio">
+                        <router-link :to="{ name: 'listapreciosrubrosvtasacopio' }">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 rounded text-secondary link-success">
@@ -528,7 +525,7 @@
                         </router-link>
                     </div>
                     <div class="col col-h">
-                        <router-link to="/listasetsvtas">
+                        <router-link :to="{ name: 'listapreciossetsvtas' }">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 rounded text-secondary link-success">
@@ -568,7 +565,7 @@
                         </router-link>
                     </div>
                     <div class="col col-h">
-                        <router-link to="/listadodistribucion">
+                        <router-link :to="{ name: 'listapreciosdistribucion' }">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 rounded text-secondary link-success">
@@ -608,7 +605,7 @@
                         </router-link>
                     </div>
                     <div class="col col-h">
-                        <router-link to="/rowaplancanjexsiempre">
+                        <router-link :to="{ name: 'rowaplancanjexsiempre' }">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 rounded text-secondary link-success">
@@ -648,7 +645,7 @@
                         </router-link>
                     </div>
                     <div class="col col-h">
-                        <router-link to="/combo">
+                        <router-link :to="{ name: 'listaprecioscombo' }">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 rounded text-secondary link-success">
@@ -688,7 +685,7 @@
                         </router-link>
                     </div>
                     <div class="col col-h">
-                        <router-link to="/acopiocemento">
+                        <router-link :to="{ name: 'acopiocementolomanegra' }">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 rounded text-secondary link-success">
@@ -728,7 +725,7 @@
                         </router-link>
                     </div>
                     <div class="col col-h">
-                        <router-link to="/stocknpoc/calescementosplasticor">
+                        <router-link :to="{ name: 'stocknpoccalescementosplasticor' }">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 rounded text-secondary link-success">
@@ -768,7 +765,7 @@
                         </router-link>
                     </div>
                     <div class="col col-h">
-                        <router-link to="/consultaporqr">
+                        <router-link :to="{ name: 'consultaporqr' }">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 rounded text-secondary link-success">
@@ -807,9 +804,8 @@
                             </div>
                         </router-link>
                     </div>
-                    <div v-if="IsAllow === 'rmuriel' || IsAllow === 'abodean' || IsAllow === 'avillasalte' || IsAllow === 'ejescobar' || IsAllow === 'sbarrios' || IsAllow === 'jbermudez' || IsAllow === 'vromero' || IsAllow === 'cbrun' || IsAllow === 'sberrutti'"
-                        class="col col-h">
-                        <router-link to="/npconproblemaentregainmediata">
+                    <div v-if="hasRole(['Gerencia', 'Sistemas', 'Logistica'])" class="col col-h">
+                        <router-link :to="{ name: 'npconproblemaentregainmediata' }">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 rounded text-secondary link-success">
@@ -821,7 +817,7 @@
                                         </svg>
                                     </div>
                                     <div class="title-column" style="text-align: right;">
-                                        Nota de pedido con problema<br> Entrega inmediata
+                                        NP con problema<br> Entrega inmediata
                                     </div>
                                 </div>
                             </div>
@@ -848,9 +844,8 @@
                             </div>
                         </router-link>
                     </div>
-                    <div v-if="IsAllow === 'mniez' || IsAllow === 'gescobar' || IsAllow === 'rmuriel' || IsAllow === 'abodean' || IsAllow === 'avillasalte' || IsAllow === 'ejescobar' || IsAllow === 'mniez'"
-                        class="col col-h">
-                        <router-link to="/consultaordenescompra">
+                    <div v-if="hasRole(['Gerencia', 'Sistemas', 'Logistica', 'Compras', 'Ventas'])" class="col col-h">
+                        <router-link :to="{ name: 'consultaordencompra' }">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 rounded text-secondary link-success">
@@ -862,7 +857,7 @@
                                         </svg>
                                     </div>
                                     <div class="title-column" style="text-align: right;">
-                                        Consulta Ordenes Compra<br>
+                                        Consulta Orden de compra<br>
                                     </div>
                                 </div>
                             </div>
@@ -889,9 +884,8 @@
                             </div>
                         </router-link>
                     </div>
-                    <div v-if="IsAllow === 'rmuriel' || IsAllow === 'abodean' || IsAllow === 'ejescobar' || IsAllow === 'mniez' || IsAllow === 'dvazquez'"
-                        class="col col-h">
-                        <router-link to="/consultatiempoentregasinmediata">
+                    <div v-if="hasRole(['Gerencia', 'Sistemas', 'Logistica'])" class="col col-h">
+                        <router-link :to="{ name: 'consultatiempoentregasinmediata' }">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 rounded text-secondary link-success">
@@ -941,6 +935,8 @@
 <script>
 import { getToken } from "@/services/auth";
 import { decodeJwt } from "@/services/jwt";
+import { hasRole } from "@/services/roles";
+
 export default {
     name: 'Consultas',
     data: () => {
@@ -949,6 +945,9 @@ export default {
             IsAllow: '',
             token: '',
         }
+    },
+    methods: {
+        hasRole
     },
     async created() {
         this.token = await getToken();

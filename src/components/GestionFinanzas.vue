@@ -5,7 +5,7 @@
                 <h3 class="text-white">Gestión de Finanzas</h3>
                 <div class="row row-cols-lg-5 gy-5 mt-2">
                     <div class="col col-h">
-                        <router-link to="/gestiondefinanzas/importarmasivofinanzas">
+                        <router-link :to="{ name: 'importarmasivofinanzas' }">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 text-secondary link-success">
@@ -46,7 +46,7 @@
                         </router-link>
                     </div>
                     <div class="col col-h">
-                        <router-link to="/gestiondefinanzas/panelfinanzas">
+                        <router-link :to="{ name: 'panelfinanzas' }">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 text-secondary link-success">

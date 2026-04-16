@@ -49,7 +49,7 @@
                 </router-link>
             </div>
             <div class="setting">
-                <router-link to="/tablas" class="link" v-tooltip.bottom="'Editar los parámetros de las tablas'">
+                <router-link to="/tabla" class="link" v-tooltip.bottom="'Editar los parámetros de las tablas'">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
                         class="bi bi-pencil-square" viewBox="0 0 16 16">
                         <path

@@ -5,7 +5,7 @@
                 <h3 class="text-white">Cartelería</h3>
                 <div class="row row-cols-lg-5 gy-5 mt-2">
                     <div class="col col-h">
-                        <router-link to="/cartelerias/combo">
+                        <router-link :to="{ name: 'carteleriascombo' }">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 text-secondary link-success">
@@ -46,7 +46,7 @@
                         </router-link>
                     </div>
                     <div class="col col-h">
-                        <router-link to="/cartelerias/m2">
+                        <router-link :to="{ name: 'carteleriasm2' }">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 rounded text-secondary link-success">
@@ -87,7 +87,7 @@
                         </router-link>
                     </div>
                     <div class="col col-h">
-                        <router-link to="/cartelerias/m2saldo">
+                        <router-link :to="{ name: 'carteleriasm2saldo' }">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 rounded text-secondary link-success">
@@ -128,7 +128,7 @@
                         </router-link>
                     </div>
                     <div class="col col-h">
-                        <router-link to="/cartelerias/articulo">
+                        <router-link :to="{ name: 'carteleriasarticulo' }">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 rounded text-secondary link-success">
@@ -169,7 +169,7 @@
                         </router-link>
                     </div>
                     <div class="col col-h">
-                        <router-link to="/cartelerias/manual">
+                        <router-link :to="{ name: 'carteleriasmanual' }">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 rounded text-secondary link-success">

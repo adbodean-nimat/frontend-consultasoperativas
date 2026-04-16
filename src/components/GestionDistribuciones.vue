@@ -46,7 +46,7 @@
                         </router-link>
                     </div> -->
                     <div class="col col-h">
-                        <router-link to="/gestiondedistribucion/listadeclientesdistribucion">
+                        <router-link :to="{ name: 'listadeclientesdistribucion' }">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 text-secondary link-success">

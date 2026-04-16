@@ -5,7 +5,7 @@
                 <h3 class="text-white">¡Hola {{ giveName }}! 👋</h3>
                 <div class="row row-cols-lg-5 gy-5 mt-2">
                     <div class="col col-h">
-                        <router-link to="/consultas">
+                        <router-link to="/co">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 text-secondary link-success">
@@ -44,8 +44,8 @@
                             </div>
                         </router-link>
                     </div>
-                    <div class="col col-h" v-if="hasRole(['Sistemas', 'Ventas', 'Exhibicion'])">
-                        <router-link to="/cartelerias">
+                    <div class="col col-h" v-if="hasRole(['Gerencia', 'Sistemas', 'Ventas', 'Exhibicion'])">
+                        <router-link to="/ca">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 rounded text-secondary link-success">
@@ -86,8 +86,8 @@
                             </div>
                         </router-link>
                     </div>
-                    <div class="col col-h" v-if="hasRole(['Sistemas', 'Ventas'])">
-                        <router-link to="/webnimat">
+                    <div class="col col-h" v-if="hasRole(['Gerencia', 'Sistemas', 'Ventas'])">
+                        <router-link to="/wn">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 text-secondary link-success">
@@ -125,8 +125,8 @@
                             </div>
                         </router-link>
                     </div>
-                    <div class="col col-h" v-if="hasRole(['Sistemas', 'Administracion y Finanzas'])">
-                        <router-link to="/consultascadplataforma">
+                    <div class="col col-h" v-if="hasRole(['Gerencia', 'Sistemas', 'Administracion y Finanzas'])">
+                        <router-link to="/cad">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 text-secondary link-success">
@@ -165,8 +165,8 @@
                             </div>
                         </router-link>
                     </div>
-                    <div class="col col-h" v-if="hasRole(['Sistemas', 'Compras'])">
-                        <router-link to="/consultainformesacindarentrefechas">
+                    <div class="col col-h" v-if="hasRole(['Gerencia', 'Sistemas', 'Compras'])">
+                        <router-link to="/cia">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 text-secondary link-success">
@@ -204,8 +204,8 @@
                             </div>
                         </router-link>
                     </div>
-                    <div class="col col-h" v-if="hasRole(['Sistemas', 'Compras', 'Exhibicion'])">
-                        <router-link to="/gestiondecompras">
+                    <div class="col col-h" v-if="hasRole(['Gerencia', 'Sistemas', 'Compras', 'Exhibicion'])">
+                        <router-link to="/gdc">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 text-secondary link-success">
@@ -243,8 +243,8 @@
                             </div>
                         </router-link>
                     </div>
-                    <div class="col col-h" v-if="hasRole(['Sistemas', 'Ventas'])">
-                        <router-link to="/gestiondedistribucion">
+                    <div class="col col-h" v-if="hasRole(['Gerencia', 'Sistemas', 'Ventas'])">
+                        <router-link to="/gdd">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 text-secondary link-success">
@@ -282,8 +282,8 @@
                             </div>
                         </router-link>
                     </div>
-                    <div class="col col-h" v-if="hasRole(['Sistemas', 'Administracion y Finanzas'])">
-                        <router-link to="/gestiondefinanzas">
+                    <div class="col col-h" v-if="hasRole(['Gerencia', 'Sistemas', 'Administracion y Finanzas'])">
+                        <router-link to="/gdf">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 text-secondary link-success">

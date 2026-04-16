@@ -4,8 +4,8 @@
             <div class="container-fluid px-4 text-center">
                 <h3 class="text-white">Gestión de Compras</h3>
                 <div class="row row-cols-lg-5 gy-5 mt-2">
-                    <div class="col col-h" v-if="hasRole(['Sistemas', 'Compras'])">
-                        <router-link to="/gestiondecompras/parametrosdecompras">
+                    <div class="col col-h" v-if="hasRole(['Gerencia', 'Sistemas', 'Compras'])">
+                        <router-link :to="{ name: 'parametrosdecompras' }">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 rounded text-secondary link-success">
@@ -44,8 +44,8 @@
                             </div>
                         </router-link>
                     </div>
-                    <div class="col col-h" v-if="hasRole(['Sistemas', 'Compras'])">
-                        <router-link to="/gestiondecompras/ratiocompras">
+                    <div class="col col-h" v-if="hasRole(['Gerencia', 'Sistemas', 'Compras'])">
+                        <router-link :to="{ name: 'ratiocompras' }">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 rounded text-secondary link-success">
@@ -84,8 +84,8 @@
                             </div>
                         </router-link>
                     </div>
-                    <div class="col col-h" v-if="hasRole(['Sistemas', 'Compras'])">
-                        <router-link to="/gestiondecompras/infodearticulosquesecomprancorrientemente">
+                    <div class="col col-h" v-if="hasRole(['Gerencia', 'Sistemas', 'Compras'])">
+                        <router-link :to="{ name: 'infodearticulosquesecomprancorrientemente' }">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 text-secondary link-success">
@@ -124,8 +124,8 @@
                             </div>
                         </router-link>
                     </div>
-                    <div class="col col-h" v-if="hasRole(['Sistemas', 'Compras'])">
-                        <router-link to="/gestiondecompras/infodearticulosquesecomprancorrientemente2">
+                    <div class="col col-h" v-if="hasRole(['Gerencia', 'Sistemas', 'Compras'])">
+                        <router-link :to="{ name: 'infodearticulosquesecomprancorrientemente2' }">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 text-secondary link-success">
@@ -164,8 +164,8 @@
                             </div>
                         </router-link>
                     </div>
-                    <div class="col col-h" v-if="hasRole(['Sistemas', 'Compras'])">
-                        <router-link to="/gestiondecompras/controlstocknpoc">
+                    <div class="col col-h" v-if="hasRole(['Gerencia', 'Sistemas', 'Compras'])">
+                        <router-link :to="{ name: 'controlstocknpoc' }">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 text-secondary link-success">
@@ -204,8 +204,8 @@
                             </div>
                         </router-link>
                     </div>
-                    <div class="col col-h" v-if="hasRole(['Sistemas', 'Compras', 'Exhibicion'])">
-                        <router-link to="/gestiondecompras/recepciondeproveedores">
+                    <div class="col col-h" v-if="hasRole(['Gerencia', 'Sistemas', 'Compras', 'Exhibicion'])">
+                        <router-link :to="{ name: 'recepciondeproveedores' }">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 text-secondary link-success">

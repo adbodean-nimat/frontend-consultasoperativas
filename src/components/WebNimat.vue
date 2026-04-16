@@ -5,7 +5,7 @@
                 <h3 class="text-white">Web NIMAT</h3>
                 <div class="row row-cols-lg-5 gy-5 mt-2">
                     <div class="col col-h">
-                        <router-link to="/webnimat/categorias">
+                        <router-link :to="{ name: 'webnimatcategorias' }">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 text-secondary link-success">
@@ -45,7 +45,7 @@
                         </router-link>
                     </div>
                     <div class="col col-h">
-                        <router-link to="/webnimat/articulos">
+                        <router-link :to="{ name: 'webnimatarticulos' }">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 rounded text-secondary link-success">
