@@ -245,7 +245,7 @@
                         </router-link>
                     </div>
                     <div class="col col-h">
-                        <router-link :to="{ name: 'listapreciosventaalpublico' }">
+                        <router-link :to="{ name: 'listaprecioscontainers' }">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
                                     class="column d-flex flex-row justify-content-between p-3 rounded text-secondary link-success">

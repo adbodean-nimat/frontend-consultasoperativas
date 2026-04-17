@@ -236,8 +236,8 @@ const routes = [
 				},
 			},
 			{
-				path: "listapreciosventaalpublico",
-				name: "listapreciosventaalpublico",
+				path: "listaprecioscontainers",
+				name: "listaprecioscontainers",
 				component: ListaContenedores,
 				props: true,
 				meta: {
