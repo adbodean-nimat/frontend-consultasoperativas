@@ -84,7 +84,7 @@
                             </div>
                         </router-link>
                     </div>
-                    <div class="col col-h" v-if="hasRole(['Gerencia', 'Sistemas', 'Compras'])">
+                    <div class="col col-h" v-if="hasRole(['Sistemas'])">
                         <router-link :to="{ name: 'infodearticulosquesecomprancorrientemente' }">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div

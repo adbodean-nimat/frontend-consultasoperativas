@@ -76,6 +76,9 @@ import ImportarMasivoFinanzas from "@/views/ImportarMasivoFinanzas.vue";
 import FinanzasView from "@/views/FinanzasView.vue";
 import ControlStockNPOC from "@/views/ControlStockNPOC.vue";
 import RecepcionProveedoresGrid from "@/views/RecepcionProveedores.vue";
+import GestionDeExhibicion from "@/views/GestionExhibicion.vue";
+import StockRotOCPreciosArtPyR from "@/views/StockRotOCPreciosArtPyR.vue";
+import ParametrosExhibicion from "@/views/ParametrosdeExhibicion.vue";
 
 const routes = [
 	{
@@ -698,6 +701,60 @@ const routes = [
 		},
 	},
 	{
+		path: "/gde",
+		children: [
+			{
+				path: "",
+				name: "gestionexhibicion",
+				component: GestionDeExhibicion,
+				props: true,
+				meta: {
+					requiresAuth: true,
+					roles: ["Gerencia", "Sistemas", "Exhibicion"],
+					title: "Gestión de Exhibición",
+					back: true,
+					metaTags: [
+						{
+							name: "Gestión de Exhibición",
+						},
+					],
+				},
+			},
+			{
+				path: "stockrotocpreciosartpyr",
+				name: "stockrotocpreciosartpyr",
+				component: StockRotOCPreciosArtPyR,
+				props: true,
+				meta: {
+					requiresAuth: true,
+					title: "Stock Rotación OC - Precios Art. PyR",
+					back: true,
+					metaTags: [
+						{
+							name: "Stock Rotación OC - Precios Art. PyR",
+						},
+					],
+				},
+			},
+			{
+				path: "parametrosexhibicion",
+				name: "parametrosexhibicion",
+				component: ParametrosExhibicion,
+				props: true,
+				meta: {
+					requiresAuth: true,
+					title: "Parametros de Exhibición",
+					back: true,
+					metaTags: [
+						{
+							name: "Parametros de Exhibición",
+						},
+					],
+				},
+			},
+		],
+	},
+	{
 		path: "/gdf",
 		children: [
 			{
@@ -887,7 +944,7 @@ const routes = [
 				props: true,
 				meta: {
 					requiresAuth: true,
-					roles: ["Gerencia", "Sistemas", "Compras"],
+					roles: ["Sistemas"],
 					title: "Info de Artículos que se compran corrientemente",
 					back: true,
 					metaTags: [

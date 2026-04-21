@@ -321,6 +321,45 @@
                             </div>
                         </router-link>
                     </div>
+                    <div class="col col-h" v-if="hasRole(['Gerencia', 'Sistemas', 'Exhibicion'])">
+                        <router-link to="/gde">
+                            <div class="d-flex flex-column justify-content-between rounded-top bg-white">
+                                <div
+                                    class="column d-flex flex-row justify-content-between p-3 text-secondary link-success">
+                                    <div class="d-flex justify-content-center align-items-center shrink-0 icon rounded">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="#fff"
+                                            class="bi bi-flower2" viewBox="0 0 16 16">
+                                            <path
+                                                d="M8 16a4 4 0 0 0 4-4 4 4 0 0 0 0-8 4 4 0 0 0-8 0 4 4 0 1 0 0 8 4 4 0 0 0 4 4m3-12q0 .11-.03.247c-.544.241-1.091.638-1.598 1.084A3 3 0 0 0 8 5c-.494 0-.96.12-1.372.331-.507-.446-1.054-.843-1.597-1.084A1 1 0 0 1 5 4a3 3 0 0 1 6 0m-.812 6.052A3 3 0 0 0 11 8a3 3 0 0 0-.812-2.052c.215-.18.432-.346.647-.487C11.34 5.131 11.732 5 12 5a3 3 0 1 1 0 6c-.268 0-.66-.13-1.165-.461a7 7 0 0 1-.647-.487m-3.56.617a3 3 0 0 0 2.744 0c.507.446 1.054.842 1.598 1.084q.03.137.03.247a3 3 0 1 1-6 0q0-.11.03-.247c.544-.242 1.091-.638 1.598-1.084m-.816-4.721A3 3 0 0 0 5 8c0 .794.308 1.516.812 2.052a7 7 0 0 1-.647.487C4.66 10.869 4.268 11 4 11a3 3 0 0 1 0-6c.268 0 .66.13 1.165.461.215.141.432.306.647.487M8 9a1 1 0 1 1 0-2 1 1 0 0 1 0 2" />
+                                        </svg>
+                                    </div>
+                                    <div class="title-column" style="text-align: right;">
+                                        <p>Gestión de Exhibición</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div
+                                class="column-question text-center h-10 d-flex justify-content-between align-items-center px-4 bg-white">
+                                <span class="fs-6"></span>
+                                <span class="fs-6">
+                                    <div id="tooltip" data-toggle="tooltip" data-placement="right"
+                                        title="Ingresar a la gestión de Distribución.">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                            fill="currentColor" class="bi bi-question-circle-fill text-secondary"
+                                            viewBox="0 0 16 16">
+                                            <path
+                                                d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.496 6.033h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286a.237.237 0 0 0 .241.247zm2.325 6.443c.61 0 1.029-.394 1.029-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94 0 .533.425.927 1.01.927z" />
+                                        </svg>
+                                    </div>
+                                </span>
+                            </div>
+                            <div
+                                class="column-bottom text-center h-10 d-flex justify-content-between align-items-center rounded-bottom px-4 bg-light">
+                                <span class="fs-6 text-secondary">1.0.0</span>
+                                <span class="fs-6 text-secondary">GDE</span>
+                            </div>
+                        </router-link>
+                    </div>
                 </div>
             </div>
         </div>

@@ -263,9 +263,9 @@ import Divider from 'primevue/divider';
 import { useToast } from 'primevue/usetoast';
 import { Button as KButton } from '@progress/kendo-buttons-vue-wrapper'
 import { directive as fullscreen } from 'vue-fullscreen'
-import ParametrosCompradores from '../components/ParametrosCompradores.vue';
-import ParametrosControlCementos from '../components/ParametrosControlCementos.vue';
-import ParametrosRecepcionProveedores from '../components/ParametrosRecepcionProveedores.vue';
+import ParametrosCompradores from '@/components/ParametrosCompradores.vue';
+import ParametrosControlCementos from '@/components/ParametrosControlCementos.vue';
+import ParametrosRecepcionProveedores from '@/components/ParametrosRecepcionProveedores.vue';
 export default {
     name: 'ParametrosdeCompras',
     directives: {
