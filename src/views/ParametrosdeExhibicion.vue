@@ -137,13 +137,15 @@
                                 <template #targetheader>
                                     <div class="flex justify-content-between align-items-center">
                                         <span class="font-bold">Tipos de comprobantes stock definida</span>
-                                        <span class="text-muted"> ({{ target_remitosdeventas.length }})</span>
+                                        <span class="text-muted"> ({{ target_recepcionproveedoresaconsiderar.length
+                                            }})</span>
                                     </div>
                                 </template>
                                 <template #sourceheader>
                                     <div class="flex justify-content-between align-items-center">
                                         <span class="font-bold">Tipos de comprobantes stock disponible</span>
-                                        <span class="text-muted"> ({{ source_remitosdeventas.length }})</span>
+                                        <span class="text-muted"> ({{ source_recepcionproveedoresaconsiderar.length
+                                            }})</span>
                                     </div>
                                 </template>
                             </PickList>
@@ -164,7 +166,7 @@
                         </AccordionContent>
                     </AccordionPanel>
                     <AccordionPanel value="6">
-                        <AccordionHeader>7 - Días durante</AccordionHeader>
+                        <AccordionHeader>7 - Días que dura</AccordionHeader>
                         <AccordionContent>
                             <InputText v-model="getStore.dias_duros" class="mb-3 me-2"
                                 @update:model-value="diasduraUpdate" /> Días
