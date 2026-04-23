@@ -60,7 +60,11 @@
             <Toolbar style="border-bottom-left-radius: 0px; border-bottom-right-radius: 0px;">
                 <template #start>
                     <Button label="Play" icon="pi pi-play" @click="getData" :loading="loading" size="small" />
-
+                    <div v-if="rowData.length > 0">
+                        <Button class="ms-2 mr-2" label="Copiar la grilla" icon="pi pi-table" severity="success"
+                            outlined size="small" @click="copyVisibleRowsToClipboard()"
+                            v-tooltip="'Copia solo las filas visibles (respetando filtros y orden) para pegar en Excel'" />
+                    </div>
                 </template>
                 <template #center>
                     <span v-if="rowData.length > 0">Total de artículos de esta vista: <Badge severity="secondary"
@@ -434,6 +438,146 @@ export default {
             if (!value) return;
             const useStore = useStoreExhibiciones();
             useStore.setDiasDuros(value);
+        },
+        formatClipboardValue(field, value) {
+            if (value === null || value === undefined || value === '') return ''
+
+            const textColumns = [
+                'ARTS_ARTICULO_EMP',
+                'ARTS_CLASIF_2',
+                'ARTS_CLASIF_3',
+                'ARTS_CLASIF_5',
+                'ARTS_CLASIF_6'
+            ]
+
+            const integerColumns = [
+                'Stock Uni',
+                'Días Stock Disp',
+                'Días sin venta',
+                'Días Ult Ent Prov',
+                'Días_UEP Diás_UV',
+                'Días previos',
+                'Días que dura'
+            ]
+
+            const decimalColumns = [
+                'M2 Caja',
+                'Stock M2',
+                'M2 Pte Entr NP',
+                'Stock M2 Disp',
+                'Consumo x día',
+                'M2 Entr Proveed',
+                'M2 OC',
+                'M2 Rtos'
+            ]
+
+            const priceColumns = [
+                'Pre Cdo M2 L1',
+                'Pre Cdo sin IVA L100 M2',
+                'Costo L100 sin IVA item'
+            ]
+
+            const dateColumns = [
+                'Ultima Vta',
+                'Ult Entr Proveed',
+                'Desde',
+                'Hasta'
+            ]
+
+            const cleanValue = String(value)
+                .replace(/\t/g, ' ')
+                .replace(/\r?\n/g, ' ')
+
+            if (textColumns.includes(field)) {
+                return `="${cleanValue}"`
+            }
+
+            if (integerColumns.includes(field)) {
+                return Number(value).toLocaleString('es-AR', {
+                    maximumFractionDigits: 0
+                })
+            }
+
+            if (decimalColumns.includes(field)) {
+                return Number(value).toLocaleString('es-AR', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                })
+            }
+
+            if (priceColumns.includes(field)) {
+                return `$ ${Number(value).toLocaleString('es-AR', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                })}`
+            }
+
+            if (dateColumns.includes(field)) {
+                return this.formatDate(value)
+            }
+
+            return cleanValue
+        },
+        async copyVisibleRowsToClipboard() {
+            if (!this.gridApi) return
+
+            const visibleColumns = this.gridApi
+                .getAllDisplayedColumns()
+                .map(col => ({
+                    header: col.getColDef().headerName || col.getColDef().field,
+                    field: col.getColDef().field
+                }))
+                .filter(col => !!col.field)
+
+            const lines = []
+            const textColumns = ['ARTS_ARTICULO_EMP']
+
+            lines.push(visibleColumns.map(col => col.header).join('\t'))
+
+            this.gridApi.forEachNodeAfterFilterAndSort((node) => {
+                if (!node.data) return
+
+                const row = visibleColumns.map(col => {
+
+                    const value = this.formatClipboardValue(col.field, node.data[col.field])
+
+                    //const value = node.data[col.field]
+
+                    if (value === null || value === undefined) return ''
+
+                    const cleanValue = String(value)
+                        .replace(/\t/g, ' ')
+                        .replace(/\r?\n/g, ' ')
+
+                    /* if (textColumns.includes(col.field)) {
+                        return `="${cleanValue}"`
+                    } */
+
+                    return cleanValue
+                })
+
+                lines.push(row.join('\t'))
+            })
+
+            const text = lines.join('\n')
+
+            try {
+                await navigator.clipboard.writeText(text)
+                this.$toast.add({
+                    severity: 'success',
+                    summary: 'Copiado con éxito',
+                    detail: `${lines.length - 1} filas visibles copiadas al portapapeles. Listo para pegar en Excel.`,
+                    life: 3000
+                });
+            } catch (error) {
+                console.error('Error al copiar:', error)
+                this.$toast.add({
+                    severity: 'error',
+                    summary: 'Error',
+                    detail: 'No se pudo copiar.',
+                    life: 3000
+                });
+            }
         },
         async getData() {
             try {

@@ -543,7 +543,7 @@ export default {
                 headerName: 'Bloq. Vtas?',
                 field: '¿BloqVtas?',
                 cellClassRules: {
-                    'text-danger': params => params.value === "Si"
+                    'bg-danger text-white': params => params.value === "Si"
                 },
                 cellClass: 'text-center'
             },

@@ -710,7 +710,7 @@ const routes = [
 				props: true,
 				meta: {
 					requiresAuth: true,
-					roles: ["Gerencia", "Sistemas", "Exhibicion"],
+					roles: ["Gerencia", "Sistemas", "Exhibicion", "Ventas"],
 					title: "Gestión de Exhibición",
 					back: true,
 					metaTags: [

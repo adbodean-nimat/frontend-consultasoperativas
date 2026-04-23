@@ -148,7 +148,7 @@
                                 <span class="fs-6"></span>
                                 <span class="fs-6">
                                     <div id="tooltip" data-toggle="tooltip" data-placement="right"
-                                        title="Consulta para el control del clientes comparar en CAD y PLATAFORMA.">
+                                        title="Consulta para el control de los clientes comparar entre CAD y PLATAFORMA.">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
                                             fill="currentColor" class="bi bi-question-circle-fill text-secondary"
                                             viewBox="0 0 16 16">
@@ -304,7 +304,7 @@
                                 <span class="fs-6"></span>
                                 <span class="fs-6">
                                     <div id="tooltip" data-toggle="tooltip" data-placement="right"
-                                        title="Ingresar a la gestión de Distribución.">
+                                        title="Ingresar a la gestión de Finanzas.">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
                                             fill="currentColor" class="bi bi-question-circle-fill text-secondary"
                                             viewBox="0 0 16 16">
@@ -321,7 +321,8 @@
                             </div>
                         </router-link>
                     </div>
-                    <div class="col col-h" v-if="hasRole(['Gerencia', 'Sistemas', 'Exhibicion'])">
+                    <div class="col col-h"
+                        v-if="hasRole(['Gerencia', 'Exhibicion', 'Sistemas']) || IsAllow === 'cfernandez'">
                         <router-link to="/gde">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
@@ -343,7 +344,7 @@
                                 <span class="fs-6"></span>
                                 <span class="fs-6">
                                     <div id="tooltip" data-toggle="tooltip" data-placement="right"
-                                        title="Ingresar a la gestión de Distribución.">
+                                        title="Ingresar a la gestión de Exhibición.">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
                                             fill="currentColor" class="bi bi-question-circle-fill text-secondary"
                                             viewBox="0 0 16 16">
