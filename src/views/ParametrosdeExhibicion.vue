@@ -32,7 +32,7 @@
             <div>
                 <Toolbar class="mb-0" style="border-radius: 0px;">
                     <template #start>
-                        <span>Parametros: <strong><i>Stock Rotación OC - Precios Art. PyR</i></strong></span>
+                        <span>Parametros generales</span>
                     </template>
                     <template #end>
 
@@ -138,38 +138,74 @@
                                     <div class="flex justify-content-between align-items-center">
                                         <span class="font-bold">Tipos de comprobantes stock definida</span>
                                         <span class="text-muted"> ({{ target_recepcionproveedoresaconsiderar.length
-                                            }})</span>
+                                        }})</span>
                                     </div>
                                 </template>
                                 <template #sourceheader>
                                     <div class="flex justify-content-between align-items-center">
                                         <span class="font-bold">Tipos de comprobantes stock disponible</span>
                                         <span class="text-muted"> ({{ source_recepcionproveedoresaconsiderar.length
-                                            }})</span>
+                                        }})</span>
                                     </div>
                                 </template>
                             </PickList>
                         </AccordionContent>
                     </AccordionPanel>
                     <AccordionPanel value="4">
-                        <AccordionHeader>5 - Clasificación 2</AccordionHeader>
+                        <AccordionHeader>Días previos</AccordionHeader>
                         <AccordionContent>
-                            <InputText v-model="getStore.clasif2" class="mb-3 me-2"
-                                @update:model-value="clasif2Update" />
+                            <InputText v-model="getStore.dias_previos" class="mb-3 me-2"
+                                @update:model-value="diaspreviosUpdate" />
+                            Días
                         </AccordionContent>
                     </AccordionPanel>
                     <AccordionPanel value="5">
-                        <AccordionHeader>6 - Días previos</AccordionHeader>
-                        <AccordionContent>
-                            <InputText v-model="getStore.dias_previos" class="mb-3 me-2"
-                                @update:model-value="diaspreviosUpdate" /> Días
-                        </AccordionContent>
-                    </AccordionPanel>
-                    <AccordionPanel value="6">
-                        <AccordionHeader>7 - Días que dura</AccordionHeader>
+                        <AccordionHeader>Días que dura</AccordionHeader>
                         <AccordionContent>
                             <InputText v-model="getStore.dias_duros" class="mb-3 me-2"
                                 @update:model-value="diasduraUpdate" /> Días
+                        </AccordionContent>
+                    </AccordionPanel>
+                </Accordion>
+            </div>
+            <Divider type="dotted" />
+            <div>
+                <Toolbar class="mb-0" style="border-bottom-left-radius: 0px; border-bottom-right-radius: 0px;">
+                    <template #start>
+                        <span>Parametro: <strong><i>Stock Rotación OC - Precios Art. Pisos y Revistimiento
+                                </i></strong></span>
+                    </template>
+                    <template #end>
+
+                    </template>
+                </Toolbar>
+                <Accordion multiple>
+                    <AccordionPanel value="0">
+                        <AccordionHeader>Clasificación 2</AccordionHeader>
+                        <AccordionContent>
+                            <InputText v-model="getStore.clasif2_pyr" class="mb-3 me-2"
+                                @update:model-value="clasif2pyrUpdate" />
+                        </AccordionContent>
+                    </AccordionPanel>
+                </Accordion>
+            </div>
+            <Divider type="dotted" />
+            <div>
+                <Toolbar class="mb-0" style="border-bottom-left-radius: 0px; border-bottom-right-radius: 0px;">
+                    <template #start>
+                        <span>Parametro: <strong><i>Stock Rotación OC - Precios Art. Pisos y Revistimiento
+                                    Terminación</i></strong></span>
+                    </template>
+                    <template #end>
+
+                    </template>
+                </Toolbar>
+                <Accordion multiple>
+                    <AccordionPanel value="0">
+                        <AccordionHeader>Clasificación 2</AccordionHeader>
+                        <AccordionContent>
+                            <InputText v-model="getStore.clasif2_terminacion" class="mb-3 me-2"
+                                @update:model-value="clasif2terminacionUpdate" />
                         </AccordionContent>
                     </AccordionPanel>
                 </Accordion>
@@ -250,10 +286,15 @@ export default {
         this.getRecepcionProveedoresAConsiderar();
     },
     methods: {
-        clasif2Update(value) {
+        clasif2pyrUpdate(value) {
             if (!value) return;
             const useStore = useStoreExhibiciones();
-            useStore.setClasif2(value);
+            useStore.setClasif2_pyr(value);
+        },
+        clasif2terminacionUpdate(value) {
+            if (!value) return;
+            const useStore = useStoreExhibiciones();
+            useStore.setClasif2_terminacion(value);
         },
         diaspreviosUpdate(value) {
             if (!value) return;

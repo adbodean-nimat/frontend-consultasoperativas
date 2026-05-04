@@ -1,7 +1,7 @@
 <template>
     <div class="container-page-consultas">
         <div class="page-content">
-            <div class="container-fluid px-5 text-center">
+            <div class="container-fluid px-4 text-center">
                 <h3 class="text-white">Consultas Operativas</h3>
                 <div class="row row-cols-lg-5 gy-5 mt-2">
                     <div v-if="hasRole(['Gerencia', 'Sistemas', 'Ventas', 'Compras'])" class="col col-h">

@@ -3,7 +3,8 @@ import { defineStore } from "pinia";
 export const useStoreExhibiciones = defineStore("exhibiciones", {
 	state: () => ({
 		parametros: {
-			clasif2: "0004",
+			clasif2_pyr: "0004",
+			clasif2_terminacion: "0005",
 			dias_previos: 75,
 			dias_duros: 74,
 		},
@@ -12,9 +13,13 @@ export const useStoreExhibiciones = defineStore("exhibiciones", {
 		getExhibiciones: (state) => state.parametros,
 	},
 	actions: {
-		setClasif2(clasif2) {
-			this.clasif2 = clasif2;
-			console.log("clasif2:", clasif2);
+		setClasif2_pyr(clasif2_pyr) {
+			this.clasif2_pyr = clasif2_pyr;
+			console.log("clasif2_pyr:", clasif2_pyr);
+		},
+		setClasif2_terminacion(clasif2_terminacion) {
+			this.clasif2_terminacion = clasif2_terminacion;
+			console.log("clasif2_terminacion:", clasif2_terminacion);
 		},
 		setDiasPrevios(dias_previos) {
 			this.dias_previos = dias_previos;

@@ -79,6 +79,7 @@ import RecepcionProveedoresGrid from "@/views/RecepcionProveedores.vue";
 import GestionDeExhibicion from "@/views/GestionExhibicion.vue";
 import StockRotOCPreciosArtPyR from "@/views/StockRotOCPreciosArtPyR.vue";
 import ParametrosExhibicion from "@/views/ParametrosdeExhibicion.vue";
+import StockRotOCPreciosArtPyRTerminacion from "../views/StockRotOCPreciosArtPyRTerminacion.vue";
 
 const routes = [
 	{
@@ -737,6 +738,22 @@ const routes = [
 				},
 			},
 			{
+				path: "stockrotocpreciosartpyrterminacion",
+				name: "stockrotocpreciosartpyrterminacion",
+				component: StockRotOCPreciosArtPyRTerminacion,
+				props: true,
+				meta: {
+					requiresAuth: true,
+					title: "Stock Rotación OC - Precios Art. PyR Terminación",
+					back: true,
+					metaTags: [
+						{
+							name: "Stock Rotación OC - Precios Art. PyR Terminación",
+						},
+					],
+				},
+			},
+			{
 				path: "parametrosexhibicion",
 				name: "parametrosexhibicion",
 				component: ParametrosExhibicion,
@@ -860,6 +877,45 @@ const routes = [
 					metaTags: [
 						{
 							name: "Parametros de Distribución",
+						},
+					],
+				},
+			},
+		],
+	},
+	{
+		path: "/gds",
+		children: [
+			{
+				path: "",
+				name: "gestiondesistemas",
+				component: () => import("@/views/GestionSistemas.vue"),
+				props: true,
+				meta: {
+					requiresAuth: true,
+					roles: ["Gerencia", "Sistemas"],
+					title: "Gestión de Sistemas",
+					back: true,
+					metaTags: [
+						{
+							name: "Gestión de Sistemas",
+						},
+					],
+				},
+			},
+			{
+				path: "avisosdeudawhatsapp",
+				name: "avisosdeudawhatsapp",
+				component: () => import("@/views/AvisosDeudaWhatsapp.vue"),
+				props: true,
+				meta: {
+					requiresAuth: true,
+					roles: ["Gerencia", "Sistemas"],
+					title: "Avisos de deuda vencida por WhatsApp",
+					back: true,
+					metaTags: [
+						{
+							name: "Avisos de deuda vencida por WhatsApp",
 						},
 					],
 				},

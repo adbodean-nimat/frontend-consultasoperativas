@@ -40,8 +40,8 @@
                     <div class="filtros-grid">
                         <div class="filtro-item">
                             <label>Clasificación 2</label>
-                            <InputText v-model="getStore.clasif2_pyr" class="mb-3 me-2"
-                                @update:model-value="clasif2pyrUpdate" />
+                            <InputText v-model="getStore.clasif2_terminacion" class="mb-3 me-2"
+                                @update:model-value="clasif2terminacionUpdate" />
                         </div>
                         <div class="filtro-item">
                             <div class="mb-2">
@@ -120,7 +120,7 @@ import Badge from 'primevue/badge';
 import { directive as fullscreen } from 'vue-fullscreen'
 
 export default {
-    name: 'StockRotOCPreciosArtPyR',
+    name: 'StockRotOCPreciosArtPyRTerminacion',
     components: {
         AgGridVue,
         Toast,
@@ -137,7 +137,7 @@ export default {
     },
     data() {
         return {
-            title: 'Stock Rotación OC - Precios Art. PyR',
+            title: 'Stock Rotación OC - Precios Art. PyR Terminación',
             token: decodeJwt(getToken()).token,
             useToast,
             fullscreen: false,
@@ -205,14 +205,14 @@ export default {
             columnDefs: [
                 {
                     headerName: 'Código',
-                    field: 'ARTS_ARTICULO_EMP',
+                    field: 'Cód Art',
                     minWidth: 130,
                     pinned: 'left',
                     cellClass: 'text-center'
                 },
                 {
                     headerName: 'Artículo',
-                    field: 'ARTS_NOMBRE',
+                    field: 'Nombre Art',
                     minWidth: 320,
                     flex: 1,
                     pinned: 'left'
@@ -225,52 +225,24 @@ export default {
                     valueFormatter: params => this.formatInteger(params.value)
                 },
                 {
-                    headerName: 'M2 Caja',
-                    field: 'M2 Caja',
-                    minWidth: 100,
-                    valueFormatter: params => this.formatNumber(params.value),
-                    cellClass: 'text-end'
-                },
-                {
-                    headerName: 'Stock M2',
-                    field: 'Stock M2',
-                    minWidth: 110,
-                    valueFormatter: params => this.formatNumber(params.value),
-                    cellClass: 'text-end'
-                },
-                {
-                    headerName: 'M2 Pte Entr NP',
-                    field: 'M2 Pte Entr NP',
+                    headerName: 'Uni Pte Entr NP',
+                    field: 'Uni Pte Entr NP',
                     minWidth: 140,
                     valueFormatter: params => this.formatNumber(params.value),
                     cellClass: 'text-end'
                 },
                 {
-                    headerName: 'Stock M2 Disp',
-                    field: 'Stock M2 Disp',
+                    headerName: 'Stock Disp.',
+                    field: 'Uni Dispon',
                     minWidth: 130,
                     valueFormatter: params => this.formatNumber(params.value),
                     cellClass: 'text-end'
                 },
                 {
-                    headerName: 'Pre Cdo M2 L1',
-                    field: 'Pre Cdo M2 L1',
+                    headerName: 'Pre Cdo con IVA L1',
+                    field: 'Pre Cdo con IVA L1',
                     minWidth: 130,
                     valueFormatter: params => `$ ${this.formatNumber(params.value)}`,
-                    cellClass: 'text-end'
-                },
-                {
-                    headerName: 'Consumo x día',
-                    field: 'Consumo x día',
-                    minWidth: 130,
-                    valueFormatter: params => this.formatNumber(params.value),
-                    cellClass: 'text-center'
-                },
-                {
-                    headerName: 'Días Stock Disp',
-                    field: 'Días Stock Disp',
-                    minWidth: 130,
-                    valueFormatter: params => this.formatInteger(params.value),
                     cellClass: 'text-center'
                 },
                 {
@@ -295,130 +267,119 @@ export default {
                     cellClass: 'text-center'
                 },
                 {
-                    headerName: 'Días_UEP Diás_UV',
+                    headerName: 'Días UEP Días Ultima Vta',
                     field: 'Días_UEP Diás_UV',
                     minWidth: 145,
                     valueFormatter: params => this.formatInteger(params.value),
                     cellClass: 'text-center'
                 },
                 {
-                    headerName: 'Ult Entr Proveed',
-                    field: 'Ult Entr Proveed',
-                    minWidth: 135,
+                    headerName: 'Pend Ent OC',
+                    field: 'Pend Ent OC',
+                    minWidth: 130,
+                    valueFormatter: params => this.formatNumber(params.value),
+                    cellClass: 'text-center'
+                },
+                {
+                    headerName: 'Fecha Ult Entr Proveed',
+                    field: 'Fecha Ult Entr Proveed',
+                    minWidth: 130,
                     valueFormatter: params => this.formatDate(params.value),
                     cellClass: 'text-center'
                 },
                 {
-                    headerName: 'M2 Entr Proveed',
-                    field: 'M2 Entr Proveed',
-                    minWidth: 135,
-                    valueFormatter: params => this.formatNumber(params.value),
-                    cellClass: 'text-end'
-                },
-                {
-                    headerName: 'M2 OC',
-                    field: 'M2 OC',
-                    minWidth: 100,
-                    valueFormatter: params => this.formatNumber(params.value),
-                    cellClass: 'text-end'
-                },
-                {
-                    headerName: 'Clasif 2',
-                    field: 'ARTS_CLASIF_2',
-                    minWidth: 100,
-                    cellClass: 'text-end'
-                },
-                {
-                    headerName: 'Rubro',
-                    field: 'CA02_NOMBRE',
-                    minWidth: 220,
+                    headerName: 'Cant Ult Entr Proveed',
+                    field: 'Cant Ult Entr Proveed',
+                    minWidth: 145,
+                    valueFormatter: params => this.formatInteger(params.value),
                     cellClass: 'text-center'
-                },
-                {
-                    headerName: 'Clasif 3',
-                    field: 'ARTS_CLASIF_3',
-                    minWidth: 100,
-                    cellClass: 'text-end'
-                },
-                {
-                    headerName: 'Subrubro',
-                    field: 'CA03_NOMBRE',
-                    minWidth: 220,
-                    cellClass: 'text-center'
-                },
-                {
-                    headerName: 'Clasif 5',
-                    field: 'ARTS_CLASIF_5',
-                    minWidth: 100,
-                    cellClass: 'text-end'
-                },
-                {
-                    headerName: 'Calidad',
-                    field: 'CA05_NOMBRE',
-                    minWidth: 180,
-                    cellClass: 'text-center'
-                },
-                {
-                    headerName: 'Clasif 6',
-                    field: 'ARTS_CLASIF_6',
-                    minWidth: 100,
-                    cellClass: 'text-end'
-                },
-                {
-                    headerName: 'Marca',
-                    field: 'CA06_NOMBRE',
-                    minWidth: 150,
-                    cellClass: 'text-center'
-                },
-                {
-                    headerName: 'Pre Cdo sin IVA L100 M2',
-                    field: 'Pre Cdo sin IVA L100 M2',
-                    minWidth: 180,
-                    valueFormatter: params => `$ ${this.formatNumber(params.value)}`,
-                    cellClass: 'text-end'
                 },
                 {
                     headerName: 'Costo L100 sin IVA item',
                     field: 'Costo L100 sin IVA item',
-                    minWidth: 180,
+                    minWidth: 135,
                     valueFormatter: params => `$ ${this.formatNumber(params.value)}`,
+                    cellClass: 'text-center'
+                },
+                {
+                    headerName: 'AGRUP B MEDIA',
+                    field: 'AGRUP B MEDIA',
+                    minWidth: 135,
                     cellClass: 'text-end'
+                },
+                {
+                    headerName: 'AGRUP D MINI',
+                    field: 'AGRUP D MINI',
+                    minWidth: 135,
+                    cellClass: 'text-end'
+                },
+                {
+                    headerName: 'AGRUP C MENOR',
+                    field: 'AGRUP C MENOR',
+                    minWidth: 135,
+                    cellClass: 'text-end'
+                },
+                {
+                    headerName: 'AGRUP E MARCA',
+                    field: 'AGRUP E MARCA',
+                    minWidth: 135,
+                    cellClass: 'text-end'
+                },
+                {
+                    headerName: 'Clasificación 8',
+                    field: 'ARTS_CLASIF_8',
+                    minWidth: 135,
+                    cellClass: 'text-end'
+                },
+                {
+                    headerName: 'STOCK Y PRODUCCION',
+                    field: 'STOCK Y PRODUCCION',
+                    minWidth: 135,
+                    cellClass: 'text-end'
+                },
+                {
+                    headerName: 'Pre Cdo sin IVA L100',
+                    field: 'Pre Cdo sin IVA L100',
+                    minWidth: 135,
+                    valueFormatter: params => `$ ${this.formatNumber(params.value)}`,
+                    cellClass: 'text-center'
+                },
+                {
+                    headerName: 'Cant Rtos',
+                    field: 'Cant Rtos',
+                    minWidth: 135,
+                    valueFormatter: params => this.formatInteger(params.value),
+                    cellClass: 'text-center'
+                },
+                {
+                    headerName: 'Cons x día',
+                    field: 'Cons x día',
+                    minWidth: 135,
+                    valueFormatter: params => this.formatInteger(params.value),
+                    cellClass: 'text-center'
+                },
+                {
+                    headerName: 'Día Stock',
+                    field: 'Día Stock',
+                    minWidth: 135,
+                    valueFormatter: params => this.formatInteger(params.value),
+                    cellClass: 'text-center'
                 },
                 {
                     headerName: 'Días previos',
                     field: 'Días previos',
-                    minWidth: 110,
+                    minWidth: 135,
                     valueFormatter: params => this.formatInteger(params.value),
-                    hide: true
+                    cellClass: 'text-center'
                 },
                 {
                     headerName: 'Días que dura',
                     field: 'Días que dura',
-                    minWidth: 120,
+                    minWidth: 135,
                     valueFormatter: params => this.formatInteger(params.value),
-                    hide: true
-                },
-                {
-                    headerName: 'Desde',
-                    field: 'Desde',
-                    minWidth: 110,
-                    valueFormatter: params => this.formatDate(params.value),
                     cellClass: 'text-center'
                 },
-                {
-                    headerName: 'Hasta',
-                    field: 'Hasta',
-                    minWidth: 110,
-                    valueFormatter: params => this.formatDate(params.value),
-                    cellClass: 'text-center'
-                },
-                {
-                    headerName: 'M2 Rtos',
-                    field: 'M2 Rtos',
-                    minWidth: 100,
-                    valueFormatter: params => this.formatNumber(params.value),
-                    cellClass: 'text-center'
-                }
+
             ],
             defaultColDef: {
                 sortable: true,
@@ -432,10 +393,10 @@ export default {
         //this.getData();
     },
     methods: {
-        clasif2pyrUpdate(value) {
+        clasif2terminacionUpdate(value) {
             if (!value) return;
             const useStore = useStoreExhibiciones();
-            useStore.setClasif2_pyr(value);
+            useStore.setClasif2_terminacion(value);
         },
         diaspreviosUpdate(value) {
             if (!value) return;
@@ -451,45 +412,38 @@ export default {
             if (value === null || value === undefined || value === '') return ''
 
             const textColumns = [
-                'ARTS_ARTICULO_EMP',
-                'ARTS_CLASIF_2',
-                'ARTS_CLASIF_3',
-                'ARTS_CLASIF_5',
-                'ARTS_CLASIF_6'
+                'Cód Art',
+                'ARTS_CLASIF_8'
             ]
 
             const integerColumns = [
                 'Stock Uni',
-                'Días Stock Disp',
+                'Uni Pte Entr NP',
+                'Uni Dispon',
                 'Días sin venta',
                 'Días Ult Ent Prov',
                 'Días_UEP Diás_UV',
+                'Pend Ent OC',
+                'Cant Ult Entr Proveed',
+                'Cant Rtos',
                 'Días previos',
                 'Días que dura'
             ]
 
             const decimalColumns = [
-                'M2 Caja',
-                'Stock M2',
-                'M2 Pte Entr NP',
-                'Stock M2 Disp',
-                'Consumo x día',
-                'M2 Entr Proveed',
-                'M2 OC',
-                'M2 Rtos'
+                'Cons x día',
+                'Día Stock',
             ]
 
             const priceColumns = [
-                'Pre Cdo M2 L1',
-                'Pre Cdo sin IVA L100 M2',
-                'Costo L100 sin IVA item'
+                'Pre Cdo con IVA L1',
+                'Costo L100 sin IVA item',
+                'Pre Cdo sin IVA L100'
             ]
 
             const dateColumns = [
                 'Ultima Vta',
-                'Ult Entr Proveed',
-                'Desde',
-                'Hasta'
+                'Fecha Ult Entr Proveed'
             ]
 
             const cleanValue = String(value)
@@ -592,17 +546,16 @@ export default {
                 this.loading = true;
                 const useStore = useStoreExhibiciones();
                 const params = {
-                    clasif2_pyr: useStore.getExhibiciones.clasif2_pyr,
+                    clasif2: useStore.getExhibiciones.clasif2_terminacion,
                     diasprevios: useStore.getExhibiciones.dias_previos,
                     diasdura: useStore.getExhibiciones.dias_duros
                 };
-                console.log('▶ StockRotNPOC:', params);
-                const response = await axios.get(`${process.env.VUE_APP_API_BASE}` + '/gde/stockrotocpreciosartpyr', {
+
+                const response = await axios.get(`${process.env.VUE_APP_API_BASE}` + '/gde/stockrotocpreciosartpyrterminacion', {
                     params,
                     headers: { Authorization: `Bearer ${this.token}` }
                 });
 
-                console.log('response:', response);
                 if (response.data && response.data.length > 0) {
                     this.rowData = response.data[0];
                     this.$toast.add({ severity: 'success', summary: 'Éxito', detail: 'Datos cargados.', life: 3000 });
