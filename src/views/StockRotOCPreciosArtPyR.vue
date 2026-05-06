@@ -592,7 +592,7 @@ export default {
                 this.loading = true;
                 const useStore = useStoreExhibiciones();
                 const params = {
-                    clasif2_pyr: useStore.getExhibiciones.clasif2_pyr,
+                    clasif2: useStore.getExhibiciones.clasif2_pyr,
                     diasprevios: useStore.getExhibiciones.dias_previos,
                     diasdura: useStore.getExhibiciones.dias_duros
                 };
