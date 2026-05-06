@@ -596,13 +596,13 @@ export default {
                     diasprevios: useStore.getExhibiciones.dias_previos,
                     diasdura: useStore.getExhibiciones.dias_duros
                 };
-                console.log('▶ StockRotNPOC:', params);
+                //console.log('▶ StockRotNPOC:', params);
                 const response = await axios.get(`${process.env.VUE_APP_API_BASE}` + '/gde/stockrotocpreciosartpyr', {
                     params,
                     headers: { Authorization: `Bearer ${this.token}` }
                 });
 
-                console.log('response:', response);
+                //console.log('response:', response);
                 if (response.data && response.data.length > 0) {
                     this.rowData = response.data[0];
                     this.$toast.add({ severity: 'success', summary: 'Éxito', detail: 'Datos cargados.', life: 3000 });
