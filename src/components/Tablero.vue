@@ -322,7 +322,7 @@
                         </router-link>
                     </div>
                     <div class="col col-h"
-                        v-if="hasRole(['Gerencia', 'Exhibicion', 'Sistemas']) || IsAllow === 'cfernandez'">
+                        v-if="hasRole(['Gerencia', 'Exhibicion', 'Sistemas', 'Compras']) || IsAllow === 'cfernandez'">
                         <router-link to="/gde">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
