@@ -211,11 +211,39 @@ export default {
                     cellClass: 'text-center'
                 },
                 {
+                    headerName: 'Marca',
+                    field: 'CA06_NOMBRE',
+                    minWidth: 150,
+                    pinned: 'left',
+                    cellClass: 'text-center'
+                },
+                {
                     headerName: 'Artículo',
                     field: 'ARTS_NOMBRE',
                     minWidth: 320,
                     flex: 1,
                     pinned: 'left'
+                },
+                {
+                    headerName: 'Pre Cdo M2 L1',
+                    field: 'Pre Cdo M2 L1',
+                    minWidth: 130,
+                    valueFormatter: params => `$ ${this.formatNumber(params.value)}`,
+                    cellClass: 'text-end'
+                },
+                {
+                    headerName: 'Última Vta',
+                    field: 'Ultima Vta',
+                    minWidth: 120,
+                    valueFormatter: params => this.formatDate(params.value),
+                    cellClass: 'text-center'
+                },
+                {
+                    headerName: 'Días Ult Ent Prov',
+                    field: 'Días Ult Ent Prov',
+                    minWidth: 145,
+                    valueFormatter: params => this.formatInteger(params.value),
+                    cellClass: 'text-center'
                 },
                 {
                     headerName: 'Stock Uni',
@@ -252,13 +280,7 @@ export default {
                     valueFormatter: params => this.formatNumber(params.value),
                     cellClass: 'text-end'
                 },
-                {
-                    headerName: 'Pre Cdo M2 L1',
-                    field: 'Pre Cdo M2 L1',
-                    minWidth: 130,
-                    valueFormatter: params => `$ ${this.formatNumber(params.value)}`,
-                    cellClass: 'text-end'
-                },
+
                 {
                     headerName: 'Consumo x día',
                     field: 'Consumo x día',
@@ -274,26 +296,13 @@ export default {
                     cellClass: 'text-center'
                 },
                 {
-                    headerName: 'Última Vta',
-                    field: 'Ultima Vta',
-                    minWidth: 120,
-                    valueFormatter: params => this.formatDate(params.value),
-                    cellClass: 'text-center'
-                },
-                {
                     headerName: 'Días sin venta',
                     field: 'Días sin venta',
                     minWidth: 130,
                     valueFormatter: params => this.formatInteger(params.value),
                     cellClass: 'text-center'
                 },
-                {
-                    headerName: 'Días Ult Ent Prov',
-                    field: 'Días Ult Ent Prov',
-                    minWidth: 145,
-                    valueFormatter: params => this.formatInteger(params.value),
-                    cellClass: 'text-center'
-                },
+
                 {
                     headerName: 'Días_UEP Diás_UV',
                     field: 'Días_UEP Diás_UV',
@@ -363,12 +372,6 @@ export default {
                     field: 'ARTS_CLASIF_6',
                     minWidth: 100,
                     cellClass: 'text-end'
-                },
-                {
-                    headerName: 'Marca',
-                    field: 'CA06_NOMBRE',
-                    minWidth: 150,
-                    cellClass: 'text-center'
                 },
                 {
                     headerName: 'Pre Cdo sin IVA L100 M2',
