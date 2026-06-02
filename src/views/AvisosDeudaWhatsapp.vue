@@ -1,6 +1,6 @@
 <template>
     <div class="avisosdeudawhatsapp-page">
-        <div class="container-fluid page-grid d-flex flex-column vh-100">
+        <div class="container-fluid page-grid d-flex flex-column">
             <div class="encabezado-titulo">
                 <div style="margin-left: 5px; color: white;" class="icon-title">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#fff" class="bi bi-whatsapp"
@@ -118,25 +118,70 @@
                         </span> -->
                     </div>
 
-                    <DataTable :value="logs" :loading="loading" paginator :rows="20" stripedRows showGridlines
-                        responsiveLayout="scroll">
+                    <DataTable v-model:filters="filters" :value="logs" :loading="loading" scrollable paginator
+                        :rows="20" dataKey="id" filterDisplay="row" :rowsPerPageOptions="[20, 50, 250, 500]" stripedRows
+                        showGridlines resizableColumns columnResizeMode="fit" tableStyle="min-width: 50rem"
+                        paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
+                        currentPageReportTemplate="{first} a {last} de {totalRecords}">
+
+                        <template #empty>No encuentro registros.</template>
+
+                        <template #loading>Cargando. Por favor, espere. </template>
+
                         <Column field="enviado_en" header="Fecha">
                             <template #body="{ data }">
                                 {{ formatDateTime(data.enviado_en) }}
                             </template>
                         </Column>
 
-                        <Column field="cliente_id" header="Cliente" />
+                        <Column field="tipo_envio" header="Tipo Envio">
+                            <template #body="{ data }">
+                                <Tag :value="data.tipo_envio" :severity="getTipoEnvioSeverity(data.tipo_envio)" />
+                            </template>
+                            <template #filter="{ filterModel, filterCallback }">
+                                <Select v-model="filterModel.value" :options="[
+                                    { label: 'CLIENTE', value: 'CLIENTE' },
+                                    { label: 'REVENDEDOR', value: 'REVENDEDOR' }
+                                ]" optionLabel="label" optionValue="value" class="w-full" @change="filterCallback"
+                                    placeholder="Filtrar por tipo de envio" />
+                            </template>
+                        </Column>
 
-                        <Column field="cliente_nombre" header="Nombre" />
+                        <Column field="cliente_id" header="Cliente">
+                            <template #filter="{ filterModel, filterCallback }">
+                                <InputText v-model="filterModel.value" type="text" @input="filterCallback()"
+                                    placeholder="Buscar por cliente" />
+                            </template>
+                        </Column>
 
-                        <Column field="telefono" header="WhatsApp" />
+                        <Column field="cliente_nombre" header="Nombre">
+                            <template #filter="{ filterModel, filterCallback }">
+                                <InputText v-model="filterModel.value" type="text" @input="filterCallback()"
+                                    placeholder="Buscar por nombre" />
+                            </template>
+                        </Column>
+
+                        <Column field="telefono" header="WhatsApp">
+                            <template #filter="{ filterModel, filterCallback }">
+                                <InputText v-model="filterModel.value" type="text" @input="filterCallback()"
+                                    placeholder="Buscar por telefono" />
+                            </template>
+                        </Column>
 
                         <Column field="pdf_filename" header="PDF" />
 
                         <Column field="estado" header="Estado">
                             <template #body="{ data }">
                                 <Tag :value="data.estado" :severity="getEstadoSeverity(data.estado)" />
+                            </template>
+                            <template #filter="{ filterModel, filterCallback }">
+                                <Select v-model="filterModel.value" :options="[
+                                    { label: 'ENVIADO', value: 'ENVIADO' },
+                                    { label: 'ERROR', value: 'ERROR' },
+                                    { label: 'SIN_PDF', value: 'SIN_PDF' },
+                                    { label: 'SIN_TELEFONO', value: 'SIN_TELEFONO' }
+                                ]" optionLabel="label" optionValue="value" class="w-full" @change="filterCallback"
+                                    placeholder="Filtrar por estado" />
                             </template>
                         </Column>
 
@@ -159,12 +204,15 @@
 import axios from 'axios';
 import { getToken } from "@/services/auth";
 import { decodeJwt } from "@/services/jwt";
+import { FilterMatchMode } from '@primevue/core/api';
 import Card from 'primevue/card';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Button from 'primevue/button';
 import Tag from 'primevue/tag';
+import Badge from 'primevue/badge';
 import Select from 'primevue/select';
+import InputText from 'primevue/inputtext';
 import DatePicker from 'primevue/datepicker';
 import Panel from 'primevue/panel';
 import Toast from 'primevue/toast';
@@ -195,7 +243,14 @@ export default {
         ],
         fechaFiltro: null,
         useToast,
-        visible: false
+        visible: false,
+        filters: {
+            cliente_id: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+            cliente_nombre: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+            telefono: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+            estado: { value: null, matchMode: FilterMatchMode.EQUALS },
+            tipo_envio: { value: null, matchMode: FilterMatchMode.EQUALS }
+        },
     }),
     components: {
         Toast,
@@ -208,7 +263,9 @@ export default {
         DatePicker,
         Panel,
         Dialog,
-        Divider
+        Divider,
+        Badge,
+        InputText
     },
     computed: {
         estadoTexto() {
@@ -360,6 +417,11 @@ export default {
             if (value === 'SIN_PDF') return 'warning';
             if (value === 'SIN_TELEFONO') return 'warning';
             return 'secondary';
+        },
+        getTipoEnvioSeverity(value) {
+            if (value === 'CLIENTE') return 'secondary';
+            if (value === 'REVENDEDOR') return 'secondary';
+            return 'contrast';
         },
         formatDateTime(value) {
             if (!value) return '-';
