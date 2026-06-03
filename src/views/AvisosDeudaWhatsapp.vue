@@ -111,11 +111,6 @@
                     <div class="mb-4">
                         <strong>Estado de envío de avisos deuda vencida automáticos:</strong>
                         <Tag :value="estadoTexto" :severity="estadoSeverity" class="ms-2" />
-
-                        <!-- <span class="ms-3">
-                            <strong>Activo DB:</strong>
-                            {{ estado?.activo ? 'Sí' : 'No' }}
-                        </span> -->
                     </div>
 
                     <DataTable v-model:filters="filters" :value="logs" :loading="loading" scrollable paginator
@@ -168,7 +163,7 @@
                             </template>
                         </Column>
 
-                        <Column field="pdf_filename" header="PDF" />
+                        <Column field="pdf_path" header="PDF" />
 
                         <Column field="estado" header="Estado">
                             <template #body="{ data }">
