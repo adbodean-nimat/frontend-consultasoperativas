@@ -163,7 +163,8 @@
                             </template>
                         </Column>
 
-                        <Column field="pdf_path" header="PDF" />
+                        <Column field="pdf_filename" header="Nombre PDF" />
+                        <!-- <Column field="pdf_path" header="Ruta PDF" /> -->
 
                         <Column field="estado" header="Estado">
                             <template #body="{ data }">
