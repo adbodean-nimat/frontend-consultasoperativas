@@ -143,7 +143,7 @@ export default {
   },
   methods: {
     readData: function (e) {
-      var token = store.state.token
+      var token = this.token
       var urlApi = `${process.env.VUE_APP_API_BASE}/constsecoarmadoconfig2/`
       kendo.jQuery.ajax({
         url: urlApi,
