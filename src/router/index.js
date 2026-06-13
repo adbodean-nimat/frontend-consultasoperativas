@@ -884,6 +884,45 @@ const routes = [
 		],
 	},
 	{
+		path: "/gda",
+		children: [
+			{
+				path: "",
+				name: "gestiondeadministracion",
+				component: () => import("@/views/GestionAdministracion.vue"),
+				props: true,
+				meta: {
+					requiresAuth: true,
+					roles: ["Gerencia", "Sistemas", "Administracion y Finanzas"],
+					title: "Gestión de Administración",
+					back: true,
+					metaTags: [
+						{
+							name: "Gestión de Administración",
+						},
+					],
+				},
+			},
+			{
+				path: "consultaavisosdeudawhatsapp",
+				name: "consultaavisosdeudawhatsapp",
+				component: () => import("@/views/AvisosDeudaWhatsapp.vue"),
+				props: true,
+				meta: {
+					requiresAuth: true,
+					roles: ["Gerencia", "Sistemas", "Administracion y Finanzas"],
+					title: "Consulta de envío avisos de deuda vencida por WhatsApp",
+					back: true,
+					metaTags: [
+						{
+							name: "Consulta de envío avisos de deuda vencida por WhatsApp",
+						},
+					],
+				},
+			},
+		],
+	},
+	{
 		path: "/gds",
 		children: [
 			{

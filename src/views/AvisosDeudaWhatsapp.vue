@@ -8,7 +8,7 @@
                         <path
                             d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232" />
                     </svg>
-                    <span style="color: white; margin-left: 5px;">{{ title }}</span>
+                    <span class="ms-2 text-white">{{ title }}</span>
                 </div>
                 <div class="button-fullscreen d-flex flex-row align-items-center">
                     <div style="margin-right: 15px;">
@@ -86,15 +86,27 @@
                     <i class="pi pi-angle-up" v-else></i>
                 </template>
                 <template #icons>
-                    <Button icon="pi pi-cog" severity="secondary" rounded text @click="visible = true" />
+                    <Button v-if="isAllow === 'abodean' || isAllow === 'dvazquez' || isAllow === 'ejescobar'"
+                        icon="pi pi-cog" severity="secondary" rounded text @click="visible = true" />
                 </template>
                 <div class="filtros">
                     <div class="filtros-grid">
-                        <div class="filtro-item">
-                            <label>Buscar por fecha de envío: </label>
-                            <DatePicker v-model="fechaFiltro" dateFormat="dd/mm/yy" showIcon
-                                placeholder="Seleccionar fecha" class="w-full ms-2" />
+                        <div class="d-flex gap-2 mb-4">
+                            <div class="me-3">
+                                <label>Buscar por fecha de envío: </label>
+                                <DatePicker v-model="fechaFiltro" dateFormat="dd/mm/yy" showIcon
+                                    placeholder="Seleccionar fecha" class="w-full ms-2" />
+                            </div>
+                            <div class="me-3">
+                                <label>Buscar por tipo de envío: </label>
+                                <Select v-model="filtroTipoEnvio" :options="[
+                                    { label: 'Todos', value: 'TODOS' },
+                                    { label: 'CLIENTE', value: 'CLIENTE' },
+                                    { label: 'REVENDEDOR', value: 'REVENDEDOR' }
+                                ]" optionLabel="label" optionValue="value" class="w-full ms-2" size="small" />
+                            </div>
                         </div>
+
                         <div class="filtro-item mt-4 col-12 md:col-4 flex align-items-end gap-2">
                             <Button label="Filtrar" icon="pi pi-search" severity="info" @click="cargarLogs" size="small"
                                 :loading="loading" />
@@ -105,12 +117,53 @@
                     </div>
                 </div>
             </Panel>
+            <div class="row mb-2">
+                <div class="col-12 col-md-4">
+                    <Card>
+                        <template #title>
+                            <i class="pi pi-send me-2 text-success"></i>
+                            Total notificado</template>
+                        <template #content>
+                            <div class="fs-4 fw-bold">
+                                {{ this.formatMoney(this.resumen.total_notificado) }}
+                            </div>
+                        </template>
+                    </Card>
+                </div>
+
+                <div class="col-12 col-md-4">
+                    <Card>
+                        <template #title>
+                            <i class="pi pi-check-circle me-2 text-success"></i>
+                            Envíos OK
+                        </template>
+                        <template #content>
+                            <div class="fs-4 fw-bold">
+                                {{ this.resumen.cantidad_envios }}
+                            </div>
+                        </template>
+                    </Card>
+                </div>
+
+                <div class="col-12 col-md-4">
+                    <Card>
+                        <template #title>
+                            <i class="pi pi-exclamation-circle me-2 text-danger"></i>
+                            Errores</template>
+                        <template #content>
+                            <div class="fs-4 fw-bold">
+                                {{ resumen.cantidad_errores }}
+                            </div>
+                        </template>
+                    </Card>
+                </div>
+            </div>
             <Card class="my-0 directive-fullscreen-wrapper-grid vh-height mb-2">
                 <template #content>
 
-                    <div class="mb-4">
+                    <div v-if="isAllow === 'abodean' || isAllow === 'dvazquez' || isAllow === 'ejescobar'" class="mb-4">
                         <strong>Estado de envío de avisos deuda vencida automáticos:</strong>
-                        <Tag :value="estadoTexto" :severity="estadoSeverity" class="ms-2" />
+                        <Tag :value="estadoTexto" :severity="estadoSeverity" class="ms-2" size="sm" />
                     </div>
 
                     <DataTable v-model:filters="filters" :value="logs" :loading="loading" scrollable paginator
@@ -123,13 +176,28 @@
 
                         <template #loading>Cargando. Por favor, espere. </template>
 
-                        <Column field="enviado_en" header="Fecha">
+                        <Column field="enviado_en" header="Fecha de envío">
                             <template #body="{ data }">
                                 {{ formatDateTime(data.enviado_en) }}
                             </template>
                         </Column>
 
-                        <Column field="tipo_envio" header="Tipo Envio">
+                        <Column field="estado" header="Estado">
+                            <template #body="{ data }">
+                                <Tag :value="data.estado" :severity="getEstadoSeverity(data.estado)" />
+                            </template>
+                            <template #filter="{ filterModel, filterCallback }">
+                                <Select v-model="filterModel.value" :options="[
+                                    { label: 'ENVIADO', value: 'ENVIADO' },
+                                    { label: 'ERROR', value: 'ERROR' },
+                                    { label: 'SIN_PDF', value: 'SIN_PDF' },
+                                    { label: 'SIN_TELEFONO', value: 'SIN_TELEFONO' }
+                                ]" optionLabel="label" optionValue="value" class="w-full" @change="filterCallback"
+                                    placeholder="Filtrar por estado" />
+                            </template>
+                        </Column>
+
+                        <Column field="tipo_envio" header="Tipo de envío">
                             <template #body="{ data }">
                                 <Tag :value="data.tipo_envio" :severity="getTipoEnvioSeverity(data.tipo_envio)" />
                             </template>
@@ -163,21 +231,18 @@
                             </template>
                         </Column>
 
-                        <Column field="pdf_filename" header="Nombre PDF" />
-                        <!-- <Column field="pdf_path" header="Ruta PDF" /> -->
+                        <Column field="cantidad_comprobantes" header="Comprobantes" />
 
-                        <Column field="estado" header="Estado">
+                        <Column field="total_saldo" header="Total deuda">
                             <template #body="{ data }">
-                                <Tag :value="data.estado" :severity="getEstadoSeverity(data.estado)" />
+                                <strong>{{ formatMoney(data.total_saldo) }}</strong>
                             </template>
-                            <template #filter="{ filterModel, filterCallback }">
-                                <Select v-model="filterModel.value" :options="[
-                                    { label: 'ENVIADO', value: 'ENVIADO' },
-                                    { label: 'ERROR', value: 'ERROR' },
-                                    { label: 'SIN_PDF', value: 'SIN_PDF' },
-                                    { label: 'SIN_TELEFONO', value: 'SIN_TELEFONO' }
-                                ]" optionLabel="label" optionValue="value" class="w-full" @change="filterCallback"
-                                    placeholder="Filtrar por estado" />
+                        </Column>
+
+                        <Column header="PDF">
+                            <template #body="{ data }">
+                                <Button label="Ver PDF" icon="pi pi-file-pdf" severity="danger" size="small" outlined
+                                    :disabled="!data.pdf_filename" @click="verPdf(data.id)" />
                             </template>
                         </Column>
 
@@ -219,11 +284,17 @@ import Divider from 'primevue/divider';
 export default {
     name: 'AvisosDeudaWhatsapp',
     data: () => ({
-        title: 'Avisos de deuda vencida por WhatsApp',
+        title: 'Consulta de avisos de deuda vencida por WhatsApp',
         estado: null,
         logs: [],
+        resumen: [{
+            total_notificado: 0,
+            cantidad_envios: 0,
+            cantidad_errores: 0
+        }],
         loading: false,
         token: decodeJwt(getToken()).token,
+        isAllow: decodeJwt(getToken()).user.sAMAccountName,
         configCron: {
             diaSemana: 3,
             hora: new Date(2026, 0, 1, 7, 0)
@@ -238,6 +309,7 @@ export default {
             { label: 'Domingo', value: 0 }
         ],
         fechaFiltro: null,
+        filtroTipoEnvio: 'TODOS',
         useToast,
         visible: false,
         filters: {
@@ -280,6 +352,15 @@ export default {
         }
     },
     methods: {
+        formatMoney(value) {
+            const number = Number(value || 0);
+
+            return new Intl.NumberFormat('es-AR', {
+                style: 'currency',
+                currency: 'ARS',
+                minimumFractionDigits: 2
+            }).format(number);
+        },
         formatDateParam(date) {
             if (!date) return null;
 
@@ -351,13 +432,22 @@ export default {
                     params.fecha = this.formatDateParam(this.fechaFiltro);
                 }
 
+                if (this.filtroTipoEnvio !== 'TODOS') {
+                    params.tipo_envio = this.filtroTipoEnvio;
+                }
+
                 const { data } = await axios.get(`${process.env.VUE_APP_API_BASE}` + '/envios-deudavencida',
                     {
                         params,
                         headers: { Authorization: `Bearer ${this.token}` }
                     });
 
-                this.logs = data;
+                this.logs = data.rows || [];
+                this.resumen = data.resumen || {
+                    total_notificado: 0,
+                    cantidad_envios: 0,
+                    cantidad_errores: 0
+                };
                 this.$toast.add({ severity: 'success', summary: 'Éxito', detail: 'Datos cargados.', life: 3000 });
             }
             catch (error) {
@@ -426,6 +516,21 @@ export default {
                 dateStyle: 'short',
                 timeStyle: 'short'
             }).format(new Date(value));
+        },
+        async verPdf(id) {
+            const response = await axios.get(`${process.env.VUE_APP_API_BASE}` + '/envios-deudavencida-pdf/' + id,
+                {
+                    responseType: 'blob',
+                    headers: { Authorization: `Bearer ${this.token}` }
+                }
+            );
+            const file = new Blob([response.data], {
+                type: 'application/pdf'
+            });
+
+            const fileURL = URL.createObjectURL(file);
+
+            window.open(fileURL, '_blank');
         }
     },
     created() {
