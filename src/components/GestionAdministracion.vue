@@ -4,7 +4,8 @@
             <div class="container-fluid px-4 text-center">
                 <h3 class="text-white">Gestión de Administración</h3>
                 <div class="row row-cols-lg-5 gy-5 mt-2">
-                    <div class="col col-h" v-if="hasRole(['Gerencia', 'Sistemas', 'Administracion y Finanzas'])">
+                    <div class="col col-h"
+                        v-if="hasRole(['Gerencia', 'Sistemas', 'Administracion y Finanzas', 'Cuentas Corrientes'])">
                         <router-link :to="{ name: 'consultaavisosdeudawhatsapp' }">
                             <div class="d-flex flex-row justify-content-between rounded-top bg-white"
                                 style="width: 100%; height: 100px;">

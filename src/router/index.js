@@ -893,7 +893,12 @@ const routes = [
 				props: true,
 				meta: {
 					requiresAuth: true,
-					roles: ["Gerencia", "Sistemas", "Administracion y Finanzas"],
+					roles: [
+						"Gerencia",
+						"Sistemas",
+						"Administracion y Finanzas",
+						"Cuentas Corrientes",
+					],
 					title: "Gestión de Administración",
 					back: true,
 					metaTags: [
@@ -910,7 +915,12 @@ const routes = [
 				props: true,
 				meta: {
 					requiresAuth: true,
-					roles: ["Gerencia", "Sistemas", "Administracion y Finanzas"],
+					roles: [
+						"Gerencia",
+						"Sistemas",
+						"Administracion y Finanzas",
+						"Cuentas Corrientes",
+					],
 					title: "Consulta de envío avisos de deuda vencida por WhatsApp",
 					back: true,
 					metaTags: [
