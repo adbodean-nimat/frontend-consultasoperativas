@@ -167,8 +167,8 @@
                     </div>
 
                     <DataTable v-model:filters="filters" :value="logs" :loading="loading" scrollable paginator
-                        :rows="20" dataKey="id" filterDisplay="row" :rowsPerPageOptions="[20, 50, 250, 500]" stripedRows
-                        showGridlines resizableColumns columnResizeMode="fit" tableStyle="min-width: 50rem"
+                        :rows="20" dataKey="id" filterDisplay="row" :rowsPerPageOptions="[20, 50, 100, 200, 500]"
+                        stripedRows showGridlines resizableColumns columnResizeMode="fit" tableStyle="min-width: 50rem"
                         paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
                         currentPageReportTemplate="{first} a {last} de {totalRecords}">
 

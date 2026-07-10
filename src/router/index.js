@@ -80,6 +80,7 @@ import GestionDeExhibicion from "@/views/GestionExhibicion.vue";
 import StockRotOCPreciosArtPyR from "@/views/StockRotOCPreciosArtPyR.vue";
 import ParametrosExhibicion from "@/views/ParametrosdeExhibicion.vue";
 import StockRotOCPreciosArtPyRTerminacion from "../views/StockRotOCPreciosArtPyRTerminacion.vue";
+import BuscarClientesPorTelefono from "@/views/BuscarClientesxTelefono.vue";
 
 const routes = [
 	{
@@ -139,6 +140,22 @@ const routes = [
 					metaTags: [
 						{
 							name: "Consultas Operativas",
+						},
+					],
+				},
+			},
+			{
+				path: "buscarclientesportelefono",
+				name: "buscarclientesportelefono",
+				component: BuscarClientesPorTelefono,
+				props: true,
+				meta: {
+					requiresAuth: true,
+					title: "Buscar Clientes por Teléfono",
+					back: true,
+					metaTags: [
+						{
+							name: "Buscar Clientes por Teléfono",
 						},
 					],
 				},

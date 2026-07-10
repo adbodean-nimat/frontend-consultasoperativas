@@ -13,7 +13,7 @@
                 </div>
                 <div class="button-fullscreen d-flex flex-row align-items-center">
                     <div style="margin-right: 15px;">
-                        <router-link to="/gestiondecompras/parametrosdecompras">
+                        <router-link to="/gdc/parametrosdecompras">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#fff"
                                 class="bi bi-sliders2" viewBox="0 0 16 16">
                                 <path fill-rule="evenodd"
@@ -167,7 +167,7 @@
                     <div class="d-flex flex-row align-items-center gap-2">
                         <span>
                             Fecha de emisión: <Badge severity="secondary" size="large"> {{ totalRows > 0 ? fechaHoy : ''
-                            }}</Badge>
+                                }}</Badge>
                         </span>
                     </div>
                 </template>
