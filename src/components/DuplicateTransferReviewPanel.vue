@@ -63,22 +63,72 @@
     </div>
     <Card class="p-0 my-0 directive-fullscreen-wrapper-grid vh-height mb-2">
       <template #content>
-        <DataTable :value="result?.items || []" :loading="loading" stripedRows showGridlines scrollable resizableColumns
-          columnResizeMode="fit">
-          <Column header="Fecha"><template #body="{ data }">{{ formatDate(data.date) }}</template></Column>
-          <Column field="division" header="División" class="text-center" />
+        <DataTable v-model:filters="tableFilters" :value="tableItems" :loading="loading" stripedRows showGridlines
+          scrollable resizableColumns columnResizeMode="fit">
+          <Column field="date" filterField="dateDisplay" header="Fecha">
+            <template #body="{ data }">{{ data.dateDisplay }}</template>
+            <template #filter="{ filterModel, filterCallback }">
+              <InputText v-model="filterModel.value" @input="filterCallback()" placeholder="DD/MM/AAAA" fluid />
+            </template>
+          </Column>
+          <Column field="division" header="División" class="text-center">
+            <template #filter="{ filterModel, filterCallback }">
+              <InputText v-model="filterModel.value" @input="filterCallback()" placeholder="División" fluid />
+            </template>
+          </Column>
           <!-- <Column field="entryNumber" header="Asiento" /> -->
-          <Column field="receipt" header="Comprobante" />
-          <Column field="accountCode" header="Cuenta" />
-          <Column field="accountName" header="Nombre cuenta" />
-          <Column field="amount" header="Importe" />
-          <Column field="sign" header="Signo" />
-          <Column field="clientCode" header="Cliente" />
-          <Column field="clientName" header="Nombre cliente" />
-          <Column field="coincidenceCount" header="Coincidencias" class="text-center" />
-          <Column header="Primera fecha"><template #body="{ data }">{{ formatDate(data.firstDate) }}</template></Column>
-          <Column header="Última fecha"><template #body="{ data }">{{ formatDate(data.lastDate) }}</template></Column>
-          <Column field="daysBetween" header="Días" class="text-center" />
+          <Column field="receipt" header="Comprobante">
+            <template #filter="{ filterModel, filterCallback }">
+              <InputText v-model="filterModel.value" @input="filterCallback()" placeholder="Comprobante" fluid />
+            </template>
+          </Column>
+          <Column field="accountCode" header="Cuenta">
+            <template #filter="{ filterModel, filterCallback }">
+              <InputText v-model="filterModel.value" @input="filterCallback()" placeholder="Cuenta" fluid />
+            </template>
+          </Column>
+          <Column field="accountName" header="Nombre cuenta">
+            <template #filter="{ filterModel, filterCallback }">
+              <InputText v-model="filterModel.value" @input="filterCallback()" placeholder="Nombre" fluid />
+            </template>
+          </Column>
+          <Column field="amount" header="Importe">
+            <template #filter="{ filterModel, filterCallback }">
+              <InputText v-model="filterModel.value" @input="filterCallback()" placeholder="Importe" fluid />
+            </template>
+          </Column>
+          <Column field="clientCode" header="Cliente">
+            <template #filter="{ filterModel, filterCallback }">
+              <InputText v-model="filterModel.value" @input="filterCallback()" placeholder="Cliente" fluid />
+            </template>
+          </Column>
+          <Column field="clientName" header="Nombre cliente">
+            <template #filter="{ filterModel, filterCallback }">
+              <InputText v-model="filterModel.value" @input="filterCallback()" placeholder="Nombre" fluid />
+            </template>
+          </Column>
+          <Column field="coincidenceCount" header="Coincidencias" class="text-center">
+            <template #filter="{ filterModel, filterCallback }">
+              <InputText v-model="filterModel.value" @input="filterCallback()" placeholder="Cantidad" fluid />
+            </template>
+          </Column>
+          <Column field="firstDate" filterField="firstDateDisplay" header="Primera fecha">
+            <template #body="{ data }">{{ data.firstDateDisplay }}</template>
+            <template #filter="{ filterModel, filterCallback }">
+              <InputText v-model="filterModel.value" @input="filterCallback()" placeholder="DD/MM/AAAA" fluid />
+            </template>
+          </Column>
+          <Column field="lastDate" filterField="lastDateDisplay" header="Última fecha">
+            <template #body="{ data }">{{ data.lastDateDisplay }}</template>
+            <template #filter="{ filterModel, filterCallback }">
+              <InputText v-model="filterModel.value" @input="filterCallback()" placeholder="DD/MM/AAAA" fluid />
+            </template>
+          </Column>
+          <Column field="daysBetween" header="Días" class="text-center">
+            <template #filter="{ filterModel, filterCallback }">
+              <InputText v-model="filterModel.value" @input="filterCallback()" placeholder="Días" fluid />
+            </template>
+          </Column>
         </DataTable>
 
         <div v-if="result" class="d-flex justify-content-between align-items-center mt-3">
@@ -99,6 +149,7 @@
 
 <script setup>
 import { computed, onMounted, ref } from "vue";
+import { FilterMatchMode } from "@primevue/core/api";
 import { useToast } from "primevue/usetoast";
 import Card from "primevue/card";
 import Panel from "primevue/panel";
@@ -114,6 +165,27 @@ const toast = useToast();
 const loading = ref(false);
 const result = ref(null);
 const filters = ref({ from: null, to: null, daysBack: null, accountCode: "", clientCode: "" });
+const tableFilters = ref({
+  dateDisplay: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  division: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  receipt: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  accountCode: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  accountName: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  amount: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  clientCode: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  clientName: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  coincidenceCount: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  firstDateDisplay: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  lastDateDisplay: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  daysBetween: { value: null, matchMode: FilterMatchMode.CONTAINS },
+});
+
+const tableItems = computed(() => (result.value?.items || []).map((item) => ({
+  ...item,
+  dateDisplay: formatDate(item.date),
+  firstDateDisplay: formatDate(item.firstDate),
+  lastDateDisplay: formatDate(item.lastDate),
+})));
 
 const firstItem = computed(() => result.value?.pagination.totalItems
   ? (result.value.pagination.page - 1) * result.value.pagination.pageSize + 1
