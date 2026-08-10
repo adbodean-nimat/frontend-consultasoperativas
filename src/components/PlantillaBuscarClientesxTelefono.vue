@@ -61,45 +61,45 @@
                             placeholder="Buscar por nombre" />
                     </template>
                 </Column>
-                <Column field="CLIE_DOMICILIO" header="Domicilio">
+                <Column field="Domicilio" header="Domicilio">
                     <template #body="{ data }">
-                        {{ data.CLIE_DOMICILIO }}
+                        {{ data.Domicilio }}
                     </template>
                     <template #filter="{ filterModel, filterCallback }">
                         <InputText v-model="filterModel.value" type="text" @input="filterCallback()"
                             placeholder="Buscar por domicilio" />
                     </template>
                 </Column>
-                <Column field="CLIE_LOCALIDAD" header="Localidad">
+                <Column field="Localidad" header="Localidad">
                     <template #body="{ data }">
-                        {{ data.CLIE_LOCALIDAD }}
+                        {{ data.Localidad }}
                     </template>
                     <template #filter="{ filterModel, filterCallback }">
                         <InputText v-model="filterModel.value" type="text" @input="filterCallback()"
                             placeholder="Buscar por localidad" />
                     </template>
                 </Column>
-                <Column field="CLIE_TELEFONO" header="Telefono">
+                <Column field="Telefono" header="Teléfono">
                     <template #body="{ data }">
-                        {{ data.CLIE_TELEFONO }}
+                        {{ data.Telefono }}
                     </template>
                     <template #filter="{ filterModel, filterCallback }">
                         <InputText v-model="filterModel.value" type="text" @input="filterCallback()"
-                            placeholder="Buscar por telefono" />
+                            placeholder="Buscar por teléfono" />
                     </template>
                 </Column>
-                <Column field="CLIE_FAX" header="Celular (CLIE_FAX)">
+                <Column field="Fax" header="Celular (CLIE_FAX)">
                     <template #body="{ data }">
-                        {{ data.CLIE_FAX }}
+                        {{ data.Fax }}
                     </template>
                     <template #filter="{ filterModel, filterCallback }">
                         <InputText v-model="filterModel.value" type="text" @input="filterCallback()"
                             placeholder="Buscar por celular" />
                     </template>
                 </Column>
-                <Column field="CLIE_EMAIL" header="Email">
+                <Column field="Email" header="Email">
                     <template #body="{ data }">
-                        {{ data.CLIE_EMAIL }}
+                        {{ data.Email }}
                     </template>
                     <template #filter="{ filterModel, filterCallback }">
                         <InputText v-model="filterModel.value" type="text" @input="filterCallback()"
@@ -141,11 +141,11 @@ const toast = useToast();
 const filters = ref({
     'CLIE_CLIENTE': { value: null, matchMode: FilterMatchMode.CONTAINS },
     'CLIE_NOMBRE': { value: null, matchMode: FilterMatchMode.CONTAINS },
-    'CLIE_TELEFONO': { value: null, matchMode: FilterMatchMode.CONTAINS },
-    'CLIE_DOMICILIO': { value: null, matchMode: FilterMatchMode.CONTAINS },
-    'CLIE_LOCALIDAD': { value: null, matchMode: FilterMatchMode.CONTAINS },
-    'CLIE_FAX': { value: null, matchMode: FilterMatchMode.CONTAINS },
-    'CLIE_EMAIL': { value: null, matchMode: FilterMatchMode.CONTAINS }
+    'Telefono': { value: null, matchMode: FilterMatchMode.CONTAINS },
+    'Domicilio': { value: null, matchMode: FilterMatchMode.CONTAINS },
+    'Localidad': { value: null, matchMode: FilterMatchMode.CONTAINS },
+    'Fax': { value: null, matchMode: FilterMatchMode.CONTAINS },
+    'Email': { value: null, matchMode: FilterMatchMode.CONTAINS }
 });
 
 const getData = async () => {

@@ -47,6 +47,36 @@
                         </router-link>
                     </div>
 
+                    <div class="col col-h" v-if="hasRole(['Gerencia', 'Sistemas'])">
+                        <router-link :to="{ name: 'monitortransferenciasduplicadas' }">
+                            <div class="d-flex flex-row justify-content-between rounded-top bg-white"
+                                style="width: 100%; height: 100px;">
+                                <div class="d-flex flex-row justify-content-between p-3 text-secondary link-success gap-2"
+                                    style="width: 30%;">
+                                    <div class="d-flex justify-content-center align-items-center shrink-0 icon rounded">
+                                        <i class="pi pi-clone text-white" style="font-size: 2rem"></i>
+                                    </div>
+                                </div>
+                                <div class="p-3 title-column text-end" style="width: 70%;">
+                                    <p>Monitor de avisos de transferencias</p>
+                                </div>
+                            </div>
+                            <div class="column-question text-center h-10 d-flex justify-content-between align-items-center px-4 bg-white">
+                                <span class="fs-6"></span>
+                                <span class="fs-6">
+                                    <div id="tooltip" data-toggle="tooltip" data-placement="right"
+                                        title="Seguimiento del control automático y de los avisos por WhatsApp">
+                                        <i class="pi pi-question-circle-fill text-secondary"></i>
+                                    </div>
+                                </span>
+                            </div>
+                            <div class="column-bottom text-center h-10 d-flex justify-content-between align-items-center px-4 rounded-bottom bg-light">
+                                <span class="fs-6 text-secondary">1.0.0</span>
+                                <span class="fs-6 text-secondary">MTD</span>
+                            </div>
+                        </router-link>
+                    </div>
+
                 </div>
             </div>
         </div>
