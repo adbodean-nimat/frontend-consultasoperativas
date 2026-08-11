@@ -283,7 +283,8 @@
                             </div>
                         </router-link>
                     </div>
-                    <div class="col col-h" v-if="hasRole(['Gerencia', 'Sistemas', 'Administracion y Finanzas'])">
+                    <div class="col col-h"
+                        v-if="hasRole(['Gerencia', 'Sistemas', 'Administracion y Finanzas', 'Cuentas Corrientes'])">
                         <router-link to="/gdf">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div

@@ -798,7 +798,12 @@ const routes = [
 				props: true,
 				meta: {
 					requiresAuth: true,
-					roles: ["Gerencia", "Sistemas", "Administracion y Finanzas"],
+					roles: [
+						"Gerencia",
+						"Sistemas",
+						"Administracion y Finanzas",
+						"Cuentas Corrientes",
+					],
 					title: "Gestión de Finanzas",
 					back: true,
 					metaTags: [
@@ -849,7 +854,12 @@ const routes = [
 				props: true,
 				meta: {
 					requiresAuth: true,
-					roles: ["Gerencia", "Sistemas", "Administracion y Finanzas"],
+					roles: [
+						"Gerencia",
+						"Sistemas",
+						"Administracion y Finanzas",
+						"Cuentas Corrientes",
+					],
 					title: "Consulta de transferencias duplicadas",
 					back: true,
 					metaTags: [{ name: "Consulta de transferencias duplicadas" }],
