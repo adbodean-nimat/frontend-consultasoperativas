@@ -1,5 +1,7 @@
 /dist
 /node_modules
-/tests
+/tests/*
+!/tests/rotacionGeneralProductos.test.cjs
+!/tests/rotacionProductosConfiguracion.test.cjs
 .env
 .env.production

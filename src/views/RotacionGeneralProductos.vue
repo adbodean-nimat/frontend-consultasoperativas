@@ -14,6 +14,12 @@
         </div>
       </div>
 
+      <Dialog v-model:visible="configuracionVisible" modal
+        header="Editar los parámetros de rotación general de productos" class="rotation-config-dialog"
+        :style="{ width: 'min(96vw, 1180px)' }" :contentStyle="{ maxHeight: '78vh', overflow: 'auto' }">
+        <RotacionGeneralProductosConfiguracion v-if="configuracionVisible" />
+      </Dialog>
+
       <Panel class="mb-2 filters-panel" toggleable>
         <template #header>
           <div class="d-flex align-items-center gap-2">
@@ -24,6 +30,11 @@
         <template #toggleicon="{ collapsed }">
           <i class="pi pi-angle-down" v-if="collapsed"></i>
           <i class="pi pi-angle-up" v-else></i>
+        </template>
+        <template #icons>
+          <Button icon="pi pi-sliders-h" severity="secondary" rounded text
+            aria-label="Configurar rotación general de productos" v-tooltip.left="'Editar parámetros'"
+            @click.stop="configuracionVisible = true" />
         </template>
 
         <div class="filters-content">
@@ -112,6 +123,7 @@
 import { computed, onBeforeUnmount, onMounted, reactive, ref, watch } from "vue";
 import Button from "primevue/button";
 import Badge from "primevue/badge";
+import Dialog from "primevue/dialog";
 import Message from "primevue/message";
 import InputText from "primevue/inputtext";
 import Panel from "primevue/panel";
@@ -122,6 +134,7 @@ import { useToast } from "primevue/usetoast";
 import { directive as vFullscreen } from "vue-fullscreen";
 import RotacionProductosFiltros from "@/components/rotacion-productos/RotacionProductosFiltros.vue";
 import RotacionProductosTabla from "@/components/rotacion-productos/RotacionProductosTabla.vue";
+import RotacionGeneralProductosConfiguracion from "@/views/RotacionGeneralProductosConfiguracion.vue";
 import { useRotacionGeneralProductos } from "@/composables/useRotacionGeneralProductos";
 import { crearFiltrosRotacionIniciales } from "@/services/rotacionGeneralProductosFiltros";
 import {
@@ -133,6 +146,7 @@ import {
 const filtros = reactive(crearFiltrosRotacionIniciales());
 const toast = useToast();
 const fullscreengrid = ref(false);
+const configuracionVisible = ref(false);
 const busquedaDebounced = ref("");
 let debounceTimer;
 watch(() => filtros.busqueda, (value) => {
