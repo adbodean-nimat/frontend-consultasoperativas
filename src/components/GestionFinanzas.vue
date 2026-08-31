@@ -4,7 +4,7 @@
             <div class="container-fluid px-4 text-center">
                 <h3 class="text-white">Gestión de Finanzas</h3>
                 <div class="row row-cols-lg-5 gy-5 mt-2">
-                    <div class="col col-h">
+                    <!-- <div class="col col-h">
                         <router-link :to="{ name: 'importarmasivofinanzas' }">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
@@ -25,16 +25,11 @@
                             </div>
                             <div
                                 class="column-question text-center h-10 d-flex justify-content-between align-items-center px-4 bg-white">
-                                <span class="fs-6"></span>
-                                <span class="fs-6">
+                                <span class="fs-6 text-secondary"></span>
+                                <span class="fs-6 text-secondary">
                                     <div id="tooltip" data-toggle="tooltip" data-placement="right"
                                         title="Importación masiva de registros financieros desde un archivo Excel/CSV">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-                                            fill="currentColor" class="bi bi-question-circle-fill text-secondary"
-                                            viewBox="0 0 16 16">
-                                            <path
-                                                d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.496 6.033h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286a.237.237 0 0 0 .241.247zm2.325 6.443c.61 0 1.029-.394 1.029-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94 0 .533.425.927 1.01.927z" />
-                                        </svg>
+                                       <i class="pi pi-question-circle" aria-hidden="true"></i>
                                     </div>
                                 </span>
                             </div>
@@ -64,16 +59,11 @@
                             </div>
                             <div
                                 class="column-question text-center h-10 d-flex justify-content-between align-items-center px-4 bg-white">
-                                <span class="fs-6"></span>
-                                <span class="fs-6">
+                                <span class="fs-6 text-secondary"></span>
+                                <span class="fs-6 text-secondary">
                                     <div id="tooltip" data-toggle="tooltip" data-placement="right"
                                         title="Visualización de flujo de fondos y análisis patrimonial">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-                                            fill="currentColor" class="bi bi-question-circle-fill text-secondary"
-                                            viewBox="0 0 16 16">
-                                            <path
-                                                d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.496 6.033h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286a.237.237 0 0 0 .241.247zm2.325 6.443c.61 0 1.029-.394 1.029-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94 0 .533.425.927 1.01.927z" />
-                                        </svg>
+                                       <i class="pi pi-question-circle" aria-hidden="true"></i>
                                     </div>
                                 </span>
                             </div>
@@ -83,11 +73,12 @@
                                 <span class="fs-6 text-secondary">TGF</span>
                             </div>
                         </router-link>
-                    </div>
+                    </div> -->
                     <div class="col col-h">
                         <router-link :to="{ name: 'consultatransferenciasduplicadas' }">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
-                                <div class="column d-flex flex-row justify-content-between p-3 text-secondary link-success">
+                                <div
+                                    class="column d-flex flex-row justify-content-between p-3 text-secondary link-success">
                                     <div class="d-flex justify-content-center align-items-center shrink-0 icon rounded">
                                         <i class="pi pi-search text-white" style="font-size: 2rem"></i>
                                     </div>
@@ -96,16 +87,18 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="column-question text-center h-10 d-flex justify-content-between align-items-center px-4 bg-white">
-                                <span class="fs-6"></span>
-                                <span class="fs-6">
+                            <div
+                                class="column-question text-center h-10 d-flex justify-content-between align-items-center px-4 bg-white">
+                                <span class="fs-6 text-secondary"></span>
+                                <span class="fs-6 text-secondary">
                                     <div id="tooltip" data-toggle="tooltip" data-placement="right"
                                         title="Consulta administrativa de solo lectura; no envía avisos ni modifica datos">
                                         <i class="pi pi-question-circle-fill text-secondary"></i>
                                     </div>
                                 </span>
                             </div>
-                            <div class="column-bottom text-center h-10 d-flex justify-content-between align-items-center rounded-bottom px-4 bg-light">
+                            <div
+                                class="column-bottom text-center h-10 d-flex justify-content-between align-items-center rounded-bottom px-4 bg-light">
                                 <span class="fs-6 text-secondary">1.0.0</span>
                                 <span class="fs-6 text-secondary">CTD</span>
                             </div>

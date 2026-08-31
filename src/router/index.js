@@ -81,6 +81,8 @@ import StockRotOCPreciosArtPyR from "@/views/StockRotOCPreciosArtPyR.vue";
 import ParametrosExhibicion from "@/views/ParametrosdeExhibicion.vue";
 import StockRotOCPreciosArtPyRTerminacion from "../views/StockRotOCPreciosArtPyRTerminacion.vue";
 import BuscarClientesPorTelefono from "@/views/BuscarClientesxTelefono.vue";
+import RotacionGeneralProductos from "@/views/RotacionGeneralProductos.vue";
+import GestionDeVentas from "@/views/GestionVentas.vue";
 
 const routes = [
 	{
@@ -786,6 +788,50 @@ const routes = [
 					],
 				},
 			},
+			{
+				path: "rotacion-general-productos",
+				name: "rotacion-general-productos-exhibicion",
+				component: RotacionGeneralProductos,
+				props: true,
+				meta: {
+					requiresAuth: true,
+					roles: ["Gerencia", "Sistemas", "Exhibicion", "Ventas", "Compras"],
+					title: "Rotación general de productos",
+					back: true,
+					metaTags: [{ name: "Rotación general de productos" }],
+				},
+			},
+		],
+	},
+	{
+		path: "/gdv",
+		children: [
+			{
+				path: "",
+				name: "gestiondeventas",
+				component: GestionDeVentas,
+				props: true,
+				meta: {
+					requiresAuth: true,
+					roles: ["Gerencia", "Sistemas", "Ventas"],
+					title: "Gestión de Ventas",
+					back: true,
+					metaTags: [{ name: "Gestión de Ventas" }],
+				},
+			},
+			{
+				path: "rotacion-general-productos",
+				name: "rotacion-general-productos-ventas",
+				component: RotacionGeneralProductos,
+				props: true,
+				meta: {
+					requiresAuth: true,
+					roles: ["Gerencia", "Sistemas", "Ventas"],
+					title: "Rotación general de productos",
+					back: true,
+					metaTags: [{ name: "Rotación general de productos" }],
+				},
+			},
 		],
 	},
 	{
@@ -1144,6 +1190,19 @@ const routes = [
 							name: "Recepción de proveedores",
 						},
 					],
+				},
+			},
+			{
+				path: "rotacion-general-productos",
+				name: "rotacion-general-productos",
+				component: RotacionGeneralProductos,
+				props: true,
+				meta: {
+					requiresAuth: true,
+					roles: ["Gerencia", "Sistemas", "Compras", "Exhibicion"],
+					title: "Rotación general de productos",
+					back: true,
+					metaTags: [{ name: "Rotación general de productos" }],
 				},
 			},
 		],
