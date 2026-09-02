@@ -133,6 +133,11 @@ export default {
       pageOnly: true,
       dataSource: ['remoteDataSourceVblesEntrNPGral'],
       title: 'Variables Entregas NP General',
+      diasAtras: 30,
+      marcaClasif6: '',
+      clasificaciones6: [],
+      loadingClasif6: false,
+      loadingEntregas: false,
       schemaModelFields: {
         Cod_Vend: { type: 'string' },
         Nomb_Vend: { type: 'string' },
@@ -155,7 +160,10 @@ export default {
       return decodeJwt(getToken()).token
     },
     UrlApiBase() {
-      return `${process.env.VUE_APP_API_BASE}/vblesentrnp/`
+      return `${process.env.VUE_APP_API_BASE}/vblesentrnp`
+    },
+    UrlClasif6() {
+      return `${process.env.VUE_APP_API_BASE}/vblesentnp/clasif6`
     },
     options() {
       return {
@@ -170,34 +178,89 @@ export default {
   },
   methods: {
     readData: function (e) {
-      var token = this.token
-      var urlApi = this.UrlApiBase
       var grid = this.$refs.grid.kendoWidget();
       var gridElement = grid.element;
       var cantdiasatras = gridElement.find('#diasatras');
-      var DiasAtras = cantdiasatras.data("kendoNumericTextBox").value()
+      var marcaDropDown = gridElement.find('#marcaClasif6').data('kendoDropDownList');
+      var DiasAtras = cantdiasatras.data("kendoNumericTextBox").value() || 30
+
+      this.diasAtras = DiasAtras
+      this.marcaClasif6 = marcaDropDown ? marcaDropDown.value() : ''
+
+      var params = new URLSearchParams()
+      params.set('diasAtras', String(DiasAtras))
+      if (this.marcaClasif6) {
+        params.set('marcaClasif6', this.marcaClasif6)
+      }
+
+      this.loadingEntregas = true
       kendo.jQuery.ajax({
-        url: urlApi + DiasAtras,
-        beforeSend: function (xhr) {
-          xhr.setRequestHeader('Authorization', 'Bearer ' + token)
+        url: `${this.UrlApiBase}?${params.toString()}`,
+        beforeSend: (xhr) => {
+          xhr.setRequestHeader('Authorization', 'Bearer ' + this.token)
         },
         dataType: 'json',
-        success: function (data) {
-          e.success(data)
+        success: (data) => {
+          if (data && data.ok === false) {
+            e.error(data)
+            return
+          }
+          e.success(data && Array.isArray(data.rows) ? data.rows : data)
+        },
+        error: (xhr) => e.error(xhr),
+        complete: () => {
+          this.loadingEntregas = false
         },
         type: 'GET'
       })
+    },
+    cargarClasificaciones6: async function () {
+      var grid = this.$refs.grid.kendoWidget();
+      var gridElement = grid.element;
+      var toolbarElement = gridElement.find('.k-grid-toolbar');
+      var marcaDropDown = gridElement.find('#marcaClasif6').data('kendoDropDownList');
+
+      try {
+        this.loadingClasif6 = true
+        marcaDropDown.enable(false)
+        kendo.ui.progress(toolbarElement, true)
+
+        var response = await fetch(this.UrlClasif6, {
+          headers: {
+            Authorization: `Bearer ${this.token}`
+          }
+        })
+        var json = await response.json()
+
+        if (!response.ok || !json.ok) {
+          throw new Error(json.message || 'Error al cargar clasificación 6')
+        }
+
+        this.clasificaciones6 = json.rows || []
+        marcaDropDown.setDataSource(this.clasificaciones6)
+      } catch (error) {
+        console.error('Error al cargar clasificación 6:', error)
+      } finally {
+        this.loadingClasif6 = false
+        marcaDropDown.enable(true)
+        kendo.ui.progress(toolbarElement, false)
+      }
     },
     toolbarTemplate: function () {
       var templateHtml =
         '<div class="container-fluid">' +
         '<form id="form" class="requires-validation row align-items-start row-cols" novalidate>' +
         '<div class="col d-flex">' +
-        `<label class="col-form-label" for="diasatras" style="width: 160px;">Cant. días hacia atras:</label>` +
+        '<label class="col-form-label" for="diasatras" style="width: 160px;">Cant. días hacia atras:</label>' +
         '<div id="input" class="col d-flex flex-column">' +
         '<input class="is-valid" id="diasatras" type="number" style="width: 200px" required/>' +
         '<div class="invalid-feedback">Falta completa este campo.</div>' +
         '</div>' +
+        '</div>' +
+        '<div class="col d-flex align-items-center">' +
+        '<label class="col-form-label" for="marcaClasif6" style="margin-right: 8px;">Marca:</label>' +
+        '<input id="marcaClasif6" style="width: 240px" />' +
+        '<a class="k-pager-refresh k-link k-button marca-clear" title="Limpiar marca" style="margin-left:5px"><span class="k-icon k-i-close"></span></a>' +
         '</div>' +
         '<div class="col d-flex">' +
         '<a class="k-pager-refresh k-link k-button play" title="Ralizar consulta" style="margin-right:5px"><span class="k-icon k-i-play"></span></a>' +
@@ -216,15 +279,28 @@ export default {
       }
     },
   },
-  mounted: function () {
+  mounted: async function () {
     var grid = this.$refs.grid.kendoWidget();
     var gridElement = grid.element;
     var cantdiasatras = gridElement.find('#diasatras');
+    var marcaClasif6 = gridElement.find('#marcaClasif6');
     var toolbarElement = gridElement.find('.k-grid-toolbar');
 
     cantdiasatras.kendoNumericTextBox({
       culture: "es-AR",
-      format: "n0"
+      format: "n0",
+      value: this.diasAtras
+    })
+
+    marcaClasif6.kendoDropDownList({
+      dataSource: [],
+      dataTextField: 'CA06_NOMBRE',
+      dataValueField: 'CA06_CLASIF_6',
+      filter: 'contains',
+      optionLabel: 'Todas las marcas',
+      change: (event) => {
+        this.marcaClasif6 = event.sender.value()
+      }
     })
 
     toolbarElement.on("click", ".refresh", function (e) {
@@ -258,6 +334,24 @@ export default {
     });
     toolbarElement.on("click", ".filter-clear", function (e) {
       cantdiasatras.data("kendoNumericTextBox").value(null)
+    })
+
+    toolbarElement.on("click", ".marca-clear", (e) => {
+      e.preventDefault()
+      marcaClasif6.data('kendoDropDownList').value('')
+      this.marcaClasif6 = ''
+      grid.dataSource.read()
+      grid.dataSource.sort({
+        field: "Fecha_Emi",
+        dir: "asc"
+      })
+    })
+
+    await this.cargarClasificaciones6()
+    grid.dataSource.read()
+    grid.dataSource.sort({
+      field: "Fecha_Emi",
+      dir: "asc"
     })
   }
 }
