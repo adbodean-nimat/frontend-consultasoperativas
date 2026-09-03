@@ -133,7 +133,8 @@ export default {
       pageOnly: true,
       dataSource: ['remoteDataSourceVblesEntrNPGral'],
       title: 'Variables Entregas NP General',
-      diasAtras: 30,
+      fechaDesde: '',
+      fechaHasta: '',
       marcaClasif6: '',
       clasificaciones6: [],
       loadingClasif6: false,
@@ -180,15 +181,27 @@ export default {
     readData: function (e) {
       var grid = this.$refs.grid.kendoWidget();
       var gridElement = grid.element;
-      var cantdiasatras = gridElement.find('#diasatras');
       var marcaDropDown = gridElement.find('#marcaClasif6').data('kendoDropDownList');
-      var DiasAtras = cantdiasatras.data("kendoNumericTextBox").value() || 30
 
-      this.diasAtras = DiasAtras
+      this.fechaDesde = this.obtenerFechaISO('#fechaDesde')
+      this.fechaHasta = this.obtenerFechaISO('#fechaHasta')
       this.marcaClasif6 = marcaDropDown ? marcaDropDown.value() : ''
 
+      if (!this.validarRangoFechas()) {
+        e.error({ statusText: 'La fecha desde no puede ser mayor a la fecha hasta' })
+        return
+      }
+
       var params = new URLSearchParams()
-      params.set('diasAtras', String(DiasAtras))
+      if (this.fechaDesde) {
+        params.set('fechaDesde', this.fechaDesde)
+      }
+      if (this.fechaHasta) {
+        params.set('fechaHasta', this.fechaHasta)
+      }
+      if (!this.fechaDesde && !this.fechaHasta) {
+        params.set('diasAtras', '30')
+      }
       if (this.marcaClasif6) {
         params.set('marcaClasif6', this.marcaClasif6)
       }
@@ -213,6 +226,66 @@ export default {
         },
         type: 'GET'
       })
+    },
+    obtenerFechaISO: function (selector) {
+      var gridElement = this.$refs.grid.kendoWidget().element;
+      var datePicker = gridElement.find(selector).data('kendoDatePicker');
+      var fecha = datePicker ? datePicker.value() : null
+
+      return fecha ? kendo.toString(fecha, 'yyyy-MM-dd') : ''
+    },
+    validarRangoFechas: function () {
+      var gridElement = this.$refs.grid.kendoWidget().element;
+      var fechaDesdeElement = gridElement.find('#fechaDesde');
+      var fechaHastaElement = gridElement.find('#fechaHasta');
+      var mensajeElement = gridElement.find('#fecha-rango-error');
+      var rangoValido = !this.fechaDesde || !this.fechaHasta || this.fechaDesde <= this.fechaHasta
+
+      fechaDesdeElement.toggleClass('is-invalid', !rangoValido)
+      fechaHastaElement.toggleClass('is-invalid', !rangoValido)
+      mensajeElement.toggleClass('d-none', rangoValido)
+
+      if (!rangoValido) {
+        console.warn('La fecha desde no puede ser mayor a la fecha hasta')
+      }
+
+      return rangoValido
+    },
+    consultarEntregas: function () {
+      var grid = this.$refs.grid.kendoWidget();
+      var gridElement = grid.element;
+
+      this.fechaDesde = this.obtenerFechaISO('#fechaDesde')
+      this.fechaHasta = this.obtenerFechaISO('#fechaHasta')
+
+      if (!this.validarRangoFechas()) {
+        return
+      }
+
+      grid.dataSource.read()
+      grid.dataSource.sort({
+        field: 'Fecha_Emi',
+        dir: 'asc'
+      })
+    },
+    limpiarFiltros: function () {
+      var grid = this.$refs.grid.kendoWidget();
+      var gridElement = grid.element;
+      var fechaDesdePicker = gridElement.find('#fechaDesde').data('kendoDatePicker');
+      var fechaHastaPicker = gridElement.find('#fechaHasta').data('kendoDatePicker');
+      var marcaDropDown = gridElement.find('#marcaClasif6').data('kendoDropDownList');
+
+      this.fechaDesde = ''
+      this.fechaHasta = ''
+      this.marcaClasif6 = ''
+
+      fechaDesdePicker.value(null)
+      fechaHastaPicker.value(null)
+      gridElement.find('#fechaDesde, #fechaHasta').removeClass('is-invalid')
+      gridElement.find('#fecha-rango-error').addClass('d-none')
+      marcaDropDown.value('')
+
+      this.consultarEntregas()
     },
     cargarClasificaciones6: async function () {
       var grid = this.$refs.grid.kendoWidget();
@@ -250,21 +323,22 @@ export default {
       var templateHtml =
         '<div class="container-fluid">' +
         '<form id="form" class="requires-validation row align-items-start row-cols" novalidate>' +
-        '<div class="col d-flex">' +
-        '<label class="col-form-label" for="diasatras" style="width: 160px;">Cant. días hacia atras:</label>' +
-        '<div id="input" class="col d-flex flex-column">' +
-        '<input class="is-valid" id="diasatras" type="number" style="width: 200px" required/>' +
-        '<div class="invalid-feedback">Falta completa este campo.</div>' +
+        '<div class="col d-flex align-items-center">' +
+        '<label class="col-form-label" for="fechaDesde" style="margin-right: 8px; white-space: nowrap;">Fecha desde:</label>' +
+        '<input id="fechaDesde" style="width: auto" />' +
         '</div>' +
+        '<div class="col d-flex align-items-center">' +
+        '<label class="col-form-label" for="fechaHasta" style="margin-right: 8px; white-space: nowrap;">Fecha hasta:</label>' +
+        '<input id="fechaHasta" style="width: auto" />' +
         '</div>' +
         '<div class="col d-flex align-items-center">' +
         '<label class="col-form-label" for="marcaClasif6" style="margin-right: 8px;">Marca:</label>' +
         '<input id="marcaClasif6" style="width: 240px" />' +
-        '<a class="k-pager-refresh k-link k-button marca-clear" title="Limpiar marca" style="margin-left:5px"><span class="k-icon k-i-close"></span></a>' +
         '</div>' +
-        '<div class="col d-flex">' +
-        '<a class="k-pager-refresh k-link k-button play" title="Ralizar consulta" style="margin-right:5px"><span class="k-icon k-i-play"></span></a>' +
-        '<a class="k-pager-refresh k-link k-button filter-clear" title="Limpiar filtro" style="margin-right:5px"><span class="k-icon k-i-filter-clear"></span></a>' +
+        '<div id="fecha-rango-error" class="col-12 text-danger d-none" role="alert">La fecha desde no puede ser mayor a la fecha hasta.</div>' +
+        '<div class="col d-flex align-items-center">' +
+        '<a class="k-pager-refresh k-link k-button play" title="Realizar consulta" aria-label="Buscar" style="margin-right:5px"><span class="k-icon k-i-play"></span></a>' +
+        '<a class="k-pager-refresh k-link k-button filter-clear" title="Limpiar filtros" aria-label="Limpiar filtros" style="margin-right:5px"><span class="k-icon k-i-filter-clear"></span></a>' +
         '<a class="k-pager-refresh k-link k-button" title="Nueva consulta" onClick="window.location.reload();"><span class="k-icon k-i-file"></span></a>' +
         '<a class="k-pager-refresh k-link k-button k-button-icontext k-grid-excel" style="margin-left:5px"><span class="k-icon k-i-excel"></span></a>' +
         '<a class="k-pager-refresh k-link k-button refresh" title="Actualizar" style="margin-left:5px"><span class="k-icon k-i-reload"></span></a>' +
@@ -282,14 +356,23 @@ export default {
   mounted: async function () {
     var grid = this.$refs.grid.kendoWidget();
     var gridElement = grid.element;
-    var cantdiasatras = gridElement.find('#diasatras');
+    var fechaDesde = gridElement.find('#fechaDesde');
+    var fechaHasta = gridElement.find('#fechaHasta');
     var marcaClasif6 = gridElement.find('#marcaClasif6');
     var toolbarElement = gridElement.find('.k-grid-toolbar');
 
-    cantdiasatras.kendoNumericTextBox({
-      culture: "es-AR",
-      format: "n0",
-      value: this.diasAtras
+    kendo.culture('es-AR')
+
+    fechaDesde.kendoDatePicker({
+      culture: 'es-AR',
+      format: 'dd/MM/yyyy',
+      autoBind: false
+    })
+
+    fechaHasta.kendoDatePicker({
+      culture: 'es-AR',
+      format: 'dd/MM/yyyy',
+      autoBind: false
     })
 
     marcaClasif6.kendoDropDownList({
@@ -303,56 +386,17 @@ export default {
       }
     })
 
-    toolbarElement.on("click", ".refresh", function (e) {
-      e.preventDefault();
-      var DiasAtras = cantdiasatras.data("kendoNumericTextBox").value()
-      var classDiasAtras = document.querySelector("#form > div > #input > .k-numerictextbox")
-      if (DiasAtras == null) {
-        classDiasAtras.classList.add('is-invalid');
-      } else {
-        classDiasAtras.classList.remove('is-invalid');
-        grid.dataSource.read();
-        grid.dataSource.sort({
-          field: "Fecha_Emi",
-          dir: "asc"
-        });
-      }
-    });
-    toolbarElement.on("click", ".play", function () {
-      var DiasAtras = cantdiasatras.data("kendoNumericTextBox").value()
-      var classDiasAtras = document.querySelector("#form > div > #input > .k-numerictextbox")
-      if (DiasAtras == null) {
-        classDiasAtras.classList.add('is-invalid');
-      } else {
-        classDiasAtras.classList.remove('is-invalid');
-        grid.dataSource.read();
-        grid.dataSource.sort({
-          field: "Fecha_Emi",
-          dir: "asc"
-        });
-      }
-    });
-    toolbarElement.on("click", ".filter-clear", function (e) {
-      cantdiasatras.data("kendoNumericTextBox").value(null)
+    toolbarElement.on("click", ".refresh, .play", (e) => {
+      e.preventDefault()
+      this.consultarEntregas()
     })
 
-    toolbarElement.on("click", ".marca-clear", (e) => {
+    toolbarElement.on("click", ".filter-clear", (e) => {
       e.preventDefault()
-      marcaClasif6.data('kendoDropDownList').value('')
-      this.marcaClasif6 = ''
-      grid.dataSource.read()
-      grid.dataSource.sort({
-        field: "Fecha_Emi",
-        dir: "asc"
-      })
+      this.limpiarFiltros()
     })
 
     await this.cargarClasificaciones6()
-    grid.dataSource.read()
-    grid.dataSource.sort({
-      field: "Fecha_Emi",
-      dir: "asc"
-    })
   }
 }
 </script>
