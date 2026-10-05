@@ -247,6 +247,29 @@
                             </div>
                         </router-link>
                     </div>
+                    <div class="col col-h" v-if="hasRole(['Gerencia', 'Sistemas', 'Compras'])">
+                        <router-link :to="{ name: 'revestidos-laf' }">
+                            <div class="d-flex flex-column justify-content-between rounded-top bg-white">
+                                <div
+                                    class="column d-flex flex-row justify-content-between p-3 rounded text-secondary link-success">
+                                    <div class="d-flex justify-content-center align-items-center shrink-0 icon rounded">
+                                        <i class="pi pi-table text-white fs-2" aria-hidden="true"></i>
+                                    </div>
+                                    <div class="title-column text-end">
+                                        <p>Chapas Revestidas y LAF</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column-question text-center d-flex justify-content-between px-4 bg-white">
+                                <span></span><i class="pi pi-question-circle text-secondary"
+                                    title="Consumos, NP, stock, OC y datos técnicos por familia"></i>
+                            </div>
+                            <div
+                                class="column-bottom d-flex justify-content-between align-items-center rounded-bottom px-4 bg-light">
+                                <span class="text-secondary">1.0.0</span><span class="text-secondary">CRL</span>
+                            </div>
+                        </router-link>
+                    </div>
                 </div>
             </div>
         </div>

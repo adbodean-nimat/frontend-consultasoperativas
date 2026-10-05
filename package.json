@@ -5,7 +5,9 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "test:rotacion": "node --test tests/rotacionGeneralProductos.test.cjs tests/rotacionProductosConfiguracion.test.cjs"
+    "test:rotacion": "node --test tests/rotacionGeneralProductos.test.cjs tests/rotacionProductosConfiguracion.test.cjs",
+    "test:revestidos-laf": "node --test tests/revestidosLaf.test.cjs",
+    "lint:revestidos-laf": "node tests/checkRevestidosLaf.cjs"
   },
   "dependencies": {
     "@primeuix/themes": "^1.1.1",
