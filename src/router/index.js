@@ -1077,13 +1077,23 @@ const routes = [
 				path: "revestidos-laf",
 				name: "revestidos-laf",
 				component: () => import("@/views/RevestidosLaf.vue"),
-				meta: { requiresAuth: true, roles: ["Gerencia", "Sistemas", "Compras"], title: "Chapas Revestidas y LAF", back: true },
+				meta: {
+					requiresAuth: true,
+					roles: ["Gerencia", "Sistemas", "Compras"],
+					title: "Chapas Revestidas y LAF",
+					back: true,
+				},
 			},
 			{
 				path: "revestidos-laf/configuracion",
 				name: "revestidos-laf-configuracion",
 				component: () => import("@/views/RevestidosLafConfiguracion.vue"),
-				meta: { requiresAuth: true, roles: ["Gerencia", "Sistemas", "Compras"], title: "Configuración de Chapas Revestidas y LAF", back: true },
+				meta: {
+					requiresAuth: true,
+					roles: ["Gerencia", "Sistemas", "Compras"],
+					title: "Configuración de Chapas Revestidas y LAF",
+					back: true,
+				},
 			},
 			{
 				path: "",

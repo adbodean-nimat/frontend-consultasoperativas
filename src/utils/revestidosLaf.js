@@ -189,18 +189,26 @@ export function generarColumnas(periods, mainWarehouse = 973) {
 			"",
 			"consumos",
 			ordenarPeriodos(periods).map((period) =>
-				group(etiquetaPeriodo(period), "consumos", [
+				({ ...group(etiquetaPeriodo(period), "consumos", [
 					numeric(`${period}.productionTon`, "Producción", "consumos"),
 					numeric(
 						`${period}.salesRemittancesTon`,
 						"Remitos ventas",
 						"consumos",
 					),
-					numeric(`${period}.totalConsumptionTon`, "Total", "consumos"),
-				]),
+					{
+						...numeric(`${period}.totalConsumptionTon`, "Total", "consumos"),
+						headerClass: ["laf-consumos", "laf-month-end"],
+						cellClass: ["laf-number", "laf-month-end"],
+					},
+				]), headerClass: ["laf-consumos", "laf-month-end"] }),
 			),
 		),
-		group("", "np", [numeric("pendingSalesOrderTon", "Pendiente (t)", "np")]),
+		group("", "np", [{
+			...numeric("pendingSalesOrderTon", "Pendiente en NP (ton)", "np"),
+			width: 185,
+			minWidth: 170,
+		}]),
 		group("", "stock", [
 			warehouses("stock.ton", "Toneladas", 2),
 			{
@@ -211,7 +219,7 @@ export function generarColumnas(periods, mainWarehouse = 973) {
 			warehouses("stock.units1050", "Unidades 10,50 m", 2),
 			warehouses("stock.unitsHl", "Unidades HL", 2),
 		]),
-		group("", "oc", [
+		group("", "oc", [group("Pendiente en OC", "oc", [
 			numeric("purchaseOrders.pendingTon", "Pendiente (t)", "oc"),
 			...[
 				["units13m", "Unidades 13 m"],
@@ -220,17 +228,21 @@ export function generarColumnas(periods, mainWarehouse = 973) {
 			].map(([field, title]) =>
 				numeric(`purchaseOrders.${field}`, title, "oc", 2),
 			),
-		]),
+		])]),
 		group(
 			"",
 			"datos",
 			[
-				{
-					field: "data.referenceCodeKg",
-					headerName: "Referencia kg",
-					width: 145,
-				},
-				numeric("data.kgPerMeterOrHl", "Kg / metro o HL", "datos", 2, false),
+				group("Peso teórico kg", "datos", [
+					{
+						field: "data.referenceCodeKg",
+						headerName: "Referencia kg",
+						headerTooltip: "Referencia kg",
+						headerClass: "laf-datos",
+						width: 145,
+					},
+					numeric("data.kgPerMeterOrHl", "Kg / metro o HL", "datos", 2, false),
+				]),
 				numeric(
 					"data.factorHomogeneousStock",
 					"Factor stock homog.",

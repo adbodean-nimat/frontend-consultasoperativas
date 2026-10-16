@@ -35,11 +35,12 @@ const api = shallowRef(null);
 const columns = computed(() => {
   const clean = cols => cols.map(({ sum, children, ...col }) => {
     if (children) return { ...col, children: clean(children) };
+    const blockClass = Array.isArray(col.headerClass) ? col.headerClass[0] : col.headerClass;
     // Subtotal cells reuse the color of their column block's header.
     return col.headerClass ? {
       ...col,
       cellClassRules: {
-        [col.headerClass]: p => Boolean(p.data?.isSubtotal ||
+        [blockClass]: p => Boolean(p.data?.isSubtotal ||
           (p.data?.isPercentage && col.field.endsWith('.totalConsumptionTon')))
       },
       ...(col.field.endsWith('.totalConsumptionTon') ? {
@@ -82,6 +83,7 @@ defineExpose({ exportar });
   --laf-stock: #e2efdf;
   --laf-oc: #c0dfc7;
   --laf-datos: #edf0f3;
+  --laf-month-divider: #71849b;
 }
 
 :deep(.laf-consumos) {
@@ -155,6 +157,12 @@ defineExpose({ exportar });
 
 :deep(.laf-separator .ag-cell) {
   border: 0;
+}
+
+:deep(.ag-header-group-cell.laf-month-end),
+:deep(.ag-header-cell.laf-month-end),
+:deep(.ag-cell.laf-month-end) {
+  border-right: 3px solid var(--laf-month-divider);
 }
 
 :deep(.ag-header-cell-comp-wrapper) {

@@ -260,13 +260,31 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="column-question text-center d-flex justify-content-between px-4 bg-white">
-                                <span></span><i class="pi pi-question-circle text-secondary"
-                                    title="Consumos, NP, stock, OC y datos técnicos por familia"></i>
-                            </div>
                             <div
-                                class="column-bottom d-flex justify-content-between align-items-center rounded-bottom px-4 bg-light">
-                                <span class="text-secondary">1.0.0</span><span class="text-secondary">CRL</span>
+                                class="column-question text-center h-10 d-flex justify-content-between align-items-center px-4 bg-white">
+                                <span class="fs-6 text-secondary"></span>
+                                <span class="fs-6 text-secondary">
+                                    <div id="tooltip" data-toggle="tooltip" data-placement="right"
+                                        title="Consumos, NP, stock, OC y datos técnicos por familia">
+                                        <i class="pi pi-question-circle text-secondary" aria-hidden="true"></i>
+                                    </div>
+                                </span>
+
+                            </div>
+                            <!-- <div
+                                class="column-question text-center h-10 d-flex justify-content-between align-items-center px-4 bg-white">
+                                <span class="fs-6 text-secondary"></span>
+                                <span class="fs-6 text-secondary">
+                                    <div id="tooltip" data-toggle="tooltip" data-placement="right"
+                                        title="Recepción de proveedores">
+                                        <i class="pi pi-question-circle" aria-hidden="true"></i>
+                                    </div>
+                                </span>
+                            </div> -->
+                            <div
+                                class="column-bottom h-10 d-flex justify-content-between align-items-center rounded-bottom px-4 bg-light">
+                                <span class="text-secondary">1.0.0</span>
+                                <span class="text-secondary">CRL</span>
                             </div>
                         </router-link>
                     </div>
