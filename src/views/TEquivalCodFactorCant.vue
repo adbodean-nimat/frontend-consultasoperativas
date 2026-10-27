@@ -238,6 +238,7 @@ export default {
       kendo.jQuery.when(data1, data2).then((response1, response2) => {
         var data1 = response1[0];
         var data2 = response2[0];
+
         var totalfalta = data1.length - data2.length
         var resumen = 'Total: PTF: ' + data1.length + ' - ' + 'Acindar: ' + data2.length + ' - ' + 'Faltantes: ' + totalfalta
         kendo.jQuery("#resumen").append(resumen);

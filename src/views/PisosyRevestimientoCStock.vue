@@ -32,7 +32,7 @@
         :page-size='200' :serverSorting="false">
       </datasource>
       <grid ref="grid" :height="'95vh'" :data-source-ref="'remoteDataSourcePyRconStock'" :sortable="false"
-        :filterable="true" :reorderable="true" :resizable="true" :groupable="false" :column-menu="true"
+        :pageable="true" :filterable="true" :reorderable="true" :resizable="true" :groupable="false" :column-menu="true"
         :toolbar="toolbarTemplate" :excel-file-name="'LP VN - Pisos y Revestimiento con stock.xlsx'"
         :excel-all-pages="true" :excel-filterable="false" :allow-copy="true" :selectable="true" :navigatable="true"
         :auto-bind="false" @excelexport="excelExport">
@@ -136,11 +136,14 @@ export default {
   },
   methods: {
     readData: function (e) {
-      // console.log(this.token)
+      var grid = this.$refs.grid.kendoWidget();
+      var gridElement = grid.element;
+      var dropDownElement = gridElement.find('#codcte');
+      var PerfilComercial = dropDownElement.data("kendoDropDownList").value();
       var token = this.token
       var urlApi = this.UrlApiBase
       kendo.jQuery.ajax({
-        url: urlApi,
+        url: urlApi + '?perfilcomercial=' + PerfilComercial,
         beforeSend: function (xhr) {
           xhr.setRequestHeader('Authorization', 'Bearer ' + token)
         },
@@ -322,10 +325,9 @@ export default {
         }
       } */
     });
-    toolbarElement.on("click", ".play", () => {
-      var PerfilComercial = dropDownElement.data("kendoDropDownList").value();
-      grid.dataSource.filter({ field: "DVC1_CLC1_CLASIF_1", operator: "contains", value: PerfilComercial })
-      grid.dataSource.sort({ field: 'Pre_Cdo_con_IVA_M2', dir: 'asc' })
+    toolbarElement.on("click", ".play", (e) => {
+      e.preventDefault();
+      grid.dataSource.read();
     });
 
     toolbarElement.on("click", ".refresh", function (e) {

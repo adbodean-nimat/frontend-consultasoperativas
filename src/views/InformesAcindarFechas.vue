@@ -484,7 +484,7 @@ export default {
           .done(
             function (data1, data2) {
               const getdata1 = data1[0]
-              const getdata2 = data2[0]
+              const getdata2 = data2
               const date = new Date();
               const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
               const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
