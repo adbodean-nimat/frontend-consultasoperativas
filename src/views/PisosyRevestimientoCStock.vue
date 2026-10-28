@@ -311,19 +311,6 @@ export default {
       index: 8,
       autoBind: true,
       dataSource: clasificadorclientes
-      /* {
-        transport:{
-          read: {
-            contentType: 'application/json',
-            dataType: 'json',
-            type: 'GET',
-            url: `${process.env.VUE_APP_API_BASE}/clasificadorclientes`,
-            headers: {
-              'Authorization': 'Bearer ' + this.token
-            }
-          }  
-        }
-      } */
     });
     toolbarElement.on("click", ".play", (e) => {
       e.preventDefault();

@@ -137,11 +137,14 @@ export default {
   },
   methods: {
     readData: function (e) {
-      // console.log(this.token)
+      var grid = this.$refs.grid.kendoWidget();
+      var gridElement = grid.element;
+      var dropDownElement = gridElement.find('#codcte');
+      var PerfilComercial = dropDownElement.data("kendoDropDownList").value();
       var token = this.token
       var urlApi = this.UrlApiBase
       var data = kendo.jQuery.ajax({
-        url: urlApi,
+        url: urlApi + '?perfilcomercial=' + PerfilComercial,
         beforeSend: function (xhr) {
           xhr.setRequestHeader('Authorization', 'Bearer ' + token)
         },
@@ -322,24 +325,10 @@ export default {
       index: 8,
       autoBind: true,
       dataSource: clasificadorclientes
-      /* {
-        transport:{
-          read: {
-            contentType: 'application/json',
-            dataType: 'json',
-            type: 'GET',
-            url: `${process.env.VUE_APP_API_BASE}/clasificadorclientes`,
-            headers: {
-              'Authorization': 'Bearer ' + this.token
-            }
-          }  
-        }
-      } */
     });
-    toolbarElement.on("click", ".play", () => {
-      var PerfilComercial = dropDownElement.data("kendoDropDownList").value();
-      grid.dataSource.filter({ field: "DVC1_CLC1_CLASIF_1", operator: "contains", value: PerfilComercial })
-      grid.dataSource.sort({ field: 'Pre_Cdo_con_IVA_M2', dir: 'asc' })
+    toolbarElement.on("click", ".play", (e) => {
+      e.preventDefault();
+      grid.dataSource.read();
     });
 
     toolbarElement.on("click", ".refresh", function (e) {
