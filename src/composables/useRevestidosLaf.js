@@ -1,6 +1,6 @@
 import { onBeforeUnmount, ref } from 'vue';
 import { obtenerRevestidosLaf } from '@/services/revestidosLaf';
-import { mensajeError, parametrosConsulta } from '@/utils/revestidosLaf';
+import { mensajeError, parametrosSolicitud } from '@/utils/revestidosLaf';
 
 export function useRevestidosLaf() {
   const resultado = ref(null);
@@ -10,7 +10,7 @@ export function useRevestidosLaf() {
   let controller;
   let activeKey;
   async function cargar(filters) {
-    const params = parametrosConsulta(filters);
+    const params = parametrosSolicitud(filters);
     const key = JSON.stringify(params);
     if (cargando.value && key === activeKey) return;
     controller?.abort();

@@ -21,12 +21,13 @@
             <i class="pi pi-sliders-h me-1" aria-hidden="true"></i>
           </router-link>
         </template>
-        <RevestidosLafFiltros v-model="filters" :cargando="cargando" @consultar="consultar" />
+        <RevestidosLafFiltros v-model="filters" :cargando="cargando" :restableciendo="restableciendo"
+          @consultar="consultar" @restablecer="restablecerFiltros" />
       </Panel>
     </div>
     <Message v-if="error || validationError" severity="error" :closable="false" class="my-2" role="alert">
       {{ error || validationError }}
-      <Button v-if="error" label="Reintentar" icon="pi pi-refresh" class="ms-3" :disabled="cargando"
+      <Button v-if="error" label="Reintentar" icon="pi pi-refresh" class="ms-3" :disabled="cargando || restableciendo"
         @click="consultar" />
     </Message>
     <Toolbar v-if="resultado" class="my-2 bg-transparent border-0 text-white">
@@ -79,12 +80,13 @@
           Los totales con datos no calculables también muestran —. ⚠: ver detalle al pasar el cursor por Estado técnico.
           % del total general: participación del subtotal en el consumo total de cada mes; — si el total es cero.
           Se conserva el orden de Compras.</p>
+        <p class="laf-help">Doble clic en una fila de familia: copiar Referencia kg para pegar en el ERP.</p>
       </template>
     </section>
   </main>
 </template>
 <script setup>
-import { computed, onBeforeUnmount, ref, watch } from 'vue';
+import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue';
 import { directive as vFullscreen, api as fullscreenApi } from 'vue-fullscreen';
 import { useRoute, useRouter } from 'vue-router';
 import Button from 'primevue/button';
@@ -96,11 +98,15 @@ import ProgressSpinner from 'primevue/progressspinner';
 import RevestidosLafFiltros from '@/components/revestidos-laf/RevestidosLafFiltros.vue';
 import RevestidosLafGrilla from '@/components/revestidos-laf/RevestidosLafGrilla.vue';
 import { useRevestidosLaf } from '@/composables/useRevestidosLaf';
-import { filtrosDesdeQuery, parametrosConsulta, etiquetaPeriodo, ESTADOS } from '@/utils/revestidosLaf';
+import { listarConfiguracion } from '@/services/revestidosLafConfiguracion';
+import { filtrosDesdeQuery, parametrosConsulta, etiquetaPeriodo, mensajeError, ESTADOS } from '@/utils/revestidosLaf';
 const route = useRoute();
 const router = useRouter();
-const filters = ref(filtrosDesdeQuery(route.query));
+const filters = ref({ months: null, rotationDays: null });
 const validationError = ref('');
+const restableciendo = ref(false);
+let resetController;
+let omitirConsultaPorRestablecer = false;
 const grid = ref(null);
 const fullscreenTarget = ref(null);
 const fullscreengrid = ref(false);
@@ -111,6 +117,7 @@ const FullScreenGrid = computed(() => ({
   teleport: true,
 }));
 onBeforeUnmount(() => {
+  resetController?.abort();
   if (fullscreenApi.element === fullscreenTarget.value) fullscreenApi.exit();
 });
 const { resultado, cargando, error, ultimaActualizacion, cargar } = useRevestidosLaf();
@@ -120,7 +127,11 @@ const periodo = computed(() => resultado.value?.periods.length
 const fechaActualizacion = computed(() => new Intl.DateTimeFormat('es-AR', { dateStyle: 'short', timeStyle: 'medium', timeZone: 'America/Argentina/Buenos_Aires' }).format(ultimaActualizacion.value));
 const globalWarnings = computed(() => resultado.value?.warnings.map(w => ESTADOS[w.code] ?? w.code).join('; '));
 async function consultar() {
-  if (cargando.value) return;
+  if (cargando.value || restableciendo.value) return;
+  if (filters.value.months === null || filters.value.rotationDays === null) {
+    await cargar(filtrosDesdeQuery(route.query));
+    return;
+  }
   try {
     const params = parametrosConsulta(filters.value);
     validationError.value = '';
@@ -129,11 +140,45 @@ async function consultar() {
     else await cargar(params);
   } catch (err) { validationError.value = err.message; }
 }
-watch(() => [route.query.months, route.query.rotationDays], () => {
-  filters.value = filtrosDesdeQuery(route.query);
+async function restablecerFiltros() {
+  if (cargando.value || restableciendo.value) return;
+  const current = new AbortController();
+  resetController = current;
+  restableciendo.value = true;
   validationError.value = '';
-  cargar(filters.value);
+  try {
+    const rows = await listarConfiguracion('general', current.signal);
+    if (current.signal.aborted) return;
+    const general = rows.find(row => Number(row.id) === 1);
+    if (!general || general.meses_consumo_default == null || general.dias_rotacion_default == null) {
+      throw new Error('La configuración general no contiene los valores predeterminados.');
+    }
+    const defaults = parametrosConsulta({ months: general.meses_consumo_default, rotationDays: general.dias_rotacion_default });
+    const { months, rotationDays, ...query } = route.query;
+    // Clearing the URL here changes only the form; the displayed result is preserved.
+    omitirConsultaPorRestablecer = true;
+    try {
+      if (months !== undefined || rotationDays !== undefined) await router.replace({ query });
+      await nextTick();
+      if (!current.signal.aborted) filters.value = defaults;
+    } finally { omitirConsultaPorRestablecer = false; }
+  } catch (err) {
+    if (!current.signal.aborted) validationError.value = `No se pudieron restablecer los filtros. ${mensajeError(err)}`;
+  } finally {
+    if (resetController === current) { restableciendo.value = false; resetController = null; }
+  }
+}
+watch(() => [route.query.months, route.query.rotationDays], () => {
+  if (omitirConsultaPorRestablecer) return;
+  resetController?.abort();
+  const params = filtrosDesdeQuery(route.query);
+  filters.value = { months: params.months ?? null, rotationDays: params.rotationDays ?? null };
+  validationError.value = '';
+  cargar(params);
 }, { immediate: true });
+watch(resultado, data => {
+  if (data) filters.value = { months: data.parameters.months, rotationDays: data.parameters.rotationDays };
+});
 </script>
 <style scoped>
 .laf-page {

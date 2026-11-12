@@ -26,10 +26,18 @@ export function parametrosConsulta(filters = DEFAULT_FILTERS) {
 
 export function filtrosDesdeQuery(query) {
 	try {
-		return parametrosConsulta({ ...DEFAULT_FILTERS, ...query });
+		return parametrosSolicitud(query);
 	} catch {
-		return { ...DEFAULT_FILTERS };
+		return {};
 	}
+}
+
+// Omitted parameters are resolved by backend configuration, never frontend defaults.
+export function parametrosSolicitud(filters = {}) {
+	const validated = parametrosConsulta(filters);
+	return Object.fromEntries(Object.keys(DEFAULT_FILTERS)
+		.filter(key => filters[key] !== undefined)
+		.map(key => [key, validated[key]]));
 }
 
 export function numero(value) {
@@ -65,6 +73,16 @@ export function formatoPorcentaje(value) {
 	return number === null ? "—" : new Intl.NumberFormat("es-AR", {
 		style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2,
 	}).format(number);
+}
+
+export async function copiarReferenciaKg(row, rowPinned = false, clipboard = globalThis.navigator?.clipboard) {
+	if (!row || rowPinned || row.isSubtotal || row.isPercentage || row.isSeparator || row.originalIndex === undefined) return null;
+	const value = row["data.referenceCodeKg"] ?? row.data?.referenceCodeKg;
+	if (typeof value !== "string" || !value.trim()) return null;
+	const code = value.trim();
+	if (!clipboard?.writeText) throw new Error("El portapapeles no está disponible en este navegador.");
+	await clipboard.writeText(code);
+	return code;
 }
 
 export const ESTADOS = {
@@ -230,13 +248,13 @@ export function generarColumnas(periods, mainWarehouse = 973) {
 			minWidth: 170,
 		}]),
 		group("", "stock", [
-			warehouses("stock.ton", "Toneladas", 2, [{
+			warehouses("stock.ton", "Stock toneladas", 2, [{
 				...numeric("stock.ton.days", "Stock en días", "stock", 2, false),
 				tooltipField: "daysExplanation",
 			}]),
-			warehouses("stock.units13m", "Unidades 13 m", 2),
-			warehouses("stock.units1050", "Unidades 10,50 m", 2),
-			warehouses("stock.unitsHl", "Unidades HL", 2),
+			warehouses("stock.units13m", "Stock Unidades 13 m", 2),
+			warehouses("stock.units1050", "Stock Unidades 10,50 m", 2),
+			warehouses("stock.unitsHl", "Stock unidades HL", 2),
 		].map(blockEnd)),
 		group("", "oc", [group("Pendiente en OC", "oc", [
 			numeric("purchaseOrders.pendingTon", "Pendiente (t)", "oc"),
@@ -442,7 +460,7 @@ export function mensajeError(error) {
 
 export async function consultarConCliente(http, filters, signal) {
 	const { data } = await http.get(ENDPOINT, {
-		params: parametrosConsulta(filters),
+		params: parametrosSolicitud(filters),
 		signal,
 		timeout: 330000,
 	});

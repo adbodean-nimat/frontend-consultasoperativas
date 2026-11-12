@@ -1,18 +1,23 @@
 <template>
   <div class="laf-grid directive-fullscreen-wrapper-grid" role="region"
     aria-label="Chapas Revestidas y LAF: consumos, NP, stock, OC y datos">
+    <Toast group="laf-reference" position="bottom-right" :baseZIndex="10000" />
     <AgGridVue style="width: 100%; height: 100%" :theme="theme" :modules="modules" :rowData="resultado.displayRows"
       :columnDefs="columns" :defaultColDef="defaultColDef"
       :pinnedBottomRowData="resultado.rows.length ? [resultado.totals] : []" :suppressFieldDotNotation="true"
       :suppressMovableColumns="true" :getRowId="getRowId" :getRowClass="getRowClass" :getRowHeight="getRowHeight" :headerHeight="36"
       :groupHeaderHeight="32" :tooltipShowDelay="200"
-      overlayNoRowsTemplate="No hay familias activas para el período consultado." @grid-ready="api = $event.api" />
+      overlayNoRowsTemplate="No hay familias activas para el período consultado." @grid-ready="api = $event.api"
+      @row-double-clicked="copiarReferenciaFila" />
   </div>
 </template>
 <script setup>
 import { computed, shallowRef } from 'vue';
 import { AgGridVue } from 'ag-grid-vue3';
 import { AllCommunityModule, themeBalham } from 'ag-grid-community';
+import Toast from 'primevue/toast';
+import { useToast } from 'primevue/usetoast';
+import { copiarReferenciaKg } from '@/utils/revestidosLaf';
 const props = defineProps({ resultado: { type: Object, required: true } });
 const modules = [AllCommunityModule];
 const theme = themeBalham.withParams(
@@ -31,6 +36,18 @@ const defaultColDef = {
   suppressNavigable: p => Boolean(p.data?.isSeparator),
 };
 const api = shallowRef(null);
+const toast = useToast();
+async function copiarReferenciaFila({ data, node }) {
+  try {
+    const code = await copiarReferenciaKg(data, node?.rowPinned);
+    if (code === null) return;
+    toast.add({ group: 'laf-reference', severity: 'success', summary: 'Referencia copiada',
+      detail: `${code} · Listo para pegar en el ERP.`, life: 2500 });
+  } catch (error) {
+    toast.add({ group: 'laf-reference', severity: 'error', summary: 'No se pudo copiar la referencia',
+      detail: error?.message || 'El navegador no permitió acceder al portapapeles.', life: 4000 });
+  }
+}
 // Metadata for totals is not an AG Grid column option.
 const columns = computed(() => {
   const clean = cols => cols.map(({ sum, children, ...col }) => {

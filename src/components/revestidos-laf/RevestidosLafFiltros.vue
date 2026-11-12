@@ -3,23 +3,28 @@
     <div class="field">
       <label for="laf-months">Meses anteriores</label>
       <input id="laf-months" class="form-control" type="number" min="1" :max="LIMITS.months" step="1" required
-        :value="modelValue.months" @input="actualizar('months', $event.target.value)" />
+        :value="modelValue.months" :disabled="cargando || restableciendo"
+        @input="actualizar('months', $event.target.value)" />
       <small>Mes actual + {{ modelValue.months || '—' }} anteriores</small>
     </div>
     <div class="field">
       <label for="laf-days">Días de consumo</label>
       <input id="laf-days" class="form-control" type="number" min="1" :max="LIMITS.rotationDays" step="1" required
-        :value="modelValue.rotationDays" @input="actualizar('rotationDays', $event.target.value)" />
+        :value="modelValue.rotationDays" :disabled="cargando || restableciendo"
+        @input="actualizar('rotationDays', $event.target.value)" />
       <small>Días de consumo para rotación</small>
     </div>
-    <Button type="submit" label="Consultar" icon="pi pi-play" outlined :loading="cargando" :disabled="cargando" />
+    <Button type="submit" label="Consultar" icon="pi pi-play" outlined :loading="cargando"
+      :disabled="cargando || restableciendo" />
+    <Button type="button" icon="pi pi-filter-slash" severity="secondary" outlined :loading="restableciendo"
+      :disabled="cargando || restableciendo" @click="emit('restablecer')" />
   </form>
 </template>
 <script setup>
 import Button from 'primevue/button';
 import { LIMITS } from '@/utils/revestidosLaf';
-const props = defineProps({ modelValue: { type: Object, required: true }, cargando: Boolean });
-const emit = defineEmits(['update:modelValue', 'consultar']);
+const props = defineProps({ modelValue: { type: Object, required: true }, cargando: Boolean, restableciendo: Boolean });
+const emit = defineEmits(['update:modelValue', 'consultar', 'restablecer']);
 const actualizar = (key, value) => emit('update:modelValue', { ...props.modelValue, [key]: value });
 </script>
 <style scoped>

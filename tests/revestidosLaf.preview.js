@@ -3,6 +3,7 @@
 import { createApp, h, ref } from 'vue';
 import { createRouter, createWebHistory, RouterView } from 'vue-router';
 import PrimeVue from 'primevue/config';
+import ToastService from 'primevue/toastservice';
 import Lara from '@primeuix/themes/lara';
 import api from '../src/services/api';
 import RevestidosLaf from '../src/views/RevestidosLaf.vue';
@@ -25,6 +26,7 @@ api.defaults.adapter = async config => {
       const row = Object.fromEntries(definition.fields.map(f => [f.key, f.type === 'boolean' ? true : f.type === 'number' ? 1 : f.nullable ? null : f.key === 'clasificador_8_excluido_stock' ? '0145' : 'Prueba']));
       row[definition.key] = resource === 'general' || resource === 'depositos-excluidos' ? 1 : resource === 'familias' ? '0001' : '001';
       if (resource === 'familias') row.codigo_ref_hl = '00001';
+      if (resource === 'general') { row.meses_consumo_default = 13; row.dias_rotacion_default = 120; }
       configurationRows.set(resource, [row]);
     }
     const rows = configurationRows.get(resource);
@@ -50,11 +52,13 @@ api.defaults.adapter = async config => {
     return { data: { ok: true, row }, status: config.method === 'post' ? 201 : 200, config, headers: {} };
   }
   if (config.url !== '/api/gdc/revestidos-laf') throw new Error('El harness solo admite la API GDC simulada.');
-  if (config.params.months === 60) throw { response: { status: 503, data: { message: 'ERP no disponible (error simulado)' } } };
+  const general = configurationRows.get('general')?.[0];
+  const params = { months: general?.meses_consumo_default ?? 13, rotationDays: general?.dias_rotacion_default ?? 120, ...config.params };
+  if (params.months === 60) throw { response: { status: 503, data: { message: 'ERP no disponible (error simulado)' } } };
   const data = response();
-  data.parameters.months = config.params.months;
-  data.parameters.rotationDays = config.params.rotationDays;
-  data.periods = Array.from({ length: config.params.months + 1 }, (_, i) => new Date(Date.UTC(2026, 9 - config.params.months + i, 1)).toISOString().slice(0, 7));
+  data.parameters.months = params.months;
+  data.parameters.rotationDays = params.rotationDays;
+  data.periods = Array.from({ length: params.months + 1 }, (_, i) => new Date(Date.UTC(2026, 9 - params.months + i, 1)).toISOString().slice(0, 7));
   data.parameters.dateFrom = `${data.periods[0]}-01`;
   data.families = Array.from({ length: 120 }, (_, i) => {
     const f = family(String(i + 1).padStart(4, '0'), ['Chapa galvanizada', 'Chapa prepintada', 'LAF'][i % 3]);
@@ -72,4 +76,4 @@ const router = createRouter({ history: createWebHistory(), routes: [
   { path: '/gdc/revestidos-laf/configuracion', name: 'revestidos-laf-configuracion', component: Configuracion },
 ] });
 createApp({ render: () => h('div', [h('p', { style: 'margin:0;padding:6px;background:#fff2cc', 'data-testid': 'preview-calls' }, `VISTA DE PRUEBA · datos simulados · ${calls.value.length} solicitudes · ${calls.value.at(-1) ?? ''}`), h(RouterView)]) })
-  .use(router).use(PrimeVue, { theme: { preset: Lara, options: { darkModeSelector: 'none' } } }).mount('#app');
+  .use(router).use(ToastService).use(PrimeVue, { theme: { preset: Lara, options: { darkModeSelector: 'none' } } }).mount('#app');

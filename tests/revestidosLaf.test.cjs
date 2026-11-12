@@ -12,9 +12,149 @@ before(async () => {
 test('defaults, límites y URL: solo enteros válidos', () => {
   assert.deepEqual(utils.parametrosConsulta(), { months: 12, rotationDays: 120 });
   assert.deepEqual(utils.filtrosDesdeQuery({ months: '24', rotationDays: '180' }), { months: 24, rotationDays: 180 });
-  assert.deepEqual(utils.filtrosDesdeQuery({ months: 'invalid' }), utils.DEFAULT_FILTERS);
+  assert.deepEqual(utils.filtrosDesdeQuery({ months: 'invalid' }), {});
   for (const value of [0, -1, 61, 1.5, '', null, '1e1', ['12'], true]) assert.throws(() => utils.parametrosConsulta({ months: value }));
   assert.throws(() => utils.parametrosConsulta({ rotationDays: 3661 }));
+});
+
+test('consulta inicial respeta configuración backend y URL parcial sin enviar defaults fijos', async () => {
+  assert.deepEqual(utils.filtrosDesdeQuery({}), {});
+  assert.deepEqual(utils.filtrosDesdeQuery({ months: '13', unrelated: 'ignored' }), { months: 13 });
+  assert.deepEqual(utils.parametrosSolicitud(), {});
+  assert.deepEqual(utils.parametrosSolicitud({ rotationDays: '180' }), { rotationDays: 180 });
+  assert.throws(() => utils.parametrosSolicitud({ months: 0 }));
+  const calls = [];
+  const http = { get: async (endpoint, options) => {
+    calls.push({ endpoint, ...options });
+    const data = response();
+    data.parameters.months = options.params.months ?? 13;
+    data.parameters.rotationDays = options.params.rotationDays ?? 150;
+    data.periods = Array.from({ length: data.parameters.months + 1 }, (_, i) => new Date(Date.UTC(2025, 8 + i, 1)).toISOString().slice(0, 7));
+    return { data };
+  } };
+  const first = await utils.consultarConCliente(http, {});
+  assert.equal(calls.length, 1);
+  assert.deepEqual(calls[0].params, {});
+  assert.equal(first.parameters.months, 13);
+  assert.equal(first.parameters.rotationDays, 150);
+  assert.equal(first.periods.length, 14);
+  const explicit = await utils.consultarConCliente(http, utils.filtrosDesdeQuery({ months: '12' }));
+  assert.deepEqual(calls[1].params, { months: 12 });
+  assert.equal(explicit.parameters.months, 12);
+  assert.equal(explicit.parameters.rotationDays, 150);
+});
+
+test('restablecer lee configuración actual sin consultar ni modificar la grilla; Consultar aplica los filtros', async () => {
+  const { createRenderer, nextTick } = require('vue');
+  const { parse, compileScript } = require('@vue/compiler-sfc');
+  const { pathToFileURL } = require('node:url');
+  const asUrl = source => `data:text/javascript;base64,${Buffer.from(source).toString('base64')}`;
+  const vueUrl = pathToFileURL(require.resolve('vue')).href;
+  const utilsUrl = asUrl(fs.readFileSync(path.resolve(__dirname, '../src/utils/revestidosLaf.js'), 'utf8'));
+  const serviceUrl = asUrl(`import { adaptarRespuesta } from ${JSON.stringify(utilsUrl)};
+    export const calls = []; let fail = false; export const failOnce = () => { fail = true; };
+    let defaults = { months: 13, rotationDays: 150 }; export const setDefaults = values => { defaults = values; };
+    export const getDefaults = () => ({ ...defaults });
+    export async function obtenerRevestidosLaf(params) { calls.push(params);
+      if (fail) { fail = false; throw new Error('ERP no disponible'); }
+      const data = ${JSON.stringify(response())};
+      data.parameters.months = params.months ?? defaults.months; data.parameters.rotationDays = params.rotationDays ?? defaults.rotationDays;
+      return adaptarRespuesta(data); }`);
+  const configServiceUrl = asUrl(`import { getDefaults } from ${JSON.stringify(serviceUrl)};
+    export const calls = []; let fail = false; export const failOnce = () => { fail = true; };
+    export async function listarConfiguracion(resource, signal) {
+      calls.push({ resource, signal }); await Promise.resolve();
+      if (fail) { fail = false; throw new Error('Configuración no disponible'); }
+      const defaults = getDefaults();
+      return [{ id: 1, meses_consumo_default: defaults.months, dias_rotacion_default: defaults.rotationDays }];
+    }`);
+  const composableUrl = asUrl(fs.readFileSync(path.resolve(__dirname, '../src/composables/useRevestidosLaf.js'), 'utf8')
+    .replace("'vue'", JSON.stringify(vueUrl)).replace("'@/services/revestidosLaf'", JSON.stringify(serviceUrl))
+    .replace("'@/utils/revestidosLaf'", JSON.stringify(utilsUrl)));
+  const routerUrl = asUrl(`import { reactive } from ${JSON.stringify(vueUrl)};
+    export const route = reactive({ query: {} }); export const useRoute = () => route;
+    export const useRouter = () => ({ replace: async ({ query }) => { route.query = query; } });`);
+  const { descriptor } = parse(fs.readFileSync(path.resolve(__dirname, '../src/views/RevestidosLaf.vue'), 'utf8'));
+  const source = compileScript(descriptor, { id: 'laf-view-test' }).content
+    .replace("'vue'", JSON.stringify(vueUrl)).replace("'vue-router'", JSON.stringify(routerUrl))
+    .replace(/^import .* from 'vue-fullscreen';$/m, 'const vFullscreen = {}; const fullscreenApi = {};')
+    .replace(/^import (\w+) from '(?:primevue\/[^']+|@\/components\/[^']+)';$/gm, 'const $1 = {};')
+    .replace("'@/composables/useRevestidosLaf'", JSON.stringify(composableUrl))
+    .replace("'@/services/revestidosLafConfiguracion'", JSON.stringify(configServiceUrl))
+    .replace("'@/utils/revestidosLaf'", JSON.stringify(utilsUrl));
+  const { default: View } = await import(asUrl(source));
+  const router = await import(routerUrl), service = await import(serviceUrl);
+  const configService = await import(configServiceUrl);
+  const renderer = createRenderer({
+    createComment: text => ({ text }), insert() {}, remove() {}, parentNode() {}, nextSibling() {},
+  });
+  const mount = () => { const app = renderer.createApp({ ...View, render: () => null }); app.mount({}); return app; };
+  const flush = async () => { await new Promise(resolve => setImmediate(resolve)); await nextTick(); };
+  const app = mount();
+  try {
+    await flush();
+    const state = app._instance.setupState;
+    assert.deepEqual(service.calls, [{}]);
+    assert.deepEqual(state.filters, { months: 13, rotationDays: 150 });
+    state.filters.months = 8;
+    await state.consultar(); await flush();
+    assert.deepEqual(service.calls[1], { months: 8, rotationDays: 150 });
+    assert.equal(service.calls.length, 2);
+    router.route.query = { months: '12', source: 'compras' }; await flush();
+    assert.deepEqual(service.calls[2], { months: 12 });
+    assert.deepEqual(state.filters, { months: 12, rotationDays: 150 });
+    const previousResult = state.resultado, previousUpdate = state.ultimaActualizacion;
+    await state.restablecerFiltros(); await flush();
+    assert.deepEqual(router.route.query, { source: 'compras' });
+    assert.equal(service.calls.length, 3);
+    assert.equal(configService.calls.length, 1);
+    assert.equal(configService.calls[0].resource, 'general');
+    assert.strictEqual(state.resultado, previousResult);
+    assert.strictEqual(state.ultimaActualizacion, previousUpdate);
+    assert.deepEqual(state.filters, { months: 13, rotationDays: 150 });
+    // A clean URL still reloads current configuration, discarding unsaved invalid inputs.
+    service.setDefaults({ months: 14, rotationDays: 180 });
+    state.filters.months = 0;
+    await state.consultar();
+    assert.ok(state.validationError);
+    await state.restablecerFiltros(); await flush();
+    assert.equal(service.calls.length, 3);
+    assert.equal(configService.calls.length, 2);
+    assert.equal(state.validationError, '');
+    assert.deepEqual(state.filters, { months: 14, rotationDays: 180 });
+    assert.strictEqual(state.resultado, previousResult);
+    const count = configService.calls.length;
+    const firstReset = state.restablecerFiltros();
+    await state.restablecerFiltros(); await firstReset; await flush();
+    assert.equal(configService.calls.length, count + 1);
+    assert.equal(service.calls.length, 3);
+    configService.failOnce();
+    await state.restablecerFiltros(); await flush();
+    assert.match(state.validationError, /Configuración no disponible/);
+    assert.deepEqual(state.filters, { months: 14, rotationDays: 180 });
+    assert.strictEqual(state.resultado, previousResult);
+    await state.restablecerFiltros(); await flush();
+    assert.equal(state.validationError, '');
+    assert.equal(service.calls.length, 3);
+    assert.deepEqual(state.filters, { months: 14, rotationDays: 180 });
+    await state.consultar(); await flush();
+    assert.equal(service.calls.length, 4);
+    assert.deepEqual(service.calls[3], { months: 14, rotationDays: 180 });
+    assert.equal(state.resultado.parameters.months, 14);
+  } finally { app.unmount(); }
+  service.setDefaults({ months: 13, rotationDays: 150 });
+  router.route.query = {}; service.failOnce();
+  const retryApp = mount();
+  try {
+    await flush();
+    const state = retryApp._instance.setupState;
+    assert.equal(state.error, 'ERP no disponible');
+    assert.deepEqual(state.filters, { months: null, rotationDays: null });
+    await state.consultar(); await flush();
+    assert.deepEqual(service.calls.at(-1), {});
+    assert.deepEqual(state.filters, { months: 13, rotationDays: 150 });
+    assert.equal(state.error, '');
+  } finally { retryApp.unmount(); }
 });
 test('months=12 incluye mes actual y doce anteriores; períodos y columnas cronológicos', () => {
   const data = response();
@@ -33,6 +173,31 @@ test('formatos es-AR: toneladas, unidades, cero y nulos', () => {
   assert.equal(utils.formatoNumero(0), '0,00');
   assert.equal(utils.formatoNumero(12), '12,00');
   for (const value of [null, undefined, '', NaN, Infinity]) assert.equal(utils.formatoNumero(value), '—');
+});
+
+test('doble clic copia solo Referencia kg como texto y conserva ceros iniciales', async () => {
+  const copied = [];
+  const clipboard = { writeText: async code => { copied.push(code); } };
+  const row = utils.adaptarRespuesta(response()).rows[0];
+  assert.equal(await utils.copiarReferenciaKg(row, false, clipboard), '0000013');
+  assert.deepEqual(copied, ['0000013']);
+  assert.equal(await utils.copiarReferenciaKg({ originalIndex: 1, data: { referenceCodeKg: '0012345' } }, false, clipboard), '0012345');
+  assert.deepEqual(copied, ['0000013', '0012345']);
+});
+
+test('copia ignora filas especiales y referencias vacías, y comunica errores de portapapeles', async () => {
+  const copied = [];
+  const clipboard = { writeText: async code => { copied.push(code); } };
+  const row = utils.adaptarRespuesta(response()).rows[0];
+  for (const special of [null, {}, { ...row, isSubtotal: true }, { ...row, isPercentage: true },
+    { ...row, isSeparator: true }, ...[null, undefined, '', '  '].map(referenceCodeKg => ({ originalIndex: 0, data: { referenceCodeKg } }))]) {
+    assert.equal(await utils.copiarReferenciaKg(special, false, clipboard), null);
+  }
+  assert.equal(await utils.copiarReferenciaKg(row, 'bottom', clipboard), null);
+  assert.deepEqual(copied, []);
+  await assert.rejects(utils.copiarReferenciaKg(row, false, null), /portapapeles no está disponible/);
+  const denied = new Error('Permiso de portapapeles denegado');
+  await assert.rejects(utils.copiarReferenciaKg(row, false, { writeText: async () => { throw denied; } }), error => error === denied);
 });
 test('orden de Compras y agrupación contigua conservados', () => {
   const { rows } = utils.adaptarRespuesta(response());

@@ -23,7 +23,7 @@ roles que la consulta de Compras v2: Gerencia, Sistemas o Compras.
 
 ## Rutas y archivos
 
-- `/gdc/revestidos-laf`: consulta automática, filtros 12/120, parámetros compartibles
+- `/gdc/revestidos-laf`: consulta automática, filtros iniciales de la configuración backend, parámetros compartibles
   `months` y `rotationDays`, grilla y CSV. Entrada en `components/GestionCompras.vue`.
 - `/gdc/revestidos-laf/configuracion`: edición de las seis configuraciones,
   activación/desactivación y códigos inmutables. Acceso desde la cabecera de consulta.
@@ -58,6 +58,13 @@ separa visualmente los cambios contiguos de Clasificador 4, sin reagrupar ni ord
 familias. No se habilitan edición, ordenamiento ni filtros de columnas que alteren
 la presentación de Compras. Los avisos se ven también en la familia fijada,
 con detalles en tooltips, y en Estado técnico.
+
+Un doble clic en cualquier celda de una fila de familia copia únicamente su
+Referencia kg al portapapeles, conservando ceros iniciales y sin encabezados ni
+otros datos. No copia subtotales, porcentajes, separadores, total general ni
+referencias vacías. Usa la API Clipboard del navegador y los avisos PrimeVue
+existentes; confirma solo al completarse la copia y muestra el error si no se
+permite acceder al portapapeles. El aviso también se ve en pantalla completa.
 
 Diferencia del contrato: no hay totales generales. `calcularTotales` suma solo
 toneladas y unidades; si algún valor de una columna es null/desconocido, el total
@@ -104,7 +111,21 @@ de fila usan iconos con tooltip y nombre accesible. Eliminar pide confirmación 
 explica que el borrado es definitivo. Desactivar conserva el registro mediante PUT
 con `activo=false`. No se realizan conexiones a
 PostgreSQL/SQL Server. Los cambios se aplican en la siguiente consulta.
-Los valores iniciales de la consulta continúan siendo 12/120, como se solicitó.
+La primera consulta omite los parámetros no especificados en la URL para que el
+backend aplique `meses_consumo_default` y `dias_rotacion_default`. Los filtros se
+completan con `parameters.months` y `parameters.rotationDays` de esa misma respuesta,
+sin consultas adicionales de configuración ni otra llamada consolidada. Mientras
+carga, los campos pendientes quedan vacíos y deshabilitados. Los parámetros
+explícitos en una URL compartida tienen prioridad; por ejemplo `?months=12` mantiene
+12 aunque el valor configurado sea 13. Al entrar sin ese parámetro se usa el nuevo
+valor configurado. Los reintentos iniciales conservan los parámetros omitidos.
+El botón Restablecer filtros lee `GET /configuracion/general` en cada clic para
+obtener los valores actuales, sin caché local. Completa solo los campos de búsqueda
+y elimina `months` y `rotationDays` de la URL sin disparar el endpoint consolidado.
+La grilla, el período consultado y la última actualización se conservan. Solo el
+botón Consultar aplica los nuevos filtros. También funciona con la URL ya limpia;
+conserva otros parámetros de navegación y bloquea clics duplicados mientras carga.
+Si falla la lectura, conserva filtros y resultados y muestra el error.
 
 ## Verificación y reproducción
 
