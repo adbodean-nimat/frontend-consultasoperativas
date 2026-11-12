@@ -80,7 +80,9 @@ defineExpose({ exportar });
   min-width: 0;
   --laf-consumos: #dce9fa;
   --laf-np: #e2f3fa;
+  --laf-np-header: #fff2b3;
   --laf-stock: #e2efdf;
+  --laf-ton-total: #c0dfc7;
   --laf-oc: #c0dfc7;
   --laf-datos: #edf0f3;
   --laf-month-divider: #71849b;
@@ -97,9 +99,20 @@ defineExpose({ exportar });
   color: #183856;
 }
 
+:deep(.ag-header-cell.laf-np) {
+  background: var(--laf-np-header);
+  color: #514400;
+}
+
 :deep(.laf-stock) {
   background: var(--laf-stock);
   color: #24402b;
+}
+
+:deep(.ag-header-cell.laf-ton-total),
+:deep(.ag-cell.laf-ton-total) {
+  background: var(--laf-ton-total);
+  color: #193c23;
 }
 
 :deep(.laf-oc) {
@@ -161,7 +174,10 @@ defineExpose({ exportar });
 
 :deep(.ag-header-group-cell.laf-month-end),
 :deep(.ag-header-cell.laf-month-end),
-:deep(.ag-cell.laf-month-end) {
+:deep(.ag-cell.laf-month-end),
+:deep(.ag-header-group-cell.laf-block-end),
+:deep(.ag-header-cell.laf-block-end),
+:deep(.ag-cell.laf-block-end) {
   border-right: 3px solid var(--laf-month-divider);
 }
 

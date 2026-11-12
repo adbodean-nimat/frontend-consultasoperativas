@@ -140,7 +140,7 @@ export function generarColumnas(periods, mainWarehouse = 973) {
 		marryChildren: true,
 		children,
 	});
-	const warehouses = (path, title, decimals) =>
+	const warehouses = (path, title, decimals, extraColumns = []) =>
 		group(title, "stock", [
 			{
 				...numeric(
@@ -152,8 +152,28 @@ export function generarColumnas(periods, mainWarehouse = 973) {
 				headerTooltip: `Depósito principal ${mainWarehouse} · ${title}`,
 			},
 			numeric(`${path}.otherWarehouses`, "Otros depósitos", "stock", decimals),
-			numeric(`${path}.total`, "Total", "stock", decimals),
+			{
+				...numeric(`${path}.total`, "Total", "stock", decimals),
+				...(path === "stock.ton" ? {
+					headerClass: ["laf-stock", "laf-ton-total"],
+					cellClass: ["laf-number", "laf-ton-total"],
+				} : {}),
+			},
+			...extraColumns,
 		]);
+	const addClass = (classes, name) => [...new Set([...(Array.isArray(classes) ? classes : classes ? [classes] : []), name])];
+	// Mark the right edge of each block, including its nested header groups.
+	const blockEnd = (column) => ({
+		...column,
+		headerClass: addClass(column.headerClass, "laf-block-end"),
+		...(column.children ? {
+			children: column.children.map((child, index) => index === column.children.length - 1 ? blockEnd(child) : child),
+		} : {
+			cellClass: typeof column.cellClass === "function"
+				? params => addClass(column.cellClass(params), "laf-block-end")
+				: addClass(column.cellClass, "laf-block-end"),
+		}),
+	});
 	return [
 		{
 			headerName: "",
@@ -210,15 +230,14 @@ export function generarColumnas(periods, mainWarehouse = 973) {
 			minWidth: 170,
 		}]),
 		group("", "stock", [
-			warehouses("stock.ton", "Toneladas", 2),
-			{
+			warehouses("stock.ton", "Toneladas", 2, [{
 				...numeric("stock.ton.days", "Stock en días", "stock", 2, false),
 				tooltipField: "daysExplanation",
-			},
+			}]),
 			warehouses("stock.units13m", "Unidades 13 m", 2),
 			warehouses("stock.units1050", "Unidades 10,50 m", 2),
 			warehouses("stock.unitsHl", "Unidades HL", 2),
-		]),
+		].map(blockEnd)),
 		group("", "oc", [group("Pendiente en OC", "oc", [
 			numeric("purchaseOrders.pendingTon", "Pendiente (t)", "oc"),
 			...[
@@ -269,7 +288,7 @@ export function generarColumnas(periods, mainWarehouse = 973) {
 				...c,
 			})),
 		),
-	];
+	].map(block => ["laf-np", "laf-stock", "laf-oc", "laf-datos"].includes(block.headerClass) ? blockEnd(block) : block);
 }
 
 export function columnasHoja(columns) {
