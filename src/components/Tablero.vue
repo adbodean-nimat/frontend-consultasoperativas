@@ -112,7 +112,7 @@
                             </div>
                         </router-link>
                     </div>
-                    <div v-if="hasRole(['Gerencia', 'Sistemas', 'Ventas'])" class="col col-h">
+                    <div v-if="hasRole(['Gerencia', 'Sistemas'])" class="col col-h">
                         <router-link :to="{ name: 'chatbot' }">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
                                 <div
