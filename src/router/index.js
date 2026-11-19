@@ -122,7 +122,7 @@ const routes = [
 			{
 				path: "",
 				name: "chatbot",
-				component: () => import("@/views/Chatbot.vue"),
+				component: () => import("@/views/ChatBot.vue"),
 				meta: {
 					requiresAuth: true,
 					roles: CHATBOT_ROLES,
