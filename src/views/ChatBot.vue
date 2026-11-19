@@ -4,8 +4,14 @@
     </div>
 </template>
 
-<script setup>
+<script>
 import TableroChatbot from '@/components/TableroChatbot.vue'
+export default {
+    name: 'ChatBot',
+    components: {
+        TableroChatbot
+    }
+}
 </script>
 
 <style></style>
