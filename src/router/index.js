@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { getToken, clearToken } from "@/services/auth";
 import { isTokenExpired, decodeJwt } from "@/services/jwt";
+import { CHATBOT_ROLES } from "@/utils/chatbotHistory";
 
 import Tablero from "@/views/Tablero.vue";
 import ConsultasOperativas from "@/views/ConsultasOperativas.vue";
@@ -64,7 +65,6 @@ import ConsultaOrdenesCompra from "@/views/ConsultaOrdenesCompra.vue";
 import GestionDeCompras from "@/views/GestionCompras.vue";
 import ParametrosDeCompras from "@/views/ParametrosdeCompras.vue";
 import InfoArticulosCompranCorrientemente from "@/views/InfoArticulosCompranCorrientemente.vue";
-import ChatBotAI from "@/views/ChatBot.vue";
 import GestionDeDistribucion from "@/views/GestionDistribucion.vue";
 import ParametrosDeDistribucion from "@/views/ParametrosdeDistribucion.vue";
 import ListadeClientesDistribucion from "@/views/ListadeClientesDistribucion.vue";
@@ -101,17 +101,6 @@ const routes = [
 		},
 	},
 	{
-		path: "/chatbot",
-		name: "ChatBot",
-		component: ChatBotAI,
-		props: true,
-		meta: {
-			requiresAuth: true,
-			title: "Chat Bot AI",
-			metaTags: [{ name: "Chat Bot AI" }],
-		},
-	},
-	{
 		path: "/",
 		name: "tablero",
 		alias: "/tablero",
@@ -126,6 +115,33 @@ const routes = [
 				},
 			],
 		},
+	},
+	{
+		path: "/chatbot",
+		children: [
+			{
+				path: "",
+				name: "chatbot",
+				component: () => import("@/views/Chatbot.vue"),
+				meta: {
+					requiresAuth: true,
+					roles: CHATBOT_ROLES,
+					title: "Chatbot",
+					back: true,
+				},
+			},
+			{
+				path: "conversaciones",
+				name: "chatbot-conversaciones",
+				component: () => import("@/views/ChatbotConversaciones.vue"),
+				meta: {
+					requiresAuth: true,
+					roles: CHATBOT_ROLES,
+					title: "Conversaciones del chatbot",
+					back: true,
+				},
+			},
+		],
 	},
 	{
 		path: "/co",
@@ -1673,7 +1689,7 @@ router.beforeEach((to, from) => {
 
 			const ok = to.meta.roles.some((required) => groupCns.includes(required));
 			//console.log(ok);
-			if (!ok) return { path: to.fullPath };
+			if (!ok) return { name: "tablero" };
 		}
 	}
 

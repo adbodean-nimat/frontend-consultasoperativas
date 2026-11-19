@@ -1,16 +1,11 @@
 <template>
-    <chat-bot />
+    <div>
+        <tablero-chatbot />
+    </div>
 </template>
 
-<script>
-import ChatBot from "../components/ChatBot.vue";
-
-export default {
-    name: "ChatBotAI",
-    components: {
-        ChatBot,
-    }
-};
+<script setup>
+import TableroChatbot from '@/components/TableroChatbot.vue'
 </script>
 
 <style></style>

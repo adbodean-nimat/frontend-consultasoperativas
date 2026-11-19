@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "test:chatbot": "node --test tests/chatbotHistory.test.cjs",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "test:rotacion": "node --test tests/rotacionGeneralProductos.test.cjs tests/rotacionProductosConfiguracion.test.cjs",

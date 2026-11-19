@@ -148,7 +148,7 @@ export default {
       return decodeJwt(getToken()).token
     },
     UrlApiBase() {
-      return `${process.env.VUE_APP_API_BASE}/vblesentrnp/`
+      return `${process.env.VUE_APP_API_BASE}/vblesentrnp`
     },
     options() {
       return {
@@ -170,13 +170,17 @@ export default {
       var cantdiasatras = gridElement.find('#diasatras');
       var DiasAtras = cantdiasatras.data("kendoNumericTextBox").value()
       kendo.jQuery.ajax({
-        url: urlApi + DiasAtras,
+        url: urlApi + '?diasAtras=' + DiasAtras,
         beforeSend: function (xhr) {
           xhr.setRequestHeader('Authorization', 'Bearer ' + token)
         },
         dataType: 'json',
         success: function (data) {
-          e.success(data)
+          if (data && data.ok === false) {
+            e.error(data)
+            return
+          }
+          e.success(data && Array.isArray(data.rows) ? data.rows : data)
         },
         type: 'GET'
       })
@@ -243,22 +247,24 @@ export default {
         });
       }
     });
-    toolbarElement.on("click", ".play", function () {
+    toolbarElement.on("click", ".play", function (e) {
+      e.preventDefault();
+      /* grid.dataSource.read(); */
       var DiasAtras = cantdiasatras.data("kendoNumericTextBox").value()
       var classDiasAtras = document.querySelector("#form > div > #input > .k-numerictextbox")
       if (DiasAtras == null) {
         classDiasAtras.classList.add('is-invalid');
       } else {
         classDiasAtras.classList.remove('is-invalid');
-        grid.dataSource.read();
+        /* grid.dataSource.read(); */
         var filter = { logic: "or", filters: [] };
         filter.filters.push({ field: "ARTS_CLASIF_2", operator: "eq", value: "0004" });
         filter.filters.push({ field: "ARTS_CLASIF_2", operator: "eq", value: "0005" });
         grid.dataSource.filter(filter);
-        grid.dataSource.sort({
+        /* grid.dataSource.sort({
           field: "Fecha_Emi",
           dir: "asc"
-        });
+        }); */
       }
     });
     toolbarElement.on("click", ".filter-clear", function (e) {

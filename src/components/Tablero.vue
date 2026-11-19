@@ -4,6 +4,7 @@
             <div class="container-fluid px-4 text-center">
                 <h3 class="text-white">¡Hola {{ giveName }}! 👋</h3>
                 <div class="row row-cols-lg-5 gy-5 mt-2">
+
                     <div class="col col-h">
                         <router-link to="/co">
                             <div class="d-flex flex-column justify-content-between rounded-top bg-white">
@@ -108,6 +109,39 @@
                                 class="column-bottom text-center h-10 d-flex justify-content-between align-items-center rounded-bottom px-4 bg-light">
                                 <span class="fs-6 text-secondary">1.3.0</span>
                                 <span class="fs-6 text-secondary">WN</span>
+                            </div>
+                        </router-link>
+                    </div>
+                    <div v-if="hasRole(['Gerencia', 'Sistemas', 'Ventas'])" class="col col-h">
+                        <router-link :to="{ name: 'chatbot' }">
+                            <div class="d-flex flex-column justify-content-between rounded-top bg-white">
+                                <div
+                                    class="column d-flex flex-row justify-content-between p-3 text-secondary link-success">
+                                    <div
+                                        class="d-flex justify-content-center align-items-center shrink-0 icon rounded overflow-hidden">
+                                        <!-- <i class="pi pi-comments text-white fs-2" aria-hidden="true"></i> -->
+                                        <img src="../assets/bot.png" alt="Chatbot Icon" class="w-100 rounded" />
+                                    </div>
+                                    <div class="title-column">
+                                        <p>Chatbot NIMAT</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <div class="column-question text-end px-4 bg-white text-secondary">Conversaciones del chatbot</div> -->
+                            <div
+                                class="column-question text-center h-10 d-flex justify-content-between align-items-center px-4 bg-white">
+                                <span class="fs-6 text-secondary"></span>
+                                <span class="fs-6 text-secondary">
+                                    <div id="tooltip" data-toggle="tooltip" data-placement="right"
+                                        title="Acceder al chatbot NIMAT para ver todas las conversaciones que han tenido los usuarios con el chatbot.">
+                                        <i class="pi pi-question-circle" aria-hidden="true"></i>
+                                    </div>
+                                </span>
+                            </div>
+                            <div
+                                class="column-bottom text-center h-10 d-flex justify-content-between align-items-center rounded-bottom px-4 bg-light">
+                                <span class="fs-6 text-secondary">1.0.0</span>
+                                <span class="fs-6 text-secondary">CHT</span>
                             </div>
                         </router-link>
                     </div>
@@ -428,11 +462,14 @@
 </template>
 
 <script>
+import ChatbotHistoryCard from '@/components/ChatbotHistoryCard.vue';
 import { hasRole } from "@/services/roles";
 import { getToken } from "@/services/auth";
 import { decodeJwt } from "@/services/jwt";
+
 export default {
     name: 'TableroVue',
+    components: { ChatbotHistoryCard },
     data: () => {
         return {
             giveName: '',
